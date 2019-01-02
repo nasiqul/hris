@@ -134,6 +134,20 @@ class Over_model extends CI_Model {
 
     public function save_member($no_doc, $nik1, $dari1, $sampai1, $jam1, $trans1, $makan1, $exfood1, $idJam1)
     {
+        $this->db->select("lembur");
+        $this->db->from("master_lembur");
+        $this->db->where("id",$idJam1);
+        $this->db->where("lembur","AW");
+
+        $q = $this->db->get()->num_rows();
+        if ($q > 0) {
+            $jamL = 'Awal';
+        }
+        else
+        {
+            $jamL = 0;
+        }
+
     	$data = array(
     		'id_ot' => $no_doc,
     		'nik' => $nik1,
@@ -143,7 +157,8 @@ class Over_model extends CI_Model {
     		'transport' => $trans1,
     		'makan' => $makan1,
     		'ext_food' => $exfood1,
-            'id_jam' => $idJam1
+            'id_jam' => $idJam1,
+            'jam_lembur' => $jamL
     	);
 
     	$this->db->insert('over_time_member', $data);	

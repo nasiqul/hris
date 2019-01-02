@@ -6,6 +6,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <html>
 <!-- HEADER -->
 <?php require_once(APPPATH.'views/header/head.php'); ?>
+<?php if (! $this->session->userdata('nik')) { redirect('home/overtime_user'); }?>
 
 <body class="hold-transition skin-purple sidebar-mini">
   <div class="wrapper">
@@ -309,7 +310,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             var newdiv1 = $( "<div class='col-md-12' style='margin-bottom: 5px' id='"+no+"'>"+
               "<div class='col-md-2'><input type='text' id='nik"+no+"' value='"+nik+"' class='form-control' readonly></div>"+
               "<div class='col-md-3'><p id='nama"+no+"'>"+nama+"</p></div>"+
-              "<div class='col-md-2' id='sJam"+no+"' name='jam"+no+"'><select id='jamL"+no+"' class='form-control' onchange='changeJams("+no+")'></select></div><div class='col-md-1'><p id='jam"+no+"'>"+j+"</p></div>"+
+              "<div class='col-md-2' id='sJam"+no+"' name='jam"+no+"'></div><div class='col-md-1'><p id='jam"+no+"'>"+j+"</p></div>"+
               "<div class='col-md-1'><select class='form-control' id='trans"+no+"'>"+
               "<option value='-' "+t1+">-</option><option value='B' "+t2+">B</option><option value='P' "+t3+">P</option></select></div>"+
               "<div class='col-md-1'><input type='checkbox' id='makan"+no+"' "+cekM+"></div>"+
@@ -319,24 +320,24 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
             $("#peserta").append(newdiv1);
 
-            var $options = $("#jamF2 > option").clone();
-            $('#jamL'+no).append($options);
-            var idB = $('#jamF2').find(':selected')[0].value;
-            $('#jamL'+no).val(idB);
+            $('#jamF2').clone().attr('id', 'jamIsi'+no).appendTo($('#sJam'+no));
 
-            var jamZ = $("#jam0").text();
-
-            var selects = $("#jamF2").find(':selected')[0].id;
-
-            $('#idJam'+no).val(selects);
+            var selects = $("#jamF2");
+            $(selects).each(function(i) {
+              var select = this;
+              $("#jamIsi"+no).eq(i).val($(select).val());
+            });
 
             $('#nomor').val(no);
+
+            var idJamIsi = $("#jamF2").find(':selected')[0].id;
+            $("#idJam"+no).val(idJamIsi);
+
+            no+=1;
 
             $('#nikF').val('');
 
             openSuccessGritter();
-
-            no+=1;
           }
         });
 
@@ -495,7 +496,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
               var nik1 = document.getElementById('nik'+i).value;
 
-              var jamD = $("#jamL"+i+" option:selected").text();
+              var jamD = $("#jamIsi"+i+" option:selected").text();
 
               var jm = jamD.split(' - ');
 
@@ -644,12 +645,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
   function gantiJam() {
     for(i= 1; i <= no; i++){
       var selects = $("#jamF2").find(':selected')[0].id;
+      var jamX = $("#jamF2").find(':selected')[0].value;
       var jamZ = $("#jam0").text();
       $('#idJam'+i).val(selects);
       //$("#jamIsi"+i).eq(i).val($(select).val());
-      
-      var idB = $('#jamF2').find(':selected')[0].value;
-      $('#jamL'+i).val(idB);
+      $("#jamIsi"+i).val(jamX);
 
       $("#jam"+i).text(jamZ);
 
@@ -707,16 +707,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
             
           }
         });
-  }
-
-  function changeJams(id) {
-    var hasilJam = $("#jamL"+id).find('option:selected').attr("name");
-    var selects = $("#jamL"+id).find(':selected')[0].id;
-    var jamZ = $("#jam0").text();
-
-    $("#jam"+id).text(hasilJam);
-    $('#idJam'+id).val(selects);
-
   }
 </script>
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
