@@ -18,35 +18,32 @@ class Home extends CI_Controller {
 
     public function index()
     {
-        if (! $this->session->userdata('nik')) {
-            redirect('home/overtime_user');
+        
+        if (isset($_POST['bulan'])) {
+            $newdata = array(
+                'bulan'  => $_POST['bulan']
+            );
+
+            $this->session->set_userdata($newdata);
+        }
+
+        if ($this->session->userdata("bulan")) {
+
+            $bln = $this->session->userdata("bulan");
+
+            $data['report1'] = $this->home_model->report1_by_tgl($bln);
+            $data['report2'] = $this->home_model->report2_by_tgl($bln);
+            $data['report3'] = $this->home_model->report3_by_tgl($bln);
         }
         else {
-            if (isset($_POST['bulan'])) {
-                $newdata = array(
-                    'bulan'  => $_POST['bulan']
-                );
-
-                $this->session->set_userdata($newdata);
-            }
-
-            if ($this->session->userdata("bulan")) {
-
-                $bln = $this->session->userdata("bulan");
-
-                $data['report1'] = $this->home_model->report1_by_tgl($bln);
-                $data['report2'] = $this->home_model->report2_by_tgl($bln);
-                $data['report3'] = $this->home_model->report3_by_tgl($bln);
-            }
-            else {
-                $data['report1'] = $this->home_model->report1();
-                $data['report2'] = $this->home_model->report2();
-                $data['report3'] = $this->home_model->report3();
-            }
-                // $data['laporan'] = $this->home_model->laporan();
-            $data['menu'] = 'home';
-            $this->load->view('report', $data);
+            $data['report1'] = $this->home_model->report1();
+            $data['report2'] = $this->home_model->report2();
+            $data['report3'] = $this->home_model->report3();
         }
+                // $data['laporan'] = $this->home_model->laporan();
+        $data['menu'] = 'home';
+        $this->load->view('report', $data);
+        
     }
 
     public function absen()
@@ -555,9 +552,9 @@ public function ajax_presensi_shift()
       }
   }
   else
-     $result[] = json_decode ("{}");
+   $result[] = json_decode ("{}");
 
- echo json_encode($result);
+echo json_encode($result);
 }
 
 public function ajax_emp_keluarga()
@@ -766,10 +763,10 @@ public function ajax_emp_coba()
         $tot = $this->cari_karyawan_model->count_all();
         $filter = $this->cari_karyawan_model->count_filtered($status,$grade,$dep,$pos);
     }
-    elseif (isset($_SESSION['bulan'])) {
-        $bulan = $this->session->userdata('bulan');
-        $list = $this->karyawan_by_period_model->get_karyawan($bulan);
-    }
+    // elseif (isset($_SESSION['bulan'])) {
+    //     $bulan = $this->session->userdata('bulan');
+    //     $list = $this->karyawan_by_period_model->get_karyawan($bulan);
+    // }
     else {
         $list = $this->karyawan_model->get_data_karyawan_coba();
         $tot = $this->karyawan_model->count_all();

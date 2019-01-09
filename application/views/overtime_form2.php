@@ -54,13 +54,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <input type="text" name="no" placeholder="nomor dokumen" class="form-control" id="no_doc" value="<?php echo $kode ?>" readonly>
 
                 <div class="row">
-                  <div class="col-md-6">
-                    <p>Tanggal</p>
+                  <div class="col-md-4">
+                    <p>Tanggal :</p>
                     <input type="text" name="tgl" placeholder="select date" class="form-control" id="datepicker" onchange="getHari()">
                   </div>
 
                   <div class="col-md-3">
-                    <p>Shift</p>
+                    <p>Shift :</p>
                     <select class="form-control" id="shiftF" onchange="showJam()">
                       <option value="" disabled selected>Shift</option>
                       <option value="1"> 1</option>
@@ -68,6 +68,26 @@ scratch. This page gets rid of all links and provides the needed markup only.
                       <option value="3"> 3</option>
                     </select>
                   </div>
+
+                  <div class="col-md-3">
+                    <p>&nbsp;</p>
+                    <div class="checkbox" id="4group3">
+                      <label class="text-center">
+                        <input type="checkbox" id="4group3s" class="minimal"><br> 4 Grup 3 Shift
+                      </label>
+                    </div>
+                  </div>
+
+                  <div class="col-md-1">
+                    <p>&nbsp;</p>
+                    <div class="checkbox" id="libur2" style="display: none">
+                      <label class="text-center">
+                        <input type="checkbox" id="libur" class="minimal"><br> Libur
+                      </label>
+                    </div>
+                  </div>
+
+                  
 
 
                 </div>
@@ -104,7 +124,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </form>
             <div class="col-md-12">
               <hr>
-              <button id="reset" class="btn btn-danger pull-right" onclick="reset()"><i class="fa fa-refresh"></i> Refresh</button>
+              <button id="reset" class="btn btn-success" onclick="reset()"><i class="fa fa-plus"></i> New </button>
             </div>
           </div>
         </div>
@@ -602,14 +622,36 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
   function showJam() {
     var idShift = $('#shiftF').find(':selected')[0].value;
-    var hari2 = hari;
+    var isChecked2 = $('#4group3s').is(':checked');
+
+    if (idShift == 3 || isChecked2) {
+      var isChecked = $('#libur').is(':checked');
+      $('#libur2').css('display','block');
+      if(isChecked)
+      {
+        if (hari == "JN")
+          var hari2 = "JL";
+        else
+          var hari2 = "L";
+      }
+      else
+        var hari2 = hari;
+
+      console.log(hari2);
+    }
+
+    else {
+      $('#libur2').css('display','none');
+      var hari2 = hari;
+    }
+
 
     $.ajax({
       type: 'POST',
       url: '<?php echo base_url("ot/ajax_over_jam") ?>',
       data: {
         'id': idShift,
-        'hari' : hari2
+        'hari' : hari2,
       },
       success: function (data) {
             // the next thing you want to do 
@@ -631,6 +673,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
         });
   }
 
+  $('#libur').on('ifChanged', function() {
+    showJam();
+  });
+
+  $('#4group3s').on('ifChanged', function() {
+    showJam();
+  });
+
   function hitungJam(jam,id2) {
     var jam = jam;
 
@@ -639,7 +689,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     var jamB = document.getElementById(id2);
 
     jamB.innerHTML = jamX;
-    
+
   }
 
   function gantiJam() {
@@ -647,79 +697,82 @@ scratch. This page gets rid of all links and provides the needed markup only.
       var selects = $("#jamF2").find(':selected')[0].id;
       var jamZ = $("#jam0").text();
       $('#idJam'+i).val(selects);
-      //$("#jamIsi"+i).eq(i).val($(select).val());
-      
-      var idB = $('#jamF2').find(':selected')[0].value;
-      $('#jamL'+i).val(idB);
+    //$("#jamIsi"+i).eq(i).val($(select).val());
 
-      $("#jam"+i).text(jamZ);
+    var idB = $('#jamF2').find(':selected')[0].value;
+    $('#jamL'+i).val(idB);
+
+    $("#jam"+i).text(jamZ);
+
+  }
+}
+
+function gantiTrans() {
+  for(i= 1; i <= no; i++){
+    var jamX = $("#transF").find(':selected')[0].value;
+
+    //$("#jamIsi"+i).eq(i).val($(select).val());
+    $("#trans"+i).val(jamX);
+
+  }
+}
+
+$('#makanF').change(function () {
+  for(i= 1; i <= no; i++){
+    if ($('#makanF').is(':checked')) {
+      $("#makan"+i).prop('checked', true);
 
     }
-  }
-
-  function gantiTrans() {
-    for(i= 1; i <= no; i++){
-      var jamX = $("#transF").find(':selected')[0].value;
-
-      //$("#jamIsi"+i).eq(i).val($(select).val());
-      $("#trans"+i).val(jamX);
-
+    else{
+      $("#makan"+i).prop('checked', false);
     }
   }
+});
 
-  $('#makanF').change(function () {
-    for(i= 1; i <= no; i++){
-      if ($('#makanF').is(':checked')) {
-        $("#makan"+i).prop('checked', true);
+$('#exfoodF').change(function () {
+  for(i= 1; i <= no; i++){
+    if ($('#exfoodF').is(':checked')) {
+      $("#exfood"+i).prop('checked', true);
+    }
+    else{
+      $("#exfood"+i).prop('checked', false);
+    }
+  }
+});
 
-      }
-      else{
-        $("#makan"+i).prop('checked', false);
-      }
+function getHari() {
+  var tanggals = $("#datepicker").val();
+
+  $.ajax({
+    type: 'POST',
+    url: '<?php echo base_url("ot/ajax_hari") ?>',
+    data: {
+      'tgl': tanggals
+    },
+    success: function (data) {
+      // the next thing you want to do 
+      var s = $.parseJSON(data);
+      hari = s;
+      console.log(hari);
+
+      showJam();
     }
   });
+}
 
-  $('#exfoodF').change(function () {
-    for(i= 1; i <= no; i++){
-      if ($('#exfoodF').is(':checked')) {
-        $("#exfood"+i).prop('checked', true);
-      }
-      else{
-        $("#exfood"+i).prop('checked', false);
-      }
-    }
-  });
+function changeJams(id) {
+  var hasilJam = $("#jamL"+id).find('option:selected').attr("name");
+  var selects = $("#jamL"+id).find(':selected')[0].id;
+  var jamZ = $("#jam0").text();
 
-  function getHari() {
-    var tanggals = $("#datepicker").val();
-    console.log(tanggals);
+  $("#jam"+id).text(hasilJam);
+  $('#idJam'+id).val(selects);
 
-    $.ajax({
-      type: 'POST',
-      url: '<?php echo base_url("ot/ajax_hari") ?>',
-      data: {
-        'tgl': tanggals
-      },
-      success: function (data) {
-            // the next thing you want to do 
-            var s = $.parseJSON(data);
-            hari = s;
-            console.log(hari);
-            
-            showJam();
-          }
-        });
-  }
+}
 
-  function changeJams(id) {
-    var hasilJam = $("#jamL"+id).find('option:selected').attr("name");
-    var selects = $("#jamL"+id).find(':selected')[0].id;
-    var jamZ = $("#jam0").text();
-
-    $("#jam"+id).text(hasilJam);
-    $('#idJam'+id).val(selects);
-
-  }
+$('input[type="checkbox"].minimal').iCheck({
+  checkboxClass: 'icheckbox_minimal-purple'
+})
 </script>
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the

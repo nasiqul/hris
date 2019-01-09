@@ -6,10 +6,9 @@
     <ul class="sidebar-menu" data-widget="tree">
       <li class="header">MAIN</li>
       <!-- Optionally, you can add icons to the links -->
+      <li class="<?php if($menu == 'home') echo 'active'?>"><a href="<?php echo base_url(); ?>"><i class="fa fa-home"></i> <span>HOME</span></a></li>
       
       <?php if ($this->session->userdata('nik')) { ?>
-
-      <li class="<?php if($menu == 'home') echo 'active'?>"><a href="<?php echo base_url(); ?>"><i class="fa fa-home"></i> <span>HOME</span></a></li>
       <li class="treeview <?php if($menu == 'emp' || $menu == 'empG') echo 'active'?>">
         <a href="#"><i class="fa fa-industry"></i> <span>Employee</span>
           <span class="pull-right-container">

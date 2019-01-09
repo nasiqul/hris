@@ -32,7 +32,7 @@ body {
 	width: 90%;
 	height: 35px;
 	margin: 0 auto;
-	text-align: center;
+	padding: 0 5px 0 5px;
 	line-height: 25px;
 }
 .kep {

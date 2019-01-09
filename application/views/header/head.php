@@ -30,6 +30,7 @@
    <link rel="stylesheet" href="<?php echo base_url()?>app/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
    <link rel="stylesheet" href="<?php echo base_url()?>app/plugins/timepicker/bootstrap-timepicker.min.css">
    <link rel="stylesheet" href="<?php echo base_url()?>app/bower_components/select2/dist/css/select2.min.css">
+   <link rel="stylesheet" href="<?php echo base_url()?>app/plugins/iCheck/all.css">
 
    <!-- DataTables -->
    <script src="<?php echo base_url()?>app/bower_components/jquery/dist/jquery.min.js"></script>
