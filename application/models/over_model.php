@@ -3,8 +3,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Over_model extends CI_Model {
 
-	var $column_order = array('id','tanggal','nik','nama','masuk','keluar','jam','aktual','diff','final'); //set column field database for datatable orderable
-    var $column_search = array('id','DATE_FORMAT(tanggal, "%d-%m-%Y")','nik','nama','masuk','keluar','jam','aktual','diff','final'); //set column field database for datatable searchable 
+	var $column_order = array('id','tanggal','nik','nama','masuk','keluar','jam','aktual','diff','final2'); //set column field database for datatable orderable
+    var $column_search = array('id','DATE_FORMAT(tanggal, "%d-%m-%Y")','nik','nama','masuk','keluar','jam','aktual','diff','final2'); //set column field database for datatable searchable 
     var $order = array('tanggal' => 'desc'); // default order 
 
     public function __construct()

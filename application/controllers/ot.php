@@ -46,7 +46,7 @@ class Ot extends CI_Controller {
 		$trans = $_POST['trans'];
 		$makan = $_POST['makan'];
 		$exfood = $_POST['exfood'];
-		$idJam = $_POST['id_jam'];
+		$idJam = $_POST['id_jam'];	
 
 		$this->over_model->save_member($no_doc, $nik, $dari, $sampai, $jam, $trans, $makan, $exfood, $idJam);
 		
@@ -68,7 +68,7 @@ class Ot extends CI_Controller {
 			$row[] = $key->keluar;
 			$row[] = $key->jam;
 
-			if ($key->aktual > $key->jam && $key->final == 0)
+			if ($key->aktual > $key->jam && $key->final == 0 && $key->status == 0)
 				$row[] = "<button class='btn btn-danger btn-xs' id=d".$key->nik.$key->id." onclick='applyJam(".$key->id.",\"".$key->nik."\",".$key->jam.")'><i class='fa fa-close'></i></button>  &nbsp <b>"
 			.ROUND($key->aktual,2)."</b> 
 			&nbsp<button class='btn btn-success btn-xs' id=c".$key->nik.$key->id." onclick='applyJam(".$key->id.",\"".$key->nik."\",".$key->aktual.")'><i class='fa fa-check'></i></button>";
@@ -442,17 +442,25 @@ class Ot extends CI_Controller {
 		$tgl = $_POST['tgl'];
 		$list = $this->over_model->getHari($tgl);
 
-		// $timestamp = strtotime($tgl);
+		$time = strtotime($tgl);
 
-		// $day = date('D', $timestamp);
+		$newformat = date('D',$time);
+
 		
 		if ($list > 0) {
-			// if ($day = 'Fri') {
-			// 	# code...
-			// }
-			echo json_encode("L");
+			if ($tgl = 'Fri') {
+				echo json_encode("JL");
+			}
+			else{
+				echo json_encode("L");
+			}
 		} else {
-			echo json_encode("N");
+			if ($tgl = 'Fri') {
+				echo json_encode("JN");
+			}
+			else{
+				echo json_encode("N");
+			}
 		}
 	}
 

@@ -294,6 +294,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
         },
         success: function(data){
           $('#conf'+nik+idX).css("display","none");
+          $('#c'+nik+idX).css("display","none");
+          $('#d'+nik+idX).css("display","none");
           openSuccessGritter();
         }
       })
