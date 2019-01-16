@@ -665,6 +665,11 @@ public function sess_destroy2()
     redirect('home/absen');
 }
 
+public function logout()
+{
+    redirect("login");
+}
+
 //------------------------- KARYAWAN COBA -------------------
 
 public function karyawan()

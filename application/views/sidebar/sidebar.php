@@ -64,7 +64,7 @@
               </span>
             </a>
             <ul class="treeview-menu">
-              <li><a href="<?php echo base_url('login'); ?>" target="_blank">Login</a></li>
+              <li><a href="<?php echo base_url('login'); ?>">Login</a></li>
               <li><a href="<?php echo base_url('home/karyawan_coba'); ?>">Coba</a></li>
               <li><a href="<?php echo base_url('home/sess_destroy'); ?>">Sess_destroy</a></li>
               <li><a href="<?php echo base_url('home/overtime_user'); ?>">overtime_user</a></li>       
