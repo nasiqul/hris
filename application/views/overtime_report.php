@@ -36,7 +36,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
       <!-- Main content -->
       <section class="content container-fluid">
-        
+
         <div class="col-md-12">
           <div class="box box-solid">
             <div class="box-body">
@@ -49,7 +49,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <th>Bagian</th>
                     <th>Total</th>
                     <th>Satuan</th>
-                    <th>Details</th>
+                    <th>Aksi</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -145,12 +145,18 @@ scratch. This page gets rid of all links and provides the needed markup only.
           "url": "<?php echo base_url('ot/ajax_ot_report')?>",
           "type": "GET"
         },
-        "columnDefs" : [
-        { "orderable": false, "targets": 6 }
+        "columnDefs": [
+        {
+          "targets": [ 4,5,6 ], //first column / numbering column
+          "orderable": false, //set not orderable
+        }
         ],
-        "orderCellsTop": true,
-        "fixedHeader": true
       });
+    })
+
+    function detail(nik,tgl) {
+      alert(nik+" "+tgl);
+    }
 
   </script>
 

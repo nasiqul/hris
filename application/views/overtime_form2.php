@@ -54,56 +54,25 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <input type="text" name="no" placeholder="nomor dokumen" class="form-control" id="no_doc" value="<?php echo $kode ?>" readonly>
 
                 <div class="row">
-                  <div class="col-md-3">
+                  <div class="col-md-6">
                     <p>Tanggal</p>
                     <input type="text" name="tgl" placeholder="select date" class="form-control" id="datepicker">
                   </div>
 
                   <div class="col-md-3">
-                    <p>Dari</p>
-                    <input type="text" name="dariF" placeholder="dari" class="form-control timepicker" id="dariF"  value=" ">
-                  </div>
-
-                  <div class="col-md-3">
-                    <p>Sampai</p>
-                    <input type="text" name="sampaiF" placeholder="sampai" class="form-control timepicker" id="sampaiF" value=" ">
-                  </div>
-
-                  <div class="col-md-3">
-                    <p>Jam</p>
-                    <p id="txtJam"></p>
-                    <input type="hidden" name="jamF" placeholder="Jam" class="form-control" id="jamF" value="0">
-                  </div>
-                </div>
-
-                <div class="row">
-                  <div class="col-md-4">
-                    <p>Transport</p>
-                  </div>
-                </div>
-
-                <div class="row">
-                  <div class="col-md-4">
-
-                    <select class='form-control' id='transF' name="trans">
-                      <option value=''>-</option>
-                      <option value='B'>B</option>
-                      <option value='P'>P</option>
+                    <p>Shift</p>
+                    <select class="form-control" id="shiftF" onchange="showJam()">
+                      <option value="" disabled selected>Shift</option>
+                      <option value="1"> 1</option>
+                      <option value="2"> 2</option>
+                      <option value="3"> 3</option>
                     </select>
                   </div>
 
-                  <div class="col-md-4 text-center">
-                    <div class="checkbox">
-                      <label><input type='checkbox' id='makanF' name="makan" value="1">Makan</label>
-                    </div>
-                  </div>
 
-                  <div class="col-md-4 text-center">
-                    <div class="checkbox">
-                      <label><input type='checkbox' id='exfoodF' name=exFood>Ext-Food</label>
-                    </div>
-                  </div>
                 </div>
+
+
               </div>
               <div class="col-md-6">
 
@@ -135,15 +104,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </form>
             <div class="col-md-12">
               <hr>
-              <div class="form-group">
-                <div class="input-group input-group-lg">
-                  <div class="input-group-addon">
-                    <i class="fa fa-barcode"></i>
-                  </div>
-                  <input type="text" class="form-control text-center" placeholder="Scan NIK Barcode here . ." id="nikF">
-                </div>
-                <!-- /.input group -->
-              </div>
               <button id="reset" class="btn btn-danger pull-right" onclick="reset()"><i class="fa fa-refresh"></i> Refresh</button>
             </div>
           </div>
@@ -156,6 +116,19 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <button class="btn btn-primary" id="print" onclick="tombol_print()" style="display: none;"><i class="fa fa-print"></i> Print</button>&nbsp&nbsp&nbsp
               <button id="submit" class="btn btn-success" onclick="submit1()"><i class="fa fa-check"></i> Simpan</button>
             </div>
+
+            <div class="col-md-12">
+              <br>
+              <div class="form-group">
+                <div class="input-group input-group-lg">
+                  <div class="input-group-addon">
+                    <i class="fa fa-barcode"></i>
+                  </div>
+                  <input type="text" class="form-control text-center" placeholder="Scan NIK Barcode here . ." id="nikF">
+                </div>
+                <!-- /.input group -->
+              </div>
+            </div>
           </div>
           
           <input type="hidden" name="nodoc2" id="nodoc2" value="<?php echo $dt; echo $nod ?>">
@@ -163,6 +136,36 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <div class="col-md-12">
               <table class="table">
                 <thead>
+                  <tr>
+                    <th>
+
+                    </th>
+                    <th>
+                    </th>
+                    <th colspan="2" name="jam0">
+                      <select class="form-control" id="jamF2" onchange="hitungJam(this.id,$(this).parent().attr('name'));gantiJam();">
+                        <option value="" disabled selected>Select Jam</option>
+                      </select>
+                    </th>
+                    <th><p id="jam0">0</p></th>
+                    <th>
+                      <select class='form-control' id='transF' name="trans" onchange="gantiTrans()">
+                        <option value='-'>-</option>
+                        <option value='B'>B</option>
+                        <option value='P'>P</option>
+                      </select>
+                    </th>
+                    <th>
+                      <div class="checkbox">
+                        <label><input type='checkbox' id='makanF' name="makan" value="1"></label>
+                      </div>
+                    </th>
+                    <th>
+                      <div class="checkbox">
+                        <label><input type='checkbox' id='exfoodF' name=exFood></label>
+                      </div>
+                    </th>
+                  </tr>
                   <tr>
                     <th width="17%">Nik</th>
                     <th width="26%">Nama</th>
@@ -201,10 +204,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
     var no = 1;
     arrNik = [];
-    var dari = document.getElementById('dariF');
-    var sampai = document.getElementById('sampaiF');
 
-    var jam = document.getElementById('jamF');
+    var jam = document.getElementById('jam0');
     var trans = document.getElementById('tranF');
     var nikS = document.getElementById('nikF');
     var txtJam = document.getElementById('txtJam');
@@ -239,9 +240,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         return false;
       }
 
-      var d = dari.value;
-      var s = sampai.value;
-      var j = jam.value;
+      var j = jam.innerHTML;
       var n = nikS.value;
       var dep = $("#dep").val();
 
@@ -309,9 +308,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             var newdiv1 = $( "<div class='col-md-12' style='margin-bottom: 5px' id='"+no+"'>"+
               "<div class='col-md-2'><input type='text' id='nik"+no+"' value='"+nik+"' class='form-control' readonly></div>"+
               "<div class='col-md-3'><p id='nama"+no+"'>"+nama+"</p></div>"+
-              "<div class='col-md-1'><input type='text' class='form-control timepicker' id='dari"+no+"' value='"+d+"'></div>"+
-              "<div class='col-md-1'><input type='text' class='form-control timepicker' id='sampai"+no+"' value='"+s+"'></div>"+
-              "<div class='col-md-1'><input type='text' class='form-control' id='jam"+no+"' value='"+j+"'></div>"+
+              "<div class='col-md-2' id='sJam"+no+"' name='jam"+no+"'></div><div class='col-md-1'><p id='jam"+no+"'>"+j+"</p></div>"+
               "<div class='col-md-1'><select class='form-control' id='trans"+no+"'>"+
               "<option value='-' "+t1+">-</option><option value='B' "+t2+">B</option><option value='P' "+t3+">P</option></select></div>"+
               "<div class='col-md-1'><input type='checkbox' id='makan"+no+"' "+cekM+"></div>"+
@@ -319,6 +316,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
               "<div class='col-md-1'><button class='btn btn-danger btn-xs' id='delete"+no+"' onclick='deleteRow(this)'><i class='fa fa-minus'></i></button></div></div>" );
 
             $("#peserta").append(newdiv1);
+            //var jamSelect = $('#jamF2').find(':selected')[0].value;
+
+            $('#jamF2').clone().attr('id', 'jamIsi'+no).appendTo($('#sJam'+no));
+
+            var selects = $("#jamF2");
+            $(selects).each(function(i) {
+              var select = this;
+              $("#jamIsi"+no).eq(i).val($(select).val());
+            });
+
             $('#nomor').val(no);
             no+=1;
 
@@ -357,7 +364,27 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
       no-=1;
 
+      var z = no - 1;
+
+      for (var i =  ids; i <= z; i++) { 
+        var newid = parseInt  + 1;
+        var oldid = newid - 1;
+        jQuery("#"+newid).attr("id",oldid);
+        jQuery("#nik"+newid).attr("id","nik"+oldid);
+        jQuery("#nama"+newid).attr("id","nama"+oldid);
+        jQuery("#dari"+newid).attr("id","dari"+oldid);
+        jQuery("#sampai"+newid).attr("id","sampai"+oldid);
+        jQuery("#jam"+newid).attr("id","jam"+oldid);
+        jQuery("#trans"+newid).attr("id","trans"+oldid);
+        jQuery("#makan"+newid).attr("id","makan"+oldid);
+        jQuery("#exfood"+newid).attr("id","exfood"+oldid);
+        jQuery("#delete"+newid).attr("id","delete"+oldid);
+
+      }
+
     }
+
+
 
     function showSec() {
       var id = $('#dep').find(':selected')[0].value;
@@ -439,7 +466,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
       },
       success: function(data){
         var s = $.parseJSON(data);
+        
         idDoc = parseInt(s)+1;
+        
         document.getElementById('no_doc').value = idDoc;
 
         $.ajax({
@@ -460,10 +489,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
             for (var i = 1; i <= no; i++) {
 
               var nik1 = document.getElementById('nik'+i).value;
-              var dariS = document.getElementById('dari'+i).value;
-              var sampaiS = document.getElementById('sampai'+i).value;
-              var jamS = document.getElementById('jam'+i).value;
-              var transS = document.getElementById('trans'+i).value;
+
+              var jamD = $("#jamIsi"+i+" option:selected").text();
+
+              var jm = jamD.split(' - ');
+
+              var jamS = $("#jam"+i).text();
+
+              var e = document.getElementById("trans"+i);
+              var transS = e.options[e.selectedIndex].value;
 
               if ($('#makan'+i).is(':checked'))
                 makanS="1";
@@ -481,8 +515,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 data: {
                   'nodoc2': idDoc,
                   'nik': nik1,
-                  'dari': dariS,
-                  'sampai': sampaiS,
+                  'dari': jm[0],
+                  'sampai': jm[1],
                   'jam': jamS,
                   'trans': transS,
                   'makan': makanS,
@@ -556,6 +590,94 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
     window.open(url,'_blank');
   }
+
+  function showJam() {
+    var idShift = $('#shiftF').find(':selected')[0].value;
+    var jamA = document.getElementById('jam');
+
+    $.ajax({
+      type: 'POST',
+      url: '<?php echo base_url("ot/ajax_over_jam") ?>',
+      data: {
+        'id': idShift
+      },
+      success: function (data) {
+            // the next thing you want to do 
+            var $jamS = $('#jamF2');
+
+            $jamS.empty();
+
+            var s = $.parseJSON(data);
+
+            $jamS.append('<option value="" disabled selected>'+ s[0][1] +'</option>');
+
+            for (var i = 1; i <= s.length; i++) {
+              $jamS.append('<option id=' + s[i][0] + ' value='+s[i][3]+'>' +s[i][1]+" - "+s[i][2]+ '</option>');
+            }
+            
+            //manually trigger a change event for the contry so that the change handler will get triggered
+            $jamS.change();
+          }
+        });
+  }
+
+  function hitungJam(jam,id2) {
+    var jam = jam;
+
+    var jamX = $('#'+jam).find(':selected')[0].value;
+
+    var jamB = document.getElementById(id2);
+
+    jamB.innerHTML = jamX;
+    
+  }
+
+  function gantiJam() {
+    for(i= 1; i <= no; i++){
+      //var selects = $("#jamF2");
+      var jamX = $("#jamF2").find(':selected')[0].value;
+      var jamZ = $("#jam0").text();
+      //$("#jamIsi"+i).eq(i).val($(select).val());
+      $("#jamIsi"+i).val(jamX);
+
+      $("#jam"+i).text(jamZ);
+
+    }
+  }
+
+  function gantiTrans() {
+    for(i= 1; i <= no; i++){
+      //var selects = $("#jamF2");
+      var jamX = $("#transF").find(':selected')[0].value;
+      //$("#jamIsi"+i).eq(i).val($(select).val());
+      $("#trans"+i).val(jamX);
+
+    }
+  }
+
+  $('#makanF').change(function () {
+    for(i= 1; i <= no; i++){
+      if ($('#makanF').is(':checked')) {
+        $("#makan"+i).prop('checked', true);
+
+      }
+      else{
+        $("#makan"+i).prop('checked', false);
+      }
+    }
+  });
+
+  $('#transF').change(function () {
+    for(i= 1; i <= no; i++){
+      if ($('#transF').is(':checked')) {
+        $("#trans"+i).prop('checked', true);
+
+      }
+      else{
+        $("#trans"+i).prop('checked', false);
+      }
+    }
+  });
 </script>
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the

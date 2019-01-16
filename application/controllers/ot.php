@@ -6,6 +6,8 @@ class Ot extends CI_Controller {
 		parent::__construct();
 		$this->load->model('over_model');
 		$this->load->model('cari_over');
+		$this->load->model('over_user_model');
+		$this->load->model('over_report_model');
 		$this->load->library('ciqrcode');
 	}
 
@@ -36,13 +38,13 @@ class Ot extends CI_Controller {
 	{
 		$no_doc = $_POST['nodoc2'];
 
-		$nik = $_POST['nik'.$i];
-		$dari = $_POST['dari'.$i];
-		$sampai = $_POST['sampai'.$i];
-		$jam = $_POST['jam'.$i];
-		$trans = $_POST['trans'.$i];
-		$makan = $_POST['makan'.$i];
-		$exfood = $_POST['exfood'.$i];
+		$nik = $_POST['nik'];
+		$dari = $_POST['dari'];
+		$sampai = $_POST['sampai'];
+		$jam = $_POST['jam'];
+		$trans = $_POST['trans'];
+		$makan = $_POST['makan'];
+		$exfood = $_POST['exfood'];
 
 		$this->over_model->save_member($no_doc, $nik, $dari, $sampai, $jam, $trans, $makan, $exfood);
 		
@@ -253,7 +255,7 @@ class Ot extends CI_Controller {
 			}
 
 		}else
-				$data[] = json_decode("{}");
+		$data[] = json_decode("{}");
 
             //output to json format
 		echo json_encode($data);
@@ -299,6 +301,137 @@ class Ot extends CI_Controller {
 		$jam = $_POST['jam'];
 
 		$this->over_model->set_jam($id, $nik, $jam);
+	}
+
+	public function ajax_ot_report()
+	{
+		$list = $this->over_report_model->get_ot_report();
+
+		$tot = $this->over_report_model->count_all();
+		$filter = $this->over_report_model->count_filtered();
+
+		$data = array();
+		if(!empty($list)) {
+			foreach ($list as $key) {
+				$row = array();
+				$row[] = $key->period;
+				$row[] = $key->nik;
+				$row[] = $key->namaKaryawan;
+				$row[] = $key->bagian;
+				$row[] = $key->total_jam;
+				$row[] = $key->satuan;
+				$row[] = "<button class='btn btn-primary btn-xs' onclick='
+				detail(".$key->nik.",\"".$key->period."\")'>Detail</button>";
+
+				$data[] = $row;
+			}
+
+		}else
+		$data[] = json_decode("{}");
+
+            //output to json format
+		$output = array(
+			"draw" => $_GET['draw'],
+			"recordsFiltered" => $filter,
+			"data" => $data,
+		);
+            //output to json format
+		echo json_encode($output);
+	}
+
+	public function get_id()
+	{
+		$tgl = $_POST['tgl'];
+		$list = $this->over_model->get_id($tgl);
+		if ($list) {
+			echo json_encode($list[0]->id);
+		}
+		else {
+			$time = strtotime($tgl);
+
+			$newformat = date('ym',$time);
+
+			$id = $newformat."0000";
+			echo json_encode($id);
+		}
+	}
+
+	public function ajax_ot_user()
+	{
+		$list = $this->over_user_model->get_ot_user();
+
+		$tot = $this->over_user_model->count_all();
+		$filter = $this->over_user_model->count_filtered();
+		$data = array();
+		if(!empty($list)) {
+			$no = 1;
+			foreach ($list as $key) {
+				$row = array();
+				$row[] = $no;
+				$row[] = $key->id;
+				$row[] = $key->tanggal;
+				$row[] = "<button class='btn btn-primary btn-xs' onclick='detail_spl(".$key->id.")'>Detail</button>";
+
+				$data[] = $row;
+
+				$no++;
+			}
+
+		}else
+		$data[] = json_decode("{}");
+
+
+		$output = array(
+			"draw" => $_GET['draw'],
+			"recordsTotal" => $tot,
+			"recordsFiltered" => $filter,
+			"data" => $data,
+		);
+            //output to json format
+		echo json_encode($output);
+	}
+
+	public function ajax_over_jam()
+	{
+		$id = $_POST['id'];
+		$list = $this->over_model->getJam($id);
+		$data = array();
+
+		$row1 = array();
+		$row1[] = "";
+		$row1[] = "Select Jam";
+		$row1[] = "";
+
+		$data[] = $row1;
+		if ($list) {
+			foreach ($list as $key) {
+				$row = array();
+				$row[] = $key->id;
+				$row[] = $key->jam_awal;
+				$row[] = $key->jam_akhir;
+				$row[] = $key->jam;
+
+				array_push($data, $row);
+			}
+		}
+
+            //output to json format
+		echo json_encode($data);
+	}
+
+
+	public function ajax_hitung_jam()
+	{
+		$id = $_POST['id'];
+		$list = $this->over_model->getJam_act($id);
+		$data = array();
+
+		
+		$data[] = $list[0]->jam;
+
+
+            //output to json format
+		echo json_encode($data);
 	}
 }
 ?>

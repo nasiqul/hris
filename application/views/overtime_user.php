@@ -6,6 +6,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <html>
 <!-- HEADER -->
 <?php require_once(APPPATH.'views/header/head.php'); ?>
+
+<style type="text/css">
+#info {
+  text-decoration: underline;
+}
+#info:hover {
+  text-decoration:none;
+}
+</style>
+
 <body class="hold-transition skin-purple sidebar-mini">
   <div class="wrapper">
 
@@ -25,27 +35,21 @@ scratch. This page gets rid of all links and provides the needed markup only.
       </section>
 
       <!-- Main content -->
-      <section class="content container-fluid">      
+      <section class="content container-fluid">
+
         <div class="col-md-12">
           <div class="box box-solid">
             <div class="box-body">
               <a class="btn btn-success" href="<?php echo base_url('home/overtime_form') ?>"> <i class="fa fa-plus"></i> New Entry</a>
               <br>
               <br>
-              <table id="example1" class="table table-responsive table-striped table-bordered text-center" width="100%">
+              <table id="example1" class="table table-responsive table-striped">
                 <thead>
                   <tr>
-                    <th>ID SPL</th>
-                    <th>Date</th>
-                    <th>NIK</th>
-                    <th width="20%">Nama</th>
-                    <th>Masuk</th>
-                    <th>Keluar</th>
-                    <th>Lembur (jam)<br>Plan</th>
-                    <th>Lembur (jam)<br>Actual</th>
-                    <th>Diff</th>
-                    <th>Final</th>
-                    <th>Aksi</th>
+                    <th width="5%">No</th>
+                    <th>No. SPL</th>
+                    <th>Tanggal</th>
+                    <th width="10%">Aksi</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -123,28 +127,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
           </div>
           <!-- /.modal-dialog -->
         </div>
-
-        <div class="modal modal-info fade" id="myModal2">
-          <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h4 style="float: right;" id="modal-title"></h4>
-                <h4 class="modal-title">Confirm OK?</h4>
-              </div>
-              <div class="modal-body">
-                <p id="tgl2"></p>
-                <h4>Yakin Konfirmasi "<c id='id_ot'></c>" ? </h4>
-                <p id="tot"></p>
-              </div>
-              <div class="modal-footer">
-                <button class="btn btn-success pull-left" data-dismiss="modal" onclick="ok()"><i class="fa fa-thumbs-up"></i> OK</button>
-                <button type="button" class="btn btn-danger" data-dismiss="modal"> <i class="fa fa-close"></i> Cancel</button>
-              </div>
-            </div>
-            <!-- /.modal-content -->
-          </div>
-          <!-- /.modal-dialog -->
-        </div>
       </section>
       <!-- /.content -->
     </div>
@@ -157,25 +139,20 @@ scratch. This page gets rid of all links and provides the needed markup only.
   </div>
   <!-- ./wrapper -->
   <script>
+    var table;
     $(document).ready(function() {
-      var table = $('#example1').DataTable({
+
+      table = $('#example1').DataTable({
         "lengthMenu"    : [[10, 25, 50, -1], [10, 25, 50, "All"]],
         "processing"    : true,
         "serverSide"    : true,
-        "bInfo": false,
         'order'         : [],
         "ajax": {
-          "url": "<?php echo base_url('ot/ajax_ot')?>",       
+          "url": "<?php echo base_url('ot/ajax_ot_user')?>",
           "type": "GET"
-        },
-        "columnDefs": [
-        {
-              "targets": [ 10 ], //first column / numbering column
-              "orderable": false, //set not orderable
-            }
-            ],
-          });
-    });
+        }
+      });
+    })
 
     function detail_spl(id) {
       tabel = $('#example2').DataTable();
@@ -258,92 +235,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
       var url = "<?php echo base_url('ot/print_preview/'); ?>"+s[2]+"/"+tanggal;
 
       window.open(url,'_blank');
-    }
-
-    function modalOpen(id, jam_lembur, tgl) {
-      $('#myModal2').modal({backdrop: 'static', keyboard: false});
-      $('#id_ot').text(id);
-      $('#tgl2').text(tgl);
-      $('#tot').text(jam_lembur);
-    }
-
-    function ok() {
-      var nik = $('#id_ot').text();
-      var tgl2 = $('#tgl2').text();
-      var tot = $('#tot').text();
-      $.ajax({
-        url: "<?php echo base_url('ot/acc/')?>",
-        type : "POST",
-        data: {
-          nik:nik,
-          tgl:tgl2,
-          tot:tot
-        },
-        success: function(data){
-          $('#conf').text(tgl);
-          openSuccessGritter();
-        }
-      })
-    }
-
-
-    function openSuccessGritter(){
-      jQuery.gritter.add({
-        title: "Success",
-        text: "Confirmation Success",
-        class_name: 'growl-success',
-        image: '<?php echo base_url()?>app/img/ok.png',
-        sticky: false,
-        time: '2000'
-      });
-    }
-
-    function jam(id,jam,nik) {
-      var newdiv1 = $('<input type="text" id="txtPlan'+id+'" class="form-control" value="'+jam+'"/><button class"btn btn-default" onclick="applyJam('+id+','+nik+')" >ok</button>');
-
-      $('#'+id).text('').append(newdiv1);
-
-      $('#txtPlan').focus();
-    }
-
-    $('#txtPlan').bind("enterKey",function(e){
-      alert("asd");
-    });
-
-    $('#txtPlan').keydown(function(e){
-      if(e.keyCode == 13)
-      {
-        $(this).trigger("enterKey");
-      }
-    });
-
-    function applyJam(id,nik,jam) {
-      $.ajax({
-        url: "<?php echo base_url('ot/changeJam/')?>",
-        type : "POST",
-        data: {
-          nik:nik,
-          id:id,
-          jam:jam
-        },
-        success: function(data){
-          document.getElementById("c"+nik+id).style.display = "none";
-          document.getElementById("d"+nik+id).style.display = "none";
-          openOKGritter();
-          document.getElementById("f"+nik+id).innerHTML = jam;
-        }
-      })
-    }
-
-    function openOKGritter(){
-      jQuery.gritter.add({
-        title: "Berhasil",
-        text: "Perubahan jam final berhasil",
-        class_name: 'growl-success',
-        image: '<?php echo base_url()?>app/img/icon.png',
-        sticky: false,
-        time: '2000'
-      });
     }
 
   </script>

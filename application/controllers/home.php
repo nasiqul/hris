@@ -18,29 +18,34 @@ class Home extends CI_Controller {
 
     public function index()
     {
-        if (isset($_POST['bulan'])) {
-            $newdata = array(
-                'bulan'  => $_POST['bulan']
-            );
-
-            $this->session->set_userdata($newdata);
-        }
-
-        if ($this->session->userdata("bulan")) {
-
-            $bln = $this->session->userdata("bulan");
-
-            $data['report1'] = $this->home_model->report1_by_tgl($bln);
-            $data['report2'] = $this->home_model->report2_by_tgl($bln);
-            $data['report3'] = $this->home_model->report3_by_tgl($bln);
+        if (! $this->session->userdata('nik')) {
+            redirect('home/overtime_user');
         }
         else {
-            $data['report1'] = $this->home_model->report1();
-            $data['report2'] = $this->home_model->report2();
-            $data['report3'] = $this->home_model->report3();
+            if (isset($_POST['bulan'])) {
+                $newdata = array(
+                    'bulan'  => $_POST['bulan']
+                );
+
+                $this->session->set_userdata($newdata);
+            }
+
+            if ($this->session->userdata("bulan")) {
+
+                $bln = $this->session->userdata("bulan");
+
+                $data['report1'] = $this->home_model->report1_by_tgl($bln);
+                $data['report2'] = $this->home_model->report2_by_tgl($bln);
+                $data['report3'] = $this->home_model->report3_by_tgl($bln);
+            }
+            else {
+                $data['report1'] = $this->home_model->report1();
+                $data['report2'] = $this->home_model->report2();
+                $data['report3'] = $this->home_model->report3();
+            }
+                // $data['laporan'] = $this->home_model->laporan();
+            $this->load->view('report', $data);
         }
-            // $data['laporan'] = $this->home_model->laporan();
-        $this->load->view('report', $data);
     }
 
     public function absen()
@@ -73,7 +78,7 @@ class Home extends CI_Controller {
     {
         $data['dep'] = $this->over_model->get_dep();
         $data['id_doc'] = $this->over_model->get_id_doc();
-        $this->load->view("overtime_form",$data);
+        $this->load->view("overtime_form2",$data);
     }
 
     public function ot_graph()
@@ -133,6 +138,11 @@ class Home extends CI_Controller {
     public function tanya()
     {
         $this->load->view('qa');
+    }
+
+    public function overtime_user()
+    {
+        $this->load->view('overtime_user');
     }
 
     public function ot()

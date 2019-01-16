@@ -7,6 +7,9 @@
     <ul class="sidebar-menu" data-widget="tree">
       <li class="header">MAIN</li>
       <!-- Optionally, you can add icons to the links -->
+      
+      <?php if ($this->session->userdata('nik')) { ?>
+
       <li class="active"><a href="<?php echo base_url(); ?>"><i class="fa fa-home"></i> <span>HOME</span></a></li>
       <li class="treeview">
         <a href="#"><i class="fa fa-industry"></i> <span>Employee</span>
@@ -63,9 +66,15 @@
             <ul class="treeview-menu">
               <li><a href="<?php echo base_url('login'); ?>" target="_blank">Login</a></li>
               <li><a href="<?php echo base_url('home/karyawan_coba'); ?>">Coba</a></li>
-              <li><a href="<?php echo base_url('home/sess_destroy'); ?>">Sess_destroy</a></li>              
+              <li><a href="<?php echo base_url('home/sess_destroy'); ?>">Sess_destroy</a></li>
+              <li><a href="<?php echo base_url('home/overtime_user'); ?>">overtime_user</a></li>       
             </ul>
           </li>
+
+        <?php }  else { ?>
+
+          <li class="active"><a href="<?php echo base_url('home/overtime_user'); ?>"><i class="fa fa-line-chart"></i> <span>overtime_user</span></a></li>
+        <?php } ?>
         </ul>
         <!-- /.sidebar-menu -->
       </section>
