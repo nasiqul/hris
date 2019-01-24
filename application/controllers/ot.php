@@ -502,6 +502,34 @@ class Ot extends CI_Controller {
             //output to json format
 		echo json_encode($output);
 	}
+
+	public function ga_by_tgl()
+	{
+		$tgl = $_POST['tgl'];
+
+		$list = $this->over_model->getGA($tgl);
+		$data = array();
+
+		if ($list) {
+			foreach ($list as $key) {
+				$row = array();
+				$row[] = $key->tanggal;
+				$row[] = $key->jam;
+				$row[] = $key->makan1;
+				$row[] = $key->makan2;
+				$row[] = $key->makan3;
+				$row[] = $key->B;
+				$row[] = $key->P;
+
+				array_push($data);
+			}
+		}
+		else
+			echo json_decode("{}");
+
+            //output to json format
+		echo json_encode($data);
+	}
 }
 ?>
 

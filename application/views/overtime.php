@@ -259,6 +259,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
       var str = $("#modal-title").text();
       var tanggal = $("#tgl").text();
       var s = str.split(" ");
+      console.log(s[2]+" "+tanggal);
+      
       var url = "<?php echo base_url('ot/print_preview/'); ?>"+s[2]+"/"+tanggal;
 
       window.open(url,'_blank');

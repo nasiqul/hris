@@ -207,7 +207,9 @@ class Over_model extends CI_Model {
         $this->db->join("karyawan k","om.nik = k.nik");
         $this->db->join("cost_center_budget cc","cc.id_cc = k.costCenter");
         $this->db->where("o.id",$id);
-        $this->db->where("MONTH(cc.period) = MONTH (STR_TO_DATE('".$tgl."', '%d-%m-%Y'))");
+        $this->db->where("MONTH(cc.period) = MONTH(STR_TO_DATE('".$tgl."', '%d-%m-%Y'))");
+        $this->db->where("YEAR(cc.period) = YEAR(STR_TO_DATE('".$tgl."', '%d-%m-%Y'))");
+        $this->db->group_by('k.nik');
         $query = $this->db->get();
         return $query->result();
     }
