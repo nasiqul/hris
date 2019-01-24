@@ -41,8 +41,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <th width="20%">Nama</th>
                     <th>Masuk</th>
                     <th>Keluar</th>
-                    <th>Lembur (jam)<br>Plan</th>
-                    <th>Lembur (jam)<br>Actual</th>
+                    <th>Lembur Plan<br>(jam)</th>
+                    <th>Lembur Aktual<br>(jam)</th>
                     <th>Diff</th>
                     <th>Final</th>
                     <th width="10%">Aksi</th>
@@ -135,7 +135,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <p id="tgl2"></p>
                 <p style="display: none" id='id5'></p>
                 <h4>Yakin Konfirmasi "<c id='id_ot'></c>" ? </h4>
-                <p id="tot"></p>
+                <span id="tot"></span> Jam
               </div>
               <div class="modal-footer">
                 <button class="btn btn-success pull-left" data-dismiss="modal" onclick="ok()"><i class="fa fa-thumbs-up"></i> OK</button>
@@ -287,6 +287,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
           id:idX
         },
         success: function(data){
+          gantiJam(nik,idX,tot);
+          document.getElementById("f"+nik+idX).innerHTML = tot;
           $('#conf'+nik+idX).css("display","none");
           $('#c'+nik+idX).css("display","none");
           $('#d'+nik+idX).css("display","none");
@@ -325,7 +327,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
       }
     });
 
-    function applyJam(id,nik,jam) {
+    function applyJam(id,nik,jam,tgl) {
+      modalOpen(nik,jam,tgl,id);
+    }
+
+    function gantiJam(nik,id,jam) {
       $.ajax({
         url: "<?php echo base_url('ot/changeJam/')?>",
         type : "POST",
@@ -333,12 +339,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
           nik:nik,
           id:id,
           jam:jam
-        },
-        success: function(data){
-          document.getElementById("c"+nik+id).style.display = "none";
-          document.getElementById("d"+nik+id).style.display = "none";
-          openOKGritter();
-          document.getElementById("f"+nik+id).innerHTML = jam;
         }
       })
     }

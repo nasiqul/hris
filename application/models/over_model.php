@@ -409,7 +409,8 @@ class Over_model extends CI_Model {
 
     public function tambah_aktual($id_cc,$val,$tgl)
     {
-        $query2 = "UPDATE `cost_center_budget` SET `aktual` = `aktual` + ".(float)$val." WHERE `id_cc` = '".$id_cc."' AND MONTH(period) = MONTH(STR_TO_DATE('".$tgl."', '%d-%m-%Y'))";
+        $query2 = "UPDATE `cost_center_budget` SET `aktual` = `aktual` + ".(float)$val." WHERE `id_cc` = '".$id_cc."' AND MONTH(period) = MONTH(STR_TO_DATE('".$tgl."', '%d-%m-%Y')) 
+            AND YEAR(period) = YEAR(STR_TO_DATE('".$tgl."', '%d-%m-%Y'))";
         $this->db->query($query2);
     }
 
@@ -433,8 +434,8 @@ class Over_model extends CI_Model {
 
     public function get_data_chart($tgl,$cc,$target)
     {
-        $q = "select tanggal,jam,".$target." as target from (
-        SELECT tanggal, costCenter, SUM(jam_aktual) as jam from over_time o
+        $q = "select tanggal, jam,".$target." as target from (
+        SELECT tanggal, costCenter, SUM(final) as jam from over_time o
         JOIN over_time_member om ON o.id = om.id_ot
         JOIN karyawan k ON k.nik = om.nik
         WHERE costCenter = ".$cc." AND

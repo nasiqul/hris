@@ -69,9 +69,9 @@ class Ot extends CI_Controller {
 			$row[] = $key->jam;
 
 			if ($key->aktual > $key->jam && $key->final == 0 && $key->status == 0)
-				$row[] = "<button class='btn btn-danger btn-xs' id=d".$key->nik.$key->id." onclick='applyJam(".$key->id.",\"".$key->nik."\",".$key->jam.")'><i class='fa fa-close'></i></button>  &nbsp <b>"
+				$row[] = "<button class='btn btn-danger btn-xs' id=d".$key->nik.$key->id." onclick='applyJam(".$key->id.",\"".$key->nik."\",".$key->jam.",\"".$tg."\")'><i class='fa fa-close'></i></button>  &nbsp <b>"
 			.ROUND($key->aktual,2)."</b> 
-			&nbsp<button class='btn btn-success btn-xs' id=c".$key->nik.$key->id." onclick='applyJam(".$key->id.",\"".$key->nik."\",".$key->aktual.")'><i class='fa fa-check'></i></button>";
+			&nbsp<button class='btn btn-success btn-xs' id=c".$key->nik.$key->id." onclick='applyJam(".$key->id.",\"".$key->nik."\",".$key->aktual.",\"".$tg."\")'><i class='fa fa-check'></i></button>";
 			else
 				$row[] = ROUND($key->aktual,2);
 			$row[] = $key->diff;

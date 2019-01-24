@@ -10,20 +10,20 @@
 
 <style type="text/css">
 @page {
-    size: A4;
-    margin: 0;
+	size: A4;
+	margin: 1;
 }
 @media print {
 	#tb-collapse {
-        background-color: #dddddd !important;
-        -webkit-print-color-adjust: exact; 
-    }
-    body {
-    	font-size: 17pt;
-    }
-    #container {
-        font-size: 17pt;
-    }
+		background-color: #dddddd !important;
+		-webkit-print-color-adjust: exact; 
+	}
+	body {
+		font-size: 17pt;
+	}
+	#container {
+		font-size: 17pt;
+	}
 }
 
 body {
@@ -253,12 +253,18 @@ table tr th {
 					var processed_json = new Array();
 					var processed_jsontr = new Array();
 					var processed_jsont = new Array();
+					var z = 0;
 
 					for (i = 0; i < s.length; i++){
-						processed_json.push(parseFloat(s[i][0]));
-						processed_jsontr.push(parseInt(s[i][2]));
+						z += parseFloat(s[i][0]);
+						processed_json.push(z);
+						processed_jsontr.push(parseFloat(s[i][2]));
 						processed_jsont.push(s[i][1]);
 					}
+
+					var target = s[0][2];
+					console.log(target);
+
 
 
 					$('#container').highcharts({
@@ -267,23 +273,23 @@ table tr th {
 						},
 
 						yAxis: {
+							softMax: 50,
+							allowDecimals: true,
+							min: 4,
 							title: {
-								text: ''
+								text: 'Resultados'
 							},
-							min : 0,
-							gridLineColor: '#000',
-							plotLines:[{
-								value:processed_jsontr,
-								color: '#ff0000',
-								width:2,
-								zIndex:4,
-								label:{text:'Target'}
+							plotLines: [{
+								value: target,
+								width: 1,
+								color: 'rgba(204,0,0,0.75)'
 							}]
 						},
 
 						xAxis: {
 							lineColor: 'transparent',
 							categories : processed_jsont
+							//processed_jsontr
 						},
 
 						legend: {
