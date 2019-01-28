@@ -155,6 +155,12 @@ class Home extends CI_Controller {
         $this->load->view('overtime_user',$data);
     }
 
+    public function report_GA()
+    {
+        $data['menu'] = 'GAreport';
+        $this->load->view('GAreport',$data);
+    }
+
     public function ot()
     {
         if (isset($_POST['tanggal']) || isset($_POST['departemen'])) 

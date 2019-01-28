@@ -61,7 +61,7 @@ class import_excel extends CI_Controller {
             	delete_files($config['upload_path']);
 
             }
-            redirect('home/ot');
+            redirect('budget');
         }
     }
 
