@@ -40,8 +40,8 @@ class Cari_model extends CI_Model {
         }
 
         if ($nama) {
-            $where = "( namaKaryawan LIKE '$nama')";
-            $this->db->where($where);
+            //$where = "namaKaryawan LIKE '$nama'";
+            $this->db->like('namaKaryawan',$nama);
         }
 
         if ($shift) {

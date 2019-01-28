@@ -64,6 +64,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   </div>
   <!-- Script untuk memanggil library Highcharts -->
   <script type="text/javascript">
+    //alert(<?php echo json_encode($tgl1) ?>);
     $(function () {       
         $('#report').highcharts({
           chart : {
@@ -73,12 +74,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
          text: 'Presensi bulan Januari'   
        }, 
        xAxis : {
-         categories: '<?php echo json_encode($tgl1); ?>'
+         categories: ['02-01-2019', '03-01-2019', '04-01-2019', '05-01-2019', '06-01-2019', '07-01-2019', '08-01-2019', '09-01-2019', '10-01-2019', '11-01-2019', '12-01-2019', '13-01-2019', '14-01-2019', '15-01-2019']
        },
        yAxis : {
          min: 0,
          title: {
-          text: 'Total fruit consumption'
+          text: 'Total Karyawan'
         },
         stackLabels: {
           enabled: true,

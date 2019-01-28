@@ -39,8 +39,7 @@ class Cari_absen_model extends CI_Model {
         }
 
         if ($nama) {
-            $where = "( namaKaryawan LIKE '$nama')";
-            $this->db->where($where);
+            $this->db->like('namaKaryawan',$nama);
         }
 
         if ($shift) {

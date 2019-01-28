@@ -26,13 +26,89 @@ scratch. This page gets rid of all links and provides the needed markup only.
       </section>
 
       <!-- Main content -->
-      <section class="content container-fluid">      
+      <section class="content container-fluid">
+        <?php
+        /* Mengambil query report*/
+        $arr2 = array();
+        $result2 = array();
+        foreach($status as $r1){
+
+          $arr2['name'] = $r1->statusKaryawan;
+          $arr2['y'] = (float) $r1->jml;
+
+          array_push($result2, $arr2);
+        }
+
+        $arr = array();
+        $result = array();
+        foreach($gender as $r2){
+
+          $arr['name'] = $r2->jk;
+          $arr['y'] = (float) $r2->jml;
+
+          array_push($result, $arr);
+        }
+
+        $arr3 = array();
+        $result3 = array();
+        foreach($grade as $r3){
+
+          $arr3['name'] = $r3->grade;
+          $arr3['y'] = (float) $r3->jml;
+
+          array_push($result3, $arr3);
+        }
+
+
+        $arr4 = array();
+        $result4 = array();
+        foreach($kode as $r4){
+
+          $arr4['name'] = $r4->kode;
+          $arr4['y'] = (float) $r4->jml;
+
+          array_push($result4, $arr4);
+        }
+        ?>
+
+        <div class="col-md-12">
+          <!-- Custom Tabs -->
+          <div class="nav-tabs-custom">
+            <ul class="nav nav-tabs">
+              <li class="active"><a href="#tab_1" data-toggle="tab">Stat By Status</a></li>
+              <li><a href="#tab_2" data-toggle="tab">Stat By Gender</a></li>
+              <li><a href="#tab_3" data-toggle="tab">Stat By Grade</a></li>
+              <li><a href="#tab_4" data-toggle="tab">Stat By Departemen</a></li>
+              <li class="pull-right"><a href="#" class="text-muted"><i class="fa fa-gear"></i></a></li>
+            </ul>
+            <div class="tab-content">
+              <div class="tab-pane active" id="tab_1">
+                <div id = "container" style = "width: 850px; margin: 0 auto"></div>
+              </div>
+              <!-- /.tab-pane -->
+              <div class="tab-pane" id="tab_2">
+                <div id = "container2" style = "width: 750px; margin: 0 auto"></div>
+              </div>
+              <!-- /.tab-pane -->
+              <div class="tab-pane" id="tab_3">
+                <div id = "container3" style = "width: 850px; margin: 0 auto"></div>
+              </div>
+
+              <div class="tab-pane" id="tab_4">
+                <div id = "container4" style = "width: 850px; margin: 0 auto"></div>
+              </div>
+              <!-- /.tab-pane -->
+            </div>
+            <!-- /.tab-content -->
+          </div>
+          <!-- nav-tabs-custom -->
+        </div>
+        <br>
 
         <table id="example1" class="table table-responsive table-striped">
           <thead>
             <tr>
               <th>NIK</th>
-              <th>Foto</th>
               <th>Nama</th>
               <th>Departemen</th>
               <th>Sec/Group</th>
@@ -81,11 +157,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <div class="tab-content">
                           <div class="active tab-pane" id="activity">
                             <div class="box-header"><i class="fa fa-user"></i> DATA PRIBADI</div>
-                            
+
                             <div class="box-body">
                               <div class="col-md-6">
                                 <p class="text-muted">Tempat Lahir</p>
                                 <p id="tempatLahir"></p>
+
 
                                 <p class="text-muted">Tanggal Lahir</p>
                                 <p id="tanggalLahir"></p>
@@ -105,7 +182,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                           <div class="tab-pane" id="devisi">
                             <div class="box-header"><i class="fa fa-building"></i> DATA DEVISI</div>
-                            
+
                             <div class="box-body">
                               <div class="col-md-6">
                                 <p class="text-muted">Departement/subSec</p>
@@ -129,7 +206,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                           <div class="tab-pane" id="kerja">
                             <div class="box-header"><i class="fa fa-briefcase"></i> DATA KERJA</div>
-                            
+
                             <div class="box-body">
                               <div class="col-md-6">
                                 <p class="text-muted">Status Karyawan</p>
@@ -154,7 +231,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                           <div class="tab-pane" id="admin">
                             <div class="box-header"><i class="fa fa-briefcase"></i> DATA ADMINISTRASI</div>
-                            
+
                             <div class="box-body">
                               <div class="col-md-6">
                                 <p class="text-muted">Nomor Handphone</p>
@@ -192,7 +269,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <div class="modal-footer">
                 <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-danger pull-left"><i class="fa fa-times"></i> Terminasi</button>
-                <button type="button" class="btn btn-warning pull-left" data-dismiss="modal"><i class="fa fa-pencil"></i> Edit Data</button>
+                <button type="button" class="btn btn-warning pull-left" id="edit"><i class="fa fa-pencil"></i> Edit Data</button>
               </div>
             </div>
             <!-- /.modal-content -->
@@ -212,7 +289,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   </div>
   <!-- ./wrapper -->
   <script>
-
+    console.log(<?php echo json_encode($result) ?>);
     $(document).ready(function() {
       $('#example1').DataTable({
         "lengthMenu"    : [[10, 25, 50, -1], [10, 25, 50, "All"]],
@@ -229,11 +306,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
         { "data": 2 },
         { "data": 3 },
         { "data": 4 },
-        { "data": 5 },
-        { "data": 6 }
+        { "data": 5 }
         ]
       })
-
     })
 
     $('#openModal').click(function(){
@@ -293,6 +368,212 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
       $('#myModal').modal('show');
     }
+
+    $('#edit').on('click',function() {
+
+     var tmpt = $('#tempatLahir').text();
+     $('#tempatLahir').text('').append($('<input />',
+     {
+      'value' : tmpt, 
+      'type' : 'text', 
+      'class' : 'form-control', 
+      'id' : 'txtTempat'}
+      ));
+     $('#txtTempat').focus();
+
+     var tanggalLahir = $('#tanggalLahir').text();
+     $('#tanggalLahir').text('').append($('<input />',
+     {
+      'value' : tanggalLahir, 
+      'type' : 'date', 
+      'class' : 'form-control', 
+      'id' : 'txttanggalLahir'}
+      ));
+
+   })
+
+    //---------CHART---------------
+
+    $(function () {
+      $('#container').highcharts({
+        chart: {
+          type: 'column'
+        },
+        title: {
+          text: ''
+        },
+        xAxis: {
+          type: 'category'
+        },
+        yAxis: {
+          title: {
+            text: 'Total Karyawan'
+          }
+
+        },
+        legend: {
+          enabled: false
+        },
+        plotOptions: {
+          series: {
+            borderWidth: 0,
+            dataLabels: {
+              enabled: true,
+              format: '{point.y:.1f}'
+            }
+          }
+        },
+        credits: {
+          enabled: false
+        },
+
+        tooltip: {
+          headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+          pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.1f}</b> <br/>'
+        },
+
+        "series": [
+        {
+          "name": "Status",
+          "colorByPoint": true,
+          "data": <?php echo json_encode($result2) ?>
+        }
+        ]
+      })
+    });
+
+    $(function () {
+      $('#container2').highcharts({
+        chart : {
+         plotBackgroundColor: null,
+         plotBorderWidth: null,
+         plotShadow: false
+       },
+       title : {
+         text: 'By Gender'   
+       },
+       tooltip : {
+         pointFormat: '<b>{point.y}</b>'
+       },
+       plotOptions : {
+         pie: {
+          allowPointSelect: true,
+          cursor: 'pointer',
+
+          dataLabels: {
+           enabled: true,
+           format: '<b>{point.name}</b> : {point.percentage:.1f}% ',
+           style: {
+            color: (Highcharts.theme && Highcharts.theme.contrastTextColor)||
+            'black'
+          }
+        },
+        showInLegend: true
+
+      }
+    },
+    credits: {
+      enabled: false
+    },
+    series : [{
+     type: 'pie',
+     name: 'Gender',
+     data: <?php echo json_encode($result) ?>
+   }]
+ })
+    });
+
+    $(function () {
+      $('#container3').highcharts({
+        chart: {
+          type: 'column'
+        },
+        title: {
+          text: ''
+        },
+        xAxis: {
+          type: 'category'
+        },
+        yAxis: {
+          title: {
+            text: 'Total Karyawan'
+          }
+        },
+        legend: {
+          enabled: false
+        },
+        plotOptions: {
+          series: {
+            borderWidth: 0,
+            dataLabels: {
+              enabled: true,
+              format: '{point.y:.1f}'
+            }
+          }
+        },
+        credits: {
+          enabled: false
+        },
+        tooltip: {
+          headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+          pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.1f}</b> of total<br/>'
+        },
+
+        "series": [
+        {
+          "colorByPoint": true,
+          "data": <?php echo json_encode($result3) ?>
+        }
+        ]
+      })
+    });
+
+
+    $(function () {
+      $('#container4').highcharts({
+        chart: {
+          type: 'column'
+        },
+        title: {
+          text: ''
+        },
+        xAxis: {
+          type: 'category'
+        },
+        yAxis: {
+          title: {
+            text: 'Total Karyawan'
+          }
+
+        },
+        legend: {
+          enabled: false
+        },
+        plotOptions: {
+          series: {
+            borderWidth: 0,
+            dataLabels: {
+              enabled: true,
+              format: '{point.y:.1f}'
+            }
+          }
+        },
+        credits: {
+          enabled: false
+        },
+        tooltip: {
+          headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+          pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.1f}</b> of total<br/>'
+        },
+
+        "series": [
+        {
+          "colorByPoint": true,
+          "data": <?php echo json_encode($result4) ?>
+        }
+        ]
+      })
+    });
   </script>
 
 <!-- Optionally, you can add Slimscroll and FastClick plugins.

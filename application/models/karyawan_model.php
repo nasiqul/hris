@@ -2,8 +2,8 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Karyawan_model extends CI_Model {
-	var $column_order = array('nik','foto','namaKaryawan','dep/subSec','sec/Group','tanggalMasuk','jk','statusKaryawan','namaGrade','jabatan'); //set column field database for datatable orderable
-    var $column_search = array('nik','foto','namaKaryawan','dep/subSec','sec/Group','tanggalMasuk','jk','statusKaryawan','namaGrade','jabatan'); //set column field database for datatable searchable 
+	var $column_order = array('nik','namaKaryawan','dep/subSec','sec/Group','tanggalMasuk','jk','statusKaryawan','namaGrade','jabatan'); //set column field database for datatable orderable
+    var $column_search = array('nik','namaKaryawan','dep/subSec','sec/Group','tanggalMasuk','jk','statusKaryawan','namaGrade','jabatan'); //set column field database for datatable searchable 
     var $order = array('nik' => 'asc'); // default order 
 
     public function __construct()
@@ -80,6 +80,54 @@ class Karyawan_model extends CI_Model {
         $this->db->where('nik',$nik);
         $query = $this->db->get();
         return $query->result();
+    }
+
+    public function by_status(){
+        $q = "SELECT statusKaryawan, COUNT(*) AS jml from karyawan group by statusKaryawan ORDER BY jml";
+        $query = $this->db->query($q);
+
+        if($query->num_rows() > 0){
+            foreach($query->result() as $data){
+                $hasil[] = $data;
+            }
+            return $hasil;
+        }
+    }
+
+    public function by_gender(){
+        $q = "SELECT jk, COUNT(nik) AS jml from karyawan group by jk";
+        $query = $this->db->query($q);
+
+        if($query->num_rows() > 0){
+            foreach($query->result() as $data){
+                $hasil[] = $data;
+            }
+            return $hasil;
+        }
+    }
+
+    public function by_grade(){
+        $q = "SELECT grade, COUNT(*) AS jml from karyawan group by grade";
+        $query = $this->db->query($q);
+
+        if($query->num_rows() > 0){
+            foreach($query->result() as $data){
+                $hasil[] = $data;
+            }
+            return $hasil;
+        }
+    }
+
+    public function by_kode(){
+        $q = "SELECT kode, COUNT(*) AS jml from karyawan group by kode order by jml ASC";
+        $query = $this->db->query($q);
+
+        if($query->num_rows() > 0){
+            foreach($query->result() as $data){
+                $hasil[] = $data;
+            }
+            return $hasil;
+        }
     }
 }
 ?>

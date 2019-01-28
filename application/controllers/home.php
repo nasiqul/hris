@@ -43,7 +43,11 @@ class Home extends CI_Controller {
 
     public function karyawan()
     {
-        $this->load->view("karyawan");
+        $data['status'] = $this->karyawan_model->by_status();
+        $data['gender'] = $this->karyawan_model->by_gender();
+        $data['grade'] = $this->karyawan_model->by_grade();
+        $data['kode'] = $this->karyawan_model->by_kode();
+        $this->load->view("karyawan", $data);
     }
 
     public function detail()
@@ -172,7 +176,7 @@ class Home extends CI_Controller {
         foreach ($list as $key) {
             $row = array();
             $row[] = $key->nik;
-            $row[] = $key->foto;
+            //$row[] = $key->foto;
             $row[] = "<a style='cursor: pointer' onclick='ShowModal(".$i.")' data-toggle='modal' data-id='".$key->nik."' id='tes".$i."'>".$key->namaKaryawan."</a>";
             $row[] = $key->dep;
             $row[] = $key->group;
