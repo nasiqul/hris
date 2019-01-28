@@ -188,7 +188,11 @@ class Karyawan_model extends CI_Model {
     }
 
     public function by_kode(){
-        $q = "SELECT kode, COUNT(*) AS jml from karyawan group by kode order by jml ASC";
+        $q = "SELECT dp.nama as dep, COUNT(k.nik) as jml from karyawan k
+                LEFT JOIN posisi p ON p.nik = k.nik 
+                JOIN departemen dp ON dp.id = p.id_dep
+                GROUP BY dp.id
+                ORDER BY jml ASC";
         $query = $this->db->query($q);
 
         if($query->num_rows() > 0){

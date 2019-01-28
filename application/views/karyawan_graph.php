@@ -70,7 +70,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         $result4 = array();
         foreach($kode as $r4){
 
-          $arr4['name'] = $r4->kode;
+          $arr4['name'] = $r4->dep;
           $arr4['y'] = (int) $r4->jml;
 
           array_push($result4, $arr4);
