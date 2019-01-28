@@ -41,13 +41,18 @@ class Home extends CI_Controller {
         $this->load->view("client");
     }
 
-    public function karyawan()
+    public function karyawan_graph()
     {
         $data['status'] = $this->karyawan_model->by_status();
         $data['gender'] = $this->karyawan_model->by_gender();
         $data['grade'] = $this->karyawan_model->by_grade();
         $data['kode'] = $this->karyawan_model->by_kode();
-        $this->load->view("karyawan", $data);
+        $this->load->view("karyawan_graph", $data);
+    }
+
+    public function karyawan()
+    {
+        $this->load->view("karyawan");
     }
 
     public function detail()
