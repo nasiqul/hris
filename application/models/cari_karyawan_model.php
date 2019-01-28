@@ -41,7 +41,7 @@ class Cari_karyawan_model extends CI_Model {
         }
 
         if ($dep) {
-            $this->db->where("k.kode", $dep);
+            $this->db->where("dp.nama", $dep);
         }
 
         if ($pos) {
