@@ -30,17 +30,17 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <?php
         /* Mengambil query report*/
         foreach($report1 as $result1){
-        $tgl1[] = date("d-m-Y", strtotime($result1->tanggal)); //ambil tanggal
+        $tgl1[] = $result1->tanggal; //ambil tanggal
         $value1[] = (float) $result1->jml; //ambil jumlah
       }
 
       foreach($report2 as $result2){
-        $tgl2[] = date("d-m-Y", strtotime($result2->tanggal)); //ambil tanggal
+        $tgl2[] = $result2->tanggal; //ambil tanggal
         $value2[] = (float) $result2->jml; //ambil jumlah
       }
 
       foreach($report3 as $result3){
-        $tgl3[] = date("d-m-Y", strtotime($result3->tanggal)); //ambil tanggal
+        $tgl3[] = $result3->tanggal; //ambil tanggal
         $value3[] = (float) $result3->jml; //ambil jumlah
       }
       /* end mengambil query*/
