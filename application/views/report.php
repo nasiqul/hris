@@ -35,12 +35,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
       }
 
       foreach($report2 as $result2){
-        $tgl2[] = $result2->tanggal; //ambil tanggal
+        $tgl2[] = date("d-m-Y", strtotime($result2->tanggal)); //ambil tanggal
         $value2[] = (float) $result2->jml; //ambil jumlah
       }
 
       foreach($report3 as $result3){
-        $tgl3[] = $result3->tanggal; //ambil tanggal
+        $tgl3[] = date("d-m-Y", strtotime($result3->tanggal)); //ambil tanggal
         $value3[] = (float) $result3->jml; //ambil jumlah
       }
       /* end mengambil query*/
