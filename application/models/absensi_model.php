@@ -26,7 +26,7 @@ class Absensi_model extends CI_Model {
         $this->db->select('karyawan.nik, karyawan.namaKaryawan, presensi.tanggal, presensi.masuk, presensi.keluar, presensi.shift');
         $this->db->from('presensi');
         $this->db->join('karyawan','karyawan.nik = presensi.nik');
-        $this->db->where('date(presensi.tanggal)','CURDATE()');
+        $this->db->where('date(presensi.tanggal) = CURRENT_DATE()');
         $this->db->where('presensi.shift REGEXP','^[a-zA-Z]+$');
         $this->db->where('presensi.shift !=','OFF');
         $this->db->where('presensi.shift !=','X');
