@@ -27,7 +27,7 @@ class Home_model extends CI_Model {
         $this->db->select('karyawan.nik, karyawan.namaKaryawan, presensi.tanggal, presensi.masuk, presensi.keluar, presensi.shift');
         $this->db->from('presensi');
         $this->db->join('karyawan','karyawan.nik = presensi.nik');
-        $this->db->where('presensi.tanggal','CURRENT_DATE()');
+        $this->db->where('date(presensi.tanggal) = CURRENT_DATE()');
         $this->db->where('presensi.shift !=','0');
         $this->db->where('presensi.shift !=','OFF');
         $this->db->where('presensi.shift !=','X');
