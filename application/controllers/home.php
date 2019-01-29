@@ -138,6 +138,8 @@ class Home extends CI_Controller {
 
         $output = array(
             "draw" => $_POST['draw'],
+            "recordsTotal" => $this->home_model->count_all(),
+            "recordsFiltered" => $this->home_model->count_filtered(),
             "data" => $data,
         );
         //output to json format

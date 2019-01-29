@@ -66,10 +66,23 @@ class Home_model extends CI_Model {
         }
     }
 
+    function count_filtered()
+    {
+        $this->_get_datatables_query();
+        $query = $this->db->get();
+        return $query->num_rows();
+    }
+
+    public function count_all()
+    {
+        $this->db->from('presensi');
+        return $this->db->count_all_results();
+    }
+
     public function report1(){
         $q = "SELECT tanggal, COUNT(*) AS jml from presensi where shift = '1' 
-AND MONTH(tanggal) = MONTH(CURRENT_DATE())
-AND YEAR(tanggal) = YEAR(CURRENT_DATE()) group by tanggal";
+        AND MONTH(tanggal) = MONTH(CURRENT_DATE())
+        AND YEAR(tanggal) = YEAR(CURRENT_DATE()) group by tanggal";
         $query = $this->db->query($q);
 
         if($query->num_rows() > 0){
