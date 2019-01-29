@@ -193,7 +193,7 @@ class Home extends CI_Controller {
             $row[] = "<a style='cursor: pointer' onclick='ShowModal(".$i.")' data-toggle='modal' data-id='".$key->nik."' id='tes".$i."'>".$key->namaKaryawan."</a>";
             $row[] = $key->dep;
             $row[] = $key->group;
-            $row[] = date("d-m-Y", strtotime($key->tanggalMasuk));
+            $row[] = date("j M Y", strtotime($key->tanggalMasuk));
             $row[] = $key->statusKaryawan;
 
             $data[] = $row;
