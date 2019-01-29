@@ -8,27 +8,27 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <?php require_once(APPPATH.'views/header/head.php'); ?>
 
 <body class="hold-transition skin-blue sidebar-mini">
-<div class="wrapper">
+  <div class="wrapper">
 
-  <!-- NAVBAR -->
-  <?php require_once(APPPATH.'views/header/navbar.php'); ?>
-  <!-- SIDEBAR -->
-  <?php require_once(APPPATH.'views/sidebar/sidebar.php'); ?>
+    <!-- NAVBAR -->
+    <?php require_once(APPPATH.'views/header/navbar.php'); ?>
+    <!-- SIDEBAR -->
+    <?php require_once(APPPATH.'views/sidebar/sidebar.php'); ?>
 
-  <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <h1>
-        Presensi
-        <small>Optional description</small>
-      </h1>
-    </section>
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+      <section class="content-header">
+        <h1>
+          Presence Data
+          <small>Optional description</small>
+        </h1>
+      </section>
 
-    <!-- Main content -->
-    <section class="content container-fluid">
+      <!-- Main content -->
+      <section class="content container-fluid">
 
-    <div class="col-md-12">
+        <div class="col-md-12">
           <!-- general form elements -->
           <div class="box box-primary">
             <div class="box-header with-border">
@@ -72,31 +72,32 @@ scratch. This page gets rid of all links and provides the needed markup only.
               </div>
               <!-- /.box-body -->
               <div class="box-footer">
-              <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i> <span>Cari</span></button>
-              <a class="btn btn-warning" id="reset" href="<?php echo base_url('home/session_destroy') ?>" >Reset</a>
-                    
+                <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i> <span>Cari</span></button>
+                <a class="btn btn-warning" id="reset" href="<?php echo base_url('home/session_destroy') ?>" >Reset</a>
+
               </div>
             </form>
           </div>
           <!-- /.box -->
 
-        </div>    
+        </div> 
+        <div class="col-md-12">
+          <table id="example1" class="table table-responsive table-striped">
+            <thead>
+              <th>Tanggal</th>
+              <th>NIK</th>
+              <th>Nama</th>
+              <th>Datang</th>
+              <th>Pulang</th>
+              <th>Shift</th>
+            </thead>        
+            <tbody>
+            </tbody>
+          </table>
+        </div>   
 
-      <table id="example1" class="table table-responsive table-striped">
-        <thead>
-          <th>Tanggal</th>
-          <th>NIK</th>
-          <th>Nama</th>
-          <th>Datang</th>
-          <th>Pulang</th>
-          <th>Shift</th>
-        </thead>        
-        <tbody>
-        </tbody>
-      </table>
-
-    </section>
-    <!-- /.content -->
+      </section>
+      <!-- /.content -->
 
     <!-- <div class="modal fade" id="myModal">
           <div class="modal-dialog modal-lg">
@@ -116,38 +117,38 @@ scratch. This page gets rid of all links and provides the needed markup only.
               </div>
             </div>
             /.modal-content -->
-          <!-- </div> -->
-          <!-- /.modal-dialog -->
-        <!-- </div> --> 
-  </div>
-  <!-- /.content-wrapper -->
-  <!-- /.control-sidebar -->
+            <!-- </div> -->
+            <!-- /.modal-dialog -->
+            <!-- </div> --> 
+          </div>
+          <!-- /.content-wrapper -->
+          <!-- /.control-sidebar -->
   <!-- Add the sidebar's background. This div must be placed
-  immediately after the control sidebar -->
-  <div class="control-sidebar-bg"></div>
-  <?php require_once(APPPATH.'views/footer/foot.php'); ?>
-</div>
-<!-- ./wrapper -->
-<script>
-  var table;
-  $(document).ready(function() {
-    table = $('#example1').DataTable({
-      "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
-      "processing": true,
-      "serverSide": true,
-      "bInfo": false,
-      "order": [],
-      "ajax": {
-            "url": "<?php echo base_url('home/ajax')?>",            
-            "type": "POST"
+    immediately after the control sidebar -->
+    <div class="control-sidebar-bg"></div>
+    <?php require_once(APPPATH.'views/footer/foot.php'); ?>
+  </div>
+  <!-- ./wrapper -->
+  <script>
+    var table;
+    $(document).ready(function() {
+      table = $('#example1').DataTable({
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        "processing": true,
+        "serverSide": true,
+        "bInfo": false,
+        "order": [],
+        "ajax": {
+          "url": "<?php echo base_url('home/ajax')?>",            
+          "type": "POST"
         }
-    });
+      });
 
-  })
-</script>
+    })
+  </script>
 
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the
      user experience. -->
-</body>
-</html>
+   </body>
+   </html>

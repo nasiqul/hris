@@ -28,7 +28,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <!-- Main content -->
       <section class="content container-fluid">
 
-      <div class="col-md-12">
+        <div class="col-md-12">
           <!-- general form elements -->
           <div class="box box-primary">
             <div class="box-header with-border">
@@ -66,35 +66,35 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <div class="form-group">
                     <label for="inputShift"><i class="fa fa-briefcase "></i> <span>Absensi</span></label>
                     <input type="text" class="form-control" name="absensi" id="inputAbsensi" placeholder="Absensi"
-                    <?php if(isset($_SESSION['absensi'])) echo 'value="'.$_SESSION['absensi'].'"';?>>
+                    <?php if(isset($_SESSION['shift2'])) echo 'value="'.$_SESSION['shift2'].'"';?>>
                   </div>
                 </div>
               </div>
               <!-- /.box-body -->
               <div class="box-footer">
-              <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i> <span>Cari</span></button>
-              <a class="btn btn-warning" id="reset" href="<?php echo base_url('home/sess_destroy2') ?>" >Reset</a>
-                    
+                <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i> <span>Cari</span></button>
+                <a class="btn btn-warning" id="reset" href="<?php echo base_url('home/sess_destroy2') ?>" >Reset</a>
+
               </div>
             </form>
           </div>
           <!-- /.box -->
 
         </div>        
-
-        <table id="example1" class="table table-responsive table-striped">
-          <thead>
-            <tr>
-              <th>Tanggal</th>
-              <th>NIK</th>
-              <th>Nama</th>
-              <th>Absensi</th>
-            </tr>
-          </thead>
-          <tbody>
-          </tbody>
-        </table>
-
+        <div class="col-md-12">
+          <table id="example1" class="table table-responsive table-striped">
+            <thead>
+              <tr>
+                <th>Tanggal</th>
+                <th>NIK</th>
+                <th>Nama</th>
+                <th>Absensi</th>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+        </div>
       </section>
       <!-- /.content -->
     </div>

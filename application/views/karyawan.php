@@ -28,21 +28,22 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <!-- Main content -->
       <section class="content container-fluid">
         <br>
-
-        <table id="example1" class="table table-responsive table-striped">
-          <thead>
-            <tr>
-              <th>NIK</th>
-              <th>Nama</th>
-              <th>Departemen</th>
-              <th>Sec/Group</th>
-              <th>Tanggal Masuk</th>
-              <th>Status Karyawan</th>
-            </tr>
-          </thead>
-          <tbody>
-          </tbody>
-        </table>
+        <div class="col-md-12">
+          <table id="example1" class="table table-responsive table-striped">
+            <thead>
+              <tr>
+                <th>NIK</th>
+                <th>Nama</th>
+                <th>Departemen</th>
+                <th>Sec/Group</th>
+                <th>Tanggal Masuk</th>
+                <th>Status Karyawan</th>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+        </div>
 
         <div class="modal fade" id="myModal">
           <div class="modal-dialog modal-lg">
@@ -315,7 +316,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
    })
 
-  </script>
+ </script>
 
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the
