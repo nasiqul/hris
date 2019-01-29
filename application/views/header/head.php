@@ -15,6 +15,7 @@
         page. However, you can choose any other skin. Make sure you
         apply the skin class to the body tag so the changes take effect. -->
   <link rel="stylesheet" href="<?php echo base_url()?>app/dist/css/skins/skin-blue.min.css">
+  <link rel="stylesheet" href="<?php echo base_url()?>app/dist/css/skins/skin-purple.css">
     <!-- DataTables -->
   <link rel="stylesheet" href="<?php echo base_url()?>app/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
   <!-- Theme style -->

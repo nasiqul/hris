@@ -2,7 +2,7 @@
 <html>
 <?php require_once(APPPATH.'views/header/head.php'); ?>
 <!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
-<body class="hold-transition skin-blue layout-top-nav">
+<body class="hold-transition skin-purple layout-top-nav">
   <div class="wrapper">
 
     <!-- NAVBAR -->

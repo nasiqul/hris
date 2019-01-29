@@ -7,7 +7,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <!-- HEADER -->
 <?php require_once(APPPATH.'views/header/head.php'); ?>
 
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-purple sidebar-mini">
 <div class="wrapper">
 
   <!-- NAVBAR -->
