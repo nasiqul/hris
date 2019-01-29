@@ -90,6 +90,8 @@ class Home extends CI_Controller {
     public function presensi_graph()
     {
         $data['tot'] = $this->home_model->by_total_kehadiran();
+        $data['persentase'] = $this->home_model->by_persentase();
+        $data['kary'] = $this->karyawan_model->tot();
         $this->load->view("presensi_graph", $data);
     }
 

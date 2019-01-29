@@ -111,4 +111,16 @@ class Home_model extends CI_Model {
             return $hasil;
         }
     }
+
+    public function by_persentase(){
+        $q = "SELECT * from (SELECT p.tanggal, COUNT(*) AS jml from presensi as p where p.shift = '3' OR p.shift = '2' OR p.shift = '1' group by p.tanggal) AS tbl WHERE date(tanggal) = '2019-01-03'";
+        $query = $this->db->query($q);
+
+        if($query->num_rows() > 0){
+            foreach($query->result() as $data){
+                $hasil[] = $data;
+            }
+            return $hasil;
+        }
+    }
 }

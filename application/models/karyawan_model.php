@@ -141,5 +141,17 @@ class Karyawan_model extends CI_Model {
             return $hasil;
         }
     }
+
+    public function tot(){
+        $q = "SELECT COUNT(*) AS jml from karyawan";
+        $query = $this->db->query($q);
+
+        if($query->num_rows() > 0){
+            foreach($query->result() as $data){
+                $hasil[] = $data;
+            }
+            return $hasil;
+        }
+    }
 }
 ?>

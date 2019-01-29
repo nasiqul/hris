@@ -89,7 +89,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <li><a href="#tab_3" data-toggle="tab">Stat By Grade</a></li>
               <li><a href="#tab_4" data-toggle="tab">Stat By Departemen</a></li>
               <li><a href="#tab_5" data-toggle="tab">Stat By Position</a></li>
-              <li class="pull-right"><a href="#" class="text-muted"><i class="fa fa-gear"></i></a></li>
             </ul>
             <div class="tab-content">
               <div class="tab-pane active" id="tab_1">
@@ -170,7 +169,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         },
 
         tooltip: {
-          headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+          headerFormat: '',
           pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b> <br/>'
         },
 
@@ -257,7 +256,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           enabled: false
         },
         tooltip: {
-          headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+          headerFormat: '',
           pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b> of total<br/>'
         },
 
@@ -305,7 +304,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           enabled: false
         },
         tooltip: {
-          headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+          headerFormat: '',
           pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b> of total<br/>'
         },
 
@@ -353,7 +352,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           enabled: false
         },
         tooltip: {
-          headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+          headerFormat: '',
           pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b> of total<br/>'
         },
 
