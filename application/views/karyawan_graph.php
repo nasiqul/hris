@@ -34,7 +34,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         foreach($status as $r1){
 
           $arr2['name'] = $r1->statusKaryawan;
-          $arr2['y'] = (float) $r1->jml;
+          $arr2['y'] = (int) $r1->jml;
 
           array_push($result2, $arr2);
         }
@@ -54,20 +54,29 @@ scratch. This page gets rid of all links and provides the needed markup only.
         foreach($grade as $r3){
 
           $arr3['name'] = $r3->grade;
-          $arr3['y'] = (float) $r3->jml;
+          $arr3['y'] = (int) $r3->jml;
 
           array_push($result3, $arr3);
         }
-
 
         $arr4 = array();
         $result4 = array();
         foreach($kode as $r4){
 
           $arr4['name'] = $r4->kode;
-          $arr4['y'] = (float) $r4->jml;
+          $arr4['y'] = (int) $r4->jml;
 
           array_push($result4, $arr4);
+        }
+
+        $arr5 = array();
+        $result5 = array();
+        foreach($posisi as $r5){
+
+          $arr5['name'] = $r5->jabatan;
+          $arr5['y'] = (int) $r5->jml;
+
+          array_push($result5, $arr5);
         }
         ?>
 
@@ -79,6 +88,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <li><a href="#tab_2" data-toggle="tab">Stat By Gender</a></li>
               <li><a href="#tab_3" data-toggle="tab">Stat By Grade</a></li>
               <li><a href="#tab_4" data-toggle="tab">Stat By Departemen</a></li>
+              <li><a href="#tab_5" data-toggle="tab">Stat By Position</a></li>
               <li class="pull-right"><a href="#" class="text-muted"><i class="fa fa-gear"></i></a></li>
             </ul>
             <div class="tab-content">
@@ -96,6 +106,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
               <div class="tab-pane" id="tab_4">
                 <div id = "container4" style = "width: 850px; margin: 0 auto"></div>
+              </div>
+
+              <div class="tab-pane" id="tab_5">
+                <div id = "container5" style = "width: 850px; margin: 0 auto"></div>
               </div>
               <!-- /.tab-pane -->
             </div>
@@ -147,7 +161,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             borderWidth: 0,
             dataLabels: {
               enabled: true,
-              format: '{point.y:.1f}'
+              format: '{point.y}'
             }
           }
         },
@@ -157,12 +171,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
         tooltip: {
           headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-          pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.1f}</b> <br/>'
+          pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b> <br/>'
         },
 
         "series": [
         {
-          "name": "Status",
+          "name": "By Status",
           "colorByPoint": true,
           "data": <?php echo json_encode($result2) ?>
         }
@@ -205,7 +219,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     },
     series : [{
      type: 'pie',
-     name: 'Gender',
+     name: 'By Gender',
      data: <?php echo json_encode($result) ?>
    }]
  })
@@ -235,7 +249,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             borderWidth: 0,
             dataLabels: {
               enabled: true,
-              format: '{point.y:.1f}'
+              format: '{point.y}'
             }
           }
         },
@@ -244,12 +258,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
         },
         tooltip: {
           headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-          pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.1f}</b> of total<br/>'
+          pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b> of total<br/>'
         },
 
         "series": [
         {
           "colorByPoint": true,
+          name: 'By Grade',
           "data": <?php echo json_encode($result3) ?>
         }
         ]
@@ -282,7 +297,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             borderWidth: 0,
             dataLabels: {
               enabled: true,
-              format: '{point.y:.1f}'
+              format: '{point.y}'
             }
           }
         },
@@ -291,13 +306,62 @@ scratch. This page gets rid of all links and provides the needed markup only.
         },
         tooltip: {
           headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-          pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.1f}</b> of total<br/>'
+          pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b> of total<br/>'
+        },
+
+        "series": [
+        {
+          "name": "By Departemen",
+          "colorByPoint": true,
+          "data": <?php echo json_encode($result4) ?>
+        }
+        ]
+      })
+    });
+
+
+    $(function () {
+      $('#container5').highcharts({
+        chart: {
+          type: 'column'
+        },
+        title: {
+          text: ''
+        },
+        xAxis: {
+          type: 'category'
+        },
+        yAxis: {
+          title: {
+            text: 'Total Karyawan'
+          }
+
+        },
+        legend: {
+          enabled: false
+        },
+        plotOptions: {
+          series: {
+            borderWidth: 0,
+            dataLabels: {
+              enabled: true,
+              format: '{point.y}'
+            }
+          }
+        },
+        credits: {
+          enabled: false
+        },
+        tooltip: {
+          headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+          pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b> of total<br/>'
         },
 
         "series": [
         {
           "colorByPoint": true,
-          "data": <?php echo json_encode($result4) ?>
+          "name": "By Position",
+          "data": <?php echo json_encode($result5) ?>
         }
         ]
       })

@@ -129,5 +129,17 @@ class Karyawan_model extends CI_Model {
             return $hasil;
         }
     }
+
+    public function by_posisi(){
+        $q = "SELECT jabatan, COUNT(*) AS jml from karyawan where jabatan <> '-' and jabatan <> '' group by jabatan order by jml ASC";
+        $query = $this->db->query($q);
+
+        if($query->num_rows() > 0){
+            foreach($query->result() as $data){
+                $hasil[] = $data;
+            }
+            return $hasil;
+        }
+    }
 }
 ?>

@@ -74,7 +74,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
          text: 'Presensi bulan Januari'   
        }, 
        xAxis : {
-         categories: ['02-01-2019', '03-01-2019', '04-01-2019', '05-01-2019', '06-01-2019', '07-01-2019', '08-01-2019', '09-01-2019', '10-01-2019', '11-01-2019', '12-01-2019', '13-01-2019', '14-01-2019', '15-01-2019']
+         categories: <?php echo json_encode($tgl1) ?>
        },
        yAxis : {
          min: 0,
@@ -90,11 +90,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
        }
      },
      legend : {
-       align: 'right',
-       x: -30,
-       verticalAlign: 'top',
-       y: 25,
-       floating: true,
+       align: 'center',
+        verticalAlign: 'bottom',
+        x: 0,
+        y: 0,
 
        backgroundColor: (
         Highcharts.theme && Highcharts.theme.background2) || 'white',

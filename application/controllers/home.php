@@ -47,6 +47,7 @@ class Home extends CI_Controller {
         $data['gender'] = $this->karyawan_model->by_gender();
         $data['grade'] = $this->karyawan_model->by_grade();
         $data['kode'] = $this->karyawan_model->by_kode();
+        $data['posisi'] = $this->karyawan_model->by_posisi();
         $this->load->view("karyawan_graph", $data);
     }
 
@@ -86,23 +87,22 @@ class Home extends CI_Controller {
         $this->load->view('index');
     }
 
+    public function presensi_graph()
+    {
+        $data['tot'] = $this->home_model->by_total_kehadiran();
+        $this->load->view("presensi_graph", $data);
+    }
+
     public function ajax()
     {
         if (isset($_SESSION['tanggal']) || isset($_SESSION['nik']) || isset($_SESSION['nama']) || isset($_SESSION['shift'])) 
         {
-            // if ($_SESSION['tanggal'] != "" || $_SESSION['nik'] != "" || $_SESSION['nama'] != "" || $_SESSION['shift'] != "") 
-            // {
             $tgl = $this->session->userdata('tanggal');
             $nik = $this->session->userdata('nik');
             $nama = $this->session->userdata('nama');
             $shift = $this->session->userdata('shift');
 
             $list = $this->cari_model->get_data_presensi_cari($tgl, $nik, $nama, $shift);
-            // session_destroy();
-            // }
-            // else {
-            //     $list = $this->home_model->get_data_persensi();
-            // }
 
         }
         else {
@@ -112,7 +112,7 @@ class Home extends CI_Controller {
         $data = array();
         foreach ($list as $key) {
             $row = array();
-            $row[] = $key->tanggal;
+            $row[] = date("d-m-Y", strtotime($key->tanggal));
             $row[] = $key->nik;
             $row[] = $key->namaKaryawan;
             if ($key->masuk == 0) 
@@ -155,7 +155,7 @@ class Home extends CI_Controller {
         $data = array();
         foreach ($list as $key) {
             $row = array();
-            $row[] = $key->tanggal;
+            $row[] = date("d-m-Y", strtotime($key->tanggal));
             $row[] = $key->nik;
             $row[] = $key->namaKaryawan;
             $row[] = $key->shift;
@@ -185,7 +185,7 @@ class Home extends CI_Controller {
             $row[] = "<a style='cursor: pointer' onclick='ShowModal(".$i.")' data-toggle='modal' data-id='".$key->nik."' id='tes".$i."'>".$key->namaKaryawan."</a>";
             $row[] = $key->dep;
             $row[] = $key->group;
-            $row[] = $key->tanggalMasuk;
+            $row[] = date("d-m-Y", strtotime($key->tanggalMasuk));
             $row[] = $key->statusKaryawan;
 
             $data[] = $row;
@@ -217,7 +217,7 @@ class Home extends CI_Controller {
             $row[] = $key->dep;
             $row[] = $key->group;
             $row[] = $key->kode;
-            $row[] = $key->tanggalMasuk;
+            $row[] = date("d-m-Y", strtotime($key->tanggalMasuk));
             $row[] = $key->jk;
             $row[] = $key->statusKaryawan;
             $row[] = $key->grade;

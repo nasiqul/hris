@@ -13,26 +13,6 @@ class Home_model extends CI_Model {
         $this->load->database();
     }
 
-
-  //   public function viewIndex()
-  //   {
-
-		// // $query = "select emp.nik, CONCAT(emp.first_name, last_name) AS nama, att_log.scan_date from emp JOIN att_log ON emp.pin = att_log.pin Where att_log.scan_date = '2019-01-07' ORDER BY att_log.scan_date DESC";
-
-
-  //     $this->db->select('emp.nik, CONCAT(emp.first_name," ", last_name) AS nama, att_log.scan_date, emp.pin,att_log.att_id,  GROUP_CONCAT(time(att_log.scan_date) ORDER BY att_log.scan_date separator "_") AS date');
-		// // $this->db->select('emp.nik, CONCAT(emp.first_name," ", last_name) AS nama, att_log.scan_date, att_log.att_id');
-  //     $this->db->from('emp');
-  //     $this->db->join('att_log', 'emp.pin = att_log.pin', 'left');
-  //     $this->db->where('DATE(att_log.scan_date)','2019-01-08')->or_where('DATE(att_log.scan_date)',NULL);
-  //     $this->db->order_by("att_log.scan_date", "desc");
-  //     $this->db->group_by("emp.pin");
-		// // $this->db->limit(10);
-
-  //     $query = $this->db->get();
-  //     return $query->result_array($query);
-  // }
-
     public function get_data_persensi()
     {
         $this->_get_datatables_query();
@@ -110,6 +90,18 @@ class Home_model extends CI_Model {
 
     public function report3(){
         $q = "SELECT tanggal, COUNT(*) AS jml from presensi where shift = '3' group by tanggal";
+        $query = $this->db->query($q);
+
+        if($query->num_rows() > 0){
+            foreach($query->result() as $data){
+                $hasil[] = $data;
+            }
+            return $hasil;
+        }
+    }
+
+    public function by_total_kehadiran(){
+        $q = "SELECT * from (SELECT p.tanggal, p.shift, COUNT(*) AS jml from presensi as p where p.shift = '3' OR p.shift = '2' OR p.shift = '1' group by p.tanggal,p.shift)  AS tbl WHERE date(tanggal) = '2019-01-03'";
         $query = $this->db->query($q);
 
         if($query->num_rows() > 0){
