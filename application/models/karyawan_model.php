@@ -107,7 +107,7 @@ class Karyawan_model extends CI_Model {
     }
 
     public function by_grade(){
-        $q = "SELECT grade, COUNT(*) AS jml from karyawan group by grade";
+        $q = "SELECT grade, COUNT(*) AS jml from karyawan where grade <> '-' group by grade ORDER BY FIELD(grade, 'E0','E1','E2','E3','E4','E5','E6','E7','E8','L1','L2','L3','L4','M1','M2','M3','M4','M5','D3') ASC";
         $query = $this->db->query($q);
 
         if($query->num_rows() > 0){
