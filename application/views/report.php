@@ -20,7 +20,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <!-- Content Header (Page header) -->
       <section class="content-header">
         <h1>
-          Jumlah Kehadiran
+          Total Presence
           <small>Optional description</small>
         </h1>
       </section>
@@ -30,7 +30,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <?php
         /* Mengambil query report*/
         foreach($report1 as $result1){
-        $tgl1[] = $result1->tanggal; //ambil tanggal
+        $tgl1[] = date("d-m-Y", strtotime($result1->tanggal)); //ambil tanggal
         $value1[] = (float) $result1->jml; //ambil jumlah
       }
 
@@ -71,7 +71,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
          type: 'column'
        },
        title : {
-         text: 'Presensi bulan Januari'   
+         text: 'Presence in January 2019'   
        }, 
        xAxis : {
          categories: <?php echo json_encode($tgl1) ?>
@@ -79,7 +79,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
        yAxis : {
          min: 0,
          title: {
-          text: 'Total Karyawan'
+          text: 'Employee Total'
         },
         stackLabels: {
           enabled: true,

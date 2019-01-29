@@ -20,7 +20,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <!-- Content Header (Page header) -->
       <section class="content-header">
         <h1>
-          Presence Data
+          Presence data
           <small>Optional description</small>
         </h1>
       </section>
@@ -72,7 +72,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               </div>
               <!-- /.box-body -->
               <div class="box-footer">
-                <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i> <span>Cari</span></button>
+                <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i> <span>Search</span></button>
                 <a class="btn btn-warning" id="reset" href="<?php echo base_url('home/session_destroy') ?>" >Reset</a>
 
               </div>

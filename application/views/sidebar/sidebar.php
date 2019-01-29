@@ -31,14 +31,14 @@
           </ul>
         </li>
         <li class="treeview">
-          <a href="#"><i class="fa fa-edit"></i> <span>Attendance</span>
+          <a href="#"><i class="fa fa-edit"></i> <span>Absent</span>
             <span class="pull-right-container">
                 <i class="fa fa-angle-left pull-right"></i>
               </span>
           </a>
           <ul class="treeview-menu">
             <li><a href="<?php echo base_url('home/absensi_graph'); ?>"><i class="fa fa-bar-chart"></i> Graph</a></li>
-            <li><a href="<?php echo base_url('home/absen'); ?>"><i class="fa fa-edit"></i> <span>Attendance Data</span></a>
+            <li><a href="<?php echo base_url('home/absen'); ?>"><i class="fa fa-edit"></i> <span>Absent Data</span></a>
           </ul>
         </li>
         <li><a href="<?php echo base_url('home/over'); ?>"><i class="fa fa-link"></i> <span>Overtime</span></a></li>

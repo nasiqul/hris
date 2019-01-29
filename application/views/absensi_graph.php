@@ -20,7 +20,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <!-- Content Header (Page header) -->
       <section class="content-header">
         <h1>
-          Attendance data
+          Absent data
           <small>Optional description</small>
         </h1>
       </section>
@@ -80,7 +80,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         },
         yAxis: {
           title: {
-            text: 'Total Attendance'
+            text: 'Total Absent'
           }
 
         },
@@ -107,7 +107,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
         "series": [
         {
-          "name": "By Attendance",
+          "name": "By Absent",
           "colorByPoint": true,
           "data": <?php echo json_encode($result) ?>
         }

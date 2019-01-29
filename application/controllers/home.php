@@ -120,7 +120,7 @@ class Home extends CI_Controller {
         $data = array();
         foreach ($list as $key) {
             $row = array();
-            $row[] = date("d-m-Y", strtotime($key->tanggal));
+            $row[] = date('j M Y', strtotime($key->tanggal));
             $row[] = $key->nik;
             $row[] = $key->namaKaryawan;
             if ($key->masuk == 0) 
@@ -163,7 +163,7 @@ class Home extends CI_Controller {
         $data = array();
         foreach ($list as $key) {
             $row = array();
-            $row[] = date("d-m-Y", strtotime($key->tanggal));
+            $row[] = date('j M Y', strtotime($key->tanggal));
             $row[] = $key->nik;
             $row[] = $key->namaKaryawan;
             $row[] = $key->shift;

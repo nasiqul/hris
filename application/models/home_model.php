@@ -27,8 +27,10 @@ class Home_model extends CI_Model {
         $this->db->select('karyawan.nik, karyawan.namaKaryawan, presensi.tanggal, presensi.masuk, presensi.keluar, presensi.shift');
         $this->db->from('presensi');
         $this->db->join('karyawan','karyawan.nik = presensi.nik');
-        $this->db->where('presensi.tanggal','2019-01-08');
+        $this->db->where('presensi.tanggal','CURDATE()');
         $this->db->where('presensi.shift !=','0');
+        $this->db->where('presensi.shift !=','OFF');
+        $this->db->where('presensi.shift !=','X');
 
         $i = 0;
 
@@ -115,7 +117,7 @@ AND YEAR(tanggal) = YEAR(CURRENT_DATE()) group by tanggal";
     }
 
     public function by_persentase(){
-        $q = "SELECT * from (SELECT p.tanggal, COUNT(*) AS jml from presensi as p where p.shift = '3' OR p.shift = '2' OR p.shift = '1' group by p.tanggal) AS tbl WHERE date(tanggal) = '2019-01-03'";
+        $q = "SELECT * from (SELECT p.tanggal, COUNT(*) AS jml from presensi as p where p.shift = '3' OR p.shift = '2' OR p.shift = '1' group by p.tanggal) AS tbl WHERE date(tanggal) = CURDATE()";
         $query = $this->db->query($q);
 
         if($query->num_rows() > 0){
