@@ -105,7 +105,7 @@ AND YEAR(tanggal) = YEAR(CURRENT_DATE()) group by tanggal";
     }
 
     public function by_total_kehadiran(){
-        $q = "SELECT * from (SELECT p.tanggal, p.shift, COUNT(*) AS jml from presensi as p where p.shift = '3' OR p.shift = '2' OR p.shift = '1' group by p.tanggal,p.shift)  AS tbl WHERE date(tanggal) = CURRENT_DATE()'";
+        $q = "SELECT * from (SELECT p.tanggal, p.shift, COUNT(*) AS jml from presensi as p where p.shift = '3' OR p.shift = '2' OR p.shift = '1' group by p.tanggal,p.shift)  AS tbl WHERE date(tanggal) = CURRENT_DATE()";
         $query = $this->db->query($q);
 
         if($query->num_rows() > 0){
