@@ -20,7 +20,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <!-- Content Header (Page header) -->
       <section class="content-header">
         <h1>
-          Data Karyawan
+          Employee Data
           <small>Optional description</small>
         </h1>
       </section>
@@ -33,11 +33,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <thead>
               <tr>
                 <th>NIK</th>
-                <th>Nama</th>
-                <th>Departemen</th>
+                <th>Name</th>
+                <th>Department</th>
                 <th>Sec/Group</th>
-                <th>Tanggal Masuk</th>
-                <th>Status Karyawan</th>
+                <th>Entry Date</th>
+                <th>Employee Status</th>
               </tr>
             </thead>
             <tbody>
@@ -51,7 +51,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <div class="modal-body">
                 <section class="content-header">
                   <h1>
-                    Detail Karyawan
+                    Employee Details
                   </h1>
                 </section>
                 <section class="content container-fluid">

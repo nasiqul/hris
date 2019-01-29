@@ -148,7 +148,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         },
         yAxis: {
           title: {
-            text: 'Total Karyawan'
+            text: 'Total Employee'
           }
 
         },
@@ -237,7 +237,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         },
         yAxis: {
           title: {
-            text: 'Total Karyawan'
+            text: 'Total Employee'
           }
         },
         legend: {
@@ -284,7 +284,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         },
         yAxis: {
           title: {
-            text: 'Total Karyawan'
+            text: 'Total Employee'
           }
 
         },
@@ -332,7 +332,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         },
         yAxis: {
           title: {
-            text: 'Total Karyawan'
+            text: 'Total Employee'
           }
 
         },

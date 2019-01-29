@@ -32,7 +32,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <!-- general form elements -->
           <div class="box box-primary">
             <div class="box-header with-border">
-              <h3 class="box-title"><i class="fa fa-search"></i> <span>Filter Pencarian</span></h3>
+              <h3 class="box-title"><i class="fa fa-search"></i> <span>Search Filter</span></h3>
             </div>
             <!-- /.box-header -->
             <!-- form start -->
@@ -40,7 +40,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <div class="box-body">
                 <div class="col-md-3">
                   <div class="form-group">
-                    <label for="inputTanggal"><i class="fa fa-calendar"></i> <span>Tanggal</span></label>
+                    <label for="inputTanggal"><i class="fa fa-calendar"></i> <span>Date</span></label>
                     <input type="date" class="form-control" name="tanggal" id="inputTanggal" 
                     <?php if(isset($_SESSION['tanggal2'])) echo 'value="'.$_SESSION['tanggal2'].'"';?>>
                   </div>
@@ -56,7 +56,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                 <div class="col-md-4">
                   <div class="form-group">
-                    <label for="inputNama"><i class="fa fa-user"></i> <span>Nama</span></label>
+                    <label for="inputNama"><i class="fa fa-user"></i> <span>Name</span></label>
                     <input type="text" class="form-control" name="nama" id="inputNama" placeholder="Nama"
                     <?php if(isset($_SESSION['nama2'])) echo 'value="'.$_SESSION['nama2'].'"';?>>
                   </div>
@@ -64,7 +64,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                 <div class="col-md-2">
                   <div class="form-group">
-                    <label for="inputShift"><i class="fa fa-briefcase "></i> <span>Absensi</span></label>
+                    <label for="inputShift"><i class="fa fa-briefcase "></i> <span>Absent</span></label>
                     <input type="text" class="form-control" name="absensi" id="inputAbsensi" placeholder="Absensi"
                     <?php if(isset($_SESSION['shift2'])) echo 'value="'.$_SESSION['shift2'].'"';?>>
                   </div>
@@ -85,10 +85,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <table id="example1" class="table table-responsive table-striped">
             <thead>
               <tr>
-                <th>Tanggal</th>
+                <th>Date</th>
                 <th>NIK</th>
-                <th>Nama</th>
-                <th>Absensi</th>
+                <th>Name</th>
+                <th>Absent</th>
               </tr>
             </thead>
             <tbody>

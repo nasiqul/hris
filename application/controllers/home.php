@@ -36,6 +36,12 @@ class Home extends CI_Controller {
         $this->load->view('absen');
     }
 
+    public function absensi_graph()
+    {
+        $data['absen'] = $this->absensi_model->by_absensi();
+        $this->load->view("absensi_graph", $data);
+    }
+
     public function client()
     {
         $this->load->view("client");
@@ -260,7 +266,7 @@ class Home extends CI_Controller {
             }
             else
                 $row[] = "";
-            $row[] = "<button class='btn btn-success'><i class='fa fa-bullhorn'></i> Jawab</button>";
+            $row[] = "<button class='btn btn-success'><i class='fa fa-bullhorn'></i> Answer</button>";
 
             $data[] = $row;
         }
