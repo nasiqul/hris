@@ -46,7 +46,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         foreach($persentase as $r3){
           $tgl3 = date('d F Y', strtotime($r3->tanggal));
 
-          $arr3['name'] = 'Masuk';
+          $arr3['name'] = 'Hadir';
           $arr3['y'] = (float) $r3->jml;
 
           array_push($result3, $arr3);
@@ -55,7 +55,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         $arr4 = array();
         foreach($kary as $r4){
           $kurang = $r4->jml - $arr3['y'];
-          $arr4['name'] = 'Tidak masuk';
+          $arr4['name'] = 'Belum / Tidak Hadir';
           $arr4['y'] = (float) $kurang;
 
           array_push($result3, $arr4);

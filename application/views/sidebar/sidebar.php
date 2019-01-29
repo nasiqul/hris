@@ -41,7 +41,7 @@
             <li><a href="<?php echo base_url('home/absen'); ?>"><i class="fa fa-edit"></i> <span>Absent Data</span></a>
           </ul>
         </li>
-        <li><a href="<?php echo base_url('home/over'); ?>"><i class="fa fa-link"></i> <span>Overtime</span></a></li>
+        <li><a href="<?php echo base_url('home/over'); ?>"><i class="fa fa-hourglass-2"></i> <span>Overtime</span></a></li>
         <li><a href="<?php echo base_url('home/tanya'); ?>"><i class="fa fa-comments-o"></i> <span>Q & A List</span></a></li>
         <li class="treeview">
           <a href="#"><i class="fa fa-link"></i> <span>Multilevel</span>
