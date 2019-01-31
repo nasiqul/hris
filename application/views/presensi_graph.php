@@ -52,10 +52,18 @@ scratch. This page gets rid of all links and provides the needed markup only.
           array_push($result3, $arr3);
         }
 
+        $arr5 = array();
+        foreach($persentase_tidakMasuk as $r5){
+          $arr5['name'] = 'Tidak Hadir';
+          $arr5['y'] = (float) $r5->jml;
+
+          array_push($result3, $arr5);
+        }
+
         $arr4 = array();
         foreach($kary as $r4){
-          $kurang = $r4->jml - $arr3['y'];
-          $arr4['name'] = 'Belum / Tidak Hadir';
+          $kurang = $r4->jml - $arr3['y'] - $arr5['y'];
+          $arr4['name'] = 'Belum Hadir';
           $arr4['y'] = (float) $kurang;
 
           array_push($result3, $arr4);

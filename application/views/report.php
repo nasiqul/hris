@@ -26,37 +26,39 @@ scratch. This page gets rid of all links and provides the needed markup only.
       </section>
 
       <!-- Main content -->
-      <section class="content container-fluid">      
+      <section class="content container-fluid">
         <?php
         /* Mengambil query report*/
         foreach($report1 as $result1){
-        $tgl1[] = $result1->tanggal; //ambil tanggal
+        $tgl1[] = date('d M Y', strtotime($result1->tanggal)); //ambil tanggal
         $value1[] = (float) $result1->jml; //ambil jumlah
       }
 
       foreach($report2 as $result2){
-        $tgl2[] = $result2->tanggal; //ambil tanggal
+        // $tgl2[] = $result2->tanggal; //ambil tanggal
         $value2[] = (float) $result2->jml; //ambil jumlah
       }
 
       foreach($report3 as $result3){
-        $tgl3[] = $result3->tanggal; //ambil tanggal
+        // $tgl3[] = $result3->tanggal; //ambil tanggal
         $value3[] = (float) $result3->jml; //ambil jumlah
       }
-      /* end mengambil query*/
+        /* end mengambil query*/
 
-      ?>
+        ?>
 
-      <!-- Load chart dengan menggunakan ID -->
-      <div id ="report"></div>
-      <div id = "container"></div>
-      <!-- END load chart -->
-    </section>
-    <!-- /.content -->
 
-  </div>
-  <!-- /.content-wrapper -->
-  <!-- /.control-sidebar -->
+          <div id ="report"></div>
+        <div id = "container"></div>
+        
+        <!-- Load chart dengan menggunakan ID -->
+        <!-- END load chart -->
+      </section>
+      <!-- /.content -->
+
+    </div>
+    <!-- /.content-wrapper -->
+    <!-- /.control-sidebar -->
   <!-- Add the sidebar's background. This div must be placed
     immediately after the control sidebar -->
     <div class="control-sidebar-bg"></div>
@@ -64,17 +66,17 @@ scratch. This page gets rid of all links and provides the needed markup only.
   </div>
   <!-- Script untuk memanggil library Highcharts -->
   <script type="text/javascript">
-    //alert(<?php echo json_encode($tgl1) ?>);
+    
     $(function () {       
-        $('#report').highcharts({
-          chart : {
+      $('#report').highcharts({
+        chart : {
          type: 'column'
        },
        title : {
          text: 'Presence in January 2019'   
        }, 
        xAxis : {
-         categories: <?php echo json_encode($tgl1) ?>
+         categories: <?php echo json_encode($tgl1); ?>
        },
        yAxis : {
          min: 0,
@@ -91,9 +93,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
      },
      legend : {
        align: 'center',
-        verticalAlign: 'bottom',
-        x: 0,
-        y: 0,
+       verticalAlign: 'bottom',
+       x: 0,
+       y: 0,
 
        backgroundColor: (
         Highcharts.theme && Highcharts.theme.background2) || 'white',
@@ -121,26 +123,22 @@ scratch. This page gets rid of all links and provides the needed markup only.
     }
   }
 },
-  credits : {
-   enabled: false
-  },
-  series : [
-  {
-    name: 'Shift3',
-    data: <?php echo json_encode($value3);?>
-  }, 
-  {
-    name: 'Shift2',
-    data: <?php echo json_encode($value2);?>
-  }, 
-  {
-    name: 'Shift1',
-    data: <?php echo json_encode($value1);?>      
-  }
-  ]
+credits : {
+ enabled: false
+},
+series : [{
+  name: 'Shift3',
+  data: <?php echo json_encode($value3) ?>
+}, {
+  name: 'Shift2',
+  data: <?php echo json_encode($value2) ?>
+}, {
+  name: 'Shift1',
+  data: <?php echo json_encode($value1) ?>
+}]
 });
-});
-    </script>
+    });
+  </script>
 
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the

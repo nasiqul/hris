@@ -2,8 +2,8 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Absensi_model extends CI_Model {
-	var $column_order = array('tanggal','nik','namaKaryawan','masuk','keluar'); //set column field database for datatable orderable
-    var $column_search = array('tanggal','nik','namaKaryawan','masuk','keluar'); //set column field database for datatable searchable 
+	var $column_order = array('tanggal','karyawan.nik','namaKaryawan','masuk','keluar'); //set column field database for datatable orderable
+    var $column_search = array('tanggal','karyawan.nik','namaKaryawan','masuk','keluar'); //set column field database for datatable searchable 
     var $order = array('masuk' => 'desc'); // default order 
 
     public function __construct()
@@ -23,10 +23,10 @@ class Absensi_model extends CI_Model {
 
 	private function _get_datatables_query()
     {
-        $this->db->select('karyawan.nik, karyawan.namaKaryawan, presensi.tanggal, presensi.masuk, presensi.keluar, presensi.shift');
+        $this->db->select('karyawan.nik, karyawan.namaKaryawan, presensi.tanggal, presensi.masuk, presensi.keluar, presensi.shift, CONCAT(`karyawan`.`dep/subSec`," ",`karyawan`.`sec/Group`," (",`karyawan`.`kode`,")") as bagian');
         $this->db->from('presensi');
         $this->db->join('karyawan','karyawan.nik = presensi.nik');
-        $this->db->where('date(presensi.tanggal) = CURRENT_DATE()');
+        $this->db->where('date(presensi.tanggal) = date("2019-01-28")');
         $this->db->where('presensi.shift REGEXP','^[a-zA-Z]+$');
         $this->db->where('presensi.shift !=','OFF');
         $this->db->where('presensi.shift !=','X');
@@ -80,6 +80,18 @@ class Absensi_model extends CI_Model {
 
     public function by_absensi(){
         $q = "SELECT shift,tanggal, COUNT(*) AS jml from presensi where date(tanggal) = CURRENT_DATE() and shift <> 'off' AND shift <> 'X' and shift REGEXP '^[a-zA-Z]+$' group by shift order by jml ASC ";
+        $query = $this->db->query($q);
+
+        if($query->num_rows() > 0){
+            foreach($query->result() as $data){
+                $hasil[] = $data;
+            }
+            return $hasil;
+        }
+    }
+
+    public function by_absensi_cari($tgl){
+        $q = "SELECT shift,tanggal, COUNT(*) AS jml from presensi where DATE_FORMAT(tanggal, '%d/%m/%Y') = '".$tgl."' and shift <> 'off' AND shift <> 'X' and shift REGEXP '^[a-zA-Z]+$' group by shift order by jml ASC ";
         $query = $this->db->query($q);
 
         if($query->num_rows() > 0){

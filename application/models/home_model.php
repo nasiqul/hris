@@ -80,9 +80,9 @@ class Home_model extends CI_Model {
     }
 
     public function report1(){
-        $q = "SELECT tanggal, COUNT(*) AS jml from presensi where shift = '1' 
-        AND MONTH(tanggal) = MONTH(CURRENT_DATE())
-        AND YEAR(tanggal) = YEAR(CURRENT_DATE()) group by tanggal";
+        $q = "SELECT tanggal, COUNT(*) AS jml from presensi where presensi.shift = '1' 
+        AND MONTH(presensi.tanggal) = MONTH(CURRENT_DATE())
+        AND YEAR(presensi.tanggal) = YEAR(CURRENT_DATE()) and tanggal not in (select tanggal from kalender) group by presensi.tanggal";
         $query = $this->db->query($q);
 
         if($query->num_rows() > 0){
@@ -94,7 +94,7 @@ class Home_model extends CI_Model {
     }
 
     public function report2(){
-        $q = "SELECT tanggal, COUNT(*) AS jml from presensi where shift = '2' AND MONTH(tanggal) = MONTH(CURRENT_DATE()) AND YEAR(tanggal) = YEAR(CURRENT_DATE()) group by tanggal";
+        $q = "SELECT tanggal, COUNT(*) AS jml from presensi where shift = '2' AND MONTH(tanggal) = MONTH(CURRENT_DATE()) AND YEAR(tanggal) = YEAR(CURRENT_DATE()) and tanggal not in (select tanggal from kalender)  group by tanggal";
         $query = $this->db->query($q);
 
         if($query->num_rows() > 0){
@@ -106,7 +106,7 @@ class Home_model extends CI_Model {
     }
 
     public function report3(){
-        $q = "SELECT tanggal, COUNT(*) AS jml from presensi where shift = '3' AND MONTH(tanggal) = MONTH(CURRENT_DATE()) AND YEAR(tanggal) = YEAR(CURRENT_DATE()) group by tanggal";
+        $q = "SELECT tanggal, COUNT(*) AS jml from presensi where shift = '3' AND MONTH(tanggal) = MONTH(CURRENT_DATE()) AND YEAR(tanggal) = YEAR(CURRENT_DATE()) and tanggal not in (select tanggal from kalender)  group by tanggal";
         $query = $this->db->query($q);
 
         if($query->num_rows() > 0){
@@ -118,7 +118,7 @@ class Home_model extends CI_Model {
     }
 
     public function by_total_kehadiran(){
-        $q = "SELECT * from (SELECT p.tanggal, p.shift, COUNT(*) AS jml from presensi as p where p.shift = '3' OR p.shift = '2' OR p.shift = '1' group by p.tanggal,p.shift)  AS tbl WHERE date(tanggal) = CURRENT_DATE()";
+        $q = "SELECT * from (SELECT p.tanggal, p.shift, COUNT(*) AS jml from presensi as p where p.shift REGEXP '^[1-9]+$' group by p.tanggal,p.shift)  AS tbl WHERE date(tanggal) = CURRENT_DATE()";
         $query = $this->db->query($q);
 
         if($query->num_rows() > 0){
@@ -130,7 +130,32 @@ class Home_model extends CI_Model {
     }
 
     public function by_persentase(){
-        $q = "SELECT * from (SELECT p.tanggal, COUNT(*) AS jml from presensi as p where p.shift = '3' OR p.shift = '2' OR p.shift = '1' group by p.tanggal) AS tbl WHERE date(tanggal) = CURRENT_DATE()";
+        $q = "SELECT * from (SELECT p.tanggal, COUNT(*) AS jml from presensi as p where p.shift REGEXP '^[1-9]+$' group by p.tanggal) AS tbl WHERE date(tanggal) = CURRENT_DATE()";
+        $query = $this->db->query($q);
+
+        if($query->num_rows() > 0){
+            foreach($query->result() as $data){
+                $hasil[] = $data;
+            }
+            return $hasil;
+        }
+    }
+
+    public function persentase_tidakMasuk(){
+        $q = "SELECT * from (SELECT p.tanggal, COUNT(*) AS jml from presensi as p where p.shift <> '0' and p.shift <> '1' and p.shift <> '2' and p.shift <> '3' and p.shift <> 'OFF' and p.shift <> 'X' group by p.tanggal) AS tbl WHERE date(tanggal) = CURRENT_DATE()";
+        $query = $this->db->query($q);
+
+        if($query->num_rows() > 0){
+            foreach($query->result() as $data){
+                $hasil[] = $data;
+            }
+            return $hasil;
+        }
+    }
+
+
+    public function laporan(){
+        $q = "SELECT * FROM (SELECT tanggal,shift, COUNT(*) AS jml FROM presensi where shift = '1' GROUP BY tanggal,shift UNION ALL SELECT tanggal,shift, COUNT(*) AS jml FROM presensi where shift = '2' GROUP BY tanggal,shift ) AS U WHERE MONTH(U.tanggal) = MONTH(CURRENT_DATE()) AND YEAR(U.tanggal) = YEAR(CURRENT_DATE())";
         $query = $this->db->query($q);
 
         if($query->num_rows() > 0){

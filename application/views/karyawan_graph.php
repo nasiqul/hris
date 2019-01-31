@@ -43,7 +43,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
         $result = array();
         foreach($gender as $r2){
 
-          $arr['name'] = $r2->jk;
+          if ($r2->jk == "L") {
+            $arr['name'] = "Male";
+          }
+
+          if ($r2->jk == "P") {
+            $arr['name'] = "Female";
+          }
           $arr['y'] = (float) $r2->jml;
 
           array_push($result, $arr);
@@ -116,14 +122,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
           </div>
           <!-- nav-tabs-custom -->
         </div>
-          <!-- /.modal-dialog -->
-          <!-- </div> --> 
+        <!-- /.modal-dialog -->
+        <!-- </div> --> 
 
-        </section>
-        <!-- /.content -->
-      </div>
-      <!-- /.content-wrapper -->
-      <!-- /.control-sidebar -->
+      </section>
+      <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+    <!-- /.control-sidebar -->
   <!-- Add the sidebar's background. This div must be placed
     immediately after the control sidebar -->
     <div class="control-sidebar-bg"></div>
@@ -157,6 +163,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
         },
         plotOptions: {
           series: {
+            cursor: 'pointer',
+            point: {
+              events: {
+                click: function () {
+                  ShowData(this.name);
+                }
+              }
+            },
             borderWidth: 0,
             dataLabels: {
               enabled: true,
@@ -365,6 +379,22 @@ scratch. This page gets rid of all links and provides the needed markup only.
         ]
       })
     });
+
+    function ShowData(status){
+      alert(status);
+
+      $.ajax({
+
+        type: "POST", 
+        url : "<?php echo base_url('home/karyawan/')?>" ,       
+        data: {
+          status:status,
+        },
+        success: function(data) {
+          window.location.href = "<?php echo base_url('home/karyawan/')?>";
+        }
+      });
+    }
   </script>
 
 <!-- Optionally, you can add Slimscroll and FastClick plugins.

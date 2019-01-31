@@ -27,97 +27,208 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
       <!-- Main content -->
       <section class="content container-fluid">
-        <?php
-        /* Mengambil query report*/
-        $arr = array();
-        $result = array();
-        foreach($absen as $r2){
-          $tgl = date('d F Y', strtotime($r2->tanggal));
-
-          $arr['name'] = $r2->shift;
-          $arr['y'] = (int) $r2->jml;
-
-          array_push($result, $arr);
-        }
-        ?>
-
         <div class="col-md-12">
           <!-- Custom Tabs -->
           <div class="box">
             <div class="box-body">
-              <div id = "container" style = "width: 850px; margin: 0 auto"></div>
-            </div>
-          </div>
-          <!-- nav-tabs-custom -->
-        </div>
-        <!-- /.modal-dialog -->
-        <!-- </div> --> 
+              
+              <form action="" method="post" id="rati">
+               <input type="text" name="sortTgl" style="width:130px;" onchange="a()" id="datepicker" placeholder="Tanggal">
+             </form>
+             <div id ="container" style = "width: 850px; margin: 0 auto"></div>
+           </div>
+         </div>
+         <!-- nav-tabs-custom -->
+         <!-- </div> --> 
 
-      </section>
-      <!-- /.content -->
-    </div>
-    <!-- /.content-wrapper -->
-    <!-- /.control-sidebar -->
+       </section>
+       <!-- /.content -->
+     </div>
+     <!-- /.content-wrapper -->
+     <!-- /.control-sidebar -->
   <!-- Add the sidebar's background. This div must be placed
     immediately after the control sidebar -->
     <div class="control-sidebar-bg"></div>
     <?php require_once(APPPATH.'views/footer/foot.php'); ?>
   </div>
   <!-- ./wrapper -->
-  <script>
+  <script >
     //---------CHART---------------
-
     $(function () {
-      $('#container').highcharts({
-        chart: {
-          type: 'column'
-        },
-        title: {
-          text: <?php echo json_encode($tgl) ?>
-        },
-        xAxis: {
-          type: 'category'
-        },
-        yAxis: {
-          title: {
-            text: 'Total Absent'
-          }
+      var processed_json = new Array();
+      $.getJSON('<?php echo base_url("home/ajax_absen_g/")?>', function(data) {
+                    // Populate series
+                    for (i = 0; i < data.length; i++){
+                      processed_json.push([data[i].name, data[i].y]);
+                    }
 
-        },
-        legend: {
-          enabled: false
-        },
-        plotOptions: {
-          series: {
-            borderWidth: 0,
-            dataLabels: {
-              enabled: true,
-              format: '{point.y}'
-            }
-          }
-        },
-        credits: {
-          enabled: false
-        },
+                    $('#container').highcharts({
+                      chart: {
+                        type: 'column'
+                      },
+                      title: {
+                        text: data[0].tgl
+                      },
+                      xAxis: {
+                        type: 'category'
+                      },
+                      yAxis: {
+                        title: {
+                          text: 'Total Absent'
+                        }
 
-        tooltip: {
-          headerFormat: '',
-          pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b> <br/>'
-        },
+                      },
+                      legend: {
+                        enabled: false
+                      },
+                      plotOptions: {
+                        series: {
+                          cursor: 'pointer',
+                          point: {
+                            events: {
+                              click: function () {
 
-        "series": [
-        {
-          "name": "By Absent",
-          "colorByPoint": true,
-          "data": <?php echo json_encode($result) ?>
-        }
-        ]
-      })
+                                var split2 = data[0].tgl.split("-");
+                                var split3 = [split2[1],split2[0],split2[2]].join("/");
+
+                                ShowModal(split3, this.name);
+                              }
+                            }
+                          },
+                          borderWidth: 0,
+                          dataLabels: {
+                            enabled: true,
+                            format: '{point.y}'
+                          }
+                        }
+                      },
+                      credits: {
+                        enabled: false
+                      },
+
+                      tooltip: {
+                        headerFormat: '',
+                        pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b> <br/>'
+                      },
+
+                      "series": [
+                      {
+                        "name": "By Absent",
+                        "colorByPoint": true,
+                        "data": processed_json
+                      }
+                      ]
+                    })
+                  });
     });
+
+    function a() {
+      var url = "<?php echo base_url('home/ajax_absen_g') ?>";
+      $.ajax({
+        type: "POST",
+        url: url,
+        data: $("#rati").serialize(),
+        success: function(data) {
+          var s = $.parseJSON(data);
+          var processed_json = new Array();
+                    // Populate series
+                    for (i = 0; i < s.length; i++){
+                      processed_json.push([s[i].name, s[i].y]);
+                    }
+
+                    $('#container').highcharts({
+                      chart: {
+                        type: 'column'
+                      },
+                      title: {
+                        text: s[0].tgl
+                      },
+                      xAxis: {
+                        type: 'category'
+                      },
+                      yAxis: {
+                        title: {
+                          text: 'Total Absent'
+                        }
+                      },
+                      legend: {
+                        enabled: false
+                      },
+                      plotOptions: {
+                        series: {
+                          cursor: 'pointer',
+                          point: {
+                            events: {
+                              click: function () {
+                                ShowModal(s[0].tgl, this.name);
+                              }
+                            }
+                          },
+                          borderWidth: 0,
+                          dataLabels: {
+                            enabled: true,
+                            format: '{point.y}'
+                          }
+                        }
+                      },
+                      credits: {
+                        enabled: false
+                      },
+
+                      tooltip: {
+                        headerFormat: '',
+                        pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b> <br/>'
+                      },
+
+                      "series": [
+                      {
+                        "name": "By Absent",
+                        "colorByPoint": true,
+                        "data": processed_json
+                      }
+                      ]
+                    })
+
+                  }
+                });
+    }
+
+
+    function ShowModal(tgl, by){
+      
+      var tanggal = new Date(tgl);
+      var absensi = by;
+      var day = ("0"+tanggal.getDate()).slice(-2) ;
+      var month = ("0" + (tanggal.getMonth() + 1)).slice(-2);
+      var year = tanggal.getFullYear();
+      var tanggal2 = [day,month,year].join('/');
+      
+      $.ajax({
+
+        type: "POST", 
+        url : "<?php echo base_url('home/absen/')?>" ,       
+        data: {
+          tanggal:tanggal2,
+          nik:'',
+          nama:'',
+          absensi:absensi,
+        },
+        success: function(data) {
+          window.location.href = "<?php echo base_url('home/absen/')?>";
+        }
+      });
+    }
+
+    $('#datepicker').datepicker({
+      autoclose: true,
+      format: 'dd/mm/yyyy',
+    })
   </script>
+
 
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the
      user experience. -->
    </body>
    </html>
+

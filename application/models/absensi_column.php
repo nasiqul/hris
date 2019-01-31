@@ -1,10 +1,9 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Cari_absen_model extends CI_Model {
-	var $column_order = array('tanggal','karyawan.nik','namaKaryawan','masuk','keluar','shift'); //set column field database for datatable orderable
-    var $column_search = array('tanggal','karyawan.nik','namaKaryawan','masuk','keluar','shift'); //set column field database for datatable searchable 
-    var $order = array('masuk' => 'desc'); // default order 
+class Absensi_column extends CI_Model {
+	//database for datatable searchable 
+    var $order = array('shift' => 'desc'); // default order 
 
     public function __construct()
     {
@@ -12,9 +11,9 @@ class Cari_absen_model extends CI_Model {
         $this->load->database();
     }
 
-    public function get_data_absensi_cari($tgl, $nik, $nama, $shift)
+    public function get_data_absensi_column($tgl, $shift)
     {
-        $this->_get_absensi_cari($tgl, $nik, $nama, $shift);
+        $this->_get_absensi_column($tgl, $shift);
         if($_POST['length'] != -1)
             $this->db->limit($_POST['length'], $_POST['start']);
         $query = $this->db->get();
@@ -22,30 +21,13 @@ class Cari_absen_model extends CI_Model {
     }
 
 
-    private function _get_absensi_cari($tgl, $nik, $nama, $shift)
+    private function _get_absensi_column($tgl, $shift)
     {
-        $this->db->select('karyawan.nik, karyawan.namaKaryawan, presensi.tanggal, presensi.masuk, presensi.keluar, presensi.shift, CONCAT(`karyawan`.`dep/subSec`," ",`karyawan`.`sec/Group`," (",`karyawan`.`kode`,")") as bagian');
+        $this->db->select('karyawan.namaKaryawan, presensi.tanggal, presensi.shift');
         $this->db->from('presensi');
         $this->db->join('karyawan','karyawan.nik = presensi.nik');
-        $this->db->where('presensi.shift REGEXP','^[a-zA-Z]+$');
-        $this->db->where('presensi.shift !=','0');
-
-       if ($tgl) {
-            $this->db->where("DATE_FORMAT(tanggal, '%d/%m/%Y') =",$tgl);
-        }
-
-        if ($nik) {
-            $this->db->where('karyawan.nik',$nik);
-        }
-
-        if ($nama) {
-            $this->db->like('namaKaryawan',$nama);
-        }
-
-        if ($shift) {
-            $this->db->where('shift', $shift);
-        }
-
+        $this->db->where('presensi.shift',$shift);
+        $this->db->where('date(presensi.tanggal)','date("'.$tgl.'"")');
 
         $i = 0;
 
