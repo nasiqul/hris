@@ -88,10 +88,13 @@ public function karyawan_graph()
 
 public function karyawan()
 {
-    if (isset($_POST['status'])) 
+    if (isset($_POST['status']) || isset($_POST['grade']) || isset($_POST['dep']) || isset($_POST['pos'])) 
     {
         $newdata = array(
-            'status'  => $_POST['status']
+            'status'  => $_POST['status'],
+            'grade'  => $_POST['grade'],
+            'dep'  => $_POST['dep'],
+            'pos'  => $_POST['pos']
         );
 
         $this->session->set_userdata($newdata);
@@ -224,10 +227,13 @@ public function ajax_absensi()
 
 public function ajax_emp()
 {
-    if (isset($_SESSION['status'])) 
+    if (isset($_SESSION['status']) || isset($_SESSION['grade']) || isset($_SESSION['dep']) || isset($_SESSION['pos'])) 
     {
         $status = $this->session->userdata('status');
-        $list = $this->cari_karyawan_model->get_data_karyawan_cari($status);
+        $grade = $this->session->userdata('grade');
+        $dep = $this->session->userdata('dep');
+        $pos = $this->session->userdata('pos');
+        $list = $this->cari_karyawan_model->get_data_karyawan_cari($status,$grade,$dep,$pos);
     }
     else {
         $list = $this->karyawan_model->get_data_karyawan();

@@ -137,8 +137,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
   </div>
   <!-- ./wrapper -->
   <script>
-    console.log(<?php echo json_encode($result) ?>);
-
     //---------CHART---------------
 
     $(function () {
@@ -167,7 +165,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             point: {
               events: {
                 click: function () {
-                  ShowData(this.name);
+                  ShowData(this.name,'','','');
                 }
               }
             },
@@ -259,6 +257,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
         },
         plotOptions: {
           series: {
+            cursor: 'pointer',
+            point: {
+              events: {
+                click: function () {
+                  ShowData('',this.name,'','');
+                }
+              }
+            },
             borderWidth: 0,
             dataLabels: {
               enabled: true,
@@ -308,6 +314,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
         plotOptions: {
           series: {
             borderWidth: 0,
+            cursor: 'pointer',
+            point: {
+              events: {
+                click: function () {
+                  ShowData('','',this.name,'');
+                }
+              }
+            },
             dataLabels: {
               enabled: true,
               format: '{point.y}'
@@ -355,6 +369,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
         },
         plotOptions: {
           series: {
+            cursor: 'pointer',
+            point: {
+              events: {
+                click: function () {
+                  ShowData('','','',this.name);
+                }
+              }
+            },
             borderWidth: 0,
             dataLabels: {
               enabled: true,
@@ -380,15 +402,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
       })
     });
 
-    function ShowData(status){
-      alert(status);
-
+    function ShowData(status,grade,dep,pos){
       $.ajax({
-
         type: "POST", 
         url : "<?php echo base_url('home/karyawan/')?>" ,       
         data: {
           status:status,
+          grade:grade,
+          dep:dep,
+          pos:pos
         },
         success: function(data) {
           window.location.href = "<?php echo base_url('home/karyawan/')?>";

@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Karyawan_model extends CI_Model {
 	var $column_order = array('nik','namaKaryawan','dep/subSec','sec/Group','tanggalMasuk','jk','statusKaryawan','namaGrade','jabatan'); //set column field database for datatable orderable
     var $column_search = array('nik','namaKaryawan','dep/subSec','sec/Group','tanggalMasuk','jk','statusKaryawan','namaGrade','jabatan'); //set column field database for datatable searchable 
-    var $order = array('nik' => 'asc'); // default order 
+    var $order = array('nik' => 'desc'); // default order 
 
     public function __construct()
     {
@@ -83,7 +83,7 @@ class Karyawan_model extends CI_Model {
     }
 
     public function by_status(){
-        $q = "SELECT statusKaryawan, COUNT(*) AS jml from karyawan group by statusKaryawan ORDER BY jml";
+        $q = "SELECT statusKaryawan, COUNT(*) AS jml from karyawan group by statusKaryawan ORDER BY FIELD(statusKaryawan,'Percobaan','Kontrak 1','Kontrak 2','Tetap')";
         $query = $this->db->query($q);
 
         if($query->num_rows() > 0){

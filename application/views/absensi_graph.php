@@ -31,7 +31,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <!-- Custom Tabs -->
           <div class="box">
             <div class="box-body">
-              
+
               <form action="" method="post" id="rati">
                <input type="text" name="sortTgl" style="width:130px;" onchange="a()" id="datepicker" placeholder="Tanggal">
              </form>
@@ -195,14 +195,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 
     function ShowModal(tgl, by){
-      
-      var tanggal = new Date(tgl);
+      var t = tgl.split("-");
+      var tanggal = new Date(t[2], t[1]-1, t[0]);
       var absensi = by;
-      var day = ("0"+tanggal.getDate()).slice(-2) ;
-      var month = ("0" + (tanggal.getMonth() + 1)).slice(-2);
+      var day = ("0"+tanggal.getDate()).slice(-2);
+      var month = ("0"+(tanggal.getMonth()+1)).slice(-2);
       var year = tanggal.getFullYear();
-      var tanggal2 = [day,month,year].join('/');
-      
+      var tanggal2 = [day,month,year].join("/");
+
       $.ajax({
 
         type: "POST", 

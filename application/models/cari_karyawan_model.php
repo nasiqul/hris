@@ -12,22 +12,34 @@ class Cari_karyawan_model extends CI_Model {
         $this->load->database();
     }
 
-    public function get_data_karyawan_cari($status)
+    public function get_data_karyawan_cari($status, $grade,$dep,$pos)
     {
-        $this->_get_datatables_query($status);
+        $this->_get_datatables_query($status, $grade,$dep,$pos);
         if($_POST['length'] != -1)
         $this->db->limit($_POST['length'], $_POST['start']);
         $query = $this->db->get();
         return $query->result();
     }
 
-	private function _get_datatables_query($status)
+	private function _get_datatables_query($status, $grade, $dep, $pos)
     {
         $this->db->select("pin, nik, costCenter, foto, namaKaryawan, dep/subSec as dep, sec/Group as group, kode, tanggalMasuk, jk, statusKaryawan, grade, namaGrade, jabatan, statusKeluarga, tanggalLahir, tempatLahir, alamat, hp, ktp, rekening, bpjstk, jp, bpjskes, npwp");
         $this->db->from('karyawan');
 
         if ($status) {
             $this->db->where("statusKaryawan", $status);
+        }
+
+        if ($grade) {
+            $this->db->where("grade", $grade);
+        }
+
+        if ($dep) {
+            $this->db->where("kode", $dep);
+        }
+
+        if ($pos) {
+            $this->db->where("jabatan", $pos);
         }
  
         $i = 0;
