@@ -84,6 +84,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
           array_push($result5, $arr5);
         }
+
+        $arr6 = array();
+        $result6 = array();
+        foreach($coba as $r6){
+
+          $arr6['name'] = $r6->tablename;
+          $arr6['y'] = (int) $r6->jml;
+
+          array_push($result6, $arr6);
+        }
         ?>
 
         <div class="col-md-12">
@@ -95,6 +105,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <li><a href="#tab_3" data-toggle="tab">Stat By Grade</a></li>
               <li><a href="#tab_4" data-toggle="tab">Stat By Departemen</a></li>
               <li><a href="#tab_5" data-toggle="tab">Stat By Position</a></li>
+              <li><a href="#tab_6" data-toggle="tab">Coba Emp Data</a></li>
             </ul>
             <div class="tab-content">
               <div class="tab-pane active" id="tab_1">
@@ -115,6 +126,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
               <div class="tab-pane" id="tab_5">
                 <div id = "container5" style = "width: 850px; margin: 0 auto"></div>
+              </div>
+
+              <div class="tab-pane" id="tab_6">
+                <div id = "container6" style = "width: 850px; margin: 0 auto"></div>
               </div>
               <!-- /.tab-pane -->
             </div>
@@ -402,6 +417,62 @@ scratch. This page gets rid of all links and provides the needed markup only.
       })
     });
 
+    $(function () {
+      $('#container6').highcharts({
+        chart: {
+          type: 'column'
+        },
+        title: {
+          text: ''
+        },
+        xAxis: {
+          type: 'category'
+        },
+        yAxis: {
+          title: {
+            text: 'Total Employee'
+          }
+
+        },
+        legend: {
+          enabled: false
+        },
+        plotOptions: {
+          series: {
+            cursor: 'pointer',
+            point: {
+              events: {
+                click: function () {
+                  ShowData2(this.name);
+                }
+              }
+            },
+            borderWidth: 0,
+            dataLabels: {
+              enabled: true,
+              format: '{point.y}'
+            }
+          }
+        },
+        credits: {
+          enabled: false
+        },
+
+        tooltip: {
+          headerFormat: '',
+          pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b> <br/>'
+        },
+
+        "series": [
+        {
+          "name": "coba1",
+          "colorByPoint": true,
+          "data": <?php echo json_encode($result6) ?>
+        }
+        ]
+      })
+    });
+
     function ShowData(status,grade,dep,pos){
       $.ajax({
         type: "POST", 
@@ -411,6 +482,19 @@ scratch. This page gets rid of all links and provides the needed markup only.
           grade:grade,
           dep:dep,
           pos:pos
+        },
+        success: function(data) {
+          window.location.href = "<?php echo base_url('home/karyawan/')?>";
+        }
+      });
+    }
+
+    function ShowData2(bulan){
+      $.ajax({
+        type: "POST", 
+        url : "<?php echo base_url('home/karyawan/')?>" ,       
+        data: {
+          bulan:bulan
         },
         success: function(data) {
           window.location.href = "<?php echo base_url('home/karyawan/')?>";

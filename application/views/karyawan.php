@@ -29,20 +29,25 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <section class="content container-fluid">
         <br>
         <div class="col-md-12">
-          <table id="example1" class="table table-responsive table-striped">
-            <thead>
-              <tr>
-                <th>NIK</th>
-                <th>Name</th>
-                <th>Department</th>
-                <th>Sec/Group</th>
-                <th>Entry Date</th>
-                <th>Employee Status</th>
-              </tr>
-            </thead>
-            <tbody>
-            </tbody>
-          </table>
+          <div class="box box-solid">
+            <div class="box-body">
+              <table id="example1" class="table table-responsive table-striped">
+                <thead>
+                  <tr>
+                    <th>NIK</th>
+                    <th>Name</th>
+                    <th>Department</th>
+                    <th>Sec/Group</th>
+                    <th>Entry Date</th>
+                    <th>Employee Status</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
 
         <div class="modal fade" id="myModal">
@@ -230,8 +235,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
         { "data": 2 },
         { "data": 3 },
         { "data": 4 },
-        { "data": 5 }
-        ]
+        { "data": 5 },
+        { "data": 6 }
+        ],
+        "columnDefs": [
+        { "orderable": false, "targets": 6 }    ]
       })
     })
 
@@ -315,7 +323,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       ));
 
    })
-  </script>
+ </script>
 
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the

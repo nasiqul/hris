@@ -27,50 +27,57 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
       <!-- Main content -->
       <section class="content container-fluid">
+        <div class="col-md-12">
         <?php
         /* Mengambil query report*/
-        $arr = array();
-        $result = array();
-        foreach($tot as $r2){
-          $tgl = date('d F Y', strtotime($r2->tanggal));
+        if(!empty($tot) && !empty($persentase) && !empty($persentase_tidakMasuk)) {
+          $arr = array();
+          $result = array();
+          foreach($tot as $r2){
+            $tgl = date('d F Y', strtotime($r2->tanggal));
 
-          $arr['name'] = $r2->shift;
-          $arr['y'] = (int) $r2->jml;
+            $arr['name'] = $r2->shift;
+            $arr['y'] = (int) $r2->jml;
 
-          array_push($result, $arr);
+            array_push($result, $arr);
+          }
+
+          $arr3 = array();
+          $result3 = array();
+
+          foreach($persentase as $r3){
+            $tgl3 = date('d F Y', strtotime($r3->tanggal));
+
+            $arr3['name'] = 'Hadir';
+            $arr3['y'] = (float) $r3->jml;
+
+            array_push($result3, $arr3);
+          }
+
+          $arr5 = array();
+          foreach($persentase_tidakMasuk as $r5){
+            $arr5['name'] = 'Tidak Hadir';
+            $arr5['y'] = (float) $r5->jml;
+
+            array_push($result3, $arr5);
+          }
+
+          $arr4 = array();
+          foreach($kary as $r4){
+            $kurang = $r4->jml - $arr3['y'] - $arr5['y'];
+            $arr4['name'] = 'Belum Hadir';
+            $arr4['y'] = (float) $kurang;
+
+            array_push($result3, $arr4);
+          }
         }
-
-        $arr3 = array();
-        $result3 = array();
-
-        foreach($persentase as $r3){
-          $tgl3 = date('d F Y', strtotime($r3->tanggal));
-
-          $arr3['name'] = 'Hadir';
-          $arr3['y'] = (float) $r3->jml;
-
-          array_push($result3, $arr3);
-        }
-
-        $arr5 = array();
-        foreach($persentase_tidakMasuk as $r5){
-          $arr5['name'] = 'Tidak Hadir';
-          $arr5['y'] = (float) $r5->jml;
-
-          array_push($result3, $arr5);
-        }
-
-        $arr4 = array();
-        foreach($kary as $r4){
-          $kurang = $r4->jml - $arr3['y'] - $arr5['y'];
-          $arr4['name'] = 'Belum Hadir';
-          $arr4['y'] = (float) $kurang;
-
-          array_push($result3, $arr4);
+        else {
+          echo '<div class="alert alert-warning alert-dismissible" data-dismiss="alert" aria-hidden="true">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h4><i class="icon fa fa-warning"></i> Data Hari ini belum diupload!</h4>
+          </div>';
         }
         ?>
-
-        <div class="col-md-12">
           <!-- Custom Tabs -->
           <div class="nav-tabs-custom">
             <ul class="nav nav-tabs">

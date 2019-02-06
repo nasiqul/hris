@@ -32,20 +32,26 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <div class="box">
             <div class="box-body">
 
-              <form action="" method="post" id="rati">
-               <input type="text" name="sortTgl" style="width:130px;" onchange="a()" id="datepicker" placeholder="Tanggal">
-             </form>
-             <div id ="container" style = "width: 850px; margin: 0 auto"></div>
-           </div>
-         </div>
-         <!-- nav-tabs-custom -->
-         <!-- </div> --> 
+              <div class="alert alert-warning alert-dismissible" data-dismiss="alert" aria-hidden="true">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h4><i class="icon fa fa-warning"></i> Data Hari ini belum diupload!</h4>
+              </div>
 
-       </section>
-       <!-- /.content -->
-     </div>
-     <!-- /.content-wrapper -->
-     <!-- /.control-sidebar -->
+              <form action="" method="post" id="rati">
+                <label>Date : </label>
+                <input type="text" name="sortTgl" style="width:130px;" onchange="a()" id="datepicker" placeholder="Select date" class="form-control">
+              </form>
+              <div id ="container" style = "width: 850px; margin: 0 auto"></div>
+            </div>
+          </div>
+          <!-- nav-tabs-custom -->
+          <!-- </div> --> 
+
+        </section>
+        <!-- /.content -->
+      </div>
+      <!-- /.content-wrapper -->
+      <!-- /.control-sidebar -->
   <!-- Add the sidebar's background. This div must be placed
     immediately after the control sidebar -->
     <div class="control-sidebar-bg"></div>
@@ -57,69 +63,70 @@ scratch. This page gets rid of all links and provides the needed markup only.
     $(function () {
       var processed_json = new Array();
       $.getJSON('<?php echo base_url("home/ajax_absen_g/")?>', function(data) {
-                    // Populate series
-                    for (i = 0; i < data.length; i++){
-                      processed_json.push([data[i].name, data[i].y]);
-                    }
 
-                    $('#container').highcharts({
-                      chart: {
-                        type: 'column'
-                      },
-                      title: {
-                        text: data[0].tgl
-                      },
-                      xAxis: {
-                        type: 'category'
-                      },
-                      yAxis: {
-                        title: {
-                          text: 'Total Absent'
-                        }
+        for (i = 0; i < data.length; i++){
+          processed_json.push([data[i].name, data[i].y]);
+        }
+        
+        // Populate series
 
-                      },
-                      legend: {
-                        enabled: false
-                      },
-                      plotOptions: {
-                        series: {
-                          cursor: 'pointer',
-                          point: {
-                            events: {
-                              click: function () {
+        $('#container').highcharts({
+          chart: {
+            type: 'column'
+          },
+          title: {
+            text: data[0].tgl
+          },
+          xAxis: {
+            type: 'category'
+          },
+          yAxis: {
+            title: {
+              text: 'Total Absent'
+            }
+          },
+          legend: {
+            enabled: false
+          },
+          plotOptions: {
+            series: {
+              cursor: 'pointer',
+              point: {
+                events: {
+                  click: function () {
 
-                                var split2 = data[0].tgl.split("-");
-                                var split3 = [split2[1],split2[0],split2[2]].join("/");
+                    var split2 = data[0].tgl.split("-");
+                    var split3 = [split2[1],split2[0],split2[2]].join("/");
 
-                                ShowModal(split3, this.name);
-                              }
-                            }
-                          },
-                          borderWidth: 0,
-                          dataLabels: {
-                            enabled: true,
-                            format: '{point.y}'
-                          }
-                        }
-                      },
-                      credits: {
-                        enabled: false
-                      },
+                    ShowModal(split3, this.name);
+                  }
+                }
+              },
+              borderWidth: 0,
+              dataLabels: {
+                enabled: true,
+                format: '{point.y}'
+              }
+            }
+          },
+          credits: {
+            enabled: false
+          },
 
-                      tooltip: {
-                        headerFormat: '',
-                        pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b> <br/>'
-                      },
+          tooltip: {
+            headerFormat: '',
+            pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b> <br/>'
+          },
 
-                      "series": [
-                      {
-                        "name": "By Absent",
-                        "colorByPoint": true,
-                        "data": processed_json
-                      }
-                      ]
-                    })
-                  });
+          "series": [
+          {
+            "name": "By Absent",
+            "colorByPoint": true,
+            "data": processed_json
+          }
+          ]
+        })
+      });
     });
 
     function a() {

@@ -82,44 +82,27 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
         </div> 
         <div class="col-md-12">
-          <table id="example1" class="table table-responsive table-striped">
-            <thead>
-              <th>Date</th>
-              <th>NIK</th>
-              <th>Name</th>
-              <th>Arrive</th>
-              <th>Come Home</th>
-              <th>Shift</th>
-            </thead>        
-            <tbody>
-            </tbody>
-          </table>
+          <div class="box box-solid">
+            <div class="box-body">
+              <table id="example1" class="table table-responsive table-striped">
+                <thead>
+                  <th>Date</th>
+                  <th>NIK</th>
+                  <th>Name</th>
+                  <th>Arrive</th>
+                  <th>Come Home</th>
+                  <th>Shift</th>
+                </thead>        
+                <tbody>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>   
 
       </section>
       <!-- /.content -->
 
-    <!-- <div class="modal fade" id="myModal">
-          <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title"></h4>
-              </div>
-              <div class="modal-body">
-                <input type="text" name="user_id" value="">
-                <p>One fine body&hellip;</p>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-              </div>
-            </div>
-            /.modal-content -->
-            <!-- </div> -->
-            <!-- /.modal-dialog -->
-            <!-- </div> --> 
           </div>
           <!-- /.content-wrapper -->
           <!-- /.control-sidebar -->

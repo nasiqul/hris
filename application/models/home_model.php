@@ -117,6 +117,42 @@ class Home_model extends CI_Model {
         }
     }
 
+    public function report1_by_tgl($tgl){
+        $q = "SELECT tanggal, COUNT(*) AS jml from presensi where shift = '1' AND MONTH(tanggal) = MONTH(STR_TO_DATE('".$tgl."', '%d-%m-%Y')) AND YEAR(tanggal) = YEAR(STR_TO_DATE('".$tgl."', '%d-%m-%Y')) and tanggal not in (select tanggal from kalender) group by tanggal";
+        $query = $this->db->query($q);
+
+        if($query->num_rows() > 0){
+            foreach($query->result() as $data){
+                $hasil[] = $data;
+            }
+            return $hasil;
+        }
+    }
+
+    public function report2_by_tgl($tgl){
+        $q = "SELECT tanggal, COUNT(*) AS jml from presensi where shift = '2' AND MONTH(tanggal) = MONTH(STR_TO_DATE('".$tgl."', '%d-%m-%Y')) AND YEAR(tanggal) = YEAR(STR_TO_DATE('".$tgl."', '%d-%m-%Y')) and tanggal not in (select tanggal from kalender)  group by tanggal";
+        $query = $this->db->query($q);
+
+        if($query->num_rows() > 0){
+            foreach($query->result() as $data){
+                $hasil[] = $data;
+            }
+            return $hasil;
+        }
+    }
+
+    public function report3_by_tgl($tgl){
+        $q = "SELECT tanggal, COUNT(*) AS jml from presensi where shift = '3' AND MONTH(tanggal) = MONTH(STR_TO_DATE('".$tgl."', '%d-%m-%Y')) AND YEAR(tanggal) = YEAR(STR_TO_DATE('".$tgl."', '%d-%m-%Y')) and tanggal not in (select tanggal from kalender)  group by tanggal";
+        $query = $this->db->query($q);
+
+        if($query->num_rows() > 0){
+            foreach($query->result() as $data){
+                $hasil[] = $data;
+            }
+            return $hasil;
+        }
+    }
+
     public function by_total_kehadiran(){
         $q = "SELECT * from (SELECT p.tanggal, p.shift, COUNT(*) AS jml from presensi as p where p.shift REGEXP '^[1-9]+$' group by p.tanggal,p.shift)  AS tbl WHERE date(tanggal) = CURRENT_DATE()";
         $query = $this->db->query($q);

@@ -10,16 +10,35 @@ class Home extends CI_Controller {
         $this->load->model('cari_model');
         $this->load->model('cari_absen_model');
         $this->load->model('qa_model');
-        $this->load->model('absensi_column');
         $this->load->model('cari_karyawan_model');
+        $this->load->model('Karyawan_graph_model');
+        $this->load->model('karyawan_by_period_model');
     }
 
     public function index()
     {
-        $data['report1'] = $this->home_model->report1();
-        $data['report2'] = $this->home_model->report2();
-        $data['report3'] = $this->home_model->report3();
-        // $data['laporan'] = $this->home_model->laporan();
+        if (isset($_POST['bulan'])) {
+            $newdata = array(
+                'bulan'  => $_POST['bulan']
+            );
+
+            $this->session->set_userdata($newdata);
+        }
+
+        if ($this->session->userdata("bulan")) {
+            
+            $bln = $this->session->userdata("bulan");
+
+            $data['report1'] = $this->home_model->report1_by_tgl($bln);
+            $data['report2'] = $this->home_model->report2_by_tgl($bln);
+            $data['report3'] = $this->home_model->report3_by_tgl($bln);
+        }
+        else {
+            $data['report1'] = $this->home_model->report1();
+            $data['report2'] = $this->home_model->report2();
+            $data['report3'] = $this->home_model->report3();
+        }
+            // $data['laporan'] = $this->home_model->laporan();
         $this->load->view('report', $data);
     }
 
@@ -59,15 +78,20 @@ class Home extends CI_Controller {
 
         $arr = array();
         $result = array();
-        foreach($absen as $r2){
-          $tgl = date('d-m-Y', strtotime($r2->tanggal));
+        if(!empty($absen)) {
+            foreach($absen as $r2){
+              $tgl = date('d-m-Y', strtotime($r2->tanggal));
 
-          $arr['name'] = $r2->shift;
-          $arr['y'] = (int) $r2->jml;
-          $arr['tgl'] = $tgl;
+              $arr['name'] = $r2->shift;
+              $arr['y'] = (int) $r2->jml;
+              $arr['tgl'] = $tgl;
 
-          $result[] = $arr;
-      }
+              $result[] = $arr;
+          }
+        }
+        else
+           $result[] = json_decode ("{}");
+            
       echo json_encode($result);
   }
 
@@ -83,6 +107,7 @@ public function karyawan_graph()
     $data['grade'] = $this->karyawan_model->by_grade();
     $data['kode'] = $this->karyawan_model->by_kode();
     $data['posisi'] = $this->karyawan_model->by_posisi();
+    $data['coba'] = $this->Karyawan_graph_model->select_all();
     $this->load->view("karyawan_graph", $data);
 }
 
@@ -95,6 +120,14 @@ public function karyawan()
             'grade'  => $_POST['grade'],
             'dep'  => $_POST['dep'],
             'pos'  => $_POST['pos']
+        );
+
+        $this->session->set_userdata($newdata);
+    }
+
+    if (isset($_POST['bulan'])) {
+        $newdata = array(
+            'bulan' => $_POST['bulan']
         );
 
         $this->session->set_userdata($newdata);
@@ -235,6 +268,10 @@ public function ajax_emp()
         $pos = $this->session->userdata('pos');
         $list = $this->cari_karyawan_model->get_data_karyawan_cari($status,$grade,$dep,$pos);
     }
+    elseif (isset($_SESSION['bulan'])) {
+        $bulan = $this->session->userdata('bulan');
+        $list = $this->karyawan_by_period_model->get_karyawan($bulan);
+    }
     else {
         $list = $this->karyawan_model->get_data_karyawan();
     }
@@ -250,6 +287,7 @@ public function ajax_emp()
         $row[] = $key->group;
         $row[] = date("j M Y", strtotime($key->tanggalMasuk));
         $row[] = $key->statusKaryawan;
+        $row[] = "<p class='text-center'><small class='label bg-green'>".$key->status." <i class='fa fa-check'></i> </small></p>";
 
         $data[] = $row;
         $i++;
@@ -336,26 +374,6 @@ public function ajax_qa()
     echo json_encode($output);
 }
 
-public function ajax_getcolumn($tgl,$shift)
-{
-    $list = $this->absensi_column->get_data_absensi_column($tgl,$shift);
-    $data = array();
-    foreach ($list as $key) {
-        $row = array();
-        $row[] = $key->namaKaryawan;
-        $row[] = $key->shift;
-
-        $data[] = $row;
-    }
-
-    $output = array(
-        "draw" => $_POST['draw'],
-        "data" => $data,
-    );
-        //output to json format
-    echo json_encode($output);
-}
-
 public function get_presensi(){
     $data=$this->home_model->get_presensi();
     echo json_encode($data);
@@ -363,8 +381,6 @@ public function get_presensi(){
 
 public function session_destroy()
 {
-        // $items = array('tanggal' => '', 'nik' => '', 'nama' => '', 'shift' => '');
-        // $this->session->unset_userdata($items);
     session_destroy();
     redirect('home/presensi');
 }
