@@ -19,7 +19,7 @@
                 <div class="box-body box-profile">
                   <img class="profile-user-img img-responsive img-circle" src="<?php echo base_url()?>app/img/user1-128x128.jpg" alt="User profile picture">
 
-                  <h3 class="profile-username text-center">Nasiqul</h3>
+                  <h3 class="profile-username text-center"><?php echo $client[0]->namaKaryawan ?></h3>
 
                   <p class="text-muted text-center">Software Engineer</p>
 

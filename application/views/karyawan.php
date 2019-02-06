@@ -106,6 +106,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                                 <p class="text-muted">Status Keluarga</p>
                                 <p id="sKeluarga"></p>
+                                <select id="SelectKeluarga" class="form-control">
+                                  <option>vv</option>
+                                </select>
                               </div>
                             </div>
                           </div>
@@ -219,6 +222,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
   </div>
   <!-- ./wrapper -->
   <script>
+    var jks;
+    var keluarga = [];
     $(document).ready(function() {
       $('#example1').DataTable({
         "lengthMenu"    : [[10, 25, 50, -1], [10, 25, 50, "All"]],
@@ -273,9 +278,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
             if (data[i][9] == "L") {
               $("#jk").text('Laki - laki');
+              jks = data[i][9];
             }
             else if (data[i][9] == "P") {
               $("#jk").text('Perempuan');
+              jks = data[i][9];
             }
 
             $("#deb").text(data[i][5]);
@@ -294,7 +301,18 @@ scratch. This page gets rid of all links and provides the needed markup only.
             $("#bpjskes").text(data[i][23]);
             $("#jp").text(data[i][22]);
           });
+        }
+      });
 
+      
+      $.ajax({
+        url: "<?php echo base_url('home/ajax_emp_keluarga/')?>" ,
+        type : "GET",
+        dataType: 'json',
+        success: function(data){
+          $.each(data, function(i, value){
+            keluarga.push(data[i][0]);
+          });
         }
       });
 
@@ -322,8 +340,42 @@ scratch. This page gets rid of all links and provides the needed markup only.
       'id' : 'txttanggalLahir'}
       ));
 
-   })
- </script>
+     var jk = $('#jk').text();
+     if (jks == "L") {
+      $('#jk').text('').append($('<select class="form-control" id="txtJK"> <option value="L" selected>Laki - laki</option> <option value="P">Perempuan</option> </select>'));
+    }
+    else if (jks == "P"){
+      $('#jk').text('').append($('<select class="form-control" id="txtJK"> <option value="L">Laki - laki</option> <option value="P" selected>Perempuan</option> </select>'));
+    }
+
+    var alamat = $('#alamat').text();
+    $('#alamat').text('').append($('<textarea class="form-control" id="txtAlamat">'+alamat+'</textarea>'));
+
+    var sKeluarga = $('#sKeluarga').text();
+
+     // for (var i = 0; i < keluarga.length; i++) {
+     //   $('#SelectKeluarga').append('<option value="foo">'+keluarga[i]+'</option>');
+     // }
+
+     // $('#SelectKeluarga').append('<option value="foo">asd</option>');
+
+      // $('#theSelectun'+a).append('<option value="'+value+'" selected="selected">'+value+'</option>');
+      var list = [];
+      var options = [];
+
+
+      for (var i = 0; i < keluarga.length; i++) {
+        list.push(i) ;
+        options.push('<option value="'+keluarga[i]+'" >'+keluarga[i]+'</option>');
+      }
+
+      $("#SelectKeluarga").html(options.join(''));
+
+
+    })
+
+
+  </script>
 
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the

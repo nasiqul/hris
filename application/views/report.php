@@ -159,7 +159,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
        style: {
         textShadow: '0 0 3px black'
       }
-    }
+    },
+    cursor: 'pointer',
+    point: {
+      events: {
+        click:function(event) {
+            alert(event.point.category);
+        }
+      }
+    },
   }
 },
 credits : {

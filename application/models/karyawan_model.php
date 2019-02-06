@@ -16,23 +16,23 @@ class Karyawan_model extends CI_Model {
     {
         $this->_get_datatables_query();
         if($_POST['length'] != -1)
-        $this->db->limit($_POST['length'], $_POST['start']);
+            $this->db->limit($_POST['length'], $_POST['start']);
         $query = $this->db->get();
         return $query->result();
     }
 
-	private function _get_datatables_query()
+    private function _get_datatables_query()
     {
         $this->db->select("pin, nik, costCenter, foto, namaKaryawan, dep/subSec as dep, sec/Group as group, kode, tanggalMasuk, jk, statusKaryawan, grade, namaGrade, jabatan, statusKeluarga, tanggalLahir, tempatLahir, alamat, hp, ktp, rekening, bpjstk, jp, bpjskes, npwp, status");
         $this->db->from('karyawan');
- 
+
         $i = 0;
-     
+
         foreach ($this->column_search as $item) // loop column 
         {
             if($_POST['search']['value']) // if datatable send POST for search
             {
-                 
+
                 if($i===0) // first loop
                 {
                     $this->db->group_start(); // open bracket. query Where with OR clause better with bracket. because maybe can combine with other WHERE with AND.
@@ -42,12 +42,12 @@ class Karyawan_model extends CI_Model {
                 {
                     $this->db->or_like($item, $_POST['search']['value']);
                 }
- 
+
                 if(count($this->column_search) - 1 == $i) //last loop
                     $this->db->group_end(); //close bracket
+                }
+                $i++;
             }
-            $i++;
-        }
 
         if(isset($_POST['order'])) // here order processing
         {
@@ -152,6 +152,19 @@ class Karyawan_model extends CI_Model {
             }
             return $hasil;
         }
+    }
+
+    public function getKeluarga()
+    {
+        $q = "SELECT statusKeluarga from karyawan group by statusKeluarga";
+       $query = $this->db->query($q);
+
+       if($query->num_rows() > 0){
+        foreach($query->result() as $data){
+            $hasil[] = $data;
+        }
+        return $hasil;
+    }    
     }
 }
 ?>

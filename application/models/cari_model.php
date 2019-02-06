@@ -32,7 +32,7 @@ class Cari_model extends CI_Model {
         $this->db->where('presensi.shift !=','0');
 
         if ($tgl) {
-            $this->db->where('tanggal',$tgl);
+            $this->db->where('DATE_FORMAT(tanggal, "%d/%m/%Y") = ',$tgl);
         }
 
         if ($nik) {

@@ -41,7 +41,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <div class="col-md-3">
                   <div class="form-group">
                     <label for="inputTanggal"><i class="fa fa-calendar"></i> <span>Date</span></label>
-                    <input type="date" class="form-control" name="tanggal" id="inputTanggal" 
+                    <input type="text" class="form-control" name="tanggal" id="datepicker" placeholder="Select date"
                     <?php if(isset($_SESSION['tanggal'])) echo 'value="'.$_SESSION['tanggal'].'"';?>>
                   </div>
                 </div>
@@ -57,7 +57,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <div class="col-md-4">
                   <div class="form-group">
                     <label for="inputNama"><i class="fa fa-user"></i> <span>Name</span></label>
-                    <input type="text" class="form-control" name="nama" id="inputNama" placeholder="Nama"
+                    <input type="text" class="form-control" name="nama" id="inputNama" placeholder="Name"
                     <?php if(isset($_SESSION['nama'])) echo 'value="'.$_SESSION['nama'].'"';?>>
                   </div>
                 </div>
@@ -90,7 +90,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <th>NIK</th>
                   <th>Name</th>
                   <th>Arrive</th>
-                  <th>Come Home</th>
+                  <th>Leave</th>
                   <th>Shift</th>
                 </thead>        
                 <tbody>
@@ -127,6 +127,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
         }
       });
 
+    })
+
+    $('#datepicker').datepicker({
+      autoclose: true,
+      format: 'dd/mm/yyyy',
     })
   </script>
 

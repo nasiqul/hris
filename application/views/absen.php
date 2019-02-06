@@ -41,7 +41,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <div class="col-md-3">
                   <div class="form-group">
                     <label for="datepicker"><i class="fa fa-calendar"></i> <span>Date</span></label>
-                    <input type="text" class="form-control" name="tanggal" id="datepicker" placeholder="Tanggal"
+                    <input type="text" class="form-control" name="tanggal" id="datepicker" placeholder="Select date"
                     <?php if(isset($_SESSION['tanggal2'])) echo 'value="'.$_SESSION['tanggal2'].'"';?>>
                   </div>
                 </div>
@@ -57,7 +57,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <div class="col-md-4">
                   <div class="form-group">
                     <label for="inputNama"><i class="fa fa-user"></i> <span>Name</span></label>
-                    <input type="text" class="form-control" name="nama" id="inputNama" placeholder="Nama"
+                    <input type="text" class="form-control" name="nama" id="inputNama" placeholder="Name"
                     <?php if(isset($_SESSION['nama2'])) echo 'value="'.$_SESSION['nama2'].'"';?>>
                   </div>
                 </div>

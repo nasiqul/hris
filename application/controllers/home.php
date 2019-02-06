@@ -107,7 +107,6 @@ public function karyawan_graph()
     $data['grade'] = $this->karyawan_model->by_grade();
     $data['kode'] = $this->karyawan_model->by_kode();
     $data['posisi'] = $this->karyawan_model->by_posisi();
-    $data['coba'] = $this->Karyawan_graph_model->select_all();
     $this->load->view("karyawan_graph", $data);
 }
 
@@ -335,6 +334,22 @@ public function ajax_emp_by_nik($id)
         $row[] = $key->jp;
         $row[] = $key->bpjskes;
         $row[] = $key->npwp;
+
+        $data[] = $row;
+    }
+
+        //output to json format
+    echo json_encode($data);
+}
+
+public function ajax_emp_keluarga()
+{
+        // echo $_GET['dataId'];
+    $list = $this->karyawan_model->getKeluarga();
+    $data = array();
+    foreach ($list as $key) {
+        $row = array();
+        $row[] = $key->statusKeluarga;
 
         $data[] = $row;
     }

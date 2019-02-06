@@ -98,7 +98,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     var split2 = data[0].tgl.split("-");
                     var split3 = [split2[1],split2[0],split2[2]].join("/");
 
-                    ShowModal(split3, this.name);
+                    //ShowModal(split3, this.name);
+                    alert(s[0].tgl);
                   }
                 }
               },
@@ -167,7 +168,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                           point: {
                             events: {
                               click: function () {
-                                ShowModal(s[0].tgl, this.name);
+                                //ShowModal(s[0].tgl, this.name);
+                                alert(s[0].tgl);
                               }
                             }
                           },
