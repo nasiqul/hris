@@ -32,8 +32,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <div class="box">
             <div class="box-body">
 
-              <div class="alert alert-warning alert-dismissible" data-dismiss="alert" aria-hidden="true">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+              <div class="alert alert-warning alert-dismissible" id="notif" onclick="check()" style="display: none; cursor: pointer;">
                 <h4><i class="icon fa fa-warning"></i> Data Hari ini belum diupload!</h4>
               </div>
 
@@ -58,14 +57,24 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <?php require_once(APPPATH.'views/footer/foot.php'); ?>
   </div>
   <!-- ./wrapper -->
-  <script >
+  <script>
+    var notif = document.getElementById("notif");
+
+    function check() {
+      notif.style.display = "none";
+    }
     //---------CHART---------------
     $(function () {
       var processed_json = new Array();
+
       $.getJSON('<?php echo base_url("home/ajax_absen_g/")?>', function(data) {
 
         for (i = 0; i < data.length; i++){
           processed_json.push([data[i].name, data[i].y]);
+
+          if (data[i].name == null) {
+            notif.style.display = "block";
+          }
         }
         
         // Populate series
@@ -142,6 +151,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     // Populate series
                     for (i = 0; i < s.length; i++){
                       processed_json.push([s[i].name, s[i].y]);
+
+                      if (s[i].name == null) 
+                        notif.style.display = "block";
+                      else
+                        notif.style.display = "none";
                     }
 
                     $('#container').highcharts({

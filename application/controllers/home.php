@@ -63,38 +63,6 @@ class Home extends CI_Controller {
         $this->load->view("absensi_graph");
     }
 
-    public function ajax_absen_g()
-    {
-
-        if (isset($_POST['sortTgl'])) 
-        {
-            $tgl = $_POST['sortTgl'];
-
-            $absen = $this->absensi_model->by_absensi_cari($tgl);
-        }
-        else {
-            $absen = $this->absensi_model->by_absensi();
-        }
-
-        $arr = array();
-        $result = array();
-        if(!empty($absen)) {
-            foreach($absen as $r2){
-              $tgl = date('d-m-Y', strtotime($r2->tanggal));
-
-              $arr['name'] = $r2->shift;
-              $arr['y'] = (int) $r2->jml;
-              $arr['tgl'] = $tgl;
-
-              $result[] = $arr;
-            }
-        }
-        else
-            $result[] = json_decode ("{}");
-
-        echo json_encode($result);
-        }
-
     public function client()
     {
         $this->load->view("client");
@@ -147,6 +115,11 @@ class Home extends CI_Controller {
     public function tanya()
     {
         $this->load->view('qa');
+    }
+
+    public function ot()
+    {
+        $this->load->view('overtime');
     }
 
     public function presensi()
@@ -217,6 +190,38 @@ class Home extends CI_Controller {
             //output to json format
         echo json_encode($output);
     }
+
+    public function ajax_absen_g()
+    {
+
+        if (isset($_POST['sortTgl'])) 
+        {
+            $tgl = $_POST['sortTgl'];
+
+            $absen = $this->absensi_model->by_absensi_cari($tgl);
+        }
+        else {
+            $absen = $this->absensi_model->by_absensi();
+        }
+
+        $arr = array();
+        $result = array();
+        if(!empty($absen)) {
+            foreach($absen as $r2){
+              $tgl = date('d-m-Y', strtotime($r2->tanggal));
+
+              $arr['name'] = $r2->shift;
+              $arr['y'] = (int) $r2->jml;
+              $arr['tgl'] = $tgl;
+
+              $result[] = $arr;
+            }
+        }
+        else
+            $result[] = json_decode("{}");
+
+        echo json_encode($result);
+        }
 
 
     public function ajax_absensi()

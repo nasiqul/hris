@@ -61,20 +61,21 @@ scratch. This page gets rid of all links and provides the needed markup only.
             }
           }
           else {
-            echo '<div class="alert alert-warning alert-dismissible" data-dismiss="alert" aria-hidden="true">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            <h4><i class="icon fa fa-warning"></i> Data Hari ini belum diupload!</h4>
-            </div>';
             $tgl = null;
             $tgl3 = null;
             $result3[] = null;
           }
           ?>
+
+          <div class="alert alert-warning alert-dismissible" id="notif" onclick="check()" style="display: none; cursor: pointer;">
+                <h4><i class="icon fa fa-warning"></i> Data Hari ini belum diupload!</h4>
+              </div>
+
           <!-- Custom Tabs -->
           <div class="nav-tabs-custom">
             <ul class="nav nav-tabs">
-              <li class="active"><a href="#tab_1" data-toggle="tab">Stat Persentase <span>(%)</span></a></li>
-              <li><a href="#tab_2" data-toggle="tab">Stat By Shift</a></li>
+              <li class="active"><a href="#tab_1" data-toggle="tab">Stat By Shift</a></li>
+              <li><a href="#tab_2" data-toggle="tab">Stat Persentase <span>(%)</span></a></li>
 
               <form action="" method="post" id="tglF">
                 <li class="pull-right"><input type="text" class="form-control text-muted" placeholder="Select date" id="datepicker" onchange="postTgl()" name="txtTgl">
@@ -85,10 +86,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </ul>
             <div class="tab-content">
               <div class="tab-pane active" id="tab_1">
-                <div id = "container2" style = "width: 850px; margin: 0 auto"></div>
+                <div id = "container" style = "width: 850px; margin: 0 auto"></div>
               </div>
               <div class="tab-pane" id="tab_2">
-                <div id = "container" style = "width: 850px; margin: 0 auto"></div>
+                <div id = "container2" style = "width: 850px; margin: 0 auto"></div>
               </div>
               <!-- /.tab-pane -->
               <!-- /.tab-pane -->
@@ -112,6 +113,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
   </div>
   <!-- ./wrapper -->
   <script>
+
+    var notif = document.getElementById("notif");
+
+    function check() {
+      notif.style.display = "none";
+    }
+
     $(document).ready(function() {
 
       $('#datepicker').datepicker({
@@ -128,6 +136,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
         for (i = 0; i < data.length; i++){
           processed_json.push([data[i].name, data[i].y]);
+
+          if (data[i].name == null) {
+            notif.style.display = "block";
+          }
         }
 
         $('#container').highcharts({
@@ -199,6 +211,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     // Populate series
                     for (i = 0; i < s.length; i++){
                       processed_json.push([s[i].name, s[i].y]);
+
+                      if (s[i].name == null) 
+                        notif.style.display = "block";
+                      else
+                        notif.style.display = "none";
+                      
                     }
 
                     $('#container').highcharts({
