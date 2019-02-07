@@ -73,7 +73,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <div class="box-body">
          <form action="" method="post" id="dateFilter">
           <label>Date : </label>
-          <input type="text" name="tgl" style="width:130px;" onchange="PostMonth()" id="datepicker" placeholder="Select date" class="form-control">
+          <input type="text" name="tgl" style="width:130px;" onchange="PostMonth()" id="datepicker" placeholder="Select Period" class="form-control">
         </form>
         <div id ="report" style = "width: 1000px; margin: 0 auto"></div>
       </div>

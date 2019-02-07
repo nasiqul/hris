@@ -28,61 +28,60 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <!-- Main content -->
       <section class="content container-fluid">
         <div class="col-md-12">
-        <?php
-        /* Mengambil query report*/
-        if(!empty($tot) && !empty($persentase) && !empty($persentase_tidakMasuk)) {
-          $arr = array();
-          $result = array();
-          foreach($tot as $r2){
-            $tgl = date('d F Y', strtotime($r2->tanggal));
+          <?php
+          /* Mengambil query report*/
+          if(!empty($persentase) && !empty($persentase_tidakMasuk) && !empty($kary)) {
+            $arr3 = array();
+            $result3 = array();
 
-            $arr['name'] = $r2->shift;
-            $arr['y'] = (int) $r2->jml;
+            foreach($persentase as $r3){
+              $tgl3 = date('d F Y', strtotime($r3->tanggal));
 
-            array_push($result, $arr);
+              $arr3['name'] = 'Hadir';
+              $arr3['y'] = (float) $r3->jml;
+
+              array_push($result3, $arr3);
+            }
+
+            $arr5 = array();
+            foreach($persentase_tidakMasuk as $r5){
+              $arr5['name'] = 'Tidak Hadir';
+              $arr5['y'] = (float) $r5->jml;
+
+              array_push($result3, $arr5);
+            }
+
+            $arr4 = array();
+            foreach($kary as $r4){
+              $kurang = $r4->jml - $arr3['y'] - $arr5['y'];
+              $arr4['name'] = 'Belum Hadir';
+              $arr4['y'] = (float) $kurang;
+
+              array_push($result3, $arr4);
+            }
           }
-
-          $arr3 = array();
-          $result3 = array();
-
-          foreach($persentase as $r3){
-            $tgl3 = date('d F Y', strtotime($r3->tanggal));
-
-            $arr3['name'] = 'Hadir';
-            $arr3['y'] = (float) $r3->jml;
-
-            array_push($result3, $arr3);
-          }
-
-          $arr5 = array();
-          foreach($persentase_tidakMasuk as $r5){
-            $arr5['name'] = 'Tidak Hadir';
-            $arr5['y'] = (float) $r5->jml;
-
-            array_push($result3, $arr5);
-          }
-
-          $arr4 = array();
-          foreach($kary as $r4){
-            $kurang = $r4->jml - $arr3['y'] - $arr5['y'];
-            $arr4['name'] = 'Belum Hadir';
-            $arr4['y'] = (float) $kurang;
-
-            array_push($result3, $arr4);
-          }
-        }
-        else {
-          echo '<div class="alert alert-warning alert-dismissible" data-dismiss="alert" aria-hidden="true">
+          else {
+            echo '<div class="alert alert-warning alert-dismissible" data-dismiss="alert" aria-hidden="true">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             <h4><i class="icon fa fa-warning"></i> Data Hari ini belum diupload!</h4>
-          </div>';
-        }
-        ?>
+            </div>';
+            $tgl = null;
+            $tgl3 = null;
+            $result3[] = null;
+          }
+          ?>
           <!-- Custom Tabs -->
           <div class="nav-tabs-custom">
             <ul class="nav nav-tabs">
               <li class="active"><a href="#tab_1" data-toggle="tab">Stat Persentase <span>(%)</span></a></li>
               <li><a href="#tab_2" data-toggle="tab">Stat By Shift</a></li>
+
+              <form action="" method="post" id="tglF">
+                <li class="pull-right"><input type="text" class="form-control text-muted" placeholder="Select date" id="datepicker" onchange="postTgl()" name="txtTgl">
+                </li>
+              </form>
+
+              <li class="pull-right"><label>Date : </label></li>
             </ul>
             <div class="tab-content">
               <div class="tab-pane active" id="tab_1">
@@ -113,55 +112,177 @@ scratch. This page gets rid of all links and provides the needed markup only.
   </div>
   <!-- ./wrapper -->
   <script>
+    $(document).ready(function() {
+
+      $('#datepicker').datepicker({
+        autoclose: true,
+        format: "dd-mm-yyyy"
+      })
+    });
+
     //---------CHART---------------
 
     $(function () {
-      $('#container').highcharts({
-        chart: {
-          type: 'column'
-        },
-        title: {
-          text: <?php echo json_encode($tgl) ?>
-        },
-        xAxis: {
-          type: 'category'
-        },
-        yAxis: {
-          title: {
-            text: 'Total Karyawan'
-          }
+      var processed_json = new Array();
+      $.getJSON('<?php echo base_url("home/ajax_presensi_shift/")?>', function(data) {
 
-        },
-        legend: {
-          enabled: false
-        },
-        plotOptions: {
-          series: {
-            borderWidth: 0,
-            dataLabels: {
-              enabled: true,
-              format: '{point.y}'
-            }
-          }
-        },
-        credits: {
-          enabled: false
-        },
-
-        tooltip: {
-          headerFormat: '',
-          pointFormat: '<span style="color:{point.color}">Shift {point.name}</span>: <b>{point.y}</b> <br/>'
-        },
-
-        "series": [
-        {
-          "name": "By Shift",
-          "colorByPoint": true,
-          "data": <?php echo json_encode($result) ?>
+        for (i = 0; i < data.length; i++){
+          processed_json.push([data[i].name, data[i].y]);
         }
-        ]
+
+        $('#container').highcharts({
+          chart: {
+            type: 'column'
+          },
+          title: {
+            text: data[0].tgl
+          },
+          xAxis: {
+            type: 'category'
+          },
+          yAxis: {
+            title: {
+              text: 'Total Karyawan'
+            }
+
+          },
+          legend: {
+            enabled: false
+          },
+          plotOptions: {
+            series: {
+              cursor: 'pointer',
+              point: {
+                events: {
+                  click: function () {
+                    ShowData(data[0].tgl, this.name);
+                  }
+                }
+              },
+              borderWidth: 0,
+              dataLabels: {
+                enabled: true,
+                format: '{point.y}'
+              }
+            }
+          },
+          credits: {
+            enabled: false
+          },
+
+          tooltip: {
+            headerFormat: '',
+            pointFormat: '<span style="color:{point.color}">Shift {point.name}</span>: <b>{point.y}</b> <br/>'
+          },
+
+          "series": [
+          {
+            "name": "By Shift",
+            "colorByPoint": true,
+            "data": processed_json
+          }
+          ]
+        })
       })
     });
+
+
+    function postTgl() {
+      var url = "<?php echo base_url('home/ajax_presensi_shift') ?>";
+      $.ajax({
+        type: "POST",
+        url: url,
+        data: $("#tglF").serialize(),
+        success: function(data) {
+          var s = $.parseJSON(data);
+          var processed_json = new Array();
+                    // Populate series
+                    for (i = 0; i < s.length; i++){
+                      processed_json.push([s[i].name, s[i].y]);
+                    }
+
+                    $('#container').highcharts({
+                      chart: {
+                        type: 'column'
+                      },
+                      title: {
+                        text: s[0].tgl
+                      },
+                      xAxis: {
+                        type: 'category'
+                      },
+                      yAxis: {
+                        title: {
+                          text: 'Total Absent'
+                        }
+                      },
+                      legend: {
+                        enabled: false
+                      },
+                      plotOptions: {
+                        series: {
+                          cursor: 'pointer',
+                          point: {
+                            events: {
+                              click: function () {
+                                ShowData(s[0].tgl, this.name);
+                              }
+                            }
+                          },
+                          borderWidth: 0,
+                          dataLabels: {
+                            enabled: true,
+                            format: '{point.y}'
+                          }
+                        }
+                      },
+                      credits: {
+                        enabled: false
+                      },
+
+                      tooltip: {
+                        headerFormat: '',
+                        pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b> <br/>'
+                      },
+
+                      "series": [
+                      {
+                        "name": "By Absent",
+                        "colorByPoint": true,
+                        "data": processed_json
+                      }
+                      ]
+                    })
+
+                  }
+                });
+    }
+
+
+    function ShowData(tgl, by){
+      var t = tgl.split("-");
+      var tanggal = new Date(t[2], t[1]-1, t[0]);
+      var shift = by;
+      var day = ("0"+tanggal.getDate()).slice(-2);
+      var month = ("0"+(tanggal.getMonth()+1)).slice(-2);
+      var year = tanggal.getFullYear();
+      var tanggal2 = [day,month,year].join("/");
+
+      $.ajax({
+
+        type: "POST", 
+        url : "<?php echo base_url('home/presensi/')?>" ,       
+        data: {
+          tanggal:tanggal2,
+          nik:'',
+          nama:'',
+          shift:shift,
+        },
+        success: function(data) {
+          window.location.href = "<?php echo base_url('home/presensi/')?>";
+        }
+      });
+    }
 
 
     $(function () {

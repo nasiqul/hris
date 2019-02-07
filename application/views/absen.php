@@ -121,15 +121,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
   </div>
   <!-- ./wrapper -->
   <script>
-
+    var table;
     $(document).ready(function() {
 
       $('#example1 tfoot th').each( function () {
         var title = $(this).text();
-        $(this).html( '<input style="text-align: center;" type="text" placeholder="Search '+title+'" size="3"/>' );
-      } );
+        $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+      });
 
-      var table = $('#example1').DataTable({
+      table = $('#example1').DataTable({
         "lengthMenu"    : [[10, 25, 50, -1], [10, 25, 50, "All"]],
         "processing"    : true,
         "serverSide"    : true,
@@ -155,9 +155,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             .draw();
           }
         } );
-      });
-
-      $('#example1 tfoot tr').appendTo('#example1 thead');
+      } );
 
     })
 

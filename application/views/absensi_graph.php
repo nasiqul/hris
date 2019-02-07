@@ -168,8 +168,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                           point: {
                             events: {
                               click: function () {
-                                //ShowModal(s[0].tgl, this.name);
-                                alert(s[0].tgl);
+                                ShowModal(s[0].tgl, this.name);
+                                // alert(s[0].tgl);
                               }
                             }
                           },

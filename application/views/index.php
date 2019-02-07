@@ -95,6 +95,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </thead>        
                 <tbody>
                 </tbody>
+                <tfoot>
+                  <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                  </tr>
+                </tfoot>
               </table>
             </div>
           </div>
@@ -103,9 +113,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
       </section>
       <!-- /.content -->
 
-          </div>
-          <!-- /.content-wrapper -->
-          <!-- /.control-sidebar -->
+    </div>
+    <!-- /.content-wrapper -->
+    <!-- /.control-sidebar -->
   <!-- Add the sidebar's background. This div must be placed
     immediately after the control sidebar -->
     <div class="control-sidebar-bg"></div>
@@ -115,6 +125,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <script>
     var table;
     $(document).ready(function() {
+
       table = $('#example1').DataTable({
         "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
         "processing": true,
@@ -127,6 +138,17 @@ scratch. This page gets rid of all links and provides the needed markup only.
         }
       });
 
+      table.columns().every( function () {
+        var that = this;
+
+        $( 'input', this.footer() ).on( 'keyup change', function () {
+          if ( that.search() !== this.value ) {
+            that
+            .search( this.value )
+            .draw();
+          }
+        } );
+      } );
     })
 
     $('#datepicker').datepicker({

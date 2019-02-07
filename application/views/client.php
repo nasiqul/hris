@@ -19,9 +19,9 @@
                 <div class="box-body box-profile">
                   <img class="profile-user-img img-responsive img-circle" src="<?php echo base_url()?>app/img/user1-128x128.jpg" alt="User profile picture">
 
-                  <h3 class="profile-username text-center"><?php echo $client[0]->namaKaryawan ?></h3>
+                  <h3 class="profile-username text-center" id="nama"></h3>
 
-                  <p class="text-muted text-center">Software Engineer</p>
+                  <p class="text-muted text-center" id="nik"></p>
 
                   <ul class="list-group list-group-unbordered">
                     <li class="list-group-item">
@@ -41,38 +41,28 @@
                   <strong><i class="fa fa-map-marker margin-r-5"></i> Departemen</strong>
 
                   <p class="text-muted">
-                    B.S. in Computer Science from the University of Tennessee at Knoxville
+                    B.S. in Computer Science from the University of Tennessee at Knoxville (dummy)
                   </p>
 
                   <strong><i class="fa fa-map-marker margin-r-5"></i> Section</strong>
 
-                  <p class="text-muted">Malibu, California</p>
+                  <p class="text-muted">Malibu, California (dummy)</p>
 
                   <strong><i class="fa fa-map-marker margin-r-5"></i> Sub - Section</strong>
 
-                  <p class="text-muted">Malibu, California</p>
+                  <p class="text-muted">Malibu, California (dummy)</p>
 
                   <strong><i class="fa fa-calendar margin-r-5"></i> Join Date</strong>
 
-                  <p class="text-muted">01 January 2019</p>
+                  <p class="text-muted" id="tglMasuk"></p>
 
                   <strong><i class="fa fa-user margin-r-5"></i> Employee Status</strong>
 
-                  <p class="text-muted">Permanent</p>
+                  <p class="text-muted" id="statusKerja"></p>
 
                   <strong><i class="fa fa-bullhorn margin-r-5"></i> Position</strong>
 
-                  <p class="text-muted">Operator / Sub Leader</p>                  
-
-                  <strong><i class="fa fa-pencil margin-r-5"></i> Skills</strong>
-
-                  <p>
-                    <span class="label label-danger">UI Design</span>
-                    <span class="label label-success">Coding</span>
-                    <span class="label label-info">Javascript</span>
-                    <span class="label label-warning">PHP</span>
-                    <span class="label label-primary">Node.js</span>
-                  </p>
+                  <p class="text-muted" id="posisi"></p>                  
 
                   <hr>
 
@@ -92,59 +82,76 @@
                 <!-- /.box-header -->
                 <!-- form start -->
                 <div class="box-body">
-                 <table class="table table-responsive table-striped" id="table1">
+                 <table class="table table-responsive table-striped text-center" id="table1">
                    <thead>
                      <th>Period</th>
                      <th>Absent</th>
                      <th>Permit</th>
                      <th>Sick</th>
-                     <th>Come Late</th>
-                     <th>Home Early</th>
-                     <th>Personal Leave</th>
-                     <th>Diciplinary Allowance</th>
-                     <th>Overtime (Hour)</th>
-                   </thead>
-                   <tbody>
-                   </tbody>
-                 </table>
+                     <!-- <th>Come Late</th>
+                       <th>Home Early</th> -->
+                       <th>Personal Leave</th>
+                       <th>Diciplinary Allowance</th>
+                       <th>Overtime (Hour)</th>
+                     </thead>
+                     <tbody>
+                     </tbody>
+                   </table>
+                 </div>
+                 <!-- /.box-body -->
                </div>
-               <!-- /.box-body -->
              </div>
            </div>
-         </div>
-         <!-- /.box -->
-       </section>
-       <!-- /.content -->
+           <!-- /.box -->
+         </section>
+         <!-- /.content -->
+       </div>
+       <!-- /.container -->
      </div>
-     <!-- /.container -->
+     <!-- /.content-wrapper -->
+     <?php require_once(APPPATH.'views/footer/foot2.php'); ?>
    </div>
-   <!-- /.content-wrapper -->
-   <?php require_once(APPPATH.'views/footer/foot2.php'); ?>
- </div>
- <!-- ./wrapper -->
+   <!-- ./wrapper -->
 
- <script>
-  var table;
-  $(document).ready(function() {
-    table = $('#table1').DataTable({
-      "processing": true,
-      "serverSide": true,
-      "searching": false
-      "bLengthChange": false,
-      "bInfo": false,
-      "order": [],
-      // "ajax": {
-      //       "url": "<?php echo base_url('home/ajax')?>",            
-      //       "type": "POST"
-      //   },
-      "columnDefs": [
-      {
-          "targets": [ 0 ], //first column / numbering column
-          "orderable": false, //set not orderable
-        }]
+   <script>
+
+
+    $(document).ready(function() {
+
+      $.ajax({
+        url: "<?php echo base_url('client/ajax_client_data/')?>" ,
+        type : "POST",
+        dataType: 'json',
+        success: function(data){
+          $.each(data, function(i, value){
+            $("#nik").text(data[i][0]);
+            $("#nama").text(data[i][1]);
+            $("#tglMasuk").text(data[i][2]);
+            $("#statusKerja").text(data[i][3]);
+            $("#posisi").text(data[i][4]);
+          });
+        }
       });
 
-  })
-</script>
+      $('#table1').DataTable({
+        "processing": true,
+        "serverSide": true,
+        "searching": false,
+        "bLengthChange": false,
+        "paging": false,
+        "bInfo": false,
+        "order": [],
+        "ajax": {
+          "url": "<?php echo base_url('client/ajax_client')?>",            
+          "type": "POST"
+        },
+        "columnDefs": [
+        {
+          "targets": [0,1,2,3,4,5,6], //first column / numbering column
+          "orderable": false, //set not orderable
+        }]
+      })
+    })
+  </script>
 </body>
 </html>
