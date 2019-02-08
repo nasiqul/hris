@@ -13,6 +13,7 @@ class Home extends CI_Controller {
         $this->load->model('cari_karyawan_model');
         $this->load->model('karyawan_graph_model');
         $this->load->model('karyawan_by_period_model');
+        $this->load->model('over_model');
     }
 
     public function index()
@@ -66,6 +67,12 @@ class Home extends CI_Controller {
     public function client()
     {
         $this->load->view("client");
+    }
+
+    public function overtime_form()
+    {
+        $data['dep'] = $this->over_model->get_dep();
+        $this->load->view("overtime_form",$data);
     }
 
     public function karyawan_graph()
@@ -386,6 +393,45 @@ class Home extends CI_Controller {
         foreach ($list as $key) {
             $row = array();
             $row[] = $key->statusKeluarga;
+
+            $data[] = $row;
+        }
+
+            //output to json format
+        echo json_encode($data);
+    }
+
+    public function ajax_over_section()
+    {
+        $id = $_POST['id'];
+        $list = $this->karyawan_model->getSection($id);
+        $data = array();
+        foreach ($list as $key) {
+            $row = array();
+            $row[] = $key->id;
+            $row[] = $key->nama;
+
+            $data[] = $row;
+        }
+
+            //output to json format
+        echo json_encode($data);
+    }
+
+    public function ajax_get_nama()
+    {
+        $nik = $_POST['nik'];
+
+        $list = $this->karyawan_model->get_data_karyawan_by_nik($nik);
+        $data = array();
+        foreach ($list as $key) {
+            $row = array();
+            $row[] = $key->nik;
+            $row[] = $key->namaKaryawan;
+            $row[] = $key->costCenter;
+            $row[] = $key->dep;
+            $row[] = $key->group;
+            $row[] = $key->kode;
 
             $data[] = $row;
         }

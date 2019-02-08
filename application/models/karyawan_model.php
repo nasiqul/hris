@@ -166,5 +166,18 @@ class Karyawan_model extends CI_Model {
         return $hasil;
     }    
     }
+
+    public function getSection($id_dep)
+    {
+        $q = "SELECT * from section where id_departemen = ".$id_dep."";
+       $query = $this->db->query($q);
+
+       if($query->num_rows() > 0){
+        foreach($query->result() as $data){
+            $hasil[] = $data;
+        }
+        return $hasil;
+    }    
+    }
 }
 ?>

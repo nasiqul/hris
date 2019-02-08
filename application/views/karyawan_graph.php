@@ -95,6 +95,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <li><a href="#tab_3" data-toggle="tab">Stat By Grade</a></li>
               <li><a href="#tab_4" data-toggle="tab">Stat By Departemen</a></li>
               <li><a href="#tab_5" data-toggle="tab">Stat By Position</a></li>
+              <li><a href="#tab_6" data-toggle="tab">Stat By Dep</a></li>
               
             </ul>
             <div class="tab-content">

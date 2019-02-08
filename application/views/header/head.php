@@ -27,12 +27,14 @@
   <link rel="stylesheet" href="<?php echo base_url()?>app/bower_components/bootstrap-daterangepicker/daterangepicker.css">
   <!-- bootstrap datepicker -->
   <link rel="stylesheet" href="<?php echo base_url()?>app/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
+  <link rel="stylesheet" href="<?php echo base_url()?>app/plugins/timepicker/bootstrap-timepicker.min.css">
 
   <!-- DataTables -->
   <script src="<?php echo base_url()?>app/bower_components/jquery/dist/jquery.min.js"></script>
   <script src="<?php echo base_url()?>app/bower_components/jquery/dist/jquery.js"></script>
   <script src="<?php echo base_url()?>app/dist/js/highcharts.js"></script>
   <script src="<?php echo base_url()?>app/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+  <script src="<?php echo base_url()?>app/plugins/timepicker/bootstrap-timepicker.min.js"></script>
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>
