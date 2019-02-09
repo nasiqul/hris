@@ -35,12 +35,57 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <div class="alert alert-warning alert-dismissible" id="notif" onclick="check()" style="display: none; cursor: pointer;">
                 <h4><i class="icon fa fa-warning"></i> Data Hari ini belum diupload!</h4>
               </div>
-
-              <form action="" method="post" id="rati">
-                <label>Date : </label>
-                <input type="text" name="sortTgl" style="width:130px;" onchange="a()" id="datepicker" placeholder="Select date" class="form-control">
-              </form>
-              <div id ="container" style = "width: 850px; margin: 0 auto"></div>
+              <div class="col-md-12">
+                <form action="" method="post" id="rati">
+                  <label>Date : </label>
+                  <input type="text" name="sortTgl" style="width:130px;" onchange="a()" id="datepicker" placeholder="Select date" class="form-control">
+                </form>
+              </div>
+              <div class="col-md-12">
+                <div id ="container" style = " margin: 0 auto"></div>
+                <br>
+                <table class="table table-striped">
+                  <tr>
+                    <th colspan="4" class="text-center"><i class="fa fa-bullhorn"></i> Keterangan</th>
+                  </tr>
+                  <tr>
+                    <td>CT</td>
+                    <td>: Cuti Tahunan</td>
+                    <td>Sn</td>
+                    <td>: Cuti Khusus Saudara Kandung Nikah</td>
+                  </tr>
+                  <tr>
+                    <td>CK</td>
+                    <td>: Cuti Khusus Lainnya</td>
+                    <td>N</td>
+                    <td>: Cuti Khusus Menikah</td>
+                  </tr>
+                  <tr>
+                    <td>Im</td>
+                    <td>: Istri Melahirkan</td>
+                    <td>SD</td>
+                    <td>: Sakit dengan Surat Dokter</td>
+                  </tr>
+                  <tr>
+                    <td>Km</td>
+                    <td>: Cuti Khusus Kematian</td>
+                    <td>I</td>
+                    <td>: Ijin</td>
+                  </tr>
+                  <tr>
+                    <td>K</td>
+                    <td>: Cuti Pra-Lahir</td>
+                    <td>A</td>
+                    <td>: Alpha</td>
+                  </tr>
+                  <tr>
+                    <td>M</td>
+                    <td>: Cuti Pasca-Lahir</td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </table>
+              </div>
             </div>
           </div>
           <!-- nav-tabs-custom -->

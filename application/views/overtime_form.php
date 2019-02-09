@@ -51,17 +51,17 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                   <div class="col-md-3">
                     <p>Dari</p>
-                    <input type="text" name="dariF" placeholder="dari" class="form-control timepicker" id="dariF">
+                    <input type="text" name="dariF" placeholder="dari" class="form-control timepicker" id="dariF" value="16:00">
                   </div>
 
                   <div class="col-md-3">
                     <p>Sampai</p>
-                    <input type="text" name="sampaiF" placeholder="sampai" class="form-control timepicker" id="sampaiF">
+                    <input type="text" name="sampaiF" placeholder="sampai" class="form-control timepicker" id="sampaiF" value="16:00">
                   </div>
 
                   <div class="col-md-3">
                     <p>Jam</p>
-                    <input type="text" name="jamF" placeholder="Jam" class="form-control" id="jamF">
+                    <input type="text" name="jamF" placeholder="Jam" class="form-control" id="jamF" value="0">
                   </div>
                 </div>
 
@@ -74,7 +74,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <div class="row">
                   <div class="col-md-4">
 
-                    <select class='form-control' id='trans' name="trans">
+                    <select class='form-control' id='transF' name="trans">
                       <option value=''>-</option>
                       <option value='B'>B</option>
                       <option value='P'>P</option>
@@ -83,13 +83,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                   <div class="col-md-4 text-center">
                     <div class="checkbox">
-                      <label><input type='checkbox' id='makan' name="makan">Makan</label>
+                      <label><input type='checkbox' id='makanF' name="makan">Makan</label>
                     </div>
                   </div>
 
                   <div class="col-md-4 text-center">
                     <div class="checkbox">
-                      <label><input type='checkbox' id='exfood' name=exFood>Ext-Food</label>
+                      <label><input type='checkbox' id='exfoodF' name=exFood>Ext-Food</label>
                     </div>
                   </div>
                 </div>
@@ -123,7 +123,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               </div>
             </form>
             <div class="col-md-12">
-              <br>
+              <hr>
               <div class="form-group">
                 <div class="input-group input-group-lg">
                   <div class="input-group-addon">
@@ -139,15 +139,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
         <div class="box box-solid">
           <div class="box-header">
-            <h3 class="box-title">Peserta</h3>
+            <h3 class="box-title"><i class="fa fa-group"></i> Peserta</h3>
             <div class="pull-right">
               <button id="submit" class="btn btn-success" onclick="submit1()"><i class="fa fa-check"></i> Simpan</button>
             </div>
           </div>
-          <form method="POST" id="pesertaF" action="<?php echo base_url('ot/ot_member_submit'); ?>">
+          <form method="POST" id="pesertaF">
             <input type="hidden" name="nodoc2" id="nodoc2">
-            <input type="hidden" name="nomor" id="nomor">
-            <div class="box-body" id="peserta">
+            <div class="box-body">
               <div class="col-md-12">
                 <table class="table">
                   <thead>
@@ -165,9 +164,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   </thead>
                 </table>
               </div>
+              <div id="peserta">
 
-              <!-- <a class="btn btn-success" onclick="cloneRow()"><i class="fa fa-plus"></i> Tambah</a>  -->
-              <!-- <a class="btn btn-danger" onclick="deleteRow()"><i class="fa fa-minus"></i> Kurang</a> -->
+              </div>
             </div>
           </form>
         </div>
@@ -191,7 +190,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     var sampai = document.getElementById('sampaiF');
 
     var jam = document.getElementById('jamF');
-    var trans = document.getElementById('trans');
+    var trans = document.getElementById('tranF');
     var nikS = document.getElementById('nikF');
 
     $(document).ready(function() {
@@ -203,14 +202,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
       $('.timepicker').timepicker({
         showInputs: false,
-        showMeridian: false,
-        defaultTime: '16:00'
+        showMeridian: false
       });
     });
 
     //nik on enter
     $('#nikF').bind("enterKey",function(e){
       appendRow();
+      openSuccessGritter();
     });
     $('#nikF').keyup(function(e){
       if(e.keyCode == 13)
@@ -245,34 +244,34 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
             nama = sr[0][1];
 
-            if ($('#makan').is(':checked')) {
+            if ($('#makanF').is(':checked')) {
               cekM="checked";
             }
 
-            if ($('#exfood').is(':checked')) {
+            if ($('#exfoodF').is(':checked')) {
               cekFd="checked";
             }
 
-            if ($('#trans option:selected').text() == '-') {
+            if ($('#transF option:selected').text() == '-') {
               t1="selected";
             }
-            else if ($('#trans option:selected').text() == 'B') {
+            else if ($('#transF option:selected').text() == 'B') {
               t2="selected";
             }
-            else if ($('#trans option:selected').text() == 'P') {
+            else if ($('#transF option:selected').text() == 'P') {
               t3="selected";
             }
 
             var newdiv1 = $( "<div class='col-md-12' style='margin-bottom: 5px'>"+
-              "<div class='col-md-2'><input type='text' name='nik"+no+"' value='"+n+"' class='form-control' readonly></div>"+
-              "<div class='col-md-3'><p name='nama"+no+"'>"+nama+"</p></div>"+
-              "<div class='col-md-1'><input type='text' class='form-control timepicker' name='dari"+no+"' value='"+d+"'></div>"+
-              "<div class='col-md-1'><input type='text' class='form-control timepicker' name='sampai"+no+"' value='"+s+"'></div>"+
-              "<div class='col-md-1'><input type='text' class='form-control' name='jam"+no+"' value='"+j+"'></div>"+
-              "<div class='col-md-1'><select class='form-control' name='trans"+no+"'>"+
+              "<div class='col-md-2'><input type='text' id='nik"+no+"' value='"+n+"' class='form-control' readonly></div>"+
+              "<div class='col-md-3'><p id='nama"+no+"'>"+nama+"</p></div>"+
+              "<div class='col-md-1'><input type='text' class='form-control timepicker' id='dari"+no+"' value='"+d+"'></div>"+
+              "<div class='col-md-1'><input type='text' class='form-control timepicker' id='sampai"+no+"' value='"+s+"'></div>"+
+              "<div class='col-md-1'><input type='text' class='form-control' id='jam"+no+"' value='"+j+"'></div>"+
+              "<div class='col-md-1'><select class='form-control' id='trans"+no+"'>"+
               "<option value='-' "+t1+">-</option><option value='B' "+t2+">B</option><option value='P' "+t3+">P</option></select></div>"+
-              "<div class='col-md-1'><input type='checkbox' name='makan"+no+"' "+cekM+"></div>"+
-              "<div class='col-md-1'><input type='checkbox' name='exfood"+no+"' "+cekFd+"></div></div>" );
+              "<div class='col-md-1'><input type='checkbox' id='makan"+no+"' "+cekM+"></div>"+
+              "<div class='col-md-1'><input type='checkbox' id='exfood"+no+"' "+cekFd+"></div></div>" );
 
             $("#peserta").append(newdiv1);
             $('#nomor').val(no);
@@ -326,14 +325,18 @@ scratch. This page gets rid of all links and provides the needed markup only.
         },
         success: function (data) {
             // the next thing you want to do 
-            var s = $.parseJSON(data);
             var $section = $('#sec');
 
             $section.empty();
-            for (var i = 0; i < s.length; i++) {
+
+            var s = $.parseJSON(data);
+
+            $section.append('<option value="" disabled selected>'+ s[0][1] +'</option>');
+
+            for (var i = 1; i <= s.length; i++) {
               $section.append('<option id=' + s[i][0] + ' value=' + s[i][0] + '>' + s[i][1] + '</option>');
             }
-
+            
             //manually trigger a change event for the contry so that the change handler will get triggered
             $section.change();
           }
@@ -372,22 +375,77 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
   function submit1() {
     var nodoc = document.getElementById('no_doc').value;
+    var tgl = document.getElementById('datepicker').value;
+    var dep = document.getElementById('dep').value;
+    var sec = document.getElementById('sec').value;
+    var kep = document.getElementById('kep').value;
+    var cat = document.getElementById('cat').value;
 
     $.ajax({
-        type: 'POST',
-        url: '<?php echo base_url("home/ajax_over_section") ?>',
-        data: {
-          'no_doc': nodoc
-        }
-        });
-//    document.getElementById("master").submit();
-    document.getElementById("pesertaF").submit();
-  }
+      type: 'POST',
+      url: '<?php echo base_url("ot/ot_submit") ?>',
+      data: {
+        'no': nodoc,
+        'tgl': tgl,
+        'dep': dep,
+        'sec': sec,
+        'kep': kep,
+        'cat': cat
+      },
+      success: function(data){
 
-  function changeDoc() {
-    var valu = document.getElementById('no_doc').value;
-    $('#nodoc2').val(valu);
-  }
+        var no_doc2 = document.getElementById('nodoc2').value;
+
+        for (var i = 1; i <= no; i++) {
+
+          var nik1 = document.getElementById('nik'+i).value;
+          var dariS = document.getElementById('dari'+i).value;
+          var sampaiS = document.getElementById('sampai'+i).value;
+          var jamS = document.getElementById('jam'+i).value;
+          var transS = document.getElementById('trans'+i).value;
+          var makanS = document.getElementById('makan'+i).value;
+          var exfoodS = document.getElementById('exfood'+i).value;
+
+          $.ajax({
+            type: 'POST',
+            url: '<?php echo base_url("ot/ot_member_submit") ?>',
+            data: {
+              'nodoc2': no_doc2,
+              'nik': nik1,
+              'dari': dariS,
+              'sampai': sampaiS,
+              'jam': jamS,
+              'trans': transS,
+              'makan': makanS,
+              'exfood': exfoodS
+            },
+            success: function(data){
+              $('#master').trigger("reset");
+              $("#peserta").empty();
+              openSuccessGritter();
+            }
+          });
+        }
+      }
+    });
+//    document.getElementById("master").submit();
+}
+
+function changeDoc() {
+  var valu = document.getElementById('no_doc').value;
+  $('#nodoc2').val(valu);
+}
+
+function openSuccessGritter(){
+  jQuery.gritter.add({
+    title: "Success",
+    text: "Input Success",
+    class_name: 'growl-success',
+    image: '<?php echo base_url()?>app/img/icon.png',
+    sticky: false,
+    time: '2000'
+  });
+}
 </script>
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the

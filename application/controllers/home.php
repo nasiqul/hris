@@ -222,269 +222,277 @@ class Home extends CI_Controller {
               $arr['tgl'] = $tgl;
 
               $result[] = $arr;
-            }
-        }
-        else
-            $result[] = json_decode("{}");
-
-        echo json_encode($result);
-        }
-
-
-    public function ajax_absensi()
-    {
-        if (isset($_SESSION['tanggal2']) || isset($_SESSION['nik2']) || isset($_SESSION['nama2']) || isset($_SESSION['shift2'])) 
-        {
-            $tgl = $this->session->userdata('tanggal2');
-            $nik = $this->session->userdata('nik2');
-            $nama = $this->session->userdata('nama2');
-            $absen = $this->session->userdata('shift2');
-
-            $list = $this->cari_absen_model->get_data_absensi_cari($tgl, $nik, $nama, $absen);
-        }
-        else {
-            $list = $this->absensi_model->get_data_absensi();
-        }
-
-        $data = array();
-        foreach ($list as $key) {
-            $row = array();
-            $row[] = date('j M Y', strtotime($key->tanggal));
-            $row[] = $key->nik;
-            $row[] = $key->namaKaryawan;
-            $row[] = $key->bagian;
-            $row[] = $key->shift;
-
-            $data[] = $row;
-        }
-
-        $output = array(
-            "draw" => $_POST['draw'],
-            "recordsTotal" => $this->absensi_model->count_all(),
-            "recordsFiltered" => $this->absensi_model->count_filtered(),
-            "data" => $data,
-        );
-            //output to json format
-        echo json_encode($output);
-    }    
-
-    public function ajax_emp()
-    {
-        if (isset($_SESSION['status']) || isset($_SESSION['grade']) || isset($_SESSION['dep']) || isset($_SESSION['pos'])) 
-        {
-            $status = $this->session->userdata('status');
-            $grade = $this->session->userdata('grade');
-            $dep = $this->session->userdata('dep');
-            $pos = $this->session->userdata('pos');
-            $list = $this->cari_karyawan_model->get_data_karyawan_cari($status,$grade,$dep,$pos);
-        }
-        elseif (isset($_SESSION['bulan'])) {
-            $bulan = $this->session->userdata('bulan');
-            $list = $this->karyawan_by_period_model->get_karyawan($bulan);
-        }
-        else {
-            $list = $this->karyawan_model->get_data_karyawan();
-        }
-
-        $data = array();
-        $i = 1;
-        foreach ($list as $key) {
-            $row = array();
-            $row[] = $key->nik;
-                //$row[] = $key->foto;
-            $row[] = "<a style='cursor: pointer' onclick='ShowModal(".$i.")' data-toggle='modal' data-id='".$key->nik."' id='tes".$i."'>".$key->namaKaryawan."</a>";
-            $row[] = $key->dep;
-            $row[] = $key->group;
-            $row[] = date("j M Y", strtotime($key->tanggalMasuk));
-            $row[] = $key->statusKaryawan;
-            $row[] = "<p class='text-center'><small class='label bg-green'>".$key->status." <i class='fa fa-check'></i> </small></p>";
-
-            $data[] = $row;
-            $i++;
-        }
-
-        $output = array(
-            "draw" => $_POST['draw'],
-            "recordsTotal" => $this->karyawan_model->count_all(),
-            "recordsFiltered" => $this->karyawan_model->count_filtered(),
-            "data" => $data,
-        );
-            //output to json format
-        echo json_encode($output);
-    }
-
-    public function ajax_emp_by_nik($id)
-    {
-            // echo $_GET['dataId'];
-        $list = $this->karyawan_model->get_data_karyawan_by_nik($id);
-        $data = array();
-        foreach ($list as $key) {
-            $row = array();
-            $row[] = $key->pin;
-            $row[] = $key->nik;
-            $row[] = $key->costCenter;
-            $row[] = $key->foto;
-            $row[] = $key->namaKaryawan;
-            $row[] = $key->dep;
-            $row[] = $key->group;
-            $row[] = $key->kode;
-            $row[] = date("d-m-Y", strtotime($key->tanggalMasuk));
-            $row[] = $key->jk;
-            $row[] = $key->statusKaryawan;
-            $row[] = $key->grade;
-            $row[] = $key->namaGrade;
-            $row[] = $key->jabatan;
-            $row[] = $key->statusKeluarga;
-            $row[] = $key->tempatLahir;
-            $row[] = $key->tanggalLahir;
-            $row[] = $key->alamat;
-            $row[] = $key->hp;
-            $row[] = $key->ktp;
-            $row[] = $key->rekening;
-            $row[] = $key->bpjstk;
-            $row[] = $key->jp;
-            $row[] = $key->bpjskes;
-            $row[] = $key->npwp;
-
-            $data[] = $row;
-        }
-
-            //output to json format
-        echo json_encode($data);
-    }
-
-    public function ajax_presensi_shift()
-    {
-
-        if (isset($_POST['txtTgl'])) 
-        {
-            $tgl = $_POST['txtTgl'];
-
-            $presen = $this->karyawan_graph_model->by_total_kehadiran_date($tgl);
-        }
-        else {
-            $presen = $this->karyawan_graph_model->by_total_kehadiran();
-        }
-
-        $arr = array();
-        $result = array();
-        if(!empty($presen)) {
-            foreach($presen as $r2){
-              $tgl = date('d-m-Y', strtotime($r2->tanggal));
-
-              $arr['name'] = $r2->shift;
-              $arr['y'] = (int) $r2->jml;
-              $arr['tgl'] = $tgl;
-
-              $result[] = $arr;
           }
-        }
-        else
-           $result[] = json_decode ("{}");
-            
-      echo json_encode($result);
-  }
+      }
+      else
+        $result[] = json_decode("{}");
 
-    public function ajax_emp_keluarga()
+    echo json_encode($result);
+}
+
+
+public function ajax_absensi()
+{
+    if (isset($_SESSION['tanggal2']) || isset($_SESSION['nik2']) || isset($_SESSION['nama2']) || isset($_SESSION['shift2'])) 
     {
-            // echo $_GET['dataId'];
-        $list = $this->karyawan_model->getKeluarga();
-        $data = array();
-        foreach ($list as $key) {
-            $row = array();
-            $row[] = $key->statusKeluarga;
+        $tgl = $this->session->userdata('tanggal2');
+        $nik = $this->session->userdata('nik2');
+        $nama = $this->session->userdata('nama2');
+        $absen = $this->session->userdata('shift2');
 
-            $data[] = $row;
-        }
-
-            //output to json format
-        echo json_encode($data);
+        $list = $this->cari_absen_model->get_data_absensi_cari($tgl, $nik, $nama, $absen);
+    }
+    else {
+        $list = $this->absensi_model->get_data_absensi();
     }
 
-    public function ajax_over_section()
+    $data = array();
+    foreach ($list as $key) {
+        $row = array();
+        $row[] = date('j M Y', strtotime($key->tanggal));
+        $row[] = $key->nik;
+        $row[] = $key->namaKaryawan;
+        $row[] = $key->bagian;
+        $row[] = $key->shift;
+
+        $data[] = $row;
+    }
+
+    $output = array(
+        "draw" => $_POST['draw'],
+        "recordsTotal" => $this->absensi_model->count_all(),
+        "recordsFiltered" => $this->absensi_model->count_filtered(),
+        "data" => $data,
+    );
+            //output to json format
+    echo json_encode($output);
+}    
+
+public function ajax_emp()
+{
+    if (isset($_SESSION['status']) || isset($_SESSION['grade']) || isset($_SESSION['dep']) || isset($_SESSION['pos'])) 
     {
-        $id = $_POST['id'];
-        $list = $this->karyawan_model->getSection($id);
-        $data = array();
+        $status = $this->session->userdata('status');
+        $grade = $this->session->userdata('grade');
+        $dep = $this->session->userdata('dep');
+        $pos = $this->session->userdata('pos');
+        $list = $this->cari_karyawan_model->get_data_karyawan_cari($status,$grade,$dep,$pos);
+    }
+    elseif (isset($_SESSION['bulan'])) {
+        $bulan = $this->session->userdata('bulan');
+        $list = $this->karyawan_by_period_model->get_karyawan($bulan);
+    }
+    else {
+        $list = $this->karyawan_model->get_data_karyawan();
+    }
+
+    $data = array();
+    $i = 1;
+    foreach ($list as $key) {
+        $row = array();
+        $row[] = $key->nik;
+                //$row[] = $key->foto;
+        $row[] = "<a style='cursor: pointer' onclick='ShowModal(".$i.")' data-toggle='modal' data-id='".$key->nik."' id='tes".$i."'>".$key->namaKaryawan."</a>";
+        $row[] = $key->dep;
+        $row[] = $key->group;
+        $row[] = date("j M Y", strtotime($key->tanggalMasuk));
+        $row[] = $key->statusKaryawan;
+        $row[] = "<p class='text-center'><small class='label bg-green'>".$key->status." <i class='fa fa-check'></i> </small></p>";
+
+        $data[] = $row;
+        $i++;
+    }
+
+    $output = array(
+        "draw" => $_POST['draw'],
+        "recordsTotal" => $this->karyawan_model->count_all(),
+        "recordsFiltered" => $this->karyawan_model->count_filtered(),
+        "data" => $data,
+    );
+            //output to json format
+    echo json_encode($output);
+}
+
+public function ajax_emp_by_nik($id)
+{
+            // echo $_GET['dataId'];
+    $list = $this->karyawan_model->get_data_karyawan_by_nik($id);
+    $data = array();
+    foreach ($list as $key) {
+        $row = array();
+        $row[] = $key->pin;
+        $row[] = $key->nik;
+        $row[] = $key->costCenter;
+        $row[] = $key->foto;
+        $row[] = $key->namaKaryawan;
+        $row[] = $key->dep;
+        $row[] = $key->group;
+        $row[] = $key->kode;
+        $row[] = date("d-m-Y", strtotime($key->tanggalMasuk));
+        $row[] = $key->jk;
+        $row[] = $key->statusKaryawan;
+        $row[] = $key->grade;
+        $row[] = $key->namaGrade;
+        $row[] = $key->jabatan;
+        $row[] = $key->statusKeluarga;
+        $row[] = $key->tempatLahir;
+        $row[] = $key->tanggalLahir;
+        $row[] = $key->alamat;
+        $row[] = $key->hp;
+        $row[] = $key->ktp;
+        $row[] = $key->rekening;
+        $row[] = $key->bpjstk;
+        $row[] = $key->jp;
+        $row[] = $key->bpjskes;
+        $row[] = $key->npwp;
+
+        $data[] = $row;
+    }
+
+            //output to json format
+    echo json_encode($data);
+}
+
+public function ajax_presensi_shift()
+{
+
+    if (isset($_POST['txtTgl'])) 
+    {
+        $tgl = $_POST['txtTgl'];
+
+        $presen = $this->karyawan_graph_model->by_total_kehadiran_date($tgl);
+    }
+    else {
+        $presen = $this->karyawan_graph_model->by_total_kehadiran();
+    }
+
+    $arr = array();
+    $result = array();
+    if(!empty($presen)) {
+        foreach($presen as $r2){
+          $tgl = date('d-m-Y', strtotime($r2->tanggal));
+
+          $arr['name'] = $r2->shift;
+          $arr['y'] = (int) $r2->jml;
+          $arr['tgl'] = $tgl;
+
+          $result[] = $arr;
+      }
+  }
+  else
+   $result[] = json_decode ("{}");
+
+echo json_encode($result);
+}
+
+public function ajax_emp_keluarga()
+{
+            // echo $_GET['dataId'];
+    $list = $this->karyawan_model->getKeluarga();
+    $data = array();
+    foreach ($list as $key) {
+        $row = array();
+        $row[] = $key->statusKeluarga;
+
+        $data[] = $row;
+    }
+
+            //output to json format
+    echo json_encode($data);
+}
+
+public function ajax_over_section()
+{
+    $id = $_POST['id'];
+    $list = $this->karyawan_model->getSection($id);
+    $data = array();
+
+    $row1 = array();
+    $row1[] = "";
+    $row1[] = "Select Section";
+
+    $data[] = $row1;
+    if ($list) {
         foreach ($list as $key) {
             $row = array();
             $row[] = $key->id;
             $row[] = $key->nama;
 
-            $data[] = $row;
+            array_push($data, $row);
         }
+    }
 
             //output to json format
-        echo json_encode($data);
+    echo json_encode($data);
+}
+
+public function ajax_get_nama()
+{
+    $nik = $_POST['nik'];
+
+    $list = $this->karyawan_model->get_data_karyawan_by_nik($nik);
+    $data = array();
+    foreach ($list as $key) {
+        $row = array();
+        $row[] = $key->nik;
+        $row[] = $key->namaKaryawan;
+        $row[] = $key->costCenter;
+        $row[] = $key->dep;
+        $row[] = $key->group;
+        $row[] = $key->kode;
+
+        $data[] = $row;
     }
-
-    public function ajax_get_nama()
-    {
-        $nik = $_POST['nik'];
-
-        $list = $this->karyawan_model->get_data_karyawan_by_nik($nik);
-        $data = array();
-        foreach ($list as $key) {
-            $row = array();
-            $row[] = $key->nik;
-            $row[] = $key->namaKaryawan;
-            $row[] = $key->costCenter;
-            $row[] = $key->dep;
-            $row[] = $key->group;
-            $row[] = $key->kode;
-
-            $data[] = $row;
-        }
 
             //output to json format
-        echo json_encode($data);
-    }
+    echo json_encode($data);
+}
 
-    public function ajax_qa()
-    {
-        $list = $this->qa_model->get_data_qa();
-        $data = array();
-        foreach ($list as $key) {
-            $row = array();
-            $row[] = $key->tanggal_tanya;
-            $row[] = $key->nik_penanya;
-            $row[] = $key->pertanyaan;
-            $row[] = $key->jawaban;
-            $row[] = $key->nik_penjawab;
-            if ($key->tanggal_jawab != 0) {
-                $row[] = $key->tanggal_jawab;
-            }
-            else
-                $row[] = "";
-            $row[] = "<button class='btn btn-success'><i class='fa fa-bullhorn'></i> Answer</button>";
-
-            $data[] = $row;
+public function ajax_qa()
+{
+    $list = $this->qa_model->get_data_qa();
+    $data = array();
+    foreach ($list as $key) {
+        $row = array();
+        $row[] = $key->tanggal_tanya;
+        $row[] = $key->nik_penanya;
+        $row[] = $key->pertanyaan;
+        $row[] = $key->jawaban;
+        $row[] = $key->nik_penjawab;
+        if ($key->tanggal_jawab != 0) {
+            $row[] = $key->tanggal_jawab;
         }
+        else
+            $row[] = "";
+        $row[] = "<button class='btn btn-success'><i class='fa fa-bullhorn'></i> Answer</button>";
 
-        $output = array(
-            "draw" => $_POST['draw'],
-            "recordsTotal" => $this->qa_model->count_all(),
-            "recordsFiltered" => $this->qa_model->count_filtered(),
-            "data" => $data,
-        );
+        $data[] = $row;
+    }
+
+    $output = array(
+        "draw" => $_POST['draw'],
+        "recordsTotal" => $this->qa_model->count_all(),
+        "recordsFiltered" => $this->qa_model->count_filtered(),
+        "data" => $data,
+    );
             //output to json format
-        echo json_encode($output);
-    }
+    echo json_encode($output);
+}
 
-    public function get_presensi(){
-        $data=$this->home_model->get_presensi();
-        echo json_encode($data);
-    }
+public function get_presensi(){
+    $data=$this->home_model->get_presensi();
+    echo json_encode($data);
+}
 
-    public function session_destroy()
-    {
-        session_destroy();
-        redirect('home/presensi');
-    }
+public function session_destroy()
+{
+    session_destroy();
+    redirect('home/presensi');
+}
 
-    public function sess_destroy2()
-    {
-        session_destroy();
-        redirect('home/absen');
-    }
+public function sess_destroy2()
+{
+    session_destroy();
+    redirect('home/absen');
+}
 }

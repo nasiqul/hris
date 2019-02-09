@@ -30,18 +30,18 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <div class="col-md-12">
           <div class="box box-solid">
             <div class="box-body">
-              <div>
                 <a class="btn btn-success" href="<?php echo base_url('home/overtime_form') ?>"> <i class="fa fa-plus"></i> New Entry</a>
-              </div>
-              <table id="example1" class="table table-responsive table-striped">
+                <br>
+                <br>
+              <table id="example1" class="table table-responsive table-striped text-center">
                 <thead>
                   <tr>
                     <th>Date</th>
                     <th>NIK</th>
                     <th>Employee Name</th>
-                    <th>Shift</th>
                     <th>Arrive</th>
                     <th>Leave</th>
+                    <th>Lembur (jam)</th>
                     <th>Status</th>
                   </tr>
                 </thead>
@@ -69,10 +69,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
         "processing"    : true,
         "serverSide"    : true,
         'order'         : [],
-        // "ajax": {
-        //   "url": "<?php //echo base_url('home/ajax_qa')?>",            
-        //   "type": "POST"
-        // }
+        "bInfo" : false,
+        "ajax": {
+          "url": "<?php echo base_url('ot/ajax_ot')?>",            
+          "type": "POST"
+        }
       })
     })
   </script>

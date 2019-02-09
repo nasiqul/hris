@@ -25,7 +25,7 @@
 
                   <ul class="list-group list-group-unbordered">
                     <li class="list-group-item">
-                      <b>Personal Leave</b> <a class="pull-right"><small class="label pull-right bg-yellow">1/10</small></a>
+                      <b>Personal Leave Remain</b> <a class="pull-right"><small class="label pull-right bg-yellow">9</small></a>
                     </li>
                   </ul>
                 </div>
