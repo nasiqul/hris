@@ -25,7 +25,7 @@
 
                   <ul class="list-group list-group-unbordered">
                     <li class="list-group-item">
-                      <b>Personal Leave Remain</b> <a class="pull-right"><small class="label pull-right bg-yellow">9</small></a>
+                      <b>Personal Leave Remain</b> <a class="pull-right"><small class="label pull-right bg-yellow"><p id="rt"></p></small></a>
                     </li>
                   </ul>
                 </div>
@@ -88,69 +88,99 @@
                      <th>Absent</th>
                      <th>Permit</th>
                      <th>Sick</th>
-                     <!-- <th>Come Late</th>
-                       <th>Home Early</th> -->
-                       <th>Personal Leave</th>
-                       <th>Diciplinary Allowance</th>
-                       <th>Overtime (Hour)</th>
-                     </thead>
-                     <tbody>
-                     </tbody>
-                   </table>
-                 </div>
-                 <!-- /.box-body -->
-               </div>
-             </div>
-           </div>
-           <!-- /.box -->
-         </section>
-         <!-- /.content -->
-       </div>
-       <!-- /.container -->
-     </div>
-     <!-- /.content-wrapper -->
-     <?php require_once(APPPATH.'views/footer/foot2.php'); ?>
-   </div>
-   <!-- ./wrapper -->
+                     <th>Personal Leave</th>
+                     <th>Diciplinary Allowance</th>
+                     <th>Overtime (Hour)</th>
+                   </thead>
+                   <tbody>
+                   </tbody>
+                   <tfoot  id="tableFootStock" hidden>
+                    <th colspan="4">Total</th>
+                    <th colspan="3"></th>
+                  </tfoot>
+                </table>
+              </div>
+              <!-- /.box-body -->
+            </div>
+          </div>
+        </div>
+        <p id="cvz">ac</p>
+        <!-- /.box -->
+      </section>
+      <!-- /.content -->
+    </div>
+    <!-- /.container -->
+  </div>
+  <!-- /.content-wrapper -->
+  <?php require_once(APPPATH.'views/footer/foot2.php'); ?>
+</div>
+<!-- ./wrapper -->
 
-   <script>
+<script>
 
 
-    $(document).ready(function() {
+  $(document).ready(function() {
 
-      $.ajax({
-        url: "<?php echo base_url('client/ajax_client_data/')?>" ,
-        type : "POST",
-        dataType: 'json',
-        success: function(data){
-          $.each(data, function(i, value){
-            $("#nik").text(data[i][0]);
-            $("#nama").text(data[i][1]);
-            $("#tglMasuk").text(data[i][2]);
-            $("#statusKerja").text(data[i][3]);
-            $("#posisi").text(data[i][4]);
-          });
-        }
-      });
+    $.ajax({
+      url: "<?php echo base_url('client/ajax_client_data/')?>" ,
+      type : "POST",
+      dataType: 'json',
+      success: function(data){
+        $.each(data, function(i, value){
+          $("#nik").text(data[i][0]);
+          $("#nama").text(data[i][1]);
+          $("#tglMasuk").text(data[i][2]);
+          $("#statusKerja").text(data[i][3]);
+          $("#posisi").text(data[i][4]);
+        });
+      }
+    });
 
-      $('#table1').DataTable({
-        "processing": true,
-        "serverSide": true,
-        "searching": false,
-        "bLengthChange": false,
-        "paging": false,
-        "bInfo": false,
-        "order": [],
-        "ajax": {
-          "url": "<?php echo base_url('client/ajax_client')?>",            
-          "type": "POST"
-        },
-        "columnDefs": [
-        {
+    var tabel = $('#table1').DataTable({
+      "processing": true,
+      "serverSide": true,
+      "searching": false,
+      "bLengthChange": false,
+      "paging": false,
+      "bInfo": false,
+      "order": [],
+      "ajax": {
+        "url": "<?php echo base_url('client/ajax_client')?>",            
+        "type": "POST"
+      },
+      "columnDefs": [
+      {
           "targets": [0,1,2,3,4,5,6], //first column / numbering column
-          "orderable": false, //set not orderable
-        }]
-      })
+          "orderable": false,//set not orderable
+        },
+        {
+          'targets': 4,
+          'createdCell':  function (td, cellData, rowData, row, col) {
+           $(td).attr('id', 'ct'); 
+         }
+       }],
+       "footerCallback": function (tfoot, data, start, end, display) {
+        var intVal = function ( i ) {
+          return typeof i === 'string' ?
+          i.replace(/[\$%,]/g, '')*1 :
+          typeof i === 'number' ?
+          i : 0;
+        };
+        var api = this.api();
+        var totalPlan = api.column(4).data().reduce(function (a, b) {
+          return intVal(a)+intVal(b);
+        }, 0)
+        $(api.column(4).footer()).html(totalPlan.toLocaleString());
+        $('#rt').html("" + totalPlan);
+        
+      }
+    });
+
+
+
+      // var ct = 0;
+      // $('#rt').html("" + ct);
+
     })
   </script>
 </body>

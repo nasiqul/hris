@@ -2,8 +2,8 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Cari_model extends CI_Model {
-	var $column_order = array('tanggal','nik','namaKaryawan','masuk','keluar','shift'); //set column field database for datatable orderable
-    var $column_search = array('tanggal','nik','namaKaryawan','masuk','keluar','shift'); //set column field database for datatable searchable 
+	var $column_order = array('tanggal','karyawan.nik','namaKaryawan','masuk','keluar','shift'); //set column field database for datatable orderable
+    var $column_search = array('tanggal','karyawan.nik','namaKaryawan','masuk','keluar','shift'); //set column field database for datatable searchable 
     var $order = array('masuk' => 'desc'); // default order 
 
     public function __construct()

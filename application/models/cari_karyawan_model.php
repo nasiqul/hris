@@ -76,9 +76,9 @@ class Cari_karyawan_model extends CI_Model {
         }
     }
 
-    function count_filtered()
+    function count_filtered($status, $grade, $dep, $pos)
     {
-        $this->_get_datatables_query();
+        $this->_get_datatables_query($status, $grade, $dep, $pos);
         $query = $this->db->get();
         return $query->num_rows();
     }

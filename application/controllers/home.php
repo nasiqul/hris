@@ -241,9 +241,13 @@ public function ajax_absensi()
         $absen = $this->session->userdata('shift2');
 
         $list = $this->cari_absen_model->get_data_absensi_cari($tgl, $nik, $nama, $absen);
+        $tot = $this->cari_absen_model->count_all();
+        $filter = $this->cari_absen_model->count_filtered($tgl, $nik, $nama, $absen);
     }
     else {
         $list = $this->absensi_model->get_data_absensi();
+        $tot = $this->absensi_model->count_all();
+        $filter = $this->absensi_model->count_filtered();
     }
 
     $data = array();
@@ -260,8 +264,8 @@ public function ajax_absensi()
 
     $output = array(
         "draw" => $_POST['draw'],
-        "recordsTotal" => $this->absensi_model->count_all(),
-        "recordsFiltered" => $this->absensi_model->count_filtered(),
+        "recordsTotal" => $tot,
+        "recordsFiltered" => $filter,
         "data" => $data,
     );
             //output to json format
@@ -277,6 +281,8 @@ public function ajax_emp()
         $dep = $this->session->userdata('dep');
         $pos = $this->session->userdata('pos');
         $list = $this->cari_karyawan_model->get_data_karyawan_cari($status,$grade,$dep,$pos);
+        $tot = $this->cari_karyawan_model->count_all();
+        $filter = $this->cari_karyawan_model->count_filtered($status,$grade,$dep,$pos);
     }
     elseif (isset($_SESSION['bulan'])) {
         $bulan = $this->session->userdata('bulan');
@@ -284,6 +290,8 @@ public function ajax_emp()
     }
     else {
         $list = $this->karyawan_model->get_data_karyawan();
+        $tot = $this->karyawan_model->count_all();
+        $filter = $this->karyawan_model->count_filtered();
     }
 
     $data = array();
@@ -305,8 +313,8 @@ public function ajax_emp()
 
     $output = array(
         "draw" => $_POST['draw'],
-        "recordsTotal" => $this->karyawan_model->count_all(),
-        "recordsFiltered" => $this->karyawan_model->count_filtered(),
+        "recordsTotal" => $tot,
+        "recordsFiltered" => $filter,
         "data" => $data,
     );
             //output to json format

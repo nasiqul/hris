@@ -38,7 +38,7 @@ class Client extends CI_Controller {
 			else
 				$row[] = "-";
 			
-			$row[] = "<span class='badge bg-yellow'>".$key->CT."</span>";
+			$row[] = $key->CT;
 			$jml = $key->DL + $key->I + $key->SD;
 			
 			if ($jml != 0 )
