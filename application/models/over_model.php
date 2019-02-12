@@ -3,8 +3,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Over_model extends CI_Model {
 
-	var $column_order = array('tanggal','nik','namaKaryawan','masuk','keluar','jam'); //set column field database for datatable orderable
-    var $column_search = array('tanggal','nik','namaKaryawan','masuk','keluar','jam'); //set column field database for datatable searchable 
+	var $column_order = array('tanggal','c.nik','d.namaKaryawan','masuk','keluar','jam'); //set column field database for datatable orderable
+    var $column_search = array('tanggal','c.nik','d.namaKaryawan','masuk','keluar','jam'); //set column field database for datatable searchable 
     var $order = array('tanggal' => 'asc'); // default order 
 
     public function __construct()
@@ -24,16 +24,15 @@ class Over_model extends CI_Model {
 
     private function _get_datatables_query()
     {
-
-    	$this->db->select("tanggal,c.nik,d.namaKaryawan,masuk,keluar,jam");
-    	$this->db->from("(select * from (
-    		select c.tanggal,b.jam,b.nik as nik1 from over_time as c
+    	$this->db->select("tanggal,c.nik,d.namaKaryawan,masuk,keluar,jam,id");
+    	$this->db->from("(SELECT * from (
+    		SELECT o.tanggal,o.id,b.jam,b.nik as nik1 from over_time as o
     		LEFT JOIN over_time_member as b
-    		on c.id = b.id_ot
+    		on o.id = b.id_ot
     		) a
 
     		left join (
-    		SELECT presensi.nik,presensi.masuk,presensi.keluar,presensi.tanggal as tanggalpresensi from presensi where presensi.nik in (select over_time_member.nik from over_time_member) and presensi.tanggal in (SELECT over_time.tanggal from over_time)
+    		SELECT presensi.nik,presensi.masuk,presensi.keluar,presensi.tanggal as tanggalpresensi from presensi where presensi.nik in (SELECT over_time_member.nik from over_time_member) and presensi.tanggal in (SELECT over_time.tanggal from over_time)
     	) b on a.tanggal = b.tanggalpresensi and a.nik1 = b.nik) c");
     	$this->db->join("karyawan d","c.nik = d.nik","left");
 
@@ -105,6 +104,32 @@ class Over_model extends CI_Model {
     		'ext_food' => $exfood1
     	);
 
-    	$this->db->insert('over_time_member', $data);	}
+    	$this->db->insert('over_time_member', $data);	
     }
-    ?>
+
+    function count_filtered()
+    {
+        $this->_get_datatables_query();
+        $query = $this->db->get();
+        return $query->num_rows();
+    }
+
+    public function count_all()
+    {
+        $this->db->from('over_time_member');
+        return $this->db->count_all_results();
+    }
+
+
+    public function get_over_by_id($id)
+    {
+        $this->db->select("o.id, tanggal, departemen, section, keperluan, catatan, om.*");
+        $this->db->from('over_time o');
+        $this->db->join("over_time_member om","o.id = om.id_ot");
+        $this->db->where("o.id",$id);
+        $query = $this->db->get();
+        return $query->result();
+
+    }
+}
+?>

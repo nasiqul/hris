@@ -31,16 +31,20 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <div class="col-md-12">
           <div class="box box-solid">
             <div class="box-body">
+              <a class="btn btn-success" href="<?php echo base_url('home/karyawan_t'); ?>"><i class="fa fa-plus"></i> New Entry</a>
+              <br>
+              <br>
               <table id="example1" class="table table-responsive table-striped">
                 <thead>
                   <tr>
                     <th>NIK</th>
                     <th>Name</th>
-                    <th>Department</th>
-                    <th>Sec/Group</th>
-                    <th>Entry Date</th>
+                    <th>Devisi</th>
+                    <th>Departemen</th>
+                    <!-- <th>Entry Date</th> -->
                     <th>Employee Status</th>
-                    <th></th>
+                    <th>Status</th>
+                    
                   </tr>
                 </thead>
                 <tbody>
@@ -70,7 +74,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                           <h3 class="profile-username text-center" id="nama"></h3>
 
                           <p class="text-muted text-center" id="nik"></p>
-                          <p class="text-center"><small class="label bg-green" id="status"></small></p>
+                          <p class="text-center" id="status"></p>
                         </div>
                         <!-- /.box-body -->
                       </div>
@@ -106,9 +110,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                                 <p class="text-muted">Status Keluarga</p>
                                 <p id="sKeluarga"></p>
-                                <select id="SelectKeluarga" class="form-control">
-                                  <option>vv</option>
-                                </select>
                               </div>
                             </div>
                           </div>
@@ -207,15 +208,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </div>
             <!-- /.modal-content -->
           </div>
-        </div>
-        <!-- /.modal-dialog -->
-        <!-- </div> --> 
+          <!-- /.modal-dialog -->
+          <!-- </div> --> 
 
-      </section>
-      <!-- /.content -->
-    </div>
-    <!-- /.content-wrapper -->
-    <!-- /.control-sidebar -->
+        </section>
+        <!-- /.content -->
+      </div>
+      <!-- /.content-wrapper -->
+      <!-- /.control-sidebar -->
   <!-- Add the sidebar's background. This div must be placed
     immediately after the control sidebar -->
     <div class="control-sidebar-bg"></div>
@@ -225,6 +225,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <script>
     var jks;
     var keluarga = [];
+    var devisi = [];
+    var departemen = [];
     $(document).ready(function() {
       $('#example1').DataTable({
         "lengthMenu"    : [[10, 25, 50, -1], [10, 25, 50, "All"]],
@@ -232,7 +234,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         "serverSide"    : true,
         'order'         : [],
         "ajax": {
-          "url": "<?php echo base_url('home/ajax_emp')?>",            
+          "url": "<?php echo base_url('home/ajax_emp_coba')?>",            
           "type": "POST"
         },
         "columns": [
@@ -241,11 +243,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
         { "data": 2 },
         { "data": 3 },
         { "data": 4 },
-        { "data": 5 },
-        { "data": 6 }
+        { "data": 5 }
         ],
         "columnDefs": [
-        { "orderable": false, "targets": 6 }    ]
+        { "orderable": false, "targets": 5 }    ]
       })
     })
 
@@ -262,7 +263,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       var id = $('#tes'+a).data("id");
 
       $.ajax({
-        url: "<?php echo base_url('home/ajax_emp_by_nik/')?>"+ id ,
+        url: "<?php echo base_url('home/ajax_emp_by_nik_coba/')?>"+ id ,
         type : "GET",
         dataType: 'json',
         success: function(data){
@@ -301,7 +302,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
             $("#bpjstk").text(data[i][21]);
             $("#bpjskes").text(data[i][23]);
             $("#jp").text(data[i][22]);
-            $("#status").text(data[i][25]);
+
+            if (data[i][25] == "Aktif")
+            {
+              $("#status").empty().append('<small class="label bg-green">'+data[i][25]+'</small>');
+            }
+            else
+            {
+              $("#status").empty().append('<small class="label bg-red">'+data[i][25]+'</small>');
+            }
+
           });
         }
       });
@@ -314,6 +324,17 @@ scratch. This page gets rid of all links and provides the needed markup only.
         success: function(data){
           $.each(data, function(i, value){
             keluarga.push(data[i][0]);
+          });
+        }
+      });
+
+      $.ajax({
+        url: "<?php echo base_url('home/ajax_dev/')?>" ,
+        type : "GET",
+        dataType: 'json',
+        success: function(data){
+          $.each(data, function(i, value){
+            devisi.push(data[i][0]);
           });
         }
       });
@@ -353,31 +374,31 @@ scratch. This page gets rid of all links and provides the needed markup only.
     var alamat = $('#alamat').text();
     $('#alamat').text('').append($('<textarea class="form-control" id="txtAlamat">'+alamat+'</textarea>'));
 
-    var sKeluarga = $('#sKeluarga').text();
+    
+    //$('#sKeluarga').css('display', 'none');
+    var keluarga2 = $('#sKeluarga').text();
 
-     // for (var i = 0; i < keluarga.length; i++) {
-     //   $('#SelectKeluarga').append('<option value="foo">'+keluarga[i]+'</option>');
-     // }
+    var list = [];
+    var options = [];
 
-     // $('#SelectKeluarga').append('<option value="foo">asd</option>');
+    for (var i = 0; i < keluarga.length; i++) {
+      list.push(i) ;
+      if (keluarga2 == keluarga[i])
+        options.push('<option value="'+keluarga[i]+'" selected>'+keluarga[i]+'</option>');
+      
+      else
+        options.push('<option value="'+keluarga[i]+'">'+keluarga[i]+'</option>');
+    }
 
-      // $('#theSelectun'+a).append('<option value="'+value+'" selected="selected">'+value+'</option>');
-      var list = [];
-      var options = [];
+    $('#sKeluarga').text('').append($('<select id="SelectKeluarga" class="form-control"></select>'));
 
-
-      for (var i = 0; i < keluarga.length; i++) {
-        list.push(i) ;
-        options.push('<option value="'+keluarga[i]+'" >'+keluarga[i]+'</option>');
-      }
-
-      $("#SelectKeluarga").html(options.join(''));
-
-
-    })
+    $("#SelectKeluarga").html(options.join(''));
 
 
-  </script>
+  })
+
+
+</script>
 
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the

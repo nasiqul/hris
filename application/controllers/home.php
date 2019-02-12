@@ -153,6 +153,15 @@ class Home extends CI_Controller {
         $this->load->view("presensi_graph", $data);
     }
 
+    public function karyawan_t()
+    {
+        $data['dev'] = $this->karyawan_model->get_dev();
+        $data['grade'] = $this->karyawan_model->get_grade();
+        $data['jabatan'] = $this->karyawan_model->get_jabatan();
+        $data['kode'] = $this->karyawan_model->get_kode();
+        $this->load->view('karyawan_form',$data);
+    }
+
     public function ajax()
     {
         if (isset($_SESSION['tanggal']) || isset($_SESSION['nik']) || isset($_SESSION['nama']) || isset($_SESSION['shift'])) 
@@ -353,6 +362,7 @@ public function ajax_emp_by_nik($id)
         $row[] = $key->jp;
         $row[] = $key->bpjskes;
         $row[] = $key->npwp;
+        $row[] = $key->status;
 
         $data[] = $row;
     }
@@ -397,6 +407,22 @@ public function ajax_emp_keluarga()
 {
             // echo $_GET['dataId'];
     $list = $this->karyawan_model->getKeluarga();
+    $data = array();
+    foreach ($list as $key) {
+        $row = array();
+        $row[] = $key->statusKeluarga;
+
+        $data[] = $row;
+    }
+
+            //output to json format
+    echo json_encode($data);
+}
+
+public function ajax_dev()
+{
+            // echo $_GET['dataId'];
+    $list = $this->karyawan_model->getdev();
     $data = array();
     foreach ($list as $key) {
         $row = array();
@@ -502,5 +528,108 @@ public function sess_destroy2()
 {
     session_destroy();
     redirect('home/absen');
+}
+
+//------------------------- KARYAWAN COBA -------------------
+
+public function karyawan_coba()
+{
+    if (isset($_POST['status']) || isset($_POST['grade']) || isset($_POST['dep']) || isset($_POST['pos'])) 
+    {
+        $newdata = array(
+            'status'  => $_POST['status'],
+            'grade'  => $_POST['grade'],
+            'dep'  => $_POST['dep'],
+            'pos'  => $_POST['pos']
+        );
+
+        $this->session->set_userdata($newdata);
+    }
+
+    if (isset($_POST['bulan'])) {
+        $newdata = array(
+            'bulan' => $_POST['bulan']
+        );
+
+        $this->session->set_userdata($newdata);
+    }
+    $this->load->view("karyawan_coba");
+}
+
+public function ajax_emp_coba()
+{
+
+    $list = $this->karyawan_model->get_data_karyawan_coba();
+    $tot = $this->karyawan_model->count_all();
+    $filter = $this->karyawan_model->count_filtered();
+
+    $data = array();
+    $i = 1;
+    foreach ($list as $key) {
+        $row = array();
+        $row[] = $key->nik;
+                //$row[] = $key->foto;
+        $row[] = "<a style='cursor: pointer' onclick='ShowModal(".$i.")' data-toggle='modal' data-id='".$key->nik."' id='tes".$i."'>".$key->namaKaryawan."</a>";
+        $row[] = $key->namadev;
+        $row[] = $key->namadep;
+        $row[] = $key->statusKaryawan;
+        if ($key->status == "Aktif")
+            $row[] = "<p class='text-center'><small class='label bg-green'>".$key->status." <i class='fa fa-check'></i> </small></p>";
+        else
+            $row[] = "<p class='text-center'><small class='label bg-red'>".$key->status." <i class='fa fa-close'></i> </small></p>";
+
+        $data[] = $row;
+        $i++;
+    }
+
+    $output = array(
+        "draw" => $_POST['draw'],
+        "recordsTotal" => $tot,
+        "recordsFiltered" => $filter,
+        "data" => $data,
+    );
+            //output to json format
+    echo json_encode($output);
+}
+
+public function ajax_emp_by_nik_coba($id)
+{
+            // echo $_GET['dataId'];
+    $list = $this->karyawan_model->get_data_karyawan_by_nik2($id);
+    $data = array();
+    foreach ($list as $key) {
+        $row = array();
+        $row[] = $key->pin;
+        $row[] = $key->nik;
+        $row[] = $key->costCenter;
+        $row[] = $key->foto;
+        $row[] = $key->namaKaryawan;
+        $row[] = $key->dev;
+        $row[] = $key->dep;
+        $row[] = $key->kode;
+        $row[] = date("d-m-Y", strtotime($key->tanggalMasuk));
+        $row[] = $key->jk;
+        $row[] = $key->statusKaryawan;
+        $row[] = $key->grade;
+        $row[] = $key->namaGrade;
+        $row[] = $key->jabatan;
+        $row[] = $key->statusKeluarga;
+        $row[] = $key->tempatLahir;
+        $row[] = $key->tanggalLahir;
+        $row[] = $key->alamat;
+        $row[] = $key->hp;
+        $row[] = $key->ktp;
+        $row[] = $key->rekening;
+        $row[] = $key->bpjstk;
+        $row[] = $key->jp;
+        $row[] = $key->bpjskes;
+        $row[] = $key->npwp;
+        $row[] = $key->status;
+
+        $data[] = $row;
+    }
+
+            //output to json format
+    echo json_encode($data);
 }
 }

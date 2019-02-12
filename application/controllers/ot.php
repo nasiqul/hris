@@ -50,24 +50,58 @@ class Ot extends CI_Controller {
 		$data = array();
 		foreach ($list as $key) {
 			$row = array();
+			$row[] = $key->id;
 			$row[] = $key->tanggal;
 			$row[] = $key->nik;
 			$row[] = $key->namaKaryawan;
 			$row[] = $key->masuk;
 			$row[] = $key->keluar;
-			$row[] = "<button class='btn btn-sm btn-warning'><i class='fa fa-clock-o'></i> &nbsp".$key->jam."</button>";
+			$row[] = "<button class='btn btn-sm btn-warning' onclick='detail_spl(".$key->id.")'><i class='fa fa-clock-o'></i> &nbsp".$key->jam."</button>";
 			
 			$row[] = "<button class='btn btn-success'><i class='fa fa-thumbs-up'></i> Answer</button>";
 
 			$data[] = $row;
 		}
 
+		$tot = $this->over_model->count_all();
+		$filter = $this->over_model->count_filtered();
+
 		$output = array(
 			"draw" => $_POST['draw'],
+			"recordsTotal" => $tot,
+			"recordsFiltered" => $filter,
 			"data" => $data
 		);
             //output to json format
 		echo json_encode($output);
+	}
+
+	public function ajax_spl_data()
+	{
+		$id = $_POST['id'];
+		$list = $this->over_model->get_over_by_id($id);
+		$data = array();
+		foreach ($list as $key) {
+			$row = array();
+			$row[] = $key->id;
+			$row[] = $key->tanggal;
+			$row[] = $key->departemen;
+			$row[] = $key->section;
+			$row[] = $key->keperluan;
+			$row[] = $key->catatan;
+			$row[] = $key->nik;
+			$row[] = $key->dari;
+			$row[] = $key->sampai;
+			$row[] = $key->jam;
+			$row[] = $key->transport;
+			$row[] = $key->makan;
+			$row[] = $key->ext_food;
+
+			$data[] = $row;
+		}
+
+            //output to json format
+		echo json_encode($data);
 	}
 }
 ?>

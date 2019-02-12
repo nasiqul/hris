@@ -42,7 +42,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </form>
               </div>
               <div class="col-md-12">
-                <div id ="container" style = " margin: 0 auto"></div>
+                <div id ="container" style ="margin: 0 auto"></div>
                 <br>
                 <table class="table table-striped">
                   <tr>
@@ -81,8 +81,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <tr>
                     <td>M</td>
                     <td>: Cuti Pasca-Lahir</td>
-                    <td></td>
-                    <td></td>
+                    <td>DL</td>
+                    <td>: Dinas Luar</td>
                   </tr>
                 </table>
               </div>

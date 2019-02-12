@@ -102,7 +102,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <select name="dep" class="form-control" id="dep" onchange='showSec()'>
                       <option value="" disabled selected>Select Departemen</option>
                       <?php 
-                      foreach ($dep as $key) {
+                      foreach ($dev as $key) {
                         echo "<option value='".$key->id."'>".$key->nama."</option>";
                       }
                       ?>

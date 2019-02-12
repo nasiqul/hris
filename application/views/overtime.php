@@ -30,12 +30,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <div class="col-md-12">
           <div class="box box-solid">
             <div class="box-body">
-                <a class="btn btn-success" href="<?php echo base_url('home/overtime_form') ?>"> <i class="fa fa-plus"></i> New Entry</a>
-                <br>
-                <br>
+              <a class="btn btn-success" href="<?php echo base_url('home/overtime_form') ?>"> <i class="fa fa-plus"></i> New Entry</a>
+              <br>
+              <br>
               <table id="example1" class="table table-responsive table-striped text-center">
                 <thead>
                   <tr>
+                    <th>ID SPL</th>
                     <th>Date</th>
                     <th>NIK</th>
                     <th>Employee Name</th>
@@ -50,7 +51,28 @@ scratch. This page gets rid of all links and provides the needed markup only.
               </table>
             </div>
           </div>
+        </div>
 
+        <div class="modal fade" id="myModal">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span></button>
+                  <h4 class="modal-title" id="modal-title"></h4>
+                </div>
+                <div class="modal-body">
+                  <p>One fine body&hellip;</p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+              </div>
+              <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+          </div>
         </section>
         <!-- /.content -->
       </div>
@@ -69,13 +91,29 @@ scratch. This page gets rid of all links and provides the needed markup only.
         "processing"    : true,
         "serverSide"    : true,
         'order'         : [],
-        "bInfo" : false,
         "ajax": {
-          "url": "<?php echo base_url('ot/ajax_ot')?>",            
+          "url": "<?php echo base_url('ot/ajax_ot')?>",       
           "type": "POST"
         }
       })
     })
+
+    function detail_spl(id) {
+      $.ajax({
+        url: "<?php echo base_url('ot/ajax_spl_data/')?>",
+        type : "POST",
+        data: {
+          id:id
+        },
+        success: function(data){
+          var s = $.parseJSON(data);
+
+          $('#myModal').modal('show');
+          $("#modal-title").text("No. SPL : " + s[0].id);
+
+        }
+      });
+    }
   </script>
 
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
