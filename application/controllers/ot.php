@@ -51,14 +51,12 @@ class Ot extends CI_Controller {
 		foreach ($list as $key) {
 			$row = array();
 			$row[] = $key->id;
-			$row[] = $key->tanggal;
-			$row[] = $key->nik;
-			$row[] = $key->namaKaryawan;
-			$row[] = $key->masuk;
-			$row[] = $key->keluar;
-			$row[] = "<button class='btn btn-sm btn-warning' onclick='detail_spl(".$key->id.")'><i class='fa fa-clock-o'></i> &nbsp".$key->jam."</button>";
-			
-			$row[] = "<button class='btn btn-success'><i class='fa fa-thumbs-up'></i> Answer</button>";
+			$row[] = date("d-m-Y",strtotime($key->tanggal));
+			$row[] = $key->namaDep;
+			$row[] = $key->namaSec;
+			$row[] = $key->keperluan;
+
+			$row[] = "<button class='btn btn-primary' onclick='detail_spl(".$key->id.")'>Detail</button>";
 
 			$data[] = $row;
 		}
@@ -83,13 +81,34 @@ class Ot extends CI_Controller {
 		$data = array();
 		foreach ($list as $key) {
 			$row = array();
-			$row[] = $key->id;
-			$row[] = $key->tanggal;
+			$row[] = $key->id_over;
+			$row[] = date("l",strtotime($key->tanggal));
+			$row[] = date("d-m-Y",strtotime($key->tanggal));
 			$row[] = $key->departemen;
 			$row[] = $key->section;
 			$row[] = $key->keperluan;
 			$row[] = $key->catatan;
+
+			$data[] = $row;
+		}
+
+            //output to json format
+		echo json_encode($data);
+	}
+
+	public function ajax_spl_data2()
+	{
+		$id = $_POST['id'];
+		$list = $this->over_model->get_over_by_id_member($id);
+		$no = 1;
+		$data = array();
+		foreach ($list as $key) {
+			$row = array();
+			$row[] = $no;
+			$row[] = $key->id_over;
+			$row[] = $key->tanggal;
 			$row[] = $key->nik;
+			$row[] = $key->namaKaryawan;
 			$row[] = $key->dari;
 			$row[] = $key->sampai;
 			$row[] = $key->jam;
@@ -98,10 +117,24 @@ class Ot extends CI_Controller {
 			$row[] = $key->ext_food;
 
 			$data[] = $row;
+			$no++;
 		}
 
+		$tot = $this->over_model->count_all();
+		$filter = $this->over_model->count_filtered();
+
+		$output = array(
+			"draw" => $_POST['draw'],
+			"data" => $data
+		);
+
             //output to json format
-		echo json_encode($data);
+		echo json_encode($output);
+	}
+
+	public function print_preview()
+	{
+		$this->load->view('print_ot');
 	}
 }
 ?>

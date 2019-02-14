@@ -39,10 +39,19 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <div class="box-body">
             <form method="POST" id="master">
               <div class="col-md-6">
-                <p>Nomor :</p>
-                <input type="text" name="no" placeholder="nomor dokumen" class="form-control" id="no_doc" onchange="changeDoc()">
-
+                <p>Nomor Dokumen :</p>
+                <?php 
+                error_reporting(0);
+                $dt = date('ym'); 
+                if ($id_doc[0]->id) 
+                  $ids = (substr($id_doc[0]->id, -4))+1;
+                else
+                  $ids = 1;
                 
+                $nod = sprintf('%04u', $ids);
+                ?>
+                <input type="text" name="no" placeholder="nomor dokumen" class="form-control" id="no_doc" value="<?php echo $dt; echo $nod ?>" readonly>
+
                 <div class="row">
                   <div class="col-md-3">
                     <p>Tanggal</p>
@@ -102,7 +111,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <select name="dep" class="form-control" id="dep" onchange='showSec()'>
                       <option value="" disabled selected>Select Departemen</option>
                       <?php 
-                      foreach ($dev as $key) {
+                      foreach ($dep as $key) {
                         echo "<option value='".$key->id."'>".$key->nama."</option>";
                       }
                       ?>
@@ -133,6 +142,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </div>
                 <!-- /.input group -->
               </div>
+              <button id="reset" class="btn btn-default pull-right" onclick="reset()"><i class="fa fa-refresh"></i> Refresh</button>
             </div>
           </div>
         </div>
@@ -141,11 +151,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <div class="box-header">
             <h3 class="box-title"><i class="fa fa-group"></i> Peserta</h3>
             <div class="pull-right">
+              <a id="print" class="btn btn-primary" href="<?php echo base_url('ot/print_preview'); ?>" target="_blank"><i class="fa fa-print"></i> Print</a>&nbsp&nbsp&nbsp
               <button id="submit" class="btn btn-success" onclick="submit1()"><i class="fa fa-check"></i> Simpan</button>
             </div>
           </div>
-          <form method="POST" id="pesertaF">
-            <input type="hidden" name="nodoc2" id="nodoc2">
+          
+            <input type="hidden" name="nodoc2" id="nodoc2" value="<?php echo $dt; echo $nod ?>">
             <div class="box-body">
               <div class="col-md-12">
                 <table class="table">
@@ -159,7 +170,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                       <th width="8%">Transport</th>
                       <th width="5%">Makan</th>
                       <th>Ext-Food</th>
-                      <th>Aksi</th>
+                      <th></th>
                     </tr>
                   </thead>
                 </table>
@@ -168,7 +179,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
               </div>
             </div>
-          </form>
+          
         </div>
       </div>
 
@@ -209,7 +220,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
     //nik on enter
     $('#nikF').bind("enterKey",function(e){
       appendRow();
-      openSuccessGritter();
     });
     $('#nikF').keyup(function(e){
       if(e.keyCode == 13)
@@ -219,6 +229,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
     });
 
     function appendRow() {
+      if ($('#no_doc').val() == ""){
+        openDangerGritter();
+        return false;
+      }
       var d = dari.value;
       var s = sampai.value;
       var j = jam.value;
@@ -243,6 +257,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             var sr = $.parseJSON(data);
 
             nama = sr[0][1];
+            nik = sr[0][0];
 
             if ($('#makanF').is(':checked')) {
               cekM="checked";
@@ -263,7 +278,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             }
 
             var newdiv1 = $( "<div class='col-md-12' style='margin-bottom: 5px'>"+
-              "<div class='col-md-2'><input type='text' id='nik"+no+"' value='"+n+"' class='form-control' readonly></div>"+
+              "<div class='col-md-2'><input type='text' id='nik"+no+"' value='"+nik+"' class='form-control' readonly></div>"+
               "<div class='col-md-3'><p id='nama"+no+"'>"+nama+"</p></div>"+
               "<div class='col-md-1'><input type='text' class='form-control timepicker' id='dari"+no+"' value='"+d+"'></div>"+
               "<div class='col-md-1'><input type='text' class='form-control timepicker' id='sampai"+no+"' value='"+s+"'></div>"+
@@ -271,17 +286,21 @@ scratch. This page gets rid of all links and provides the needed markup only.
               "<div class='col-md-1'><select class='form-control' id='trans"+no+"'>"+
               "<option value='-' "+t1+">-</option><option value='B' "+t2+">B</option><option value='P' "+t3+">P</option></select></div>"+
               "<div class='col-md-1'><input type='checkbox' id='makan"+no+"' "+cekM+"></div>"+
-              "<div class='col-md-1'><input type='checkbox' id='exfood"+no+"' "+cekFd+"></div></div>" );
+              "<div class='col-md-1'><input type='checkbox' id='exfood"+no+"' "+cekFd+"></div>"+
+              "<div class='col-md-1'><button class='btn btn-danger btn-xs' id='delete"+no+"' onclick='deleteRow(this)'><i class='fa fa-minus'></i></button></div></div>" );
 
             $("#peserta").append(newdiv1);
             $('#nomor').val(no);
             no+=1;
 
             $('#nikF').val('');
+
+            openSuccessGritter();
             
 
           }
         });
+
     }
 
     // function cloneRow() {
@@ -313,6 +332,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
     //   var id = "#row"+no;
     //   $(id).remove();
     // }
+
+    function deleteRow(elem) {
+      $(elem).parent('div').parent('div').remove();      
+    }
 
     function showSec() {
       var id = $('#dep').find(':selected')[0].value;
@@ -420,8 +443,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
               'exfood': exfoodS
             },
             success: function(data){
-              $('#master').trigger("reset");
-              $("#peserta").empty();
               openSuccessGritter();
             }
           });
@@ -429,11 +450,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
       }
     });
 //    document.getElementById("master").submit();
-}
-
-function changeDoc() {
-  var valu = document.getElementById('no_doc').value;
-  $('#nodoc2').val(valu);
 }
 
 function openSuccessGritter(){
@@ -445,6 +461,24 @@ function openSuccessGritter(){
     sticky: false,
     time: '2000'
   });
+}
+
+function openDangerGritter(){
+  jQuery.gritter.add({
+    title: "Failed",
+    text: "Ada Data yang Kosong",
+    class_name: 'growl-danger',
+    image: '<?php echo base_url()?>app/img/close.png',
+    sticky: false,
+    time: '2000'
+  });
+}
+
+function reset() {
+  location.reload();
+  // $('#master').trigger("reset");
+  // $("#peserta").empty();
+
 }
 </script>
 <!-- Optionally, you can add Slimscroll and FastClick plugins.

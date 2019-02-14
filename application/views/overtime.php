@@ -38,12 +38,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <tr>
                     <th>ID SPL</th>
                     <th>Date</th>
-                    <th>NIK</th>
-                    <th>Employee Name</th>
-                    <th>Arrive</th>
-                    <th>Leave</th>
-                    <th>Lembur (jam)</th>
-                    <th>Status</th>
+                    <th>Departemen</th>
+                    <th>Section</th>
+                    <th>Keperluan</th>
+                    <!-- <th>Catatan</th> -->
+                    <!-- <th>Lembur (jam)</th> -->
+                    <th>Aksi</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -54,30 +54,78 @@ scratch. This page gets rid of all links and provides the needed markup only.
         </div>
 
         <div class="modal fade" id="myModal">
-          <div class="modal-dialog">
+          <div class="modal-dialog modal-lg">
             <div class="modal-content">
               <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span></button>
-                  <h4 class="modal-title" id="modal-title"></h4>
-                </div>
-                <div class="modal-body">
-                  <p>One fine body&hellip;</p>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                  <button type="button" class="btn btn-primary">Save changes</button>
+                <h4 style="float: right;" id="modal-title"></h4>
+                <h4 class="modal-title">PT. YAMAHA MUSICAL PRODUCT INDONESIA</h4>
+              </div>
+              <div class="modal-body">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="col-md-4">
+                      <p>Hari</p>
+                      <p>Tanggal</p>
+                      <p>Bagian</p>
+                    </div>
+                    <div class="col-md-8">
+                      <p>: <c id="hari"></c></p>
+                      <p>: <c id="tgl"></c></p>
+                      <p>: -</p>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <p>Keperluan : </p>
+                    <input type="text" class="form-control" readonly id="kep" style="height:70px;">
+                  </div>
+
+                  <div class="col-md-12">
+                    <br>
+                    <table class="table table-hover" id="example2" style="width: 100%;">
+                      <thead>
+                        <tr>
+                          <th>No</th>
+                          <th>NIK</th>
+                          <th>Nama</th>
+                          <th>Dari</th>
+                          <th>Sampai</th>
+                          <th>Jam</th>
+                          <th>Trans</th>
+                          <th>Makan</th>
+                          <th>E.Food</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+
+                      </tbody>
+                      <tfoot>
+                        <tr>
+                          <td colspan="4"><b>B = Bangil, P = Pasuruan</b></td>
+                          <td><c class="pull-right">Total :</c></td>
+                          <td class="text-center"><b>[ 2 ]</b></td>
+                          <td>Jam</td>
+                        </tr>
+                      </tfoot>
+                    </table>
+                    <p>Catatan :</p>
+                    <input type="text" class="form-control" readonly id="cat" style="height:70px;">
+                  </div>
                 </div>
               </div>
-              <!-- /.modal-content -->
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary"><i class="fa fa-print"></i> Print</button>
+              </div>
             </div>
-            <!-- /.modal-dialog -->
+            <!-- /.modal-content -->
           </div>
-        </section>
-        <!-- /.content -->
-      </div>
-      <!-- /.content-wrapper -->
-      <!-- /.control-sidebar -->
+          <!-- /.modal-dialog -->
+        </div>
+      </section>
+      <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+    <!-- /.control-sidebar -->
   <!-- Add the sidebar's background. This div must be placed
     immediately after the control sidebar -->
     <div class="control-sidebar-bg"></div>
@@ -94,11 +142,18 @@ scratch. This page gets rid of all links and provides the needed markup only.
         "ajax": {
           "url": "<?php echo base_url('ot/ajax_ot')?>",       
           "type": "POST"
-        }
+        },
+        "columnDefs": [
+            {
+          "targets": [ 5 ], //first column / numbering column
+          "orderable": false, //set not orderable
+        }]
       })
     })
 
     function detail_spl(id) {
+      tabel = $('#example2').DataTable();
+      tabel.destroy();
       $.ajax({
         url: "<?php echo base_url('ot/ajax_spl_data/')?>",
         type : "POST",
@@ -109,7 +164,46 @@ scratch. This page gets rid of all links and provides the needed markup only.
           var s = $.parseJSON(data);
 
           $('#myModal').modal('show');
-          $("#modal-title").text("No. SPL : " + s[0].id);
+          $("#modal-title").text("No : " + s[0][0]);
+          var id2 = s[0][0];
+          
+          $("#hari").text(s[0][1]);
+          $("#tgl").text(s[0][2]);
+          $("#kep").val(s[0][5]);
+          $("#cat").val(s[0][6]);
+
+
+          $('#example2').DataTable({
+            "processing"    : true,
+            "serverSide"    : true,
+            "searching": false,
+            "bPaginate": false,
+            "bLengthChange": false,
+            "bFilter": false,
+            "bInfo": false,
+            'order'         : [],
+            "ajax": {
+              "url": "<?php echo base_url('ot/ajax_spl_data2')?>",       
+              "type": "POST",
+              'data' : { id : id2 }
+            },
+            "columns": [
+            { "data": 0 },
+            { "data": 3 },
+            { "data": 4 },
+            { "data": 5 },
+            { "data": 6 },
+            { "data": 7 },
+            { "data": 8 },
+            { "data": 9 },
+            { "data": 10 }
+            ],
+            "columnDefs": [
+            {
+          "targets": [ 5,6,7,8 ], //first column / numbering column
+          "orderable": false, //set not orderable
+        }]
+      })
 
         }
       });

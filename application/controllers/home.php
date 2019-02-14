@@ -72,6 +72,7 @@ class Home extends CI_Controller {
     public function overtime_form()
     {
         $data['dep'] = $this->over_model->get_dep();
+        $data['id_doc'] = $this->over_model->get_id_doc();
         $this->load->view("overtime_form",$data);
     }
 
@@ -405,7 +406,6 @@ echo json_encode($result);
 
 public function ajax_emp_keluarga()
 {
-            // echo $_GET['dataId'];
     $list = $this->karyawan_model->getKeluarga();
     $data = array();
     foreach ($list as $key) {
@@ -415,23 +415,56 @@ public function ajax_emp_keluarga()
         $data[] = $row;
     }
 
-            //output to json format
     echo json_encode($data);
 }
 
 public function ajax_dev()
 {
-            // echo $_GET['dataId'];
-    $list = $this->karyawan_model->getdev();
+    $list = $this->karyawan_model->get_dev();
     $data = array();
     foreach ($list as $key) {
         $row = array();
-        $row[] = $key->statusKeluarga;
+        $row[] = $key->id;
+        $row[] = $key->nama;
 
         $data[] = $row;
     }
 
-            //output to json format
+    //output to json format
+    echo json_encode($data);
+}
+
+public function ajax_dep()
+{
+    $id = $_POST['id'];
+    $list = $this->karyawan_model->get_dep($id);
+    $data = array();
+    foreach ($list as $key) {
+        $row = array();
+        $row[] = $key->id;
+        $row[] = $key->nama;
+
+        $data[] = $row;
+    }
+
+    //output to json format
+    echo json_encode($data);
+}
+
+public function ajax_sec()
+{
+    $id = $_POST['id'];
+    $list = $this->karyawan_model->get_sec($id);
+    $data = array();
+    foreach ($list as $key) {
+        $row = array();
+        $row[] = $key->id;
+        $row[] = $key->nama;
+
+        $data[] = $row;
+    }
+
+    //output to json format
     echo json_encode($data);
 }
 
@@ -625,6 +658,10 @@ public function ajax_emp_by_nik_coba($id)
         $row[] = $key->bpjskes;
         $row[] = $key->npwp;
         $row[] = $key->status;
+        $row[] = $key->id_devisi;
+        $row[] = $key->id_dep;
+        $row[] = $key->id_sec;
+        $row[] = $key->id_sub_sec;
 
         $data[] = $row;
     }

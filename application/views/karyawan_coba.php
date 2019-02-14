@@ -119,16 +119,26 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                             <div class="box-body">
                               <div class="col-md-6">
-                                <p class="text-muted">Departement/subSec</p>
-                                <p id="deb"></p>
+                                <p class="text-muted">Devisi</p>
+                                <p id="dev"></p>
 
-                                <p class="text-muted">Sec/Group</p>
-                                <p id="group"></p>
+                                <p class="text-muted">Departemen</p>
+                                <p id="dep"></p>
+
+                                <p class="text-muted">Section</p>
+                                <p id="sec">cc</p>
+
+                                <p class="text-muted">Sub Section</p>
+                                <p id="sub-sec">scc</p>
+
+                              </div>
+                              <div class="col-md-6">
+                                <p class="text-muted">Group</p>
+                                <p id="group">gr</p>
 
                                 <p class="text-muted">Kode</p>
                                 <p id="kode"></p>
-                              </div>
-                              <div class="col-md-6">
+
                                 <p class="text-muted">Grade</p>
                                 <p id="namaGrade"></p><p id="grade"></p>
 
@@ -227,6 +237,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
     var keluarga = [];
     var devisi = [];
     var departemen = [];
+    var section = [];
+    var sub_section = [];
+    var group = [];
+
     $(document).ready(function() {
       $('#example1').DataTable({
         "lengthMenu"    : [[10, 25, 50, -1], [10, 25, 50, "All"]],
@@ -287,8 +301,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
               jks = data[i][9];
             }
 
-            $("#deb").text(data[i][5]);
-            $("#group").text(data[i][6]);
+            $("#dev").text(data[i][5]);
+            $("#dep").text(data[i][6]);
             $("#kode").text(data[i][7]);
             $("#grade").text("("+data[i][11]+")");
             $("#namaGrade").text(data[i][12]);
@@ -312,11 +326,76 @@ scratch. This page gets rid of all links and provides the needed markup only.
               $("#status").empty().append('<small class="label bg-red">'+data[i][25]+'</small>');
             }
 
+            var id_dev = data[i][26];
+            var id_dep = data[i][27];
+            var id_sec = data[i][28];
+            var id_sub_sec = data[i][29];
+
+            //----------------- AJAX DEPARTEMEN -----------
+            $.ajax({
+              type : "POST",
+              url: "<?php echo base_url('home/ajax_dep/') ?>",
+              data : { 
+                'id' : id_dev 
+              },
+              dataType: 'json',
+              success: function(data){
+                $.each(data, function(i, value){
+                  departemen.push(data[i]);
+                });
+              }
+            });
+
+            //----------------- AJAX SECTION -----------
+            $.ajax({
+              type : "POST",
+              url: "<?php echo base_url('home/ajax_sec/') ?>",
+              data : { 
+                'id' : id_dep 
+              },
+              dataType: 'json',
+              success: function(data){
+                $.each(data, function(i, value){
+                  section.push(data[i]);
+                });
+              }
+            });
+
+            //----------------- AJAX SUB SECTION -----------
+            $.ajax({
+              type : "POST",
+              url: "<?php echo base_url('home/ajax_sub_sec/') ?>",
+              data : { 
+                'id' : id_sec 
+              },
+              dataType: 'json',
+              success: function(data){
+                $.each(data, function(i, value){
+                  sub_section.push(data[i]);
+                });
+              }
+            });
+
+            //----------------- AJAX GROUP -----------
+            $.ajax({
+              type : "POST",
+              url: "<?php echo base_url('home/ajax_group/') ?>",
+              data : { 
+                'id' : id_sub_sec 
+              },
+              dataType: 'json',
+              success: function(data){
+                $.each(data, function(i, value){
+                  group.push(data[i]);
+                });
+              }
+            });
+
           });
         }
       });
 
-      
+      // ---------------- AJAX KELUARGA ----------------
       $.ajax({
         url: "<?php echo base_url('home/ajax_emp_keluarga/')?>" ,
         type : "GET",
@@ -326,15 +405,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
             keluarga.push(data[i][0]);
           });
         }
-      });
+      });      
 
+      // --------------- AJAX DEVISI -------------------
       $.ajax({
         url: "<?php echo base_url('home/ajax_dev/')?>" ,
         type : "GET",
         dataType: 'json',
         success: function(data){
           $.each(data, function(i, value){
-            devisi.push(data[i][0]);
+            devisi.push(data[i]);
           });
         }
       });
@@ -375,7 +455,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
     $('#alamat').text('').append($('<textarea class="form-control" id="txtAlamat">'+alamat+'</textarea>'));
 
     
-    //$('#sKeluarga').css('display', 'none');
+    // ----------------- Select Option Keluarga ------------------
+
     var keluarga2 = $('#sKeluarga').text();
 
     var list = [];
@@ -394,6 +475,64 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
     $("#SelectKeluarga").html(options.join(''));
 
+    // ------------------------ Select Option Devisi ----------------
+
+    var devisi2 = $('#dev').text();
+
+    var list2 = [];
+    var options2 = [];
+
+    for (var i = 0; i < devisi.length; i++) {
+      list2.push(i) ;
+      if (devisi2 == devisi[i][1])
+        options2.push('<option value="'+devisi[i][0]+'" selected>'+devisi[i][1]+'</option>');
+      
+      else
+        options2.push('<option value="'+devisi[i][0]+'">'+devisi[i][1]+'</option>');
+    }
+
+    $('#dev').text('').append($('<select id="SelectDevisi" class="form-control"></select>'));
+
+    $("#SelectDevisi").html(options2.join(''));
+
+    // --------------------- Select Option Departemen ------------------
+
+    var departemen2 = $('#dep').text();
+
+    var list3 = [];
+    var options3 = [];
+
+    for (var i = 0; i < departemen.length; i++) {
+      list3.push(i) ;
+      if (departemen2 == departemen[i][1])
+        options3.push('<option value="'+departemen[i][0]+'" selected>'+departemen[i][1]+'</option>');
+      
+      else
+        options3.push('<option value="'+departemen[i][0]+'">'+departemen[i][1]+'</option>');
+    }
+
+    $('#dep').text('').append($('<select id="SelectDepartemen" class="form-control"></select>'));
+
+    $("#SelectDepartemen").html(options3.join(''));
+
+    //------------------ Select Option Section -----------------
+
+    var section2 = $('#sec').text();
+
+    var list4 = [];
+    var options4 = [];
+
+    for (var i = 0; i < section.length; i++) {
+      list4.push(i) ;
+      if (section2 == section[i][1])
+        options4.push('<option value="'+section[i][0]+'" selected>'+section[i][1]+'</option>');
+      else
+        options4.push('<option value="'+section[i][0]+'">'+section[i][1]+'</option>');
+    }
+
+    $('#sec').text('').append($('<select id="SelectSection" class="form-control"></select>'));
+
+    $("#SelectSection").html(options4.join(''));
 
   })
 

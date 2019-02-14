@@ -91,6 +91,7 @@
                      <th>Personal Leave</th>
                      <th>Diciplinary Allowance</th>
                      <th>Overtime (Hour)</th>
+                     <th>aksi</th>
                    </thead>
                    <tbody>
                    </tbody>
@@ -104,52 +105,71 @@
             </div>
           </div>
         </div>
-        <p id="cvz">ac</p>
         <!-- /.box -->
-      </section>
-      <!-- /.content -->
+
+        <div class="modal fade" id="myModal">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header">
+                January 2019
+              </div>
+              <div class="modal-body">
+                <div class="row">
+                  <div class="col-md-12">
+                    
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+            <!-- /.modal-content -->
+          </div>
+        </section>
+        <!-- /.content -->
+      </div>
+      <!-- /.container -->
     </div>
-    <!-- /.container -->
+    <!-- /.content-wrapper -->
+    <?php require_once(APPPATH.'views/footer/foot2.php'); ?>
   </div>
-  <!-- /.content-wrapper -->
-  <?php require_once(APPPATH.'views/footer/foot2.php'); ?>
-</div>
-<!-- ./wrapper -->
+  <!-- ./wrapper -->
 
-<script>
+  <script>
 
 
-  $(document).ready(function() {
+    $(document).ready(function() {
 
-    $.ajax({
-      url: "<?php echo base_url('client/ajax_client_data/')?>" ,
-      type : "POST",
-      dataType: 'json',
-      success: function(data){
-        $.each(data, function(i, value){
-          $("#nik").text(data[i][0]);
-          $("#nama").text(data[i][1]);
-          $("#tglMasuk").text(data[i][2]);
-          $("#statusKerja").text(data[i][3]);
-          $("#posisi").text(data[i][4]);
-        });
-      }
-    });
+      $.ajax({
+        url: "<?php echo base_url('client/ajax_client_data/')?>" ,
+        type : "POST",
+        dataType: 'json',
+        success: function(data){
+          $.each(data, function(i, value){
+            $("#nik").text(data[i][0]);
+            $("#nama").text(data[i][1]);
+            $("#tglMasuk").text(data[i][2]);
+            $("#statusKerja").text(data[i][3]);
+            $("#posisi").text(data[i][4]);
+          });
+        }
+      });
 
-    var tabel = $('#table1').DataTable({
-      "processing": true,
-      "serverSide": true,
-      "searching": false,
-      "bLengthChange": false,
-      "paging": false,
-      "bInfo": false,
-      "order": [],
-      "ajax": {
-        "url": "<?php echo base_url('client/ajax_client')?>",            
-        "type": "POST"
-      },
-      "columnDefs": [
-      {
+      var tabel = $('#table1').DataTable({
+        "processing": true,
+        "serverSide": true,
+        "searching": false,
+        "bLengthChange": false,
+        "paging": false,
+        "bInfo": false,
+        "order": [],
+        "ajax": {
+          "url": "<?php echo base_url('client/ajax_client')?>",            
+          "type": "POST"
+        },
+        "columnDefs": [
+        {
           "targets": [0,1,2,3,4,5,6], //first column / numbering column
           "orderable": false,//set not orderable
         },
@@ -176,12 +196,11 @@
       }
     });
 
-
-
-      // var ct = 0;
-      // $('#rt').html("" + ct);
-
     })
+
+    function openModal() {
+      $("#myModal").modal('show');
+    }
   </script>
 </body>
 </html>

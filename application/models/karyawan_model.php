@@ -73,12 +73,12 @@ class Karyawan_model extends CI_Model {
     {
         $this->db->select("k.nik, k.namaKaryawan, dv.nama as namadev, dp.nama as namadep, k.statusKaryawan, k.status");
         $this->db->from('karyawan k');
-        $this->db->join('posisi p','k.nik = p.nik');
-        $this->db->join('devisi dv','p.id_devisi = dv.id');
-        $this->db->join('departemen dp','p.id_dep = dp.id');
-        $this->db->join('section sec','p.id_sec = sec.id');
-        $this->db->join('sub_section ssec','p.id_sub_sec = ssec.id');
-        $this->db->join('group1 gr','p.id_group = gr.id');
+        $this->db->join('posisi p','k.nik = p.nik', 'left');
+        $this->db->join('devisi dv','p.id_devisi = dv.id', 'left');
+        $this->db->join('departemen dp','p.id_dep = dp.id', 'left');
+        $this->db->join('section sec','p.id_sec = sec.id', 'left');
+        $this->db->join('sub_section ssec','p.id_sub_sec = ssec.id', 'left');
+        $this->db->join('group1 gr','p.id_group = gr.id', 'left');
 
         $i = 0;
 
@@ -131,21 +131,21 @@ class Karyawan_model extends CI_Model {
     {
         $this->db->select("pin, nik, costCenter, foto, namaKaryawan, dep/subSec as dep, sec/Group as group, kode, tanggalMasuk, jk, statusKaryawan, grade, namaGrade, jabatan, statusKeluarga, tanggalLahir, tempatLahir, alamat, hp, ktp, rekening, bpjstk, jp, bpjskes, npwp, status");
         $this->db->from('karyawan');
-        $this->db->where('nik',$nik);
+        $this->db->like('nik',$nik);
         $query = $this->db->get();
         return $query->result();
     }
 
     public function get_data_karyawan_by_nik2($nik)
     {
-        $this->db->select("pin, k.nik, costCenter, foto, namaKaryawan, d.nama as dev, dp.nama as dep, kode, tanggalMasuk, jk, statusKaryawan, grade, namaGrade, jabatan, statusKeluarga, tanggalLahir, tempatLahir, alamat, hp, ktp, rekening, bpjstk, jp, bpjskes, npwp, status");
+        $this->db->select("pin, k.nik, costCenter, foto, namaKaryawan, d.nama as dev, dp.nama as dep, kode, tanggalMasuk, jk, statusKaryawan, grade, namaGrade, jabatan, statusKeluarga, tanggalLahir, tempatLahir, alamat, hp, ktp, rekening, bpjstk, jp, bpjskes, npwp, status, p.id_devisi, p.id_dep, p.id_sec, p.id_sub_sec");
         $this->db->from('karyawan k');
-        $this->db->join('posisi p', 'p.nik = k.nik');
-        $this->db->join('devisi d', 'p.id_devisi = d.id');
-        $this->db->join('departemen dp', 'p.id_dep = dp.id');
-        $this->db->join('section sc', 'p.id_sec = sc.id');
-        $this->db->join('sub_section sub_sec', 'p.id_sub_sec = sub_sec.id');
-        $this->db->join('group1 gr', 'p.id_group = gr.id');
+        $this->db->join('posisi p', 'p.nik = k.nik', 'left');
+        $this->db->join('devisi d', 'p.id_devisi = d.id', 'left');
+        $this->db->join('departemen dp', 'p.id_dep = dp.id', 'left');
+        $this->db->join('section sc', 'p.id_sec = sc.id', 'left');
+        $this->db->join('sub_section sub_sec', 'p.id_sub_sec = sub_sec.id', 'left');
+        $this->db->join('group1 gr', 'p.id_group = gr.id', 'left');
         $this->db->where('k.nik',$nik);
         $query = $this->db->get();
         return $query->result();
