@@ -287,49 +287,50 @@ scratch. This page gets rid of all links and provides the needed markup only.
             $("#foto").text(data[i][3]);
             $("#nama").text(data[i][4]);
             $("#nik").text(data[i][1]);
-            $("#tempatLahir").text(data[i][15]);
-            $("#tanggalLahir").text(data[i][16]);
-            $("#alamat").text(data[i][17]);
-            $("#sKeluarga").text(data[i][14]);
+            $("#tempatLahir").text(data[i][16]);
+            $("#tanggalLahir").text(data[i][17]);
+            $("#alamat").text(data[i][18]);
+            $("#sKeluarga").text(data[i][15]);
 
-            if (data[i][9] == "L") {
+            if (data[i][10] == "L") {
               $("#jk").text('Laki - laki');
-              jks = data[i][9];
+              jks = data[i][10];
             }
-            else if (data[i][9] == "P") {
+            else if (data[i][10] == "P") {
               $("#jk").text('Perempuan');
-              jks = data[i][9];
+              jks = data[i][10];
             }
 
             $("#dev").text(data[i][5]);
             $("#dep").text(data[i][6]);
-            $("#kode").text(data[i][7]);
-            $("#grade").text("("+data[i][11]+")");
-            $("#namaGrade").text(data[i][12]);
-            $("#jabatan").text(data[i][13]);
-            $("#statKaryawan").text(data[i][10]);
-            $("#tglMasuk").text(data[i][8]);
-            $("#hp").text(data[i][18]);
-            $("#rek").text(data[i][20]);
-            $("#ktp").text(data[i][19]);
-            $("#npwp").text(data[i][24]);
-            $("#bpjstk").text(data[i][21]);
-            $("#bpjskes").text(data[i][23]);
-            $("#jp").text(data[i][22]);
+            $("#sec").text(data[i][7]);
+            $("#kode").text(data[i][8]);
+            $("#grade").text("("+data[i][12]+")");
+            $("#namaGrade").text(data[i][11]);
+            $("#jabatan").text(data[i][14]);
+            $("#statKaryawan").text(data[i][11]);
+            $("#tglMasuk").text(data[i][9]);
+            $("#hp").text(data[i][19]);
+            $("#rek").text(data[i][21]);
+            $("#ktp").text(data[i][20]);
+            $("#npwp").text(data[i][25]);
+            $("#bpjstk").text(data[i][22]);
+            $("#bpjskes").text(data[i][24]);
+            $("#jp").text(data[i][23]);
 
-            if (data[i][25] == "Aktif")
+            if (data[i][26] == "Aktif")
             {
-              $("#status").empty().append('<small class="label bg-green">'+data[i][25]+'</small>');
+              $("#status").empty().append('<small class="label bg-green">'+data[i][26]+'</small>');
             }
             else
             {
-              $("#status").empty().append('<small class="label bg-red">'+data[i][25]+'</small>');
+              $("#status").empty().append('<small class="label bg-red">'+data[i][26]+'</small>');
             }
 
-            var id_dev = data[i][26];
-            var id_dep = data[i][27];
-            var id_sec = data[i][28];
-            var id_sub_sec = data[i][29];
+            var id_dev = data[i][27];
+            var id_dep = data[i][28];
+            var id_sec = data[i][29];
+            var id_sub_sec = data[i][30];
 
             //----------------- AJAX DEPARTEMEN -----------
             $.ajax({

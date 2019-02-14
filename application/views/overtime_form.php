@@ -49,8 +49,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   $ids = 1;
                 
                 $nod = sprintf('%04u', $ids);
+                $kode = $dt.$nod;
                 ?>
-                <input type="text" name="no" placeholder="nomor dokumen" class="form-control" id="no_doc" value="<?php echo $dt; echo $nod ?>" readonly>
+                <input type="text" name="no" placeholder="nomor dokumen" class="form-control" id="no_doc" value="<?php echo $kode ?>" readonly>
 
                 <div class="row">
                   <div class="col-md-3">
@@ -70,7 +71,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                   <div class="col-md-3">
                     <p>Jam</p>
-                    <input type="text" name="jamF" placeholder="Jam" class="form-control" id="jamF" value="0">
+                    <p id="txtJam"></p>
+                    <input type="hidden" name="jamF" placeholder="Jam" class="form-control" id="jamF" value="0">
                   </div>
                 </div>
 
@@ -92,7 +94,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                   <div class="col-md-4 text-center">
                     <div class="checkbox">
-                      <label><input type='checkbox' id='makanF' name="makan">Makan</label>
+                      <label><input type='checkbox' id='makanF' name="makan" value="1">Makan</label>
                     </div>
                   </div>
 
@@ -142,7 +144,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </div>
                 <!-- /.input group -->
               </div>
-              <button id="reset" class="btn btn-default pull-right" onclick="reset()"><i class="fa fa-refresh"></i> Refresh</button>
+              <button id="reset" class="btn btn-danger pull-right" onclick="reset()"><i class="fa fa-refresh"></i> Refresh</button>
             </div>
           </div>
         </div>
@@ -151,34 +153,34 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <div class="box-header">
             <h3 class="box-title"><i class="fa fa-group"></i> Peserta</h3>
             <div class="pull-right">
-              <a id="print" class="btn btn-primary" href="<?php echo base_url('ot/print_preview'); ?>" target="_blank"><i class="fa fa-print"></i> Print</a>&nbsp&nbsp&nbsp
+              <a id="print" class="btn btn-primary" style="display: none;" data-toggle="tooltip" title="Print" href="<?php echo base_url('ot/print_preview/'.$kode); ?>" target="_blank"><i class="fa fa-print"></i> Print</a>&nbsp&nbsp&nbsp
               <button id="submit" class="btn btn-success" onclick="submit1()"><i class="fa fa-check"></i> Simpan</button>
             </div>
           </div>
           
-            <input type="hidden" name="nodoc2" id="nodoc2" value="<?php echo $dt; echo $nod ?>">
-            <div class="box-body">
-              <div class="col-md-12">
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th width="17%">Nik</th>
-                      <th width="26%">Nama</th>
-                      <th width="8%">Dari</th>
-                      <th width="8%">Sampai</th>
-                      <th width="8%">Jam</th>
-                      <th width="8%">Transport</th>
-                      <th width="5%">Makan</th>
-                      <th>Ext-Food</th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                </table>
-              </div>
-              <div id="peserta">
-
-              </div>
+          <input type="hidden" name="nodoc2" id="nodoc2" value="<?php echo $dt; echo $nod ?>">
+          <div class="box-body">
+            <div class="col-md-12">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th width="17%">Nik</th>
+                    <th width="26%">Nama</th>
+                    <th width="8%">Dari</th>
+                    <th width="8%">Sampai</th>
+                    <th width="8%">Jam</th>
+                    <th width="8%">Transport</th>
+                    <th width="5%">Makan</th>
+                    <th>Ext-Food</th>
+                    <th></th>
+                  </tr>
+                </thead>
+              </table>
             </div>
+            <div id="peserta">
+
+            </div>
+          </div>
           
         </div>
       </div>
@@ -203,6 +205,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     var jam = document.getElementById('jamF');
     var trans = document.getElementById('tranF');
     var nikS = document.getElementById('nikF');
+    var txtJam = document.getElementById('txtJam');
 
     $(document).ready(function() {
 
@@ -229,10 +232,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
     });
 
     function appendRow() {
-      if ($('#no_doc').val() == ""){
+      if ($('#no_doc').val() == "" || $('#datepicker').val() == "" || $('#kep').val() == "" || $('#cat').val() == "" || $('#nikF').val() == "" || $('#dep').find(':selected').prop('disabled') == true){
         openDangerGritter();
         return false;
       }
+
       var d = dari.value;
       var s = sampai.value;
       var j = jam.value;
@@ -303,36 +307,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
     }
 
-    // function cloneRow() {
-    //   var row = document.getElementById("row0"); // find row to copy
-    //   var table = document.getElementById("tableToModify"); // find table to append to
-    //   var clone = row.cloneNode(true); // copy children too
-    //   clone.id = "row"+no; // change id or other attributes/contents
-
-    //   // var nik = $(this).find('#nik');
-    //   // var nama = $(this).find('#nama');
-    //   // var dari = $(this).find('#dari');
-    //   // var sampai = $(this).find('#sampai');
-    //   // var jam = $(this).find('#jam');
-    //   // var trans = $(this).find('#trans');
-    //   // var makan = $(this).find('#makan');
-    //   // var exfood = $(this).find('#exfood');
-
-    //   // nik.eq(0).attr('id', 'nik' + no);
-    //   // nama.eq(0).attr('id', 'nama' + no);
-    //   // dari.eq(0).attr('id', 'dari' + no);
-
-    //   table.appendChild(clone); // add new row to end of table
-
-    //   no+=1;
-    // }
-
-    // function deleteRow() {
-    //   no-=1;
-    //   var id = "#row"+no;
-    //   $(id).remove();
-    // }
-
     function deleteRow(elem) {
       $(elem).parent('div').parent('div').remove();      
     }
@@ -394,9 +368,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
     //alert('sum of above time= '+hour+':'+minute);
     $('#jamF').val(hour);
+    $('#txtJam').text(hour+" Jam");
   }
 
   function submit1() {
+    if ($('#nik1').length == 0) {
+      openDangerGritter();
+      return false;
+    }
     var nodoc = document.getElementById('no_doc').value;
     var tgl = document.getElementById('datepicker').value;
     var dep = document.getElementById('dep').value;
@@ -426,8 +405,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
           var sampaiS = document.getElementById('sampai'+i).value;
           var jamS = document.getElementById('jam'+i).value;
           var transS = document.getElementById('trans'+i).value;
-          var makanS = document.getElementById('makan'+i).value;
-          var exfoodS = document.getElementById('exfood'+i).value;
+          
+          if ($('#makan'+i).is(':checked'))
+            makanS="1";
+          else
+            makanS="0";
+
+          if ($('#exfood'+i).is(':checked'))
+            exfoodS="1";
+          else
+            exfoodS="0";
 
           $.ajax({
             type: 'POST',
@@ -444,6 +431,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
             },
             success: function(data){
               openSuccessGritter();
+              $('#submit').css("display", "none");
+              $('#print').css("display", "block");
             }
           });
         }

@@ -111,12 +111,12 @@
           <div class="modal-dialog modal-lg">
             <div class="modal-content">
               <div class="modal-header">
-                January 2019
+                <p>January 2019</p>
               </div>
               <div class="modal-body">
                 <div class="row">
                   <div class="col-md-12">
-                    
+
                   </div>
                 </div>
               </div>
@@ -170,7 +170,7 @@
         },
         "columnDefs": [
         {
-          "targets": [0,1,2,3,4,5,6], //first column / numbering column
+          "targets": [0,1,2,3,4,5,6,7], //first column / numbering column
           "orderable": false,//set not orderable
         },
         {
@@ -201,6 +201,14 @@
     function openModal() {
       $("#myModal").modal('show');
     }
-  </script>
+
+    $('#detail').click(function(e) {
+     var tr = $(this).closest('tr');    
+   //get the real row index, even if the table is sorted 
+   var index = tabel.fnGetPosition(tr[0]);
+   //alert the content of the hidden first column 
+   alert(tabel.fnGetData(index)[0]);
+ });
+</script>
 </body>
 </html>

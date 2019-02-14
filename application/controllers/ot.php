@@ -5,6 +5,7 @@ class Ot extends CI_Controller {
 	function __construct(){
 		parent::__construct();
 		$this->load->model('over_model');
+		$this->load->library('ciqrcode');
 	}
 
 	public function ot_submit()
@@ -15,6 +16,13 @@ class Ot extends CI_Controller {
 		$sec = $_POST['sec'];
 		$kep = $_POST['kep'];
 		$cat = $_POST['cat'];
+
+		$params['data'] = $no_doc;
+		$params['level'] = 'H';
+		$params['size'] = 10;
+		$params['savename'] = 'app/qr_lembur/'.$no_doc.'.png';
+		$this->ciqrcode->generate($params);
+
 		$this->over_model->save_master($no_doc, $tgl, $dep, $sec, $kep, $cat);
 	}
 
@@ -27,18 +35,8 @@ class Ot extends CI_Controller {
 		$sampai = $_POST['sampai'.$i];
 		$jam = $_POST['jam'.$i];
 		$trans = $_POST['trans'.$i];
-
-		if (isset($_POST['makan'.$i])) {
-			$makan = 1;
-		}
-		else
-			$makan = 0;
-
-		if (isset($_POST['exfood'.$i])) {
-			$exfood = 1;
-		}
-		else
-			$exfood = 0;
+		$makan = $_POST['makan'.$i];
+		$exfood = $_POST['exfood'.$i];
 
 		$this->over_model->save_member($no_doc, $nik, $dari, $sampai, $jam, $trans, $makan, $exfood);
 		
@@ -132,9 +130,13 @@ class Ot extends CI_Controller {
 		echo json_encode($output);
 	}
 
-	public function print_preview()
+
+	public function print_preview($id)
 	{
-		$this->load->view('print_ot');
+		$data['list'] = $this->over_model->get_over_by_id($id);
+		$data['list_anggota'] = $this->over_model->get_member_id($id);
+
+		$this->load->view('print_ot',$data);
 	}
 }
 ?>

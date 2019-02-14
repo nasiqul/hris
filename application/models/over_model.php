@@ -146,6 +146,17 @@ class Over_model extends CI_Model {
         return $query->result();
     }
 
+    public function get_member_id($id)
+    {
+        $this->db->select("o.id as id_over, tanggal, departemen, section, keperluan, catatan, om.*, k.namaKaryawan");
+        $this->db->from('over_time o');
+        $this->db->join("over_time_member om","o.id = om.id_ot");
+        $this->db->join("karyawan k","om.nik = k.nik");
+        $this->db->where("o.id",$id);
+        $query = $this->db->get();
+        return $query->result();
+    }
+
     private function _get_datatables_query2($id)
     {
         $this->db->select("o.id as id_over, tanggal, departemen, section, keperluan, catatan, om.*, k.namaKaryawan");

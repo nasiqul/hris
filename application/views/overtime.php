@@ -102,7 +102,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <tr>
                           <td colspan="4"><b>B = Bangil, P = Pasuruan</b></td>
                           <td><c class="pull-right">Total :</c></td>
-                          <td class="text-center"><b>[ 2 ]</b></td>
+                          <td class="text-center"><b id="jml">[ 2 ]</b></td>
                           <td>Jam</td>
                         </tr>
                       </tfoot>
@@ -114,7 +114,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary"><i class="fa fa-print"></i> Print</button>
+                <button class="btn btn-primary" onclick="tombol_print()"><i class="fa fa-print"></i> Print</button>
               </div>
             </div>
             <!-- /.modal-content -->
@@ -205,8 +205,19 @@ scratch. This page gets rid of all links and provides the needed markup only.
         }]
       })
 
+          var z = tabel.column(5).data().sum();
+
+          $("#jml").text("["+z+"]");
         }
       });
+    }
+
+    function tombol_print() {
+      var str = $("#modal-title").text();
+      var s = str.split(" ");
+      var url = "<?php echo base_url('ot/print_preview/'); ?>"+s[2];
+
+      window.open(url,'_blank');
     }
   </script>
 

@@ -46,7 +46,7 @@ class Client extends CI_Controller {
 			else
 				$row[] = "<i class='fa fa-check'></i>";
 			$row[] = "-";
-			$row[] = "<button class='btn btn-info btn-xs' onclick='openModal()'>Detail</button>";
+			$row[] = "<button class='btn btn-info btn-xs' id='detail'>Detail</button>";
 
 			$data[] = $row;
 		}
