@@ -68,14 +68,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
           ?>
 
           <div class="alert alert-warning alert-dismissible" id="notif" onclick="check()" style="display: none; cursor: pointer;">
-                <h4><i class="icon fa fa-warning"></i> Data Hari ini belum diupload!</h4>
-              </div>
+            <h4><i class="icon fa fa-warning"></i> Data Hari ini belum diupload!</h4>
+          </div>
 
           <!-- Custom Tabs -->
           <div class="nav-tabs-custom">
             <ul class="nav nav-tabs">
               <li class="active"><a href="#tab_1" data-toggle="tab">Stat By Shift</a></li>
-              <li><a href="#tab_2" data-toggle="tab">Stat Persentase <span>(%)</span></a></li>
+              <!-- <li><a href="#tab_2" data-toggle="tab">Stat Persentase <span>(%)</span></a></li> -->
 
               <form action="" method="post" id="tglF">
                 <li class="pull-right"><input type="text" class="form-control text-muted" placeholder="Select date" id="datepicker" onchange="postTgl()" name="txtTgl">
@@ -98,7 +98,43 @@ scratch. This page gets rid of all links and provides the needed markup only.
           </div>
           <!-- nav-tabs-custom -->
         </div>
-        <!-- /.modal-dialog -->
+        
+        <div class="modal fade" id="myModal">
+            <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 style="float: right;" id="modal-title"></h4>
+                  <h4 class="modal-title"><b>PT. YAMAHA MUSICAL PRODUCT INDONESIA</b></h4>
+                </div>
+                <div class="modal-body">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <table id="example2" class="table table-striped table-bordered" style="width: 100%;"> 
+                        <thead>
+                          <tr>
+                            <th>Tanggal</th>
+                            <th>NIK</th>
+                            <th>Nama karyawan</th>
+                            <th>Masuk</th>
+                            <th>Keluar</th>
+                            <th>Shift</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-danger pull-right" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                </div>
+              </div>
+              <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+          </div>
+
         <!-- </div> --> 
 
       </section>
@@ -276,29 +312,32 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 });
     }
 
-
     function ShowData(tgl, by){
-      var t = tgl.split("-");
-      var tanggal = new Date(t[2], t[1]-1, t[0]);
-      var shift = by;
-      var day = ("0"+tanggal.getDate()).slice(-2);
-      var month = ("0"+(tanggal.getMonth()+1)).slice(-2);
-      var year = tanggal.getFullYear();
-      var tanggal2 = [day,month,year].join("/");
+      tabel = $('#example2').DataTable();
+      tabel.destroy();
 
-      $.ajax({
-
-        type: "POST", 
-        url : "<?php echo base_url('home/presensi/')?>" ,       
-        data: {
-          tanggal:tanggal2,
-          nik:'',
-          nama:'',
-          shift:shift,
+      $('#myModal').modal('show');
+      $('#example2').DataTable({
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        "processing": true,
+        "serverSide": true,
+        "bInfo": false,
+        "order": [],
+        "ajax": {
+          "url": "<?php echo base_url('home/ajax_presensi_cari_g/')?>",            
+          "type": "POST",
+          "data": {
+            tanggal:tgl,
+            nik:'',
+            nama:'',
+            shift:by,
+          }
         },
-        success: function(data) {
-          window.location.href = "<?php echo base_url('home/presensi/')?>";
-        }
+        "columnDefs": [
+        {
+          "targets": [ 0,1,2,3,4,5 ], //first column / numbering column
+          "orderable": false, //set not orderable
+        }]
       });
     }
 

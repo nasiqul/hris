@@ -281,7 +281,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               t3="selected";
             }
 
-            var newdiv1 = $( "<div class='col-md-12' style='margin-bottom: 5px'>"+
+            var newdiv1 = $( "<div class='col-md-12' style='margin-bottom: 5px' id='"+no+"'>"+
               "<div class='col-md-2'><input type='text' id='nik"+no+"' value='"+nik+"' class='form-control' readonly></div>"+
               "<div class='col-md-3'><p id='nama"+no+"'>"+nama+"</p></div>"+
               "<div class='col-md-1'><input type='text' class='form-control timepicker' id='dari"+no+"' value='"+d+"'></div>"+
@@ -308,7 +308,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     }
 
     function deleteRow(elem) {
-      $(elem).parent('div').parent('div').remove();      
+      $(elem).parent('div').parent('div').remove(); 
     }
 
     function showSec() {

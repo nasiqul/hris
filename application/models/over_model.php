@@ -36,13 +36,15 @@ class Over_model extends CI_Model {
     	// ) b on a.tanggal = b.tanggalpresensi and a.nik1 = b.nik) c");
     	// $this->db->join("karyawan d","c.nik = d.nik","left");
 
-        $this->db->select('o.id, tanggal, d.nama as namaDep, s.nama as namaSec, keperluan, catatan');
+        $this->db->select('o.id, tanggal, d.nama as namaDep, s.nama as namaSec, keperluan, catatan, SUM(om.jam) as jam');
         $this->db->from("over_time o");
         $this->db->join("departemen d","o.departemen = d.id",'left');
         $this->db->join("section s","o.section = s.id",'left');
+        $this->db->join("over_time_member om","o.id = om.id_ot");
+        $this->db->group_by("o.id");
 
 
-    	$i = 0;
+        $i = 0;
 
         foreach ($this->column_search as $item) // loop column 
         {
@@ -121,7 +123,7 @@ class Over_model extends CI_Model {
 
     public function count_all()
     {
-        $this->db->from('over_time_member');
+        $this->db->from('over_time');
         return $this->db->count_all_results();
     }
 
@@ -211,5 +213,91 @@ class Over_model extends CI_Model {
         $query = $this->db->get();
         return $query->result();
     }
+
+    public function by_bagian(){
+        $q = "SELECT nama, section, tanggal, SUM(om.jam) AS jml from over_time o 
+        JOIN over_time_member om ON o.id = om.id_ot
+        LEFT JOIN departemen d ON o.departemen = d.id
+        where MONTH(o.tanggal) = MONTH(CURRENT_DATE()) GROUP BY o.departemen ORDER BY jml DESC";
+        $query = $this->db->query($q);
+
+        if($query->num_rows() > 0){
+            foreach($query->result() as $data){
+                $hasil[] = $data;
+            }
+            return $hasil;
+        }
+    }
+
+    public function by_bagian_cari($tgl){
+        $q = "SELECT nama, section, tanggal, SUM(om.jam) AS jml from over_time o 
+        LEFT JOIN departemen d ON o.departemen = d.id
+        JOIN over_time_member om ON o.id = om.id_ot
+        where MONTH(o.tanggal) = MONTH( STR_TO_DATE('".$tgl."', '%d-%m-%Y')) GROUP BY o.departemen ORDER BY jml DESC";
+        $query = $this->db->query($q);
+
+        if($query->num_rows() > 0){
+            foreach($query->result() as $data){
+                $hasil[] = $data;
+            }
+            return $hasil;
+        }
+    }
+
+
+     public function get_over_by_bagian($tgl, $dep)
+    {
+        $this->_get_datatables_query3($tgl, $dep);
+        if($_POST['length'] != -1)
+            $this->db->limit($_POST['length'], $_POST['start']);
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+    private function _get_datatables_query3($tgl, $dep)
+    {
+        $this->db->select("nama, tanggal, k.namaKaryawan, om.jam, o.keperluan");
+        $this->db->from('over_time o');
+        $this->db->join("departemen d","o.departemen = d.id", 'LEFT');
+        $this->db->join("over_time_member om","o.id = om.id_ot");
+        $this->db->join("karyawan k","om.nik = k.nik");
+        $this->db->where("d.nama",$dep);
+        $this->db->where("MONTH(o.tanggal) = MONTH(STR_TO_DATE('".$tgl."', '%d-%m-%Y'))");
+
+
+        $i = 0;
+
+        foreach ($this->column_search as $item) // loop column 
+        {
+            if($_POST['search']['value']) // if datatable send POST for search
+            {
+
+                if($i===0) // first loop
+                {
+                    $this->db->group_start(); // open bracket. query Where with OR clause better with bracket. because maybe can combine with other WHERE with AND.
+                    $this->db->like($item, $_POST['search']['value']);
+                }
+                else
+                {
+                    $this->db->or_like($item, $_POST['search']['value']);
+                }
+
+                if(count($this->column_search) - 1 == $i) //last loop
+                    $this->db->group_end(); //close bracket
+                }
+                $i++;
+            }
+
+        if(isset($_POST['order'])) // here order processing
+        {
+            $this->db->order_by($this->column_order[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
+        } 
+        else if(isset($this->order))
+        {
+            $order = $this->order;
+            $this->db->order_by(key($order), $order[key($order)]);
+        }
+    }
+
 }
 ?>

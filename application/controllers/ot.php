@@ -5,6 +5,7 @@ class Ot extends CI_Controller {
 	function __construct(){
 		parent::__construct();
 		$this->load->model('over_model');
+		$this->load->model('cari_over');
 		$this->load->library('ciqrcode');
 	}
 
@@ -44,7 +45,9 @@ class Ot extends CI_Controller {
 
 	public function ajax_ot()
 	{
+		
 		$list = $this->over_model->get_data_ot();
+
 		$data = array();
 		foreach ($list as $key) {
 			$row = array();
@@ -52,7 +55,8 @@ class Ot extends CI_Controller {
 			$row[] = date("d-m-Y",strtotime($key->tanggal));
 			$row[] = $key->namaDep;
 			$row[] = $key->namaSec;
-			$row[] = $key->keperluan;
+			$row[] = "<p class='kep'>".$key->keperluan."</p>";
+			$row[] = $key->jam;
 
 			$row[] = "<button class='btn btn-primary' onclick='detail_spl(".$key->id.")'>Detail</button>";
 
@@ -120,6 +124,68 @@ class Ot extends CI_Controller {
 
 		$tot = $this->over_model->count_all();
 		$filter = $this->over_model->count_filtered();
+
+		$output = array(
+			"draw" => $_POST['draw'],
+			"data" => $data
+		);
+
+            //output to json format
+		echo json_encode($output);
+	}
+
+	public function ajax_ot_graph()
+	{
+		if (isset($_POST['sortBulan'])) 
+		{
+			$tgl = $_POST['sortBulan'];
+
+			$over = $this->over_model->by_bagian_cari('01-'.$tgl);
+		}
+		else {
+			$over = $this->over_model->by_bagian();
+		}
+
+		$arr = array();
+		$result = array();
+		if(!empty($over)) {
+			foreach($over as $r2){
+				$tgl = date('M Y', strtotime($r2->tanggal));
+
+				$arr['name'] = $r2->nama;
+				$arr['y'] = (float) $r2->jml;
+				$arr['tgl'] = $tgl;
+
+				$result[] = $arr;
+			}
+		}
+		else
+			$result[] = json_decode("{}");
+
+		echo json_encode($result);
+	}
+
+
+	public function ajax_modal_g()
+	{
+		$tgl = $_POST['tanggal'];
+		$time = strtotime('01 '.$tgl);
+		$newformat = date('d-m-Y',$time);
+		
+		$dep = $_POST['departemen'];
+
+		$list = $this->over_model->get_over_by_bagian($newformat, $dep);
+		$data = array();
+		foreach ($list as $key) {
+			$row = array();
+			$row[] = $key->nama;
+			$row[] = date("d-m-Y",strtotime($key->tanggal));
+			$row[] = $key->namaKaryawan;
+			$row[] = $key->jam;
+			$row[] = $key->keperluan;
+
+			$data[] = $row;
+		}
 
 		$output = array(
 			"draw" => $_POST['draw'],

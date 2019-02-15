@@ -40,8 +40,18 @@
             <li><a href="<?php echo base_url('home/absensi_graph'); ?>"><i class="fa fa-bar-chart"></i> Graph</a></li>
             <li><a href="<?php echo base_url('home/absen'); ?>"><i class="fa fa-edit"></i> <span>Absent Data</span></a>
             </ul>
-          </li>
-          <li><a href="<?php echo base_url('home/ot'); ?>"><i class="fa fa-hourglass-2"></i> <span>Overtime</span></a></li>
+        </li>
+        <li class="treeview">
+        <a href="#"><i class="fa fa-eye"></i> <span>Overtime</span>
+          <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+          </span>
+        </a>
+        <ul class="treeview-menu">
+          <li><a href="<?php echo base_url('home/ot_graph'); ?>"><i class="fa fa-bar-chart"></i> Graph</a></li>
+          <li><a href="<?php echo base_url('home/ot'); ?>"><i class="fa fa-male"></i> <span>Overtime Data</span></a>
+          </ul>
+        </li>
           <li><a href="<?php echo base_url('home/tanya'); ?>"><i class="fa fa-comments-o"></i> <span>Q & A List</span></a></li>
           <li class="treeview">
             <a href="#"><i class="fa fa-link"></i> <span>Multilevel</span>

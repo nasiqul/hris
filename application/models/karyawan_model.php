@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Karyawan_model extends CI_Model {
 	var $column_order = array('k.nik','namaKaryawan','dep/subSec','sec/Group','tanggalMasuk','statusKaryawan'); //set column field database for datatable orderable
-    var $column_search = array('k.nik','namaKaryawan','dep/subSec','sec/Group','tanggalMasuk','statusKaryawan','status'); //set column field database for datatable searchable 
+    var $column_search = array('k.nik','namaKaryawan','dep/subSec','sec/Group','DATE_FORMAT(tanggalMasuk, "%d %M %Y")','statusKaryawan','status'); //set column field database for datatable searchable 
     var $order = array('tanggalMasuk' => 'asc', 'nik' => 'asc'); // default order 
 
     public function __construct()
@@ -71,7 +71,7 @@ class Karyawan_model extends CI_Model {
 
     private function _get_datatables_query2()
     {
-        $this->db->select("k.nik, k.namaKaryawan, dv.nama as namadev, dp.nama as namadep, k.statusKaryawan, k.status");
+        $this->db->select("k.nik, k.namaKaryawan, dv.nama as namadev, dp.nama as namadep, k.tanggalMasuk, k.statusKaryawan, k.status");
         $this->db->from('karyawan k');
         $this->db->join('posisi p','k.nik = p.nik', 'left');
         $this->db->join('devisi dv','p.id_devisi = dv.id', 'left');

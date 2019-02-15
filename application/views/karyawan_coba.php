@@ -41,7 +41,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <th>Name</th>
                     <th>Devisi</th>
                     <th>Departemen</th>
-                    <!-- <th>Entry Date</th> -->
+                    <th>Entry Date</th>
                     <th>Employee Status</th>
                     <th>Status</th>
                     
@@ -257,10 +257,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
         { "data": 2 },
         { "data": 3 },
         { "data": 4 },
-        { "data": 5 }
+        { "data": 5 },
+        { "data": 6 }
         ],
         "columnDefs": [
-        { "orderable": false, "targets": 5 }    ]
+        { "orderable": false, "targets": 6 }    ]
       })
     })
 

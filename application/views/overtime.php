@@ -6,7 +6,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <html>
 <!-- HEADER -->
 <?php require_once(APPPATH.'views/header/head.php'); ?>
-
 <body class="hold-transition skin-purple sidebar-mini">
   <div class="wrapper">
 
@@ -41,7 +40,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <th>Departemen</th>
                     <th>Section</th>
                     <th>Keperluan</th>
-                    <!-- <th>Catatan</th> -->
+                    <th>Jam</th>
                     <!-- <th>Lembur (jam)</th> -->
                     <th>Aksi</th>
                   </tr>
@@ -144,11 +143,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
           "type": "POST"
         },
         "columnDefs": [
-            {
-          "targets": [ 5 ], //first column / numbering column
+        {
+          "targets": [ 5,6 ], //first column / numbering column
           "orderable": false, //set not orderable
         }]
       })
+
     })
 
     function detail_spl(id) {
@@ -200,9 +200,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
             ],
             "columnDefs": [
             {
-          "targets": [ 5,6,7,8 ], //first column / numbering column
-          "orderable": false, //set not orderable
-        }]
+              "targets": [ 5,6,7,8 ], //first column / numbering column
+              "orderable": false, //set not orderable
+          }]
       })
 
           var z = tabel.column(5).data().sum();

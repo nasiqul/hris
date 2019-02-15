@@ -69,7 +69,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       $str = '\'Presence in '.$bln.'\'';
 
       ?>
-      <div class="box">
+      <div class="box box-solid">
         <div class="box-body">
          <form action="" method="post" id="dateFilter">
           <label>Date : </label>
@@ -100,7 +100,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       $('#datepicker').datepicker({
         autoclose: true,
         format: "mm-yyyy",
-        viewMode: "months", 
+        viewMode: "months",
         minViewMode: "months"
       })
     });

@@ -73,7 +73,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <!-- /.box-body -->
               <div class="box-footer">
                 <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i> <span>Search</span></button>
-                <a class="btn btn-warning" id="reset" href="<?php echo base_url('home/sess_destroy2') ?>" >Reset</a>
+                <a class="btn btn-warning" id="reset" href="<?php echo base_url('home/sess_destroy2') ?>" ><i class="fa fa-refresh"></i> Reset</a>
 
               </div>
             </form>

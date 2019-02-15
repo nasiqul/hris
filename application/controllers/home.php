@@ -76,6 +76,11 @@ class Home extends CI_Controller {
         $this->load->view("overtime_form",$data);
     }
 
+    public function ot_graph()
+    {
+        $this->load->view("ot_graph");
+    }
+
     public function karyawan_graph()
     {
         $data['status'] = $this->karyawan_model->by_status();
@@ -127,6 +132,15 @@ class Home extends CI_Controller {
 
     public function ot()
     {
+        if (isset($_POST['tanggal']) || isset($_POST['departemen'])) 
+        {
+            $newdata = array(
+                'tanggal3'  => $_POST['tanggal'],
+                'dep2'     => $_POST['departemen']
+            );
+
+            $this->session->set_userdata($newdata);
+        }
         $this->load->view('overtime');
     }
 
@@ -208,6 +222,43 @@ class Home extends CI_Controller {
         echo json_encode($output);
     }
 
+    public function ajax_presensi_cari_g()
+    {
+
+        $tgl = date('d/m/Y', strtotime($_POST['tanggal']));
+        $nik = $_POST['nik'];
+        $nama = $_POST['nama'];
+        $shift = $_POST['shift'];
+
+        $list = $this->cari_model->get_data_presensi_cari($tgl, $nik, $nama, $shift);
+
+        $data = array();
+        foreach ($list as $key) {
+            $row = array();
+            $row[] = date('j M Y', strtotime($key->tanggal));
+            $row[] = $key->nik;
+            $row[] = $key->namaKaryawan;
+            if ($key->masuk == 0) 
+                $row[] = '';
+            else
+                $row[] = $key->masuk;
+            if ($key->keluar == 0) 
+                $row[] = '';
+            else
+                $row[] = $key->keluar;
+            $row[] = $key->shift;
+
+            $data[] = $row;
+        }
+
+        $output = array(
+            "draw" => $_POST['draw'],
+            "data" => $data,
+        );
+            //output to json format
+        echo json_encode($output);
+    }
+
     public function ajax_absen_g()
     {
 
@@ -280,7 +331,37 @@ public function ajax_absensi()
     );
             //output to json format
     echo json_encode($output);
-}    
+}
+
+
+public function ajax_absensi_cari_g()
+{
+    $tgl = date('d/m/Y', strtotime($_POST['tanggal']));
+    $nik = $_POST['nik'];
+    $nama = $_POST['nama'];
+    $absen = $_POST['absensi'];
+
+    $list = $this->cari_absen_model->get_data_absensi_cari($tgl, $nik, $nama, $absen);
+
+    $data = array();
+    foreach ($list as $key) {
+        $row = array();
+        $row[] = date('j M Y', strtotime($key->tanggal));
+        $row[] = $key->nik;
+        $row[] = $key->namaKaryawan;
+        $row[] = $key->bagian;
+        $row[] = $key->shift;
+
+        $data[] = $row;
+    }
+
+    $output = array(
+        "draw" => $_POST['draw'],
+        "data" => $data,
+    );
+            //output to json format
+    echo json_encode($output);
+}
 
 public function ajax_emp()
 {
@@ -399,9 +480,9 @@ public function ajax_presensi_shift()
       }
   }
   else
-   $result[] = json_decode ("{}");
+     $result[] = json_decode ("{}");
 
-echo json_encode($result);
+ echo json_encode($result);
 }
 
 public function ajax_emp_keluarga()
@@ -605,6 +686,7 @@ public function ajax_emp_coba()
         $row[] = "<a style='cursor: pointer' onclick='ShowModal(".$i.")' data-toggle='modal' data-id='".$key->nik."' id='tes".$i."'>".$key->namaKaryawan."</a>";
         $row[] = $key->namadev;
         $row[] = $key->namadep;
+        $row[] = date('d M Y', strtotime($key->tanggalMasuk));
         $row[] = $key->statusKaryawan;
         if ($key->status == "Aktif")
             $row[] = "<p class='text-center'><small class='label bg-green'>".$key->status." <i class='fa fa-check'></i> </small></p>";

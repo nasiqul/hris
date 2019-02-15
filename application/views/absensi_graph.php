@@ -29,7 +29,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <section class="content container-fluid">
         <div class="col-md-12">
           <!-- Custom Tabs -->
-          <div class="box">
+          <div class="box box-solid">
             <div class="box-body">
 
               <div class="alert alert-warning alert-dismissible" id="notif" onclick="check()" style="display: none; cursor: pointer;">
@@ -91,6 +91,41 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <!-- nav-tabs-custom -->
           <!-- </div> --> 
 
+          <div class="modal fade" id="myModal">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 style="float: right;" id="modal-title"></h4>
+                  <h4 class="modal-title"><b>PT. YAMAHA MUSICAL PRODUCT INDONESIA</b></h4>
+                </div>
+                <div class="modal-body">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <table id="example2" class="table table-striped table-bordered" style="width: 100%;"> 
+                        <thead>
+                          <tr>
+                            <th>Tanggal</th>
+                            <th>Nik</th>
+                            <th>Nama karyawan</th>
+                            <th>Bagian</th>
+                            <th>Absensi</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-danger pull-right" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                </div>
+              </div>
+              <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+          </div>
+
         </section>
         <!-- /.content -->
       </div>
@@ -148,12 +183,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               point: {
                 events: {
                   click: function () {
-
-                    var split2 = data[0].tgl.split("-");
-                    var split3 = [split2[1],split2[0],split2[2]].join("/");
-
-                    //ShowModal(split3, this.name);
-                    alert(s[0].tgl);
+                    ShowModal(s[0].tgl, this.name);
                   }
                 }
               },
@@ -228,7 +258,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             events: {
                               click: function () {
                                 ShowModal(s[0].tgl, this.name);
-                                // alert(s[0].tgl);
                               }
                             }
                           },
@@ -263,27 +292,35 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 
     function ShowModal(tgl, by){
-      var t = tgl.split("-");
-      var tanggal = new Date(t[2], t[1]-1, t[0]);
-      var absensi = by;
-      var day = ("0"+tanggal.getDate()).slice(-2);
-      var month = ("0"+(tanggal.getMonth()+1)).slice(-2);
-      var year = tanggal.getFullYear();
-      var tanggal2 = [day,month,year].join("/");
+      tabel = $('#example2').DataTable();
+      tabel.destroy();
 
-      $.ajax({
-
-        type: "POST", 
-        url : "<?php echo base_url('home/absen/')?>" ,       
-        data: {
-          tanggal:tanggal2,
-          nik:'',
-          nama:'',
-          absensi:absensi,
+      $('#myModal').modal('show');
+      $('#example2').DataTable({
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        "processing": true,
+        "serverSide": true,
+        "searching": false,
+        "bPaginate": false,
+        "bLengthChange": false,
+        "bFilter": false,
+        "bInfo": false,
+        "order": [],
+        "ajax": {
+          "url": "<?php echo base_url('home/ajax_absensi_cari_g/')?>",            
+          "type": "POST",
+          "data": {
+            tanggal:tgl,
+            nik:'',
+            nama:'',
+            absensi:by,
+          }
         },
-        success: function(data) {
-          window.location.href = "<?php echo base_url('home/absen/')?>";
-        }
+        "columnDefs": [
+        {
+          "targets": [ 0,1,2,3,4 ], //first column / numbering column
+          "orderable": false, //set not orderable
+        }]
       });
     }
 
