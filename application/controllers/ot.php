@@ -217,5 +217,15 @@ class Ot extends CI_Controller {
 
 		$this->load->view('print_ot',$data);
 	}
+
+	public function cek_nik()
+	{
+		$nik = $_POST['nik'];
+		$dep = $_POST['dep'];
+
+		$list = $this->over_model->cek_id($nik, $dep);
+
+		echo json_encode($list);
+	}
 }
 ?>

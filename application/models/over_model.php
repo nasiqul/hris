@@ -150,10 +150,11 @@ class Over_model extends CI_Model {
 
     public function get_member_id($id)
     {
-        $this->db->select("o.id as id_over, tanggal, departemen, section, keperluan, catatan, om.*, k.namaKaryawan");
+        $this->db->select("o.id as id_over, tanggal, departemen, section, keperluan, catatan, om.*, k.namaKaryawan, cc.budget");
         $this->db->from('over_time o');
         $this->db->join("over_time_member om","o.id = om.id_ot");
         $this->db->join("karyawan k","om.nik = k.nik");
+        $this->db->join("cost_center_budget cc","cc.id_cc = k.costCenter");
         $this->db->where("o.id",$id);
         $query = $this->db->get();
         return $query->result();
@@ -297,6 +298,18 @@ class Over_model extends CI_Model {
             $order = $this->order;
             $this->db->order_by(key($order), $order[key($order)]);
         }
+    }
+
+    public function cek_id($nik, $dep)
+    {
+        $this->db->select("k.nik");
+        $this->db->from('karyawan k');
+        $this->db->join("posisi p","p.nik = k.nik");
+        $this->db->join("departemen d","p.id_dep = d.id");
+        $this->db->where("k.nik",$nik);
+        $this->db->where("p.id_dep",$dep);
+        $query = $this->db->get();
+        return $query->num_rows();
     }
 
 }

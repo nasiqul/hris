@@ -42,7 +42,7 @@
             </ul>
         </li>
         <li class="treeview">
-        <a href="#"><i class="fa fa-eye"></i> <span>Overtime</span>
+        <a href="#"><i class="fa fa-line-chart"></i> <span>Overtime</span>
           <span class="pull-right-container">
             <i class="fa fa-angle-left pull-right"></i>
           </span>

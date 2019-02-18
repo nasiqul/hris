@@ -179,7 +179,7 @@ class Home extends CI_Controller {
 
     public function ajax()
     {
-        if (isset($_SESSION['tanggal']) || isset($_SESSION['nik']) || isset($_SESSION['nama']) || isset($_SESSION['shift'])) 
+        if ((isset($_SESSION['tanggal']) && $_SESSION['tanggal'] != "") || (isset($_SESSION['nik']) && $_SESSION['nik'] != "") || (isset($_SESSION['nama']) && $_SESSION['nama'] != "") || (isset($_SESSION['shift']) && $_SESSION['shift'] != "")) 
         {
             $tgl = $this->session->userdata('tanggal');
             $nik = $this->session->userdata('nik');
@@ -635,13 +635,14 @@ public function get_presensi(){
 
 public function session_destroy()
 {
-    session_destroy();
+    $array_items = array('tanggal' , 'nik', 'nama', 'shift');
+    $this->session->unset_userdata($array_items);
     redirect('home/presensi');
 }
 
 public function sess_destroy2()
 {
-    $array_items = array('tanggal2' => "", 'nik2' => "", 'nama2' => "", 'shift2' => "");
+    $array_items = array('tanggal2' , 'nik2', 'nama2', 'shift2');
     $this->session->unset_userdata($array_items);
     redirect('home/absen');
 }
@@ -675,9 +676,25 @@ public function karyawan()
 public function ajax_emp_coba()
 {
 
-    $list = $this->karyawan_model->get_data_karyawan_coba();
-    $tot = $this->karyawan_model->count_all();
-    $filter = $this->karyawan_model->count_filtered();
+    if (isset($_SESSION['status']) || isset($_SESSION['grade']) || isset($_SESSION['dep']) || isset($_SESSION['pos'])) 
+    {
+        $status = $this->session->userdata('status');
+        $grade = $this->session->userdata('grade');
+        $dep = $this->session->userdata('dep');
+        $pos = $this->session->userdata('pos');
+        $list = $this->cari_karyawan_model->get_data_karyawan_cari($status,$grade,$dep,$pos);
+        $tot = $this->cari_karyawan_model->count_all();
+        $filter = $this->cari_karyawan_model->count_filtered($status,$grade,$dep,$pos);
+    }
+    elseif (isset($_SESSION['bulan'])) {
+        $bulan = $this->session->userdata('bulan');
+        $list = $this->karyawan_by_period_model->get_karyawan($bulan);
+    }
+    else {
+        $list = $this->karyawan_model->get_data_karyawan_coba();
+        $tot = $this->karyawan_model->count_all();
+        $filter = $this->karyawan_model->count_filtered();
+    }
 
     $data = array();
     $i = 1;

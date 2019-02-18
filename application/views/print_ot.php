@@ -85,12 +85,14 @@ p {
 	?>
 	<table width="100%" border="0" style="padding-right: 20px">
 		<tr>
-			<td width="85%" colspan="4"><b>PT. YAMAHA MUSICAL PRODUCT INDONESIA</b></td>
-			<td style="text-align: left;">NO : <?php echo $list[0]->id_over ?></td>
+			<td width="85%" colspan="5"><b>PT. YAMAHA MUSICAL PRODUCT INDONESIA</b></td>
 		</tr>
 		<tr>
 			<td colspan="4"><center><h2>FORM LEMBUR KARYAWAN</h2></center></td>
-			<td><img src="../../app/qr_lembur/<?php echo $list[0]->id_over ?>.png" width="70px"></td>
+			<td style="text-align: center;">
+				<img src="../../app/qr_lembur/<?php echo $list[0]->id_over ?>.png" width="70px"><br>
+				<?php echo $list[0]->id_over ?>
+			</td>
 		</tr>
 		<tr>
 			<td width="10%" style="padding: 5px 0  5px 20px">Hari</td>
@@ -110,7 +112,7 @@ p {
 			<td width="25%">-</td>
 		</tr>
 	</table>
-	<table width="98%" style="margin-top: 10px" id="anggota"  align="center">
+	<table width="98%" style="margin-top: 10px" id="anggota"  align="center" border="0">
 		<tr>
 			<th width="3%">No</th>
 			<th width="15%">NIK</th>
@@ -125,7 +127,7 @@ p {
 			<th width="6%">Revisi</th>
 			<th width="8%">TTD Atasan</th>
 		</tr>
-		<?php $no =1; $jml=0; foreach ($list_anggota as $key) { ?>
+		<?php $no=1; $jml=0; $total=0; foreach ($list_anggota as $key) { ?>
 			<tr>
 				<td><?php echo $no ?></td>
 				<td><?php echo $key->nik ?></td>
@@ -140,42 +142,48 @@ p {
 				<td><div></div></td>
 				<td><div></div></td>
 			</tr>
-			<?php $jml += (float) $key->jam; $no++; } ?>
-			<tr id="bottom">
-				<td colspan="3" style="text-align: left;">B = Bangil ; P = Pasuruan</td>
-				<td colspan="4" style="text-align: left;">Catatan :</td>
-				<td colspan="2" style="text-align: right;">Total = </td>
-				<td><div><?php echo $jml; ?></div></td>
-				<td>Jam</td>
-				<td></td>
-			</tr>
-			<tr>
-				<td colspan="3">
-					<table width="100%" id="tb-collapse">
-						<tr><td width="15%">B</td><td width="15%">P</td><td width="30%">Total Makan</td><td width="30%">Total E.Food</td></tr>
-						<tr><td>0</td><td>0</td><td>0</td><td>0</td></tr>
-					</table>
-				</td>
-				<td colspan="9"><div style="height: 100px; margin: 0 5px 0 5px; width: 100%;"><?php echo $list[0]->catatan ?></div></td>
-			</tr>
-			<tr>
-				<td colspan="3">
-					<table width="100%" id="tb-collapse" style="background-color: #dddddd">
-						<tr><td width="34%">TARGET</td><td width="33%">ACTUAL</td><td width="33%">DIFF</td></tr>
-						<tr><td height="20px"></td><td></td><td></td></tr>
-						<tr><td colspan="3" height="130px"></td></tr>
-					</table>
-				</td>
-				<td colspan="9">
-					<table width="100%" id="tb-collapse" style="margin-left: 5px; background-color: #dddddd">
-						<tr><td>Diusulkan,</td><td>Disetujui,</td><td>Diketahui,</td><td>Diterima,</td></tr>
-						<tr><td>Staff / Leader</td><td>Chief / Foreman</td><td>Dept. Manager</td><td>HR Dept.</td></tr>
-						<tr><td height="90px"></td><td></td><td></td><td></td></tr>
-						<tr><td style="text-align: left;">tgl. </td><td style="text-align: left;">tgl. </td><td style="text-align: left;">tgl. </td><td style="text-align: left;">tgl. </td></tr>
-					</table>
-				</td>
-			</tr>
-		</table>
+			<?php 
+			$jml += (float) $key->jam; 
+			$no++;
+			$total = $key->budget;
+		} ?>
+		<tr id="bottom">
+			<td colspan="3" style="text-align: left;">B = Bangil ; P = Pasuruan</td>
+			<td colspan="6" style="text-align: right;">Total = </td>
+			<td><div><?php echo $jml; ?></div></td>
+			<td>Jam</td>
+			<td></td>
+		</tr>
+		<tr><td colspan="3"></td><td>Catatan : </td></tr>
+		<tr>
+			<td colspan="3">
+				<table width="100%" id="tb-collapse">
+					<tr><td width="15%">B</td><td width="15%">P</td><td width="30%">Total Makan</td><td width="30%">Total E.Food</td></tr>
+					<tr><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+				</table>
+			</td>
+			<td colspan="9">
+				<div style="height: 80px; margin: 0 5px 0 5px; width: 100%;"><?php echo $list[0]->catatan ?></div>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="3">
+				<table width="100%" id="tb-collapse" style="background-color: #dddddd">
+					<tr><td width="34%">TARGET</td><td width="33%">ACTUAL</td><td width="33%">DIFF</td></tr>
+					<tr><td height="20px"><?php echo $total ?></td><td></td><td></td></tr>
+					<tr><td colspan="3" height="130px"></td></tr>
+				</table>
+			</td>
+			<td colspan="9">
+				<table width="100%" id="tb-collapse" style="margin-left: 5px; background-color: #dddddd">
+					<tr><td>Diusulkan,</td><td>Disetujui,</td><td>Diketahui,</td><td>Diterima,</td></tr>
+					<tr><td>Staff / Leader</td><td>Chief / Foreman</td><td>Dept. Manager</td><td>HR Dept.</td></tr>
+					<tr><td height="92px"></td><td></td><td></td><td></td></tr>
+					<tr><td style="text-align: left;">tgl. </td><td style="text-align: left;">tgl. </td><td style="text-align: left;">tgl. </td><td style="text-align: left;">tgl. </td></tr>
+				</table>
+			</td>
+		</tr>
+	</table>
 
-	</body>
-	</html>
+</body>
+</html>

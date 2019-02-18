@@ -23,23 +23,29 @@ class Cari_karyawan_model extends CI_Model {
 
 	private function _get_datatables_query($status, $grade, $dep, $pos)
     {
-        $this->db->select("pin, nik, costCenter, foto, namaKaryawan, dep/subSec as dep, sec/Group as group, kode, tanggalMasuk, jk, statusKaryawan, grade, namaGrade, jabatan, statusKeluarga, tanggalLahir, tempatLahir, alamat, hp, ktp, rekening, bpjstk, jp, bpjskes, npwp,status");
-        $this->db->from('karyawan');
+        $this->db->select("k.nik, k.namaKaryawan, dv.nama as namadev, dp.nama as namadep, k.tanggalMasuk, k.statusKaryawan, k.status");
+        $this->db->from('karyawan k');
+        $this->db->join('posisi p','k.nik = p.nik', 'left');
+        $this->db->join('devisi dv','p.id_devisi = dv.id', 'left');
+        $this->db->join('departemen dp','p.id_dep = dp.id', 'left');
+        $this->db->join('section sec','p.id_sec = sec.id', 'left');
+        $this->db->join('sub_section ssec','p.id_sub_sec = ssec.id', 'left');
+        $this->db->join('group1 gr','p.id_group = gr.id', 'left');
 
         if ($status) {
             $this->db->where("statusKaryawan", $status);
         }
 
         if ($grade) {
-            $this->db->where("grade", $grade);
+            $this->db->where("k.grade", $grade);
         }
 
         if ($dep) {
-            $this->db->where("kode", $dep);
+            $this->db->where("k.kode", $dep);
         }
 
         if ($pos) {
-            $this->db->where("jabatan", $pos);
+            $this->db->where("k.jabatan", $pos);
         }
  
         $i = 0;

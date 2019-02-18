@@ -199,6 +199,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <script type="text/javascript">
 
     var no = 1;
+    arrNik = [];
     var dari = document.getElementById('dariF');
     var sampai = document.getElementById('sampaiF');
 
@@ -232,7 +233,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     });
 
     function appendRow() {
-      if ($('#no_doc').val() == "" || $('#datepicker').val() == "" || $('#kep').val() == "" || $('#cat').val() == "" || $('#nikF').val() == "" || $('#dep').find(':selected').prop('disabled') == true){
+      if ($('#no_doc').val() == "" || $('#datepicker').val() == "" || $('#kep').val() == "" || $('#nikF').val() == "" || $('#dep').find(':selected').prop('disabled') == true){
         openDangerGritter();
         return false;
       }
@@ -241,6 +242,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
       var s = sampai.value;
       var j = jam.value;
       var n = nikS.value;
+      var dep = $("#dep").val();
+
+      for (var z = 0; z < arrNik.length; z++) {
+        if (arrNik[z] == n) {
+          openDanger3Gritter();
+          return false;
+        }
+      }
 
       var nama ="";
       var t1 = "";
@@ -252,11 +261,27 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
       $.ajax({
         type: 'POST',
-        url: '<?php echo base_url("home/ajax_get_nama") ?>',
+        url: '<?php echo base_url("ot/cek_nik") ?>',
         data: {
-          'nik': n
+          'nik': n,
+          'dep': dep
         },
         success: function (data) {
+          if ($.parseJSON(data) == 0) {
+            openDanger2Gritter();
+            return false;
+          }
+
+          arrNik.push(n);
+          alert(arrNik);      
+
+          $.ajax({
+            type: 'POST',
+            url: '<?php echo base_url("home/ajax_get_nama") ?>',
+            data: {
+              'nik': n
+            },
+            success: function (data) {
             // the next thing you want to do 
             var sr = $.parseJSON(data);
 
@@ -300,10 +325,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
             $('#nikF').val('');
 
             openSuccessGritter();
-            
-
           }
         });
+
+        }
+      });
 
     }
 
@@ -312,6 +338,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
       var ids = $(elem).parent('div').parent('div').attr('id');
 
       var oldid = ids;
+      var niks = $("#nik"+oldid).attr('value');
+
+      alert(niks);
 
       var newid = parseInt(ids) + 1;
       jQuery("#"+newid).attr("id",oldid);
@@ -324,7 +353,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
       jQuery("#makan"+newid).attr("id","makan"+oldid);
       jQuery("#exfood"+newid).attr("id","exfood"+oldid);
       jQuery("#delete"+newid).attr("id","delete"+oldid);
-
 
       no-=1;
 
@@ -478,6 +506,28 @@ function openDangerGritter(){
   jQuery.gritter.add({
     title: "Failed",
     text: "Ada Data yang Kosong",
+    class_name: 'growl-danger',
+    image: '<?php echo base_url()?>app/img/close.png',
+    sticky: false,
+    time: '2000'
+  });
+}
+
+function openDanger3Gritter(){
+  jQuery.gritter.add({
+    title: "Failed",
+    text: "Karyawan sudah diinput",
+    class_name: 'growl-danger',
+    image: '<?php echo base_url()?>app/img/close.png',
+    sticky: false,
+    time: '2000'
+  });
+}
+
+function openDanger2Gritter(){
+  jQuery.gritter.add({
+    title: "Failed",
+    text: "Karyawan tidak terdaftar pada Bagian",
     class_name: 'growl-danger',
     image: '<?php echo base_url()?>app/img/close.png',
     sticky: false,
