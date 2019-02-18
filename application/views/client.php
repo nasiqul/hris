@@ -161,6 +161,7 @@
             $("#sec").text(data[i][7]);
             $("#foto").attr("src","<?php echo base_url() ?>app/img/photo/"+data[i][8]+"");
             $("#fotoHead").attr("src","<?php echo base_url() ?>app/img/photo/"+data[i][8]+"");
+            $("#fotoHead2").attr("src","<?php echo base_url() ?>app/img/photo/"+data[i][8]+"");
           });
         }
       });

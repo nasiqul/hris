@@ -41,7 +41,7 @@
               <ul class="dropdown-menu">
                 <!-- The user image in the menu -->
                 <li class="user-header">
-                  <img src="<?php echo base_url()?>app/img/user1-128x128.jpg" class="img-circle" alt="User Image">
+                  <img id="fotoHead2" class="img-circle" alt="User Image">
 
                   <p>
                     Alexander Pierce - Web Developer
