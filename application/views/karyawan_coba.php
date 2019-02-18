@@ -69,7 +69,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                       <!-- general form elements -->
                       <div class="box box-primary">
                         <div class="box-body box-profile">
-                          <img class="profile-user-img img-responsive img-circle" src="<?php echo base_url()?>app/img/user1-128x128.jpg" alt="User profile picture">
+                          <img class="profile-user-img img-responsive img-circle" id="foto" alt="User profile picture">
 
                           <h3 class="profile-username text-center" id="nama"></h3>
 
@@ -285,7 +285,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           $.each(data, function(i, value){
             $("#pin").text(data[i][0]);
             $("#costC").text(data[i][2]);
-            $("#foto").text(data[i][3]);
+            $("#foto").attr("src","<?php echo base_url() ?>app/img/photo/"+data[i][3]+"");
             $("#nama").text(data[i][4]);
             $("#nik").text(data[i][1]);
             $("#tempatLahir").text(data[i][16]);
