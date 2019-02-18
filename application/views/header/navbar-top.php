@@ -34,7 +34,7 @@
               <!-- Menu Toggle Button -->
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                 <!-- The user image in the navbar-->
-                <img src="<?php echo base_url()?>app/img/user1-128x128.jpg" class="user-image" alt="User Image">
+                <img class="user-image" alt="User Image" id="fotoHead">
                 <!-- hidden-xs hides the username on small devices so only the image appears. -->
                 <span class="hidden-xs"><?php echo $this->session->userdata('id'); ?></span>
               </a>
