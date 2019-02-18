@@ -25,7 +25,7 @@
 
                   <ul class="list-group list-group-unbordered">
                     <li class="list-group-item">
-                      <b>Personal Leave Using</b> <a class="pull-right"><small class="label pull-right bg-yellow"><p id="rt"></p></small></a>
+                      <b>Cuti yang dipakai</b> <a class="pull-right"><small class="label pull-right bg-yellow"><p id="rt"></p></small></a>
                     </li>
                   </ul>
                 </div>
@@ -88,7 +88,7 @@
                      <th>Absent</th>
                      <th>Permit</th>
                      <th>Sick</th>
-                     <th>Personal Leave</th>
+                     <th>Cuti</th>
                      <th>Diciplinary Allowance</th>
                      <th>Overtime (Hour)</th>
                      <th>aksi</th>
