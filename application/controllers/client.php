@@ -23,8 +23,8 @@ class Client extends CI_Controller {
 			$row = array();
 			$row[] = date_format(date_create($key->tanggal),"M Y");
 			
-			if ($key->DL != 0) 
-				$row[] = $key->DL;
+			if ($key->A != 0) 
+				$row[] = $key->A;
 			else
 				$row[] = "-";
 			

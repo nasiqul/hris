@@ -30,6 +30,7 @@ class Client_model extends CI_Model {
             COUNT(if(shift = "CK" , shift, null)) CK,
             COUNT(if(shift = "I" , shift, null)) I,
             COUNT(if(shift = "SD" , shift, null)) SD,
+            COUNT(if(shift = "A" , shift, null)) A,
             COUNT(if(shift = "CT" , shift, null)) CT,
             COUNT(if(shift = "DL" , shift, null)) DL');
         $this->db->from('presensi');
