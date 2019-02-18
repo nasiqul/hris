@@ -159,7 +159,7 @@
             $("#dev").text(data[i][5]);
             $("#dep").text(data[i][6]);
             $("#sec").text(data[i][7]);
-            $("#foto").attr("src","<?php base_url() ?>app/img/photo/"+data[i][8]+"");
+            $("#foto").attr("src","<?php echo base_url() ?>app/img/photo/"+data[i][8]+"");
           });
         }
       });
