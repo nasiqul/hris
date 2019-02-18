@@ -17,7 +17,7 @@
               <!-- Widget: user widget style 1 -->
               <div class="box box-primary">
                 <div class="box-body box-profile">
-                  <img class="profile-user-img img-responsive img-circle" src="<?php echo base_url()?>app/img/user1-128x128.jpg" id="foto" alt="User profile picture" style="border-radius: 50%;">
+                  <img class="profile-user-img img-responsive img-circle" id="foto" alt="User profile picture">
 
                   <h3 class="profile-username text-center" id="nama"></h3>
 
