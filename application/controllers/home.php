@@ -91,7 +91,7 @@ class Home extends CI_Controller {
         $this->load->view("karyawan_graph", $data);
     }
 
-    public function karyawan()
+    public function karyawan_coba()
     {
         if (isset($_POST['status']) || isset($_POST['grade']) || isset($_POST['dep']) || isset($_POST['pos'])) 
         {
@@ -648,7 +648,7 @@ public function sess_destroy2()
 
 //------------------------- KARYAWAN COBA -------------------
 
-public function karyawan_coba()
+public function karyawan()
 {
     if (isset($_POST['status']) || isset($_POST['grade']) || isset($_POST['dep']) || isset($_POST['pos'])) 
     {

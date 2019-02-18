@@ -62,7 +62,7 @@ class Client extends CI_Controller {
 	public function ajax_client_data()
 	{
 		$id = $this->session->userdata("id");
-		$list = $this->karyawan_model->get_data_karyawan_by_nik($id);
+		$list = $this->karyawan_model->get_data_karyawan_by_nik2($id);
 
 		$data = array();
 		foreach ($list as $key) {
@@ -73,6 +73,9 @@ class Client extends CI_Controller {
 			$row[] = date_format(date_create($key->tanggalMasuk),"d M Y");
 			$row[] = $key->statusKaryawan;
 			$row[] = $key->namaGrade." / ". $key->jabatan;
+			$row[] = $key->dev;
+			$row[] = $key->dep;
+			$row[] = $key->sec;
 
 			$data[] = $row;
 		}

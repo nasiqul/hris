@@ -40,17 +40,15 @@
                 <div class="box-body">
                   <strong><i class="fa fa-map-marker margin-r-5"></i> Departemen</strong>
 
-                  <p class="text-muted">
-                    B.S. in Computer Science from the University of Tennessee at Knoxville (dummy)
-                  </p>
+                  <p class="text-muted" id="dev"></p>
 
                   <strong><i class="fa fa-map-marker margin-r-5"></i> Section</strong>
 
-                  <p class="text-muted">Malibu, California (dummy)</p>
+                  <p class="text-muted" id="dep"></p>
 
                   <strong><i class="fa fa-map-marker margin-r-5"></i> Sub - Section</strong>
 
-                  <p class="text-muted">Malibu, California (dummy)</p>
+                  <p class="text-muted" id="sec"></p>
 
                   <strong><i class="fa fa-calendar margin-r-5"></i> Join Date</strong>
 
@@ -95,9 +93,15 @@
                    </thead>
                    <tbody>
                    </tbody>
-                   <tfoot  id="tableFootStock" hidden>
-                    <th colspan="4">Total</th>
-                    <th colspan="3"></th>
+                   <tfoot  id="tableFootStock">
+                    <th>Total</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
                   </tfoot>
                 </table>
               </div>
@@ -152,6 +156,9 @@
             $("#tglMasuk").text(data[i][2]);
             $("#statusKerja").text(data[i][3]);
             $("#posisi").text(data[i][4]);
+            $("#dev").text(data[i][5]);
+            $("#dep").text(data[i][6]);
+            $("#sec").text(data[i][7]);
           });
         }
       });
