@@ -39,7 +39,7 @@ class Client extends CI_Controller {
 				$row[] = "-";
 			
 			$row[] = $key->CT;
-			$jml = $key->DL + $key->I + $key->SD;
+			$jml = $key->A + $key->I + $key->SD;
 			
 			if ($jml != 0 )
 				$row[] = "<i class='fa fa-close'></i>";
