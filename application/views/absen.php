@@ -96,15 +96,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </thead>
                 <tbody>
                 </tbody>
-                <tfoot>
-                  <tr>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                  </tr>
-                </tfoot>
               </table>
             </div>
           </div>
@@ -124,10 +115,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
     var table;
     $(document).ready(function() {
 
-      $('#example1 tfoot th').each( function () {
-        var title = $(this).text();
-        $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
-      });
+      // $('#example1 tfoot th').each( function () {
+      //   var title = $(this).text();
+      //   $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+      // });
 
       table = $('#example1').DataTable({
         "lengthMenu"    : [[10, 25, 50, -1], [10, 25, 50, "All"]],
@@ -145,17 +136,17 @@ scratch. This page gets rid of all links and provides the needed markup only.
         "fixedHeader": true
       });
 
-      table.columns().every( function () {
-        var that = this;
+      // table.columns().every( function () {
+      //   var that = this;
 
-        $( 'input', this.footer() ).on( 'keyup change', function () {
-          if ( that.search() !== this.value ) {
-            that
-            .search( this.value )
-            .draw();
-          }
-        } );
-      } );
+      //   $( 'input', this.footer() ).on( 'keyup change', function () {
+      //     if ( that.search() !== this.value ) {
+      //       that
+      //       .search( this.value )
+      //       .draw();
+      //     }
+      //   } );
+      // } );
 
     })
 

@@ -37,11 +37,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <tr>
                     <th>ID SPL</th>
                     <th>Date</th>
-                    <th>Departemen</th>
-                    <th>Section</th>
-                    <th>Keperluan</th>
-                    <th>Jam</th>
-                    <!-- <th>Lembur (jam)</th> -->
+                    <th>NIK</th>
+                    <th>Nama</th>
+                    <th>Masuk</th>
+                    <th>Keluar</th>
+                    <th>Lembur (jam)<br>Plan</th>
+                    <th>Lembur (jam)<br>Actual</th>
                     <th>Aksi</th>
                   </tr>
                 </thead>
@@ -141,12 +142,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         "ajax": {
           "url": "<?php echo base_url('ot/ajax_ot')?>",       
           "type": "POST"
-        },
-        "columnDefs": [
-        {
-          "targets": [ 5,6 ], //first column / numbering column
-          "orderable": false, //set not orderable
-        }]
+        }
       })
 
     })

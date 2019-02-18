@@ -45,7 +45,7 @@ class Home extends CI_Controller {
 
     public function absen()
     {
-        if (isset($_POST['tanggal']) || isset($_POST['nik']) || isset($_POST['nama']) || isset($_POST['absensi'])) 
+        if (isset($_POST['tanggal']) || isset($_POST['nik']) || isset($_POST['nama']) || isset($_POST['absensi']))
         {
             $newdata = array(
                 'tanggal2'  => $_POST['tanggal'],
@@ -294,7 +294,8 @@ class Home extends CI_Controller {
 
 public function ajax_absensi()
 {
-    if (isset($_SESSION['tanggal2']) || isset($_SESSION['nik2']) || isset($_SESSION['nama2']) || isset($_SESSION['shift2'])) 
+    if ((isset($_SESSION['tanggal2']) && $_SESSION['tanggal2'] != "") || (isset($_SESSION['nik2']) && $_SESSION['nik2'] != "") || (isset($_SESSION['nama2']) && $_SESSION['nama2'] != "") || (isset($_SESSION['shift2']) && $_SESSION['shift2'] != ""))
+    // if (isset($_SESSION['tanggal2']) || isset($_SESSION['nik2']) || isset($_SESSION['nama2']) || isset($_SESSION['shift2'])) 
     {
         $tgl = $this->session->userdata('tanggal2');
         $nik = $this->session->userdata('nik2');
@@ -640,7 +641,8 @@ public function session_destroy()
 
 public function sess_destroy2()
 {
-    session_destroy();
+    $array_items = array('tanggal2' => "", 'nik2' => "", 'nama2' => "", 'shift2' => "");
+    $this->session->unset_userdata($array_items);
     redirect('home/absen');
 }
 

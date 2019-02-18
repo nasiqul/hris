@@ -53,10 +53,23 @@ class Ot extends CI_Controller {
 			$row = array();
 			$row[] = $key->id;
 			$row[] = date("d-m-Y",strtotime($key->tanggal));
-			$row[] = $key->namaDep;
-			$row[] = $key->namaSec;
-			$row[] = "<p class='kep'>".$key->keperluan."</p>";
+			$row[] = $key->nik;
+			$row[] = $key->namaKaryawan;
+			$row[] = $key->masuk;
+			$row[] = $key->keluar.$key->shift;
 			$row[] = $key->jam;
+
+			if ($key->shift == 1) {
+				$date = '2007-05-14';
+				$time = strtotime($date." ".$key->keluar);
+				$pulang = strtotime($date.' 16:00:00');
+
+				$jam = $time - $pulang;
+
+				$row[] = round(($jam / 60) / 60, 1);
+			}
+			else
+				$row[] = "";
 
 			$row[] = "<button class='btn btn-primary' onclick='detail_spl(".$key->id.")'>Detail</button>";
 

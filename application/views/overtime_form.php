@@ -224,8 +224,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
     $('#nikF').bind("enterKey",function(e){
       appendRow();
     });
-    $('#nikF').keyup(function(e){
-      if(e.keyCode == 13)
+    $('#nikF').keydown(function(e){
+      if(e.keyCode == 13 || e.which == 9)
       {
         $(this).trigger("enterKey");
       }
@@ -308,7 +308,29 @@ scratch. This page gets rid of all links and provides the needed markup only.
     }
 
     function deleteRow(elem) {
-      $(elem).parent('div').parent('div').remove(); 
+      $(elem).parent('div').parent('div').remove();
+      var ids = $(elem).parent('div').parent('div').attr('id');
+
+      var oldid = ids;
+
+      var newid = parseInt(ids) + 1;
+      jQuery("#"+newid).attr("id",oldid);
+      jQuery("#nik"+newid).attr("id","nik"+oldid);
+      jQuery("#nama"+newid).attr("id","nama"+oldid);
+      jQuery("#dari"+newid).attr("id","dari"+oldid);
+      jQuery("#sampai"+newid).attr("id","sampai"+oldid);
+      jQuery("#jam"+newid).attr("id","jam"+oldid);
+      jQuery("#trans"+newid).attr("id","trans"+oldid);
+      jQuery("#makan"+newid).attr("id","makan"+oldid);
+      jQuery("#exfood"+newid).attr("id","exfood"+oldid);
+      jQuery("#delete"+newid).attr("id","delete"+oldid);
+
+
+      no-=1;
+
+      // while() {
+
+      // }
     }
 
     function showSec() {

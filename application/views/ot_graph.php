@@ -58,7 +58,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           </div>
 
           <div class="modal fade" id="myModal">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-lg">
               <div class="modal-content">
                 <div class="modal-header">
                   <h4 style="float: right;" id="modal-title"></h4>

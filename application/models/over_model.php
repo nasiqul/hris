@@ -24,24 +24,24 @@ class Over_model extends CI_Model {
 
     private function _get_datatables_query()
     {
-    	// $this->db->select("tanggal,c.nik,d.namaKaryawan,masuk,keluar,jam,id");
-    	// $this->db->from("(SELECT * from (
-    	// 	SELECT o.tanggal,o.id,b.jam,b.nik as nik1 from over_time as o
-    	// 	LEFT JOIN over_time_member as b
-    	// 	on o.id = b.id_ot
-    	// 	) a
+    	$this->db->select("tanggal,c.nik,d.namaKaryawan,masuk,keluar,jam,id, shift");
+    	$this->db->from("(SELECT * from (
+    		SELECT o.tanggal,o.id,b.jam,b.nik as nik1 from over_time as o
+    		LEFT JOIN over_time_member as b
+    		on o.id = b.id_ot
+    		) a
 
-    	// 	left join (
-    	// 	SELECT presensi.nik,presensi.masuk,presensi.keluar,presensi.tanggal as tanggalpresensi from presensi where presensi.nik in (SELECT over_time_member.nik from over_time_member) and presensi.tanggal in (SELECT over_time.tanggal from over_time)
-    	// ) b on a.tanggal = b.tanggalpresensi and a.nik1 = b.nik) c");
-    	// $this->db->join("karyawan d","c.nik = d.nik","left");
+    		left join (
+    		SELECT presensi.nik,presensi.masuk,presensi.keluar,presensi.tanggal as tanggalpresensi, shift from presensi where presensi.nik in (SELECT over_time_member.nik from over_time_member) and presensi.tanggal in (SELECT over_time.tanggal from over_time)
+    	) b on a.tanggal = b.tanggalpresensi and a.nik1 = b.nik) c");
+    	$this->db->join("karyawan d","c.nik = d.nik","left");
 
-        $this->db->select('o.id, tanggal, d.nama as namaDep, s.nama as namaSec, keperluan, catatan, SUM(om.jam) as jam');
-        $this->db->from("over_time o");
-        $this->db->join("departemen d","o.departemen = d.id",'left');
-        $this->db->join("section s","o.section = s.id",'left');
-        $this->db->join("over_time_member om","o.id = om.id_ot");
-        $this->db->group_by("o.id");
+        // $this->db->select('o.id, tanggal, d.nama as namaDep, s.nama as namaSec, keperluan, catatan, SUM(om.jam) as jam');
+        // $this->db->from("over_time o");
+        // $this->db->join("departemen d","o.departemen = d.id",'left');
+        // $this->db->join("section s","o.section = s.id",'left');
+        // $this->db->join("over_time_member om","o.id = om.id_ot");
+        // $this->db->group_by("o.id");
 
 
         $i = 0;
