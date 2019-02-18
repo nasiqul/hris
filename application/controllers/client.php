@@ -76,6 +76,7 @@ class Client extends CI_Controller {
 			$row[] = $key->dev;
 			$row[] = $key->dep;
 			$row[] = $key->sec;
+			$row[] = $key->foto;
 
 			$data[] = $row;
 		}

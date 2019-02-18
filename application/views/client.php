@@ -17,7 +17,7 @@
               <!-- Widget: user widget style 1 -->
               <div class="box box-primary">
                 <div class="box-body box-profile">
-                  <img class="profile-user-img img-responsive img-circle" src="<?php echo base_url()?>app/img/user1-128x128.jpg" alt="User profile picture">
+                  <img class="profile-user-img img-responsive img-circle" src="<?php echo base_url()?>app/img/user1-128x128.jpg" id="foto" alt="User profile picture">
 
                   <h3 class="profile-username text-center" id="nama"></h3>
 
@@ -159,6 +159,7 @@
             $("#dev").text(data[i][5]);
             $("#dep").text(data[i][6]);
             $("#sec").text(data[i][7]);
+            $("#foto").attr("src","<?php base_url() ?>app/img/photo/"+data[i][8]+"");
           });
         }
       });
