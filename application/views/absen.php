@@ -7,6 +7,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <!-- HEADER -->
 <?php require_once(APPPATH.'views/header/head.php'); ?>
 
+<style type="text/css">
+#info {
+  text-decoration: underline;
+}
+#info:hover {
+  text-decoration:none;
+}
+</style>
+
 <body class="hold-transition skin-purple sidebar-mini">
   <div class="wrapper">
 
@@ -74,6 +83,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <div class="box-footer">
                 <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i> <span>Search</span></button>
                 <a class="btn btn-warning" id="reset" href="<?php echo base_url('home/sess_destroy2') ?>" ><i class="fa fa-refresh"></i> Reset</a>
+                <div class="pull-right">
+                  <div class="col-md-12">
+                    <a href="#" onclick="$('#myModal').modal('show');" id="info" style="color: #8a8c8e"><i class="fa fa-info"></i>&nbsp Informasi Kode Absensi</a>
+                  </div>
+                </div>
 
               </div>
             </form>
@@ -99,6 +113,69 @@ scratch. This page gets rid of all links and provides the needed markup only.
               </table>
             </div>
           </div>
+        </div>
+
+        <div class="modal fade" id="myModal">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 style="float: right;" id="modal-title"></h4>
+                <h4 class="modal-title"><b>PT. YAMAHA MUSICAL PRODUCT INDONESIA</b></h4>
+              </div>
+              <div class="modal-body">
+                <div class="row">
+                  <div class="col-md-12">
+                    <table class="table table-striped">
+                      <tr>
+                        <th colspan="4" class="text-center"><i class="fa fa-bullhorn"></i> Keterangan</th>
+                      </tr>
+                      <tr>
+                        <td>CT</td>
+                        <td>: Cuti Tahunan</td>
+                        <td>Sn</td>
+                        <td>: Cuti Khusus Saudara Kandung Nikah</td>
+                      </tr>
+                      <tr>
+                        <td>CK</td>
+                        <td>: Cuti Khusus Lainnya</td>
+                        <td>N</td>
+                        <td>: Cuti Khusus Menikah</td>
+                      </tr>
+                      <tr>
+                        <td>Im</td>
+                        <td>: Istri Melahirkan</td>
+                        <td>SD</td>
+                        <td>: Sakit dengan Surat Dokter</td>
+                      </tr>
+                      <tr>
+                        <td>Km</td>
+                        <td>: Cuti Khusus Kematian</td>
+                        <td>I</td>
+                        <td>: Ijin</td>
+                      </tr>
+                      <tr>
+                        <td>K</td>
+                        <td>: Cuti Pra-Lahir</td>
+                        <td>A</td>
+                        <td>: Alpha</td>
+                      </tr>
+                      <tr>
+                        <td>M</td>
+                        <td>: Cuti Pasca-Lahir</td>
+                        <td>DL</td>
+                        <td>: Dinas Luar</td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-danger pull-right" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+              </div>
+            </div>
+            <!-- /.modal-content -->
+          </div>
+          <!-- /.modal-dialog -->
         </div>
       </section>
       <!-- /.content -->

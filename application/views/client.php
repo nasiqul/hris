@@ -62,11 +62,6 @@
 
                   <p class="text-muted" id="posisi"></p>                  
 
-                  <hr>
-
-                  <strong><i class="fa fa-file-text-o margin-r-5"></i> Notes</strong>
-
-                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam fermentum enim neque.</p>
                 </div>
                 <!-- /.box-body -->
               </div>
