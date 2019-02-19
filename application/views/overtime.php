@@ -102,7 +102,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <tr>
                           <td colspan="4"><b>B = Bangil, P = Pasuruan</b></td>
                           <td><c class="pull-right">Total :</c></td>
-                          <td class="text-center"><b id="jml">[ 2 ]</b></td>
+                          <td class="text-center"></td>
                           <td>Jam</td>
                         </tr>
                       </tfoot>
@@ -198,12 +198,21 @@ scratch. This page gets rid of all links and provides the needed markup only.
             {
               "targets": [ 5,6,7,8 ], //first column / numbering column
               "orderable": false, //set not orderable
-          }]
-      })
-
-          var z = tabel.column(5).data().sum();
-
-          $("#jml").text("["+z+"]");
+            }],
+            "footerCallback": function (tfoot, data, start, end, display) {
+              var intVal = function ( i ) {
+                return typeof i === 'string' ?
+                i.replace(/[\$%,]/g, '')*1 :
+                typeof i === 'number' ?
+                i : 0;
+              };
+              var api = this.api();
+              var totalPlan = api.column(5).data().reduce(function (a, b) {
+                return intVal(a)+intVal(b);
+              }, 0)
+              $(api.column(5).footer()).html(totalPlan.toLocaleString());
+            }
+          })
         }
       });
     }

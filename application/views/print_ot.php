@@ -109,7 +109,7 @@ p {
 		<tr>
 			<td width="10%" style="padding: 5px 0  5px 20px">Bagian</td>
 			<td width="2%">:</td>
-			<td width="25%">-</td>
+			<td width="25%"><?php echo $list[0]->departemen ?> - <?php echo $list[0]->section ?></td>
 		</tr>
 	</table>
 	<table width="98%" style="margin-top: 10px" id="anggota"  align="center" border="0">
@@ -127,7 +127,7 @@ p {
 			<th width="6%">Revisi</th>
 			<th width="8%">TTD Atasan</th>
 		</tr>
-		<?php $no=1; $jml=0; $total=0; foreach ($list_anggota as $key) { ?>
+		<?php $no=1; $jml=0; $total=0; $mkn=0; $efood=0; $b=0; $p=0; foreach ($list_anggota as $key) { ?>
 			<tr>
 				<td><?php echo $no ?></td>
 				<td><?php echo $key->nik ?></td>
@@ -135,14 +135,18 @@ p {
 				<td><?php echo date("H:i",strtotime($key->dari)); ?></td>
 				<td><?php echo date("H:i",strtotime($key->sampai)) ?></td>
 				<td><div><?php echo $key->transport; ?></div></td>
-				<td><?php if ($key->makan == 1) echo "&#x2714"; ?></td>
-				<td><?php if ($key->ext_food == 1) echo "&#x2714"; ?></td>
+				<td><?php if ($key->makan == 1){ echo "&#x2714"; $mkn+=1; }?></td>
+				<td><?php if ($key->ext_food == 1){ echo "&#x2714"; $efood+=1;} ?></td>
 				<td><div></div></td>
 				<td><div><?php echo $key->jam ?></div></td>
 				<td><div></div></td>
 				<td><div></div></td>
 			</tr>
 			<?php 
+			if ($key->transport == "B")
+				$b+=1;
+			if ($key->transport == "P")
+				$p+=1;
 			$jml += (float) $key->jam; 
 			$no++;
 			$total = $key->budget;
@@ -154,12 +158,12 @@ p {
 			<td>Jam</td>
 			<td></td>
 		</tr>
-		<tr><td colspan="3"></td><td>Catatan : </td></tr>
+		<tr><td colspan="3"></td><td colspan="3" align="left">Catatan :</td></tr>
 		<tr>
 			<td colspan="3">
 				<table width="100%" id="tb-collapse">
 					<tr><td width="15%">B</td><td width="15%">P</td><td width="30%">Total Makan</td><td width="30%">Total E.Food</td></tr>
-					<tr><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+					<tr><td><?php echo $b ?></td><td><?php echo $p ?></td><td><?php echo $mkn ?></td><td><?php echo $efood ?></td></tr>
 				</table>
 			</td>
 			<td colspan="9">
@@ -170,7 +174,7 @@ p {
 			<td colspan="3">
 				<table width="100%" id="tb-collapse" style="background-color: #dddddd">
 					<tr><td width="34%">TARGET</td><td width="33%">ACTUAL</td><td width="33%">DIFF</td></tr>
-					<tr><td height="20px"><?php echo $total ?></td><td></td><td></td></tr>
+					<tr><td height="20px"><?php echo $cc_member[0]->jml*$total ?></td><td></td><td></td></tr>
 					<tr><td colspan="3" height="130px"></td></tr>
 				</table>
 			</td>

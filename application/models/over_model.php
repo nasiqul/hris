@@ -3,9 +3,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Over_model extends CI_Model {
 
-	var $column_order = array('o.id','tanggal','d.nama','s.nama','keperluan','catatan'); //set column field database for datatable orderable
-    var $column_search = array('o.id','tanggal','d.nama','s.nama','keperluan','catatan'); //set column field database for datatable searchable 
-    var $order = array('tanggal' => 'asc'); // default order 
+	var $column_order = array('id','tanggal','c.nik','d.namaKaryawan','masuk','keluar','jam','shift'); //set column field database for datatable orderable
+    var $column_search = array('id','tanggal','c.nik','d.namaKaryawan','masuk','keluar','jam','shift'); //set column field database for datatable searchable 
+    var $order = array('tanggal' => 'desc'); // default order 
 
     public function __construct()
     {
@@ -24,9 +24,9 @@ class Over_model extends CI_Model {
 
     private function _get_datatables_query()
     {
-    	$this->db->select("tanggal,c.nik,d.namaKaryawan,masuk,keluar,jam,id, shift");
+    	$this->db->select("tanggal,c.nik,d.namaKaryawan, masuk, keluar, jam, id, shift, a.status");
     	$this->db->from("(SELECT * from (
-    		SELECT o.tanggal,o.id,b.jam,b.nik as nik1 from over_time as o
+    		SELECT o.tanggal, o.id, b.jam, b.nik as nik1, o.status as status from over_time as o
     		LEFT JOIN over_time_member as b
     		on o.id = b.id_ot
     		) a
@@ -92,7 +92,8 @@ class Over_model extends CI_Model {
     		'departemen' => $dep,
     		'section' => $sec,
     		'keperluan' => $kep,
-    		'catatan' => $cat
+    		'catatan' => $cat,
+            'status' => 0
     	);
 
     	$this->db->insert('over_time', $data);
@@ -130,12 +131,13 @@ class Over_model extends CI_Model {
 
     public function get_over_by_id($id)
     {
-        $this->db->select("o.id as id_over, tanggal, departemen, section, keperluan, catatan");
+        $this->db->select("o.id as id_over, tanggal, d.nama as departemen, s.nama as section, keperluan, catatan");
         $this->db->from('over_time o');
+        $this->db->join('departemen d','o.departemen = d.id','left');
+        $this->db->join('section s','o.section = s.id','left');
         $this->db->where("o.id",$id);
         $query = $this->db->get();
         return $query->result();
-
     }
 
 
@@ -150,12 +152,21 @@ class Over_model extends CI_Model {
 
     public function get_member_id($id)
     {
-        $this->db->select("o.id as id_over, tanggal, departemen, section, keperluan, catatan, om.*, k.namaKaryawan, cc.budget");
+        $this->db->select("o.id as id_over, tanggal, departemen, section, keperluan, catatan, om.*, k.namaKaryawan, cc.budget, cc.id_cc");
         $this->db->from('over_time o');
         $this->db->join("over_time_member om","o.id = om.id_ot");
         $this->db->join("karyawan k","om.nik = k.nik");
         $this->db->join("cost_center_budget cc","cc.id_cc = k.costCenter");
         $this->db->where("o.id",$id);
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+    public function costCenter($id)
+    {
+        $this->db->select("COUNT(nik) as jml");
+        $this->db->from("karyawan");
+        $this->db->where("costCenter", $id);
         $query = $this->db->get();
         return $query->result();
     }

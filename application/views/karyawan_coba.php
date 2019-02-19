@@ -484,6 +484,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
     var list2 = [];
     var options2 = [];
 
+    alert(devisi);
+
     for (var i = 0; i < devisi.length; i++) {
       list2.push(i) ;
       if (devisi2 == devisi[i][1])
@@ -503,6 +505,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
     var list3 = [];
     var options3 = [];
+
 
     for (var i = 0; i < departemen.length; i++) {
       list3.push(i) ;
@@ -539,7 +542,17 @@ scratch. This page gets rid of all links and provides the needed markup only.
   })
 
 
-</script>
+    $('#myModal').on('hidden.bs.modal', function () {
+      keluarga = [];
+      devisi = [];
+      departemen = [];
+      section = [];
+      sub_section = [];
+      group = [];
+    })
+
+
+  </script>
 
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the

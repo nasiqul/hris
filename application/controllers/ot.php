@@ -66,12 +66,18 @@ class Ot extends CI_Controller {
 
 				$jam = $time - $pulang;
 
-				$row[] = round(($jam / 60) / 60, 1);
+				$row[] = round(round(($jam / 60) / 60, 1),1);
 			}
 			else
 				$row[] = "";
 
-			$row[] = "<button class='btn btn-primary' onclick='detail_spl(".$key->id.")'>Detail</button>";
+			if ($key->status == 1) {
+				$row[] = "<button class='btn btn-primary btn-xs' onclick='detail_spl(".$key->id.")'>Detail</button>
+				<button class='btn btn-success btn-xs' onclick='detail_spl(".$key->id.")'><i class='fa fa-thumbs-up'></i> OK</button>";
+			}
+			else {
+				$row[] = "<button class='btn btn-primary btn-xs' onclick='detail_spl(".$key->id.")'>Detail</button>";
+			}
 
 			$data[] = $row;
 		}
@@ -214,6 +220,8 @@ class Ot extends CI_Controller {
 	{
 		$data['list'] = $this->over_model->get_over_by_id($id);
 		$data['list_anggota'] = $this->over_model->get_member_id($id);
+		$cc = $this->over_model->get_member_id($id);
+		$data['cc_member'] = $this->over_model->costCenter($cc[sizeof($cc)-1]->id_cc);
 
 		$this->load->view('print_ot',$data);
 	}
