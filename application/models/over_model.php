@@ -84,7 +84,7 @@ class Over_model extends CI_Model {
     	return $query->result();
     }
 
-    public function save_master($no_doc, $tgl, $dep, $sec, $kep, $cat)
+    public function save_master($no_doc, $tgl, $dep, $sec, $kep, $cat, $hari)
     {
     	$data = array(
     		'id' => $no_doc,
@@ -93,6 +93,7 @@ class Over_model extends CI_Model {
     		'section' => $sec,
     		'keperluan' => $kep,
     		'catatan' => $cat,
+            'hari' => $hari,
             'status' => 0
         );
 
@@ -357,6 +358,16 @@ class Over_model extends CI_Model {
 
         $query2 = "UPDATE `cost_center_budget` SET `aktual` = `aktual` + ".(int)$val." WHERE `id_cc` = '".$id_cc."'";
         $this->db->query($query2);
+    }
+
+    public function get_calendar($tgl)
+    {
+        $this->db->select("tanggal");
+        $this->db->from("kalender");
+        $this->db->where("tanggal = STR_TO_DATE('".$tgl."', '%Y-%m-%d')");
+
+        $query = $this->db->get();
+        return $query->num_rows();
     }
 }
 ?>

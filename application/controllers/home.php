@@ -481,9 +481,9 @@ public function ajax_presensi_shift()
       }
   }
   else
-     $result[] = json_decode ("{}");
+   $result[] = json_decode ("{}");
 
- echo json_encode($result);
+echo json_encode($result);
 }
 
 public function ajax_emp_keluarga()
@@ -676,7 +676,7 @@ public function karyawan()
 public function ajax_emp_coba()
 {
 
-    if (isset($_SESSION['status']) || isset($_SESSION['grade']) || isset($_SESSION['dep']) || isset($_SESSION['pos'])) 
+    if ((isset($_SESSION['status']) && $_SESSION['status'] != "") || (isset($_SESSION['grade']) && $_SESSION['grade'] != "") || (isset($_SESSION['dep']) && $_SESSION['dep'] != "") || (isset($_SESSION['pos']) && $_SESSION['pos'] != ""))
     {
         $status = $this->session->userdata('status');
         $grade = $this->session->userdata('grade');
@@ -770,5 +770,11 @@ public function ajax_emp_by_nik_coba($id)
 
             //output to json format
     echo json_encode($data);
+}
+
+public function sess_destroy()
+{
+    $this->session->sess_destroy();
+    redirect("home");
 }
 }
