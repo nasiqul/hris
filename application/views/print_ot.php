@@ -150,6 +150,7 @@ p {
 			$jml += (float) $key->jam; 
 			$no++;
 			$total = $key->budget;
+			$aktual = $key->aktual;
 		} ?>
 		<tr id="bottom">
 			<td colspan="3" style="text-align: left;">B = Bangil ; P = Pasuruan</td>
@@ -174,7 +175,7 @@ p {
 			<td colspan="3">
 				<table width="100%" id="tb-collapse" style="background-color: #dddddd">
 					<tr><td width="34%">TARGET</td><td width="33%">ACTUAL</td><td width="33%">DIFF</td></tr>
-					<tr><td height="20px"><?php echo $cc_member[0]->jml*$total ?></td><td></td><td></td></tr>
+					<tr><td height="20px"><?php echo $cc_member[0]->jml*$total ?></td><td><?php echo $aktual ?></td><td><?php echo ($cc_member[0]->jml*$total) - $aktual ?></td></tr>
 					<tr><td colspan="3" height="130px"></td></tr>
 				</table>
 			</td>

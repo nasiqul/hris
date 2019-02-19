@@ -121,6 +121,26 @@ scratch. This page gets rid of all links and provides the needed markup only.
           </div>
           <!-- /.modal-dialog -->
         </div>
+
+        <div class="modal modal-info fade" id="myModal2">
+          <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 style="float: right;" id="modal-title"></h4>
+                <h4 class="modal-title">Confirm OK?</h4>
+              </div>
+              <div class="modal-body">
+                <h4>Yakin Konfirmasi "<c id='id_ot'></c>" ? </h4>
+              </div>
+              <div class="modal-footer">
+                <button class="btn btn-success pull-left" data-dismiss="modal" onclick="ok()"><i class="fa fa-thumbs-up"></i> OK</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal"> <i class="fa fa-close"></i> Cancel</button>
+              </div>
+            </div>
+            <!-- /.modal-content -->
+          </div>
+          <!-- /.modal-dialog -->
+        </div>
       </section>
       <!-- /.content -->
     </div>
@@ -198,7 +218,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
             {
               "targets": [ 5,6,7,8 ], //first column / numbering column
               "orderable": false, //set not orderable
-            }],
+            }
+            ],
             "footerCallback": function (tfoot, data, start, end, display) {
               var intVal = function ( i ) {
                 return typeof i === 'string' ?
@@ -223,6 +244,37 @@ scratch. This page gets rid of all links and provides the needed markup only.
       var url = "<?php echo base_url('ot/print_preview/'); ?>"+s[2];
 
       window.open(url,'_blank');
+    }
+
+    function modalOpen(id) {
+      $('#myModal2').modal({backdrop: 'static', keyboard: false});
+      $('#id_ot').text(id);
+    }
+
+    function ok() {
+      var id_ot = $('#id_ot').text();
+      $.ajax({
+        url: "<?php echo base_url('ot/acc/')?>",
+        type : "POST",
+        data: {
+          id:id_ot
+        },
+        success: function(data){
+          openSuccessGritter();
+        }
+      })
+    }
+
+
+    function openSuccessGritter(){
+      jQuery.gritter.add({
+        title: "Success",
+        text: "Confirmation Success",
+        class_name: 'growl-success',
+        image: '<?php echo base_url()?>app/img/ok.png',
+        sticky: false,
+        time: '2000'
+      });
     }
   </script>
 

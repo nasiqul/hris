@@ -484,8 +484,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
     var list2 = [];
     var options2 = [];
 
-    alert(devisi);
-
     for (var i = 0; i < devisi.length; i++) {
       list2.push(i) ;
       if (devisi2 == devisi[i][1])

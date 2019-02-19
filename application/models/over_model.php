@@ -24,7 +24,7 @@ class Over_model extends CI_Model {
 
     private function _get_datatables_query()
     {
-    	$this->db->select("tanggal,c.nik,d.namaKaryawan, masuk, keluar, jam, id, shift, a.status");
+    	$this->db->select("tanggal,c.nik,d.namaKaryawan, masuk, keluar, jam, id, shift, c.status");
     	$this->db->from("(SELECT * from (
     		SELECT o.tanggal, o.id, b.jam, b.nik as nik1, o.status as status from over_time as o
     		LEFT JOIN over_time_member as b
@@ -94,7 +94,7 @@ class Over_model extends CI_Model {
     		'keperluan' => $kep,
     		'catatan' => $cat,
             'status' => 0
-    	);
+        );
 
     	$this->db->insert('over_time', $data);
     }
@@ -152,7 +152,7 @@ class Over_model extends CI_Model {
 
     public function get_member_id($id)
     {
-        $this->db->select("o.id as id_over, tanggal, departemen, section, keperluan, catatan, om.*, k.namaKaryawan, cc.budget, cc.id_cc");
+        $this->db->select("o.id as id_over, tanggal, departemen, section, keperluan, catatan, om.*, k.namaKaryawan, cc.budget, cc.id_cc, cc.aktual");
         $this->db->from('over_time o');
         $this->db->join("over_time_member om","o.id = om.id_ot");
         $this->db->join("karyawan k","om.nik = k.nik");
@@ -257,7 +257,7 @@ class Over_model extends CI_Model {
     }
 
 
-     public function get_over_by_bagian($tgl, $dep)
+    public function get_over_by_bagian($tgl, $dep)
     {
         $this->_get_datatables_query3($tgl, $dep);
         if($_POST['length'] != -1)
@@ -323,5 +323,40 @@ class Over_model extends CI_Model {
         return $query->num_rows();
     }
 
+    public function by_bagian_bulan(){
+        $q = "";
+        $query = $this->db->query($q);
+
+        if($query->num_rows() > 0){
+            foreach($query->result() as $data){
+                $hasil[] = $data;
+            }
+            return $hasil;
+        }
+    }
+
+
+    public function get_jam($id)
+    {
+        $this->db->set('status','1');
+        $this->db->where('id', $id);
+        $this->db->update('over_time');
+
+
+        $this->db->select("SUM(om.jam) as jml, k.costCenter, o.tanggal");
+        $this->db->from('over_time o');
+        $this->db->join("over_time_member om","o.id = om.id_ot");
+        $this->db->join("karyawan k","om.nik = k.nik");
+        $this->db->where("o.id",$id);
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+    public function tambah_aktual($id_cc,$val,$tgl)
+    {
+
+        $query2 = "UPDATE `cost_center_budget` SET `aktual` = `aktual` + ".(int)$val." WHERE `id_cc` = '".$id_cc."'";
+        $this->db->query($query2);
+    }
 }
 ?>

@@ -33,7 +33,6 @@
   <!-- DataTables -->
   <script src="<?php echo base_url()?>app/bower_components/jquery/dist/jquery.min.js"></script>
   <script src="<?php echo base_url()?>app/bower_components/jquery/dist/jquery.js"></script>
-  <!-- <script src="<?php echo base_url()?>app/dist/js/sum().js"></script> -->
   <script src="<?php echo base_url()?>app/dist/js/highcharts.js"></script>
   <script src="<?php echo base_url()?>app/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
   <script src="<?php echo base_url()?>app/plugins/timepicker/bootstrap-timepicker.min.js"></script>

@@ -71,9 +71,9 @@ class Ot extends CI_Controller {
 			else
 				$row[] = "";
 
-			if ($key->status == 1) {
+			if ($key->status == 0) {
 				$row[] = "<button class='btn btn-primary btn-xs' onclick='detail_spl(".$key->id.")'>Detail</button>
-				<button class='btn btn-success btn-xs' onclick='detail_spl(".$key->id.")'><i class='fa fa-thumbs-up'></i> OK</button>";
+				<button class='btn btn-success btn-xs' onclick='modalOpen(".$key->id.")'><i class='fa fa-thumbs-up'></i> Confirm</button>";
 			}
 			else {
 				$row[] = "<button class='btn btn-primary btn-xs' onclick='detail_spl(".$key->id.")'>Detail</button>";
@@ -184,6 +184,29 @@ class Ot extends CI_Controller {
 		echo json_encode($result);
 	}
 
+	public function ajax_ot_graph_bulan()
+	{
+		$over = $this->over_model->by_bagian_bulan();
+
+		$arr = array();
+		$result = array();
+		if(!empty($over)) {
+			foreach($over as $r2){
+				$tgl = date('M Y', strtotime($r2->tanggal));
+
+				$arr['name'] = $r2->nama;
+				$arr['y'] = (float) $r2->jml;
+				$arr['tgl'] = $tgl;
+
+				$result[] = $arr;
+			}
+		}
+		else
+			$result[] = json_decode("{}");
+
+		echo json_encode($result);
+	}
+
 
 	public function ajax_modal_g()
 	{
@@ -234,6 +257,16 @@ class Ot extends CI_Controller {
 		$list = $this->over_model->cek_id($nik, $dep);
 
 		echo json_encode($list);
+	}
+
+	public function acc()
+	{
+		$id = $_POST['id'];
+
+		$jam = $this->over_model->get_jam($id);
+
+		$this->over_model->tambah_aktual($jam[0]->costCenter,$jam[0]->jml,$jam[0]->tanggal);
+
 	}
 }
 ?>

@@ -334,13 +334,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
     }
 
     function deleteRow(elem) {
-      $(elem).parent('div').parent('div').remove();
+
       var ids = $(elem).parent('div').parent('div').attr('id');
 
       var oldid = ids;
-      var niks = $("#nik"+oldid).attr('value');
 
-      alert(niks);
+      var removed = arrNik.splice(parseInt(ids) - 1,1);
+      alert(arrNik);
+
+      $(elem).parent('div').parent('div').remove();
 
       var newid = parseInt(ids) + 1;
       jQuery("#"+newid).attr("id",oldid);
@@ -356,9 +358,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
       no-=1;
 
-      // while() {
-
-      // }
     }
 
     function showSec() {
