@@ -273,7 +273,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
           }
 
           arrNik.push(n);
-          alert(arrNik);      
 
           $.ajax({
             type: 'POST',

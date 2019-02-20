@@ -11,7 +11,12 @@ class User_model extends CI_Model {
     public function login($nik, $pass)
     {
         $this->db->select("nik");
-        
+        $this->db->from('login');
+        $this->db->where('nik',$nik);
+        $this->db->where('password',$pass);
+
+        $query = $this->db->get();
+        return $query->num_rows();
     }
 }
 ?>

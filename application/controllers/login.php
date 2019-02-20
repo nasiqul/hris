@@ -30,26 +30,26 @@ class Login extends CI_Controller {
 
 	public function proses_login()
 	{
-		$nik = $_POST['nik'];
-		$pass = $_POST['pass'];
+		// $nik = $_POST['nik'];
+		// $pass = $_POST['pass'];
 
-		$list = $this->user_model->login($nik,$pass);
+		// $list = $this->user_model->login($nik,$pass);
 
-		if ($list == 1) {
-			$newdata = array(
-				'nik'  => $nik
-			);
+		// if ($list == 1) {
+		// 	$newdata = array(
+		// 		'nik'  => $nik
+		// 	);
 
-			$this->session->set_userdata($newdata);
+		// 	$this->session->set_userdata($newdata);
 
-			redirect('client/view');
-		}
-		else {
+		// 	redirect('client/view');
+		// }
+		// else {
 			
-			$this->session->set_flashdata('success', 'Success Message...');
+		// 	$this->session->set_flashdata('success', 'Success Message...');
 
-			redirect('login');
-		}
+		// 	redirect('login');
+		// }
 	}
 }
 ?>

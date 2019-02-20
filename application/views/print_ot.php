@@ -44,6 +44,12 @@ p {
 #tb-collapse td {
 	border: 1px solid black;
 }
+ 
+table,
+table tr td,
+table tr th {
+	page-break-inside: avoid;
+}
 </style>
 <body onload="window.print()">
 	<?php 
@@ -83,7 +89,7 @@ p {
 		break;
 	}
 	?>
-	<table width="100%" border="1" style="padding-right: 20px">
+	<table width="100%" border="0" style="padding-right: 20px">
 		<tr>
 			<td width="85%" colspan="5"><b>PT. YAMAHA MUSICAL PRODUCT INDONESIA</b></td>
 		</tr>
@@ -112,7 +118,7 @@ p {
 			<td width="25%"><?php echo $list[0]->departemen ?> - <?php echo $list[0]->section ?></td>
 		</tr>
 	</table>
-	<table width="98%" style="margin-top: 10px" id="anggota"  align="center" border="1">
+	<table width="98%" style="margin-top: 10px" id="anggota"  align="center" border="0">
 		<tr>
 			<th width="3%">No</th>
 			<th width="15%">NIK</th>
@@ -173,9 +179,9 @@ p {
 		</tr>
 	</table>
 
-	<table width="100%" border="1">
-		<tr width>
-			<td>
+	<table width="100%" border="0">
+		<tr>
+			<td width="36%">
 				<table width="100%" id="tb-collapse" style="background-color: #dddddd">
 					<tr><td width="34%">TARGET</td><td width="33%">ACTUAL</td><td width="33%">DIFF</td></tr>
 					<tr><td height="20px"><?php echo $cc_member[0]->jml*$total ?></td><td><?php echo $aktual ?></td><td><?php echo ($cc_member[0]->jml*$total) - $aktual ?></td></tr>

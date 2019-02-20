@@ -4,6 +4,12 @@
 <?php require_once(APPPATH.'views/header/head.php'); ?>
 
 <body class="hold-transition login-page">
+	<?php if($this->session->flashdata('success')){ ?>  
+		<div class="alert alert-success">  
+			<a href="#" class="close" data-dismiss="alert">&times;</a>  
+			<strong>Success!</strong> <?php echo $this->session->flashdata('success'); ?>  
+		</div>  
+	<?php } ?>
 	<div class="login-box">
 		<div class="login-logo">
 			<b>Admin</b>LTE
@@ -12,7 +18,7 @@
 		<div class="login-box-body">
 			<p class="login-box-msg">Sign in to start your session</p>
 
-			<form action=" <?php echo base_url('login/submit_login') ?>" method="POST">
+			<form onsubmit="login();return false;">
 				<div class="form-group has-feedback">
 					<input type="text" class="form-control" placeholder="NIK" id="nik" name="nik" required="">
 					<span class="glyphicon glyphicon-user form-control-feedback"></span>
@@ -35,12 +41,7 @@
 	</div>
 	<!-- /.login-box -->
 
-	<!-- jQuery 3 -->
-	<script src="../../bower_components/jquery/dist/jquery.min.js"></script>
-	<!-- Bootstrap 3.3.7 -->
-	<script src="../../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-	<!-- iCheck -->
-	<script src="../../plugins/iCheck/icheck.min.js"></script>
+<script src="<?php echo base_url()?>app/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 	<script>
 
 		function login() {
@@ -55,18 +56,11 @@
 					pass:pass
 				},
 				success: function(data){
-
+					alert('tes1');
 				}
 			})
 		}
 
-		$(function () {
-			$('input').iCheck({
-				checkboxClass: 'icheckbox_square-blue',
-				radioClass: 'iradio_square-blue',
-				increaseArea: '20%' /* optional */
-			});
-		});
 	</script>
 </body>
 </html>
