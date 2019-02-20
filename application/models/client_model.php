@@ -36,7 +36,6 @@ class Client_model extends CI_Model {
         $this->db->from('presensi');
         $this->db->join('karyawan','karyawan.nik = presensi.nik');
         $this->db->where('presensi.nik',$id);
-        $this->db->where('presensi.shift REGEXP','^[a-zA-Z]+$');
         $this->db->group_by('DATE_FORMAT(presensi.tanggal, "%Y-%m-01")');
  
         $i = 0;

@@ -32,17 +32,19 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <a class="btn btn-success" href="<?php echo base_url('home/overtime_form') ?>"> <i class="fa fa-plus"></i> New Entry</a>
               <br>
               <br>
-              <table id="example1" class="table table-responsive table-striped text-center">
+              <table id="example1" class="table table-responsive table-striped text-center" width="100%">
                 <thead>
                   <tr>
                     <th>ID SPL</th>
                     <th>Date</th>
                     <th>NIK</th>
-                    <th>Nama</th>
+                    <th width="20%">Nama</th>
                     <th>Masuk</th>
                     <th>Keluar</th>
                     <th>Lembur (jam)<br>Plan</th>
                     <th>Lembur (jam)<br>Actual</th>
+                    <th>Diff</th>
+                    <th>act</th>
                     <th>Aksi</th>
                   </tr>
                 </thead>
@@ -71,7 +73,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <div class="col-md-8">
                       <p>: <c id="hari"></c></p>
                       <p>: <c id="tgl"></c></p>
-                      <p>: -</p>
+                      <p>: <c id="dep"></c> - <c id="sec"></c></p>
                     </div>
                   </div>
                   <div class="col-md-6">
@@ -130,7 +132,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <h4 class="modal-title">Confirm OK?</h4>
               </div>
               <div class="modal-body">
+                <p id="tgl2"></p>
                 <h4>Yakin Konfirmasi "<c id='id_ot'></c>" ? </h4>
+                <p id="tot"></p>
               </div>
               <div class="modal-footer">
                 <button class="btn btn-success pull-left" data-dismiss="modal" onclick="ok()"><i class="fa fa-thumbs-up"></i> OK</button>
@@ -185,6 +189,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
           
           $("#hari").text(s[0][1]);
           $("#tgl").text(s[0][2]);
+          $("#dep").text(s[0][3]);
+          $("#sec").text(s[0][4]);
           $("#kep").val(s[0][5]);
           $("#cat").val(s[0][6]);
 
@@ -246,18 +252,24 @@ scratch. This page gets rid of all links and provides the needed markup only.
       window.open(url,'_blank');
     }
 
-    function modalOpen(id) {
+    function modalOpen(id,jam_lembur, tgl) {
       $('#myModal2').modal({backdrop: 'static', keyboard: false});
       $('#id_ot').text(id);
+      $('#tgl2').text(tgl);
+      $('#tot').text(jam_lembur);
     }
 
     function ok() {
-      var id_ot = $('#id_ot').text();
+      var nik = $('#id_ot').text();
+      var tgl2 = $('#tgl2').text();
+      var tot = $('#tot').text();
       $.ajax({
         url: "<?php echo base_url('ot/acc/')?>",
         type : "POST",
         data: {
-          id:id_ot
+          nik:nik,
+          tgl:tgl2,
+          tot:tot
         },
         success: function(data){
           openSuccessGritter();

@@ -52,12 +52,14 @@ class Ot extends CI_Controller {
 	{
 		
 		$list = $this->over_model->get_data_ot();
+		$aktual = 0;
 
 		$data = array();
 		foreach ($list as $key) {
 			$row = array();
+			$tg = date("d-m-Y",strtotime($key->tanggal));
 			$row[] = $key->id;
-			$row[] = date("d-m-Y",strtotime($key->tanggal));
+			$row[] = $tg;
 			$row[] = $key->nik;
 			$row[] = $key->namaKaryawan;
 			$row[] = $key->masuk;
@@ -66,19 +68,49 @@ class Ot extends CI_Controller {
 
 			if ($key->shift == 1) {
 				$date = '2007-05-14';
-				$time = strtotime($date." ".$key->keluar);
+
+				$time = strtotime($date." ".$key->masuk);
+				$datang = strtotime($date.' 07:00:00');
+
+				$time2 = strtotime($date." ".$key->keluar);
 				$pulang = strtotime($date.' 16:00:00');
 
-				$jam = $time - $pulang;
+				$jam = ($time2 - $pulang) + ($datang - $time);
 
-				$row[] = floor((($jam / 60) / 60) * 2) / 2;
+				$aktual =  floor((($jam / 60) / 60) * 2) / 2;
+				$row[] = $aktual;
+			}
+			else if ($key->shift == 2) {
+				$date = '2007-05-14';
+
+				$time = strtotime($date." ".$key->masuk);
+				$datang = strtotime($date.' 16:00:00');
+
+				$time2 = strtotime($date." ".$key->keluar);
+				$pulang = strtotime($date.' 00:00:00');
+
+				$jam = ($time2 - $pulang) + ($datang - $time);
+
+				$aktual =  floor((($jam / 60) / 60) * 2) / 2;
+				$row[] = $aktual;
 			}
 			else
 				$row[] = "";
 
+			$row[] = $aktual - $key->jam;
+			
+			if ($key->jam > $aktual) {
+				$lembur = $aktual;
+				$row[] = $lembur;
+			}
+			else {
+				$lembur = $key->jam;
+				$row[] = $lembur;
+			}
+
 			if ($key->status == 0) {
 				$row[] = "<button class='btn btn-primary btn-xs' onclick='detail_spl(".$key->id.")'>Detail</button>
-				<button class='btn btn-success btn-xs' onclick='modalOpen(".$key->id.")'><i class='fa fa-thumbs-up'></i> Confirm</button>";
+				<button class='btn btn-success btn-xs' onclick='modalOpen(\"".$key->nik."\",".$lembur.",\"".$tg."\")'><i class='fa fa-thumbs-up'></i> Confirm</button>";
 			}
 			else {
 				$row[] = "<button class='btn btn-primary btn-xs' onclick='detail_spl(".$key->id.")'>Detail</button>";
@@ -266,11 +298,13 @@ class Ot extends CI_Controller {
 
 	public function acc()
 	{
-		$id = $_POST['id'];
+		$nik = $_POST['nik'];
+		$tgl = $_POST['tgl'];
+		$jml = $_POST['tot'];
 
-		$jam = $this->over_model->get_jam($id);
+		$cc = $this->over_model->get_cc($nik, $jml, $tgl);
 
-		$this->over_model->tambah_aktual($jam[0]->costCenter,$jam[0]->jml,$jam[0]->tanggal);
+		$this->over_model->tambah_aktual($cc[0]->costCenter, $jml, $tgl);
 
 	}
 }

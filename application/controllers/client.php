@@ -39,6 +39,9 @@ class Client extends CI_Controller {
 				$row[] = "-";
 			
 			$row[] = $key->CT;
+			$row[] = "-";
+			$row[] = "-";
+			$row[] = "-";
 			$jml = $key->A + $key->I + $key->SD;
 			
 			if ($jml != 0 )

@@ -83,7 +83,7 @@ p {
 		break;
 	}
 	?>
-	<table width="100%" border="0" style="padding-right: 20px">
+	<table width="100%" border="1" style="padding-right: 20px">
 		<tr>
 			<td width="85%" colspan="5"><b>PT. YAMAHA MUSICAL PRODUCT INDONESIA</b></td>
 		</tr>
@@ -112,7 +112,7 @@ p {
 			<td width="25%"><?php echo $list[0]->departemen ?> - <?php echo $list[0]->section ?></td>
 		</tr>
 	</table>
-	<table width="98%" style="margin-top: 10px" id="anggota"  align="center" border="0">
+	<table width="98%" style="margin-top: 10px" id="anggota"  align="center" border="1">
 		<tr>
 			<th width="3%">No</th>
 			<th width="15%">NIK</th>
@@ -171,15 +171,18 @@ p {
 				<div style="height: 80px; margin: 0 5px 0 5px; width: 100%;"><?php echo $list[0]->catatan ?></div>
 			</td>
 		</tr>
-		<tr>
-			<td colspan="3">
+	</table>
+
+	<table width="100%" border="1">
+		<tr width>
+			<td>
 				<table width="100%" id="tb-collapse" style="background-color: #dddddd">
 					<tr><td width="34%">TARGET</td><td width="33%">ACTUAL</td><td width="33%">DIFF</td></tr>
 					<tr><td height="20px"><?php echo $cc_member[0]->jml*$total ?></td><td><?php echo $aktual ?></td><td><?php echo ($cc_member[0]->jml*$total) - $aktual ?></td></tr>
 					<tr><td colspan="3" height="130px"></td></tr>
 				</table>
 			</td>
-			<td colspan="9">
+			<td>
 				<table width="100%" id="tb-collapse" style="margin-left: 5px; background-color: #dddddd">
 					<tr><td>Diusulkan,</td><td>Disetujui,</td><td>Diketahui,</td><td>Diterima,</td></tr>
 					<tr><td>Staff / Leader</td><td>Chief / Foreman</td><td>Dept. Manager</td><td>HR Dept.</td></tr>

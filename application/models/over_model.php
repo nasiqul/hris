@@ -3,8 +3,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Over_model extends CI_Model {
 
-	var $column_order = array('id','tanggal','c.nik','d.namaKaryawan','masuk','keluar','jam','shift'); //set column field database for datatable orderable
-    var $column_search = array('id','tanggal','c.nik','d.namaKaryawan','masuk','keluar','jam','shift'); //set column field database for datatable searchable 
+	var $column_order = array('id','tanggal','c.nik','d.namaKaryawan','masuk','keluar','jam','shift','','',''); //set column field database for datatable orderable
+    var $column_search = array('id','DATE_FORMAT(tanggal, "%d-%m-%Y")','c.nik','d.namaKaryawan','masuk','keluar','jam'); //set column field database for datatable searchable 
     var $order = array('tanggal' => 'desc'); // default order 
 
     public function __construct()
@@ -26,7 +26,7 @@ class Over_model extends CI_Model {
     {
     	$this->db->select("tanggal,c.nik,d.namaKaryawan, masuk, keluar, jam, id, shift, c.status");
     	$this->db->from("(SELECT * from (
-    		SELECT o.tanggal, o.id, b.jam, b.nik as nik1, o.status as status from over_time as o
+    		SELECT o.tanggal, o.id, b.jam, b.nik as nik1, b.status as status from over_time as o
     		LEFT JOIN over_time_member as b
     		on o.id = b.id_ot
     		) a
@@ -337,18 +337,14 @@ class Over_model extends CI_Model {
     }
 
 
-    public function get_jam($id)
+    public function get_cc($nik,$val,$tgl)
     {
-        $this->db->set('status','1');
-        $this->db->where('id', $id);
-        $this->db->update('over_time');
+        $sql = "UPDATE over_time_member AS om JOIN over_time AS o ON om.id_ot = o.id SET om.status = 1, om.jam_aktual = ".(float)$val." WHERE o.tanggal = STR_TO_DATE('".$tgl."', '%d-%m-%Y') AND om.nik = '".$nik."'";
+        $this->db->query($sql);
 
-
-        $this->db->select("SUM(om.jam) as jml, k.costCenter, o.tanggal");
-        $this->db->from('over_time o');
-        $this->db->join("over_time_member om","o.id = om.id_ot");
-        $this->db->join("karyawan k","om.nik = k.nik");
-        $this->db->where("o.id",$id);
+        $this->db->select("k.costCenter");
+        $this->db->from("karyawan k");
+        $this->db->where("k.nik",$nik);
         $query = $this->db->get();
         return $query->result();
     }
@@ -356,7 +352,7 @@ class Over_model extends CI_Model {
     public function tambah_aktual($id_cc,$val,$tgl)
     {
 
-        $query2 = "UPDATE `cost_center_budget` SET `aktual` = `aktual` + ".(int)$val." WHERE `id_cc` = '".$id_cc."'";
+        $query2 = "UPDATE `cost_center_budget` SET `aktual` = `aktual` + ".(float)$val." WHERE `id_cc` = '".$id_cc."'";
         $this->db->query($query2);
     }
 

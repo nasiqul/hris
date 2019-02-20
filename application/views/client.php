@@ -78,20 +78,21 @@
                  <table class="table table-responsive table-striped text-center" id="table1">
                    <thead>
                      <th>Period</th>
-                     <th>Absent</th>
-                     <th>Permit</th>
-                     <th>Sick</th>
+                     <th>Alpa</th>
+                     <th>Ijin</th>
+                     <th>Sakit</th>
                      <th>Cuti</th>
+                     <th>Cuti Khusus</th>
+                     <th>PC</th>
+                     <th>T</th>
                      <th>Diciplinary Allowance</th>
-                     <th>Overtime (Hour)</th>
+                     <th>Lembur (Jam)</th>
                      <th>aksi</th>
                    </thead>
                    <tbody>
                    </tbody>
                    <tfoot  id="tableFootStock">
                     <th>Total</th>
-                    <th></th>
-                    <th></th>
                     <th></th>
                     <th></th>
                     <th></th>
