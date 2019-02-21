@@ -3,8 +3,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Over_model extends CI_Model {
 
-	var $column_order = array('id','tanggal','c.nik','d.namaKaryawan','masuk','keluar','jam','shift','','',''); //set column field database for datatable orderable
-    var $column_search = array('id','DATE_FORMAT(tanggal, "%d-%m-%Y")','c.nik','d.namaKaryawan','masuk','keluar','jam'); //set column field database for datatable searchable 
+	var $column_order = array('id','tanggal','nik','nama','masuk','keluar','jam','aktual','diff','final'); //set column field database for datatable orderable
+    var $column_search = array('id','DATE_FORMAT(tanggal, "%d-%m-%Y")','nik','nama','masuk','keluar','jam','aktual','diff','final'); //set column field database for datatable searchable 
     var $order = array('tanggal' => 'desc'); // default order 
 
     public function __construct()
@@ -16,25 +16,45 @@ class Over_model extends CI_Model {
     public function get_data_ot()
     {
     	$this->_get_datatables_query();
-    	if($_POST['length'] != -1)
-    		$this->db->limit($_POST['length'], $_POST['start']);
+    	if($_GET['length'] != -1)
+    		$this->db->limit($_GET['length'], $_GET['start']);
     	$query = $this->db->get();
     	return $query->result();
     }
 
     private function _get_datatables_query()
     {
-    	$this->db->select("tanggal,c.nik,d.namaKaryawan, masuk, keluar, jam, id, shift, c.status");
-    	$this->db->from("(SELECT * from (
-    		SELECT o.tanggal, o.id, b.jam, b.nik as nik1, b.status as status from over_time as o
-    		LEFT JOIN over_time_member as b
-    		on o.id = b.id_ot
-    		) a
+    	$this->db->select("*");
+    	$this->db->from("(
+            select tanggal,c.nik as nik,d.namaKaryawan as nama, masuk, keluar, id, shift, c.status, jam,
+                IF(shift = 1, 
+                        floor(((TIME_TO_SEC(TIMEDIFF(concat('2010-08-20 ',keluar), '2010-08-20 16:00:00'))) + 
+                        (TIME_TO_SEC(TIMEDIFF('2010-08-20 07:00:00' , concat('2010-08-20 ',masuk)))))/ 60 / 60 * 2) / 2
+                        , IF(shift = 2,
+                            floor(((TIME_TO_SEC(TIMEDIFF(concat('2010-08-20 ',keluar), '2010-08-20 00:00:00'))) + 
+                            (TIME_TO_SEC(TIMEDIFF('2010-08-20 16:00:00' , concat('2010-08-20 ',masuk)))))/ 60 / 60 * 2) / 2
+                            , IF(shift = 3,
+                            floor(((TIME_TO_SEC(TIMEDIFF(concat('2010-08-20 ',keluar), '2010-08-20 07:00:00'))) + 
+                            (TIME_TO_SEC(TIMEDIFF('2010-08-20 00:00:00' , concat('2010-08-20 ',masuk)))))/ 60 / 60 * 2) / 2
+                            , 0)))
+                        
+                as aktual, 
+                ((SELECT aktual) - jam) as diff,
+                IF(jam > (SELECT aktual),
+                ROUND((SELECT aktual), 1),ROUND(jam, 1))
+                as final
+                
+                from (SELECT * from (
+            SELECT o.tanggal, o.id, b.jam, b.nik as nik1, b.status as status from over_time as o
+            LEFT JOIN over_time_member as b
+            on o.id = b.id_ot
+            ) a
 
-    		left join (
-    		SELECT presensi.nik,presensi.masuk,presensi.keluar,presensi.tanggal as tanggalpresensi, shift from presensi where presensi.nik in (SELECT over_time_member.nik from over_time_member) and presensi.tanggal in (SELECT over_time.tanggal from over_time)
-    	) b on a.tanggal = b.tanggalpresensi and a.nik1 = b.nik) c");
-    	$this->db->join("karyawan d","c.nik = d.nik","left");
+            left join (
+            SELECT presensi.nik,presensi.masuk,presensi.keluar,presensi.tanggal as tanggalpresensi, shift from presensi where presensi.nik in (SELECT over_time_member.nik from over_time_member) and presensi.tanggal in (SELECT over_time.tanggal from over_time)
+        ) b on a.tanggal = b.tanggalpresensi and a.nik1 = b.nik) c
+            left join karyawan d on c.nik = d.nik ) tmp");
+    	$this->db->where(1,1);
 
         // $this->db->select('o.id, tanggal, d.nama as namaDep, s.nama as namaSec, keperluan, catatan, SUM(om.jam) as jam');
         // $this->db->from("over_time o");
@@ -48,17 +68,17 @@ class Over_model extends CI_Model {
 
         foreach ($this->column_search as $item) // loop column 
         {
-            if($_POST['search']['value']) // if datatable send POST for search
+            if($_GET['search']['value']) // if datatable send POST for search
             {
 
                 if($i===0) // first loop
                 {
                     $this->db->group_start(); // open bracket. query Where with OR clause better with bracket. because maybe can combine with other WHERE with AND.
-                    $this->db->like($item, $_POST['search']['value']);
+                    $this->db->like($item, $_GET['search']['value']);
                 }
                 else
                 {
-                	$this->db->or_like($item, $_POST['search']['value']);
+                	$this->db->or_like($item, $_GET['search']['value']);
                 }
 
                 if(count($this->column_search) - 1 == $i) //last loop
@@ -67,9 +87,9 @@ class Over_model extends CI_Model {
                 $i++;
             }
 
-        if(isset($_POST['order'])) // here order processing
+        if(isset($_GET['order'])) // here order processing
         {
-        	$this->db->order_by($this->column_order[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
+        	$this->db->order_by($this->column_order[$_GET['order']['0']['column']], $_GET['order']['0']['dir']);
         } 
         else if(isset($this->order))
         {
@@ -145,8 +165,8 @@ class Over_model extends CI_Model {
     public function get_over_by_id_member($id)
     {
         $this->_get_datatables_query2($id);
-        if($_POST['length'] != -1)
-            $this->db->limit($_POST['length'], $_POST['start']);
+        if($_GET['length'] != -1)
+            $this->db->limit($_GET['length'], $_GET['start']);
         $query = $this->db->get();
         return $query->result();
     }
@@ -185,17 +205,17 @@ class Over_model extends CI_Model {
 
         foreach ($this->column_search as $item) // loop column 
         {
-            if($_POST['search']['value']) // if datatable send POST for search
+            if($_GET['search']['value']) // if datatable send POST for search
             {
 
                 if($i===0) // first loop
                 {
                     $this->db->group_start(); // open bracket. query Where with OR clause better with bracket. because maybe can combine with other WHERE with AND.
-                    $this->db->like($item, $_POST['search']['value']);
+                    $this->db->like($item, $_GET['search']['value']);
                 }
                 else
                 {
-                    $this->db->or_like($item, $_POST['search']['value']);
+                    $this->db->or_like($item, $_GET['search']['value']);
                 }
 
                 if(count($this->column_search) - 1 == $i) //last loop
@@ -204,9 +224,9 @@ class Over_model extends CI_Model {
                 $i++;
             }
 
-        if(isset($_POST['order'])) // here order processing
+        if(isset($_GET['order'])) // here order processing
         {
-            $this->db->order_by($this->column_order[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
+            $this->db->order_by($this->column_order[$_GET['order']['0']['column']], $_GET['order']['0']['dir']);
         } 
         else if(isset($this->order))
         {

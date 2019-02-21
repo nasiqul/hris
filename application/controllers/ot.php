@@ -50,9 +50,7 @@ class Ot extends CI_Controller {
 
 	public function ajax_ot()
 	{
-		
 		$list = $this->over_model->get_data_ot();
-		$aktual = 0;
 
 		$data = array();
 		foreach ($list as $key) {
@@ -61,56 +59,20 @@ class Ot extends CI_Controller {
 			$row[] = $key->id;
 			$row[] = $tg;
 			$row[] = $key->nik;
-			$row[] = $key->namaKaryawan;
+			$row[] = $key->nama;
 			$row[] = $key->masuk;
-			$row[] = $key->keluar.$key->shift;
-			$row[] = $key->jam;
-
-			if ($key->shift == 1) {
-				$date = '2007-05-14';
-
-				$time = strtotime($date." ".$key->masuk);
-				$datang = strtotime($date.' 07:00:00');
-
-				$time2 = strtotime($date." ".$key->keluar);
-				$pulang = strtotime($date.' 16:00:00');
-
-				$jam = ($time2 - $pulang) + ($datang - $time);
-
-				$aktual =  floor((($jam / 60) / 60) * 2) / 2;
-				$row[] = $aktual;
-			}
-			else if ($key->shift == 2) {
-				$date = '2007-05-14';
-
-				$time = strtotime($date." ".$key->masuk);
-				$datang = strtotime($date.' 16:00:00');
-
-				$time2 = strtotime($date." ".$key->keluar);
-				$pulang = strtotime($date.' 00:00:00');
-
-				$jam = ($time2 - $pulang) + ($datang - $time);
-
-				$aktual =  floor((($jam / 60) / 60) * 2) / 2;
-				$row[] = $aktual;
-			}
+			$row[] = $key->keluar;
+			if ($key->aktual >= $key->jam)
+				$row[] = "<p id=".$key->id.">".$key->jam." &nbsp<a href='#' onclick=''><i class='fa fa-refresh'></i></a></p>";
 			else
-				$row[] = "";
-
-			$row[] = $aktual - $key->jam;
-			
-			if ($key->jam > $aktual) {
-				$lembur = $aktual;
-				$row[] = $lembur;
-			}
-			else {
-				$lembur = $key->jam;
-				$row[] = $lembur;
-			}
+				$row[] = $key->jam;
+			$row[] = ROUND($key->aktual,2);
+			$row[] = $key->diff;
+			$row[] = ROUND($key->final,2);
 
 			if ($key->status == 0) {
 				$row[] = "<button class='btn btn-primary btn-xs' onclick='detail_spl(".$key->id.")'>Detail</button>
-				<button class='btn btn-success btn-xs' onclick='modalOpen(\"".$key->nik."\",".$lembur.",\"".$tg."\")'><i class='fa fa-thumbs-up'></i> Confirm</button>";
+				<button class='btn btn-success btn-xs' onclick='modalOpen(\"".$key->nik."\",".$key->final.",\"".$tg."\")'><i class='fa fa-thumbs-up'></i> Confirm</button>";
 			}
 			else {
 				$row[] = "<button class='btn btn-primary btn-xs' onclick='detail_spl(".$key->id.")'>Detail</button>";
@@ -123,7 +85,7 @@ class Ot extends CI_Controller {
 		$filter = $this->over_model->count_filtered();
 
 		$output = array(
-			"draw" => $_POST['draw'],
+			"draw" => $_GET['draw'],
 			"recordsTotal" => $tot,
 			"recordsFiltered" => $filter,
 			"data" => $data
@@ -156,7 +118,7 @@ class Ot extends CI_Controller {
 
 	public function ajax_spl_data2()
 	{
-		$id = $_POST['id'];
+		$id = $_GET['id'];
 		$list = $this->over_model->get_over_by_id_member($id);
 		$no = 1;
 		$data = array();
@@ -182,7 +144,7 @@ class Ot extends CI_Controller {
 		$filter = $this->over_model->count_filtered();
 
 		$output = array(
-			"draw" => $_POST['draw'],
+			"draw" => $_GET['draw'],
 			"data" => $data
 		);
 

@@ -44,7 +44,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <th>Lembur (jam)<br>Plan</th>
                     <th>Lembur (jam)<br>Actual</th>
                     <th>Diff</th>
-                    <th>act</th>
+                    <th>Final</th>
                     <th>Aksi</th>
                   </tr>
                 </thead>
@@ -165,11 +165,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
         'order'         : [],
         "ajax": {
           "url": "<?php echo base_url('ot/ajax_ot')?>",       
-          "type": "POST"
-        }
-      })
-
-    })
+          "type": "GET"
+        },
+        "columnDefs": [
+        {
+              "targets": [ 10 ], //first column / numbering column
+              "orderable": false, //set not orderable
+            }
+            ],
+          });
+    });
 
     function detail_spl(id) {
       tabel = $('#example2').DataTable();
@@ -206,7 +211,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             'order'         : [],
             "ajax": {
               "url": "<?php echo base_url('ot/ajax_spl_data2')?>",       
-              "type": "POST",
+              "type": "GET",
               'data' : { id : id2 }
             },
             "columns": [
@@ -288,7 +293,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
         time: '2000'
       });
     }
-  </script>
+
+    function jam(jam) {
+      alert(jam);
+    }
+
+ </script>
 
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the
