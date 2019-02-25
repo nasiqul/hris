@@ -192,10 +192,13 @@ class Home extends CI_Controller {
             $shift = $this->session->userdata('shift');
 
             $list = $this->cari_model->get_data_presensi_cari($tgl, $nik, $nama, $shift);
-
+            $tot = $this->cari_model->count_all();
+            $filter = $this->cari_model->count_filtered($tgl, $nik, $nama, $shift);
         }
         else {
             $list = $this->home_model->get_data_persensi();
+            $tot = $this->home_model->count_all();
+            $filter = $this->home_model->count_filtered();
         }
 
         $data = array();
@@ -219,8 +222,8 @@ class Home extends CI_Controller {
 
         $output = array(
             "draw" => $_POST['draw'],
-            "recordsTotal" => $this->home_model->count_all(),
-            "recordsFiltered" => $this->home_model->count_filtered(),
+            "recordsTotal" => $tot,
+            "recordsFiltered" => $filter,
             "data" => $data,
         );
             //output to json format
@@ -486,9 +489,9 @@ public function ajax_presensi_shift()
       }
   }
   else
-   $result[] = json_decode ("{}");
+     $result[] = json_decode ("{}");
 
-echo json_encode($result);
+ echo json_encode($result);
 }
 
 public function ajax_emp_keluarga()

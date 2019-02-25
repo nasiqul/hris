@@ -82,5 +82,18 @@ class Cari_model extends CI_Model {
             $this->db->order_by(key($order), $order[key($order)]);
         }
     }
+
+    function count_filtered($tgl, $nik, $nama, $shift)
+    {
+        $this->_get_presensi_cari($tgl, $nik, $nama, $shift);
+        $query = $this->db->get();
+        return $query->num_rows();
+    }
+
+    public function count_all()
+    {
+        $this->db->from('presensi');
+        return $this->db->count_all_results();
+    }
 }
 ?>

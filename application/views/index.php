@@ -130,12 +130,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
         "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
         "processing": true,
         "serverSide": true,
-        "bInfo": false,
         "order": [],
         "ajax": {
           "url": "<?php echo base_url('home/ajax')?>",            
           "type": "POST"
-        }
+        },
+        "orderCellsTop": true,
+        "fixedHeader": true
       });
 
       table.columns().every( function () {
