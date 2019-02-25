@@ -36,7 +36,7 @@
                 <!-- The user image in the navbar-->
                 <img class="user-image" alt="User Image" id="fotoHead">
                 <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                <span class="hidden-xs"><?php echo $this->session->userdata('id'); ?></span>
+                <span class="hidden-xs"><?php echo $this->session->userdata('nik'); ?></span>
               </a>
               <ul class="dropdown-menu">
                 <!-- The user image in the menu -->
