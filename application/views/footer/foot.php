@@ -85,6 +85,7 @@
 
 <!-- Bootstrap 3.3.7 -->
 <script src="<?php echo base_url()?>app/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="<?php echo base_url()?>app/bower_components/morris.js/morris.min.js"></script>
 <script src="<?php echo base_url()?>app/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
 <script src="<?php echo base_url()?>app/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
 <!-- AdminLTE App -->

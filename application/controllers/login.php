@@ -8,7 +8,7 @@ class Login extends CI_Controller {
 		$this->load->model('absensi_model');
 		$this->load->model('karyawan_model');
 		$this->load->model('cari_model');
-        $this->load->model('user_model');
+		$this->load->model('user_model');
 	}
 
 	public function index()
@@ -30,26 +30,26 @@ class Login extends CI_Controller {
 
 	public function proses_login()
 	{
-		// $nik = $_POST['nik'];
-		// $pass = $_POST['pass'];
+		$nik = $_POST['nik'];
+		$pass = $_POST['pass'];
 
-		// $list = $this->user_model->login($nik,$pass);
+		$list = $this->user_model->login($nik,$pass);
+		$isi = $this->user_model->login_data($nik,$pass);
 
-		// if ($list == 1) {
-		// 	$newdata = array(
-		// 		'nik'  => $nik
-		// 	);
+		if ($list == 1) {
+			$newdata = array(
+				'nik'  => $nik,
+				'role'  => $isi[0]->role
+			);
 
-		// 	$this->session->set_userdata($newdata);
+			$this->session->set_userdata($newdata);
 
-		// 	redirect('client/view');
-		// }
-		// else {
-			
-		// 	$this->session->set_flashdata('success', 'Success Message...');
+			echo json_encode(1);
+		}
+		else {
 
-		// 	redirect('login');
-		// }
+			echo json_encode(0);
+		}
 	}
 }
 ?>

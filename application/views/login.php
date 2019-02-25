@@ -3,13 +3,16 @@
 
 <?php require_once(APPPATH.'views/header/head.php'); ?>
 
+<style type="text/css">
+.error {
+	border:1px solid red;
+}
+</style>
+
 <body class="hold-transition login-page">
-	<?php if($this->session->flashdata('success')){ ?>  
-		<div class="alert alert-success">  
-			<a href="#" class="close" data-dismiss="alert">&times;</a>  
-			<strong>Success!</strong> <?php echo $this->session->flashdata('success'); ?>  
-		</div>  
-	<?php } ?>
+	<div class="alert alert-danger" id="notif" style="display: none; cursor: pointer;" onclick="check()">
+		<strong>Login Gagal,</strong> NIK atau Password Salah !!
+	</div>  
 	<div class="login-box">
 		<div class="login-logo">
 			<b>Admin</b>LTE
@@ -20,11 +23,11 @@
 
 			<form onsubmit="login();return false;">
 				<div class="form-group has-feedback">
-					<input type="text" class="form-control" placeholder="NIK" id="nik" name="nik" required="">
+					<input type="text" class="form-control" placeholder="NIK" id="nik" name="nik" required="" onfocus="default2()">
 					<span class="glyphicon glyphicon-user form-control-feedback"></span>
 				</div>
 				<div class="form-group has-feedback">
-					<input type="password" class="form-control" placeholder="Password" required="" id="pass">
+					<input type="password" class="form-control" placeholder="Password" required="" id="pass" onfocus="default3()">
 					<span class="glyphicon glyphicon-lock form-control-feedback"></span>
 				</div>
 				<div class="row">
@@ -41,8 +44,13 @@
 	</div>
 	<!-- /.login-box -->
 
-<script src="<?php echo base_url()?>app/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script src="<?php echo base_url()?>app/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 	<script>
+		var notif = document.getElementById("notif");
+
+		function check() {
+			notif.style.display = "none";
+		}
 
 		function login() {
 			var nik = $("#nik").val();
@@ -56,9 +64,25 @@
 					pass:pass
 				},
 				success: function(data){
-					alert('tes1');
+					var s = $.parseJSON(data);
+					if (s == 0) {
+						notif.style.display = "block";
+
+						document.getElementById("nik").className = document.getElementById("nik").className + " error";  // this adds the error class
+						document.getElementById("pass").className = document.getElementById("pass").className + " error";  // this adds the error class
+					} else {
+						window.location.replace("<?php echo base_url('home/client/') ?>");
+					}
 				}
 			})
+		}
+
+		function default2() {
+			document.getElementById("nik").className = document.getElementById("nik").className.replace(" error", ""); // this removes the error class
+		}
+
+		function default3() {
+			document.getElementById("pass").className = document.getElementById("pass").className.replace(" error", ""); // this removes the error class
 		}
 
 	</script>

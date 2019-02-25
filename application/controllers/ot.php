@@ -27,7 +27,7 @@ class Ot extends CI_Controller {
 		$kalender = $this->over_model->get_calendar($tgl);
 
 		if ($kalender == 0)
-			$this->over_model->save_master($no_doc, $tgl, $dep, $sec, $kep, $cat, 'B');
+			$this->over_model->save_master($no_doc, $tgl, $dep, $sec, $kep, $cat, 'N');
 		else
 			$this->over_model->save_master($no_doc, $tgl, $dep, $sec, $kep, $cat, 'L');
 	}
@@ -62,32 +62,29 @@ class Ot extends CI_Controller {
 			$row[] = $key->nama;
 			$row[] = $key->masuk;
 			$row[] = $key->keluar;
-			if ($key->aktual >= $key->jam)
-				$row[] = "<p id=".$key->id.">".$key->jam." &nbsp<a href='#' onclick=''><i class='fa fa-refresh'></i></a></p>";
+			if ($key->aktual > $key->jam && $key->final == 0)
+				$row[] = "<button class='btn btn-danger btn-xs' id=d".$key->nik.$key->id." onclick='applyJam(".$key->id.",".$key->nik.",".$key->jam.")'><i class='fa fa-close'></i></button>  &nbsp <b>"
+			.$key->jam."</b> 
+			&nbsp<button class='btn btn-success btn-xs' id=c".$key->nik.$key->id." onclick='applyJam(".$key->id.",".$key->nik.",".$key->aktual.")'><i class='fa fa-check'></i></button>";
 			else
 				$row[] = $key->jam;
 			$row[] = ROUND($key->aktual,2);
 			$row[] = $key->diff;
-			$row[] = ROUND($key->final,2);
+			$row[] = "<p id='f".$key->nik.$key->id."'>".ROUND($key->final2,2)."<p>";
 
 			if ($key->status == 0) {
 				$row[] = "<button class='btn btn-primary btn-xs' onclick='detail_spl(".$key->id.")'>Detail</button>
-				<button class='btn btn-success btn-xs' onclick='modalOpen(\"".$key->nik."\",".$key->final.",\"".$tg."\")'><i class='fa fa-thumbs-up'></i> Confirm</button>";
+				<button class='btn btn-success btn-xs' onclick='modalOpen(\"".$key->nik."\",".$key->final2.",\"".$tg."\")'><i class='fa fa-thumbs-up'></i> Confirm</button>";
 			}
 			else {
-				$row[] = "<button class='btn btn-primary btn-xs' onclick='detail_spl(".$key->id.")'>Detail</button>";
+				$row[] = "<button class='btn btn-primary btn-xs' id='conf".$key->nik.$key->id."' onclick='detail_spl(".$key->id.")'>Detail</button>";
 			}
 
 			$data[] = $row;
 		}
 
-		$tot = $this->over_model->count_all();
-		$filter = $this->over_model->count_filtered();
-
 		$output = array(
 			"draw" => $_GET['draw'],
-			"recordsTotal" => $tot,
-			"recordsFiltered" => $filter,
 			"data" => $data
 		);
             //output to json format
@@ -237,12 +234,37 @@ class Ot extends CI_Controller {
 		echo json_encode($output);
 	}
 
+	public function ajax_spl_g()
+	{
+		$tgl = $_POST['tanggal'];
+		$cc = $_POST['cc'];
+		$target = $_POST['target'];
 
-	public function print_preview($id)
+		$list = $this->over_model->get_data_chart($tgl, $cc, $target);
+		$data = array();
+		if(!empty($list)) {
+			foreach ($list as $key) {
+				$row = array();
+				$row[] = $key->jam;
+				$row[] = date("d/m",strtotime($key->tanggal));
+				$row[] = $key->target;
+
+				$data[] = $row;
+			}
+
+		}else
+				$data[] = json_decode("{}");
+
+            //output to json format
+		echo json_encode($data);
+	}
+
+
+	public function print_preview($id,$tgl)
 	{
 		$data['list'] = $this->over_model->get_over_by_id($id);
-		$data['list_anggota'] = $this->over_model->get_member_id($id);
-		$cc = $this->over_model->get_member_id($id);
+		$data['list_anggota'] = $this->over_model->get_member_id($id,$tgl);
+		$cc = $this->over_model->get_member_id($id,$tgl);
 		$data['cc_member'] = $this->over_model->costCenter($cc[sizeof($cc)-1]->id_cc);
 
 		$this->load->view('print_ot',$data);
@@ -269,5 +291,15 @@ class Ot extends CI_Controller {
 		$this->over_model->tambah_aktual($cc[0]->costCenter, $jml, $tgl);
 
 	}
+
+	public function changeJam()
+	{
+		$nik = $_POST['nik'];
+		$id = $_POST['id'];
+		$jam = $_POST['jam'];
+
+		$this->over_model->set_jam($id, $nik, $jam);
+	}
 }
 ?>
+

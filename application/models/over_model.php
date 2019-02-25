@@ -26,33 +26,34 @@ class Over_model extends CI_Model {
     {
     	$this->db->select("*");
     	$this->db->from("(
-            select tanggal,c.nik as nik,d.namaKaryawan as nama, masuk, keluar, id, shift, c.status, jam,
-                IF(shift = 1, 
-                        floor(((TIME_TO_SEC(TIMEDIFF(concat('2010-08-20 ',keluar), '2010-08-20 16:00:00'))) + 
-                        (TIME_TO_SEC(TIMEDIFF('2010-08-20 07:00:00' , concat('2010-08-20 ',masuk)))))/ 60 / 60 * 2) / 2
-                        , IF(shift = 2,
-                            floor(((TIME_TO_SEC(TIMEDIFF(concat('2010-08-20 ',keluar), '2010-08-20 00:00:00'))) + 
-                            (TIME_TO_SEC(TIMEDIFF('2010-08-20 16:00:00' , concat('2010-08-20 ',masuk)))))/ 60 / 60 * 2) / 2
-                            , IF(shift = 3,
-                            floor(((TIME_TO_SEC(TIMEDIFF(concat('2010-08-20 ',keluar), '2010-08-20 07:00:00'))) + 
-                            (TIME_TO_SEC(TIMEDIFF('2010-08-20 00:00:00' , concat('2010-08-20 ',masuk)))))/ 60 / 60 * 2) / 2
-                            , 0)))
-                        
-                as aktual, 
-                ((SELECT aktual) - jam) as diff,
-                IF(jam > (SELECT aktual),
-                ROUND((SELECT aktual), 1),ROUND(jam, 1))
-                as final
-                
-                from (SELECT * from (
-            SELECT o.tanggal, o.id, b.jam, b.nik as nik1, b.status as status from over_time as o
+            select tanggal,c.nik1 as nik,d.namaKaryawan as nama, masuk, keluar, id, shift, c.status, jam, final,
+            IF(shift = 1, 
+            floor(((TIME_TO_SEC(TIMEDIFF(concat('2010-08-20 ',keluar), '2010-08-20 16:00:00'))) + 
+            (TIME_TO_SEC(TIMEDIFF('2010-08-20 07:00:00' , concat('2010-08-20 ',masuk)))))/ 60 / 60 * 2) / 2
+            , IF(shift = 2,
+            floor(((TIME_TO_SEC(TIMEDIFF(concat('2010-08-20 ',keluar), '2010-08-20 00:00:00'))) + 
+            (TIME_TO_SEC(TIMEDIFF('2010-08-20 16:00:00' , concat('2010-08-20 ',masuk)))))/ 60 / 60 * 2) / 2
+            , IF(shift = 3,
+            floor(((TIME_TO_SEC(TIMEDIFF(concat('2010-08-20 ',keluar), '2010-08-20 07:00:00'))) + 
+            (TIME_TO_SEC(TIMEDIFF('2010-08-20 00:00:00' , concat('2010-08-20 ',masuk)))))/ 60 / 60 * 2) / 2
+            , 0)))
+
+            as aktual, 
+            ((SELECT aktual) - jam) as diff,
+            IF((SELECT aktual) > jam , 
+            IF(final <> 0, ROUND((SELECT final), 1) , ROUND(jam, 1))
+            , ROUND((SELECT aktual), 1))
+            as final2
+
+            from (SELECT * from (
+            SELECT o.tanggal, o.id, b.jam, b.nik as nik1, b.status as status, final from over_time as o
             LEFT JOIN over_time_member as b
             on o.id = b.id_ot
             ) a
 
             left join (
             SELECT presensi.nik,presensi.masuk,presensi.keluar,presensi.tanggal as tanggalpresensi, shift from presensi where presensi.nik in (SELECT over_time_member.nik from over_time_member) and presensi.tanggal in (SELECT over_time.tanggal from over_time)
-        ) b on a.tanggal = b.tanggalpresensi and a.nik1 = b.nik) c
+            ) b on a.tanggal = b.tanggalpresensi and a.nik1 = b.nik) c
             left join karyawan d on c.nik = d.nik ) tmp");
     	$this->db->where(1,1);
 
@@ -171,21 +172,22 @@ class Over_model extends CI_Model {
         return $query->result();
     }
 
-    public function get_member_id($id)
+    public function get_member_id($id,$tgl)
     {
-        $this->db->select("o.id as id_over, tanggal, departemen, section, keperluan, catatan, om.*, k.namaKaryawan, cc.budget, cc.id_cc, cc.aktual");
+        $this->db->select("o.id as id_over, tanggal, departemen, section, keperluan, catatan, om.*, k.namaKaryawan, cc.budget, cc.id_cc, cc.aktual as aktual");
         $this->db->from('over_time o');
         $this->db->join("over_time_member om","o.id = om.id_ot");
         $this->db->join("karyawan k","om.nik = k.nik");
         $this->db->join("cost_center_budget cc","cc.id_cc = k.costCenter");
         $this->db->where("o.id",$id);
+        $this->db->where("MONTH(cc.period) = MONTH (STR_TO_DATE('".$tgl."', '%d-%m-%Y'))");
         $query = $this->db->get();
         return $query->result();
     }
 
     public function costCenter($id)
     {
-        $this->db->select("COUNT(nik) as jml");
+        $this->db->select("costCenter, COUNT(nik) as jml");
         $this->db->from("karyawan");
         $this->db->where("costCenter", $id);
         $query = $this->db->get();
@@ -362,6 +364,13 @@ class Over_model extends CI_Model {
         $sql = "UPDATE over_time_member AS om JOIN over_time AS o ON om.id_ot = o.id SET om.status = 1, om.jam_aktual = ".(float)$val." WHERE o.tanggal = STR_TO_DATE('".$tgl."', '%d-%m-%Y') AND om.nik = '".$nik."'";
         $this->db->query($sql);
 
+        $sql = "UPDATE over_time_member AS om 
+        JOIN over_time AS o ON om.id_ot = o.id 
+        JOIN satuan_lembur sl ON sl.jam = om.jam_aktual 
+        SET om.satuan = sl.satuan 
+        WHERE o.tanggal = STR_TO_DATE('".$tgl."', '%d-%m-%Y') AND om.nik = '".$nik."'";
+        $this->db->query($sql);
+
         $this->db->select("k.costCenter");
         $this->db->from("karyawan k");
         $this->db->where("k.nik",$nik);
@@ -372,7 +381,7 @@ class Over_model extends CI_Model {
     public function tambah_aktual($id_cc,$val,$tgl)
     {
 
-        $query2 = "UPDATE `cost_center_budget` SET `aktual` = `aktual` + ".(float)$val." WHERE `id_cc` = '".$id_cc."'";
+        $query2 = "UPDATE `cost_center_budget` SET `aktual` = `aktual` + ".(float)$val." WHERE `id_cc` = '".$id_cc."' AND MONTH(period) = MONTH(STR_TO_DATE('".$tgl."', '%d-%m-%Y'))";
         $this->db->query($query2);
     }
 
@@ -384,6 +393,28 @@ class Over_model extends CI_Model {
 
         $query = $this->db->get();
         return $query->num_rows();
+    }
+
+    public function set_jam($id, $nik, $jam)
+    {
+        $sql = "UPDATE over_time_member SET 
+        final = ".$jam."
+        WHERE id_ot = ".$id." AND nik = '".$nik."'";
+        $this->db->query($sql);
+    }
+
+    public function get_data_chart($tgl,$cc,$target)
+    {
+        $q = "select tanggal,jam,".$target." as target from (
+            SELECT tanggal, costCenter, SUM(jam_aktual) as jam from over_time o
+            JOIN over_time_member om ON o.id = om.id_ot
+            JOIN karyawan k ON k.nik = om.nik
+            WHERE costCenter = ".$cc." AND
+            MONTH(tanggal) = MONTH(STR_TO_DATE('".$tgl."', '%Y-%m-%d'))
+            GROUP BY tanggal
+            )a
+            where a.jam > 0";
+        return $this->db->query($q)->result();
     }
 }
 ?>

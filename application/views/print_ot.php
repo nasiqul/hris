@@ -1,13 +1,36 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>OVERTIME</title>
+	<title>Overtime</title>
 </head>
+
+<link rel="stylesheet" href="<?php echo base_url()?>app/bower_components/bootstrap/dist/css/bootstrap.min.css">
+<script src="<?php echo base_url()?>app/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="<?php echo base_url()?>app/dist/js/highcharts.js"></script>
+
 <style type="text/css">
+@page {
+    size: A4;
+    margin: 0;
+}
+@media print {
+	#tb-collapse {
+        background-color: #dddddd !important;
+        -webkit-print-color-adjust: exact; 
+    }
+    body {
+    	font-size: 17pt;
+    }
+    #container {
+        font-size: 17pt;
+    }
+}
+
 body {
 	font-family: sans-serif;
+	padding: 5px;
 }
-div {
+.div {
 	border: 1px solid black;
 	width: 90%;
 	height: 25px;
@@ -31,9 +54,6 @@ p {
 	border-bottom: 1px solid #000;
 	padding: 5px 0 5px 0;
 }
-#anggota tr td { 
-	padding: 10px 0 10px 0;
-}
 #anggota #bottom td { 
 	border-top: 1px solid #000;
 	padding: 5px 0 5px 0;
@@ -44,7 +64,7 @@ p {
 #tb-collapse td {
 	border: 1px solid black;
 }
- 
+
 table,
 table tr td,
 table tr th {
@@ -109,7 +129,7 @@ table tr th {
 		<tr>
 			<td width="10%" style="padding: 5px 0  5px 20px">Tanggal</td>
 			<td width="2%">:</td>
-			<td width="25%"><?php echo $list[0]->tanggal ?></td>
+			<td width="25%"><p id='tgl'><?php echo $list[0]->tanggal ?></p></td>
 			<td colspan="2" rowspan="2" class='kep' style="padding: 7px"><p><?php echo $list[0]->keperluan ?></p></td>
 		</tr>
 		<tr>
@@ -130,23 +150,21 @@ table tr th {
 			<th width="8%">E.Food</th>
 			<th width="6%">TTD</th>
 			<th width="6%">jam</th>
-			<th width="6%">Revisi</th>
 			<th width="8%">TTD Atasan</th>
 		</tr>
 		<?php $no=1; $jml=0; $total=0; $mkn=0; $efood=0; $b=0; $p=0; foreach ($list_anggota as $key) { ?>
 			<tr>
-				<td><?php echo $no ?></td>
+				<td style="padding: 5px 0 5px 0"><?php echo $no ?></td>
 				<td><?php echo $key->nik ?></td>
 				<td><?php echo $key->namaKaryawan ?></td>
 				<td><?php echo date("H:i",strtotime($key->dari)); ?></td>
 				<td><?php echo date("H:i",strtotime($key->sampai)) ?></td>
-				<td><div><?php echo $key->transport; ?></div></td>
+				<td><div class="div"><?php echo $key->transport; ?></div></td>
 				<td><?php if ($key->makan == 1){ echo "&#x2714"; $mkn+=1; }?></td>
 				<td><?php if ($key->ext_food == 1){ echo "&#x2714"; $efood+=1;} ?></td>
-				<td><div></div></td>
-				<td><div><?php echo $key->jam ?></div></td>
-				<td><div></div></td>
-				<td><div></div></td>
+				<td><div class="div"></div></td>
+				<td><div class="div"><?php echo $key->jam ?></div></td>
+				<td><div class="div"></div></td>
 			</tr>
 			<?php 
 			if ($key->transport == "B")
@@ -159,45 +177,164 @@ table tr th {
 			$aktual = $key->aktual;
 		} ?>
 		<tr id="bottom">
-			<td colspan="3" style="text-align: left;">B = Bangil ; P = Pasuruan</td>
-			<td colspan="6" style="text-align: right;">Total = </td>
-			<td><div><?php echo $jml; ?></div></td>
+			<td colspan="5" style="text-align: left;">B = Bangil <br> P = Pasuruan</td>
+			<td>B = <?php echo $b ?><br>P = <?php echo $p ?></td>
+			<td><?php echo $mkn ?></td>
+			<td><?php echo $efood ?></td>
+			<td style="text-align: right;">Total = </td>
+			<td><div class="div"><?php echo $jml; ?></div></td>
 			<td>Jam</td>
-			<td></td>
+			
 		</tr>
-		<tr><td colspan="3"></td><td colspan="3" align="left">Catatan :</td></tr>
+		<tr><td colspan="3" align="left">Catatan :</td><td colspan="3" ></td></tr>
 		<tr>
 			<td colspan="3">
-				<table width="100%" id="tb-collapse">
-					<tr><td width="15%">B</td><td width="15%">P</td><td width="30%">Total Makan</td><td width="30%">Total E.Food</td></tr>
-					<tr><td><?php echo $b ?></td><td><?php echo $p ?></td><td><?php echo $mkn ?></td><td><?php echo $efood ?></td></tr>
-				</table>
+				<div class="div" style="height: 158px; margin: 0 5px 0 5px; "><?php echo $list[0]->catatan ?></div>
 			</td>
 			<td colspan="9">
-				<div style="height: 80px; margin: 0 5px 0 5px; width: 100%;"><?php echo $list[0]->catatan ?></div>
-			</td>
-		</tr>
-	</table>
-
-	<table width="100%" border="0">
-		<tr>
-			<td width="36%">
-				<table width="100%" id="tb-collapse" style="background-color: #dddddd">
-					<tr><td width="34%">TARGET</td><td width="33%">ACTUAL</td><td width="33%">DIFF</td></tr>
-					<tr><td height="20px"><?php echo $cc_member[0]->jml*$total ?></td><td><?php echo $aktual ?></td><td><?php echo ($cc_member[0]->jml*$total) - $aktual ?></td></tr>
-					<tr><td colspan="3" height="130px"></td></tr>
-				</table>
-			</td>
-			<td>
-				<table width="100%" id="tb-collapse" style="margin-left: 5px; background-color: #dddddd">
-					<tr><td>Diusulkan,</td><td>Disetujui,</td><td>Diketahui,</td><td>Diterima,</td></tr>
-					<tr><td>Staff / Leader</td><td>Chief / Foreman</td><td>Dept. Manager</td><td>HR Dept.</td></tr>
-					<tr><td height="92px"></td><td></td><td></td><td></td></tr>
+				<table width="100%" id="tb-collapse" style="margin: 0;padding: 0; background-color: #dddddd">
+					<tr>
+						<td width="25%" cellpading="0" cellspacing="0">Diusulkan,</td><td width="25%">Disetujui,</td><td width="25%">Diketahui,</td><td width="25%">Diterima,</td>
+					</tr>
+					<tr>
+						<td>Staff / Leader</td><td>Chief / Foreman</td><td>Dept. Manager</td><td>HR Dept.</td>
+					</tr>
+					<tr>
+						<td height="92px"></td><td></td><td></td><td></td>
+					</tr>
 					<tr><td style="text-align: left;">tgl. </td><td style="text-align: left;">tgl. </td><td style="text-align: left;">tgl. </td><td style="text-align: left;">tgl. </td></tr>
 				</table>
 			</td>
 		</tr>
-	</table>
+		<tr>
+			<td colspan="11">
+				<table width="100%" id="tb-collapse" style="background-color: #dddddd; margin-top: 10px ">
+					<tr><td width="34%">TARGET</td><td width="33%">ACTUAL</td><td width="33%">DIFF</td></tr>
+					<tr>
+						<td height="20px"><d id="target" style="font-size: 25pt"><?php echo $cc_member[0]->jml*$total ?></d></td>
+						<td><d style="font-size: 25pt"><?php echo $aktual ?></d></td>
+						<td><d style="font-size: 25pt"><?php echo ($cc_member[0]->jml*$total) - $aktual ?></d></td>
+					</tr>
+					<tr><td colspan="3" height="150px">
+						<p id="cc" hidden><?php echo $cc_member[0]->costCenter ?></p>
+						<div id="container" style = "height: 148px; margin: 0 auto"></div>
+					</td></tr>
+				</table>
+			</td>
+		</tr>
+	</table>	
+
+	<script src="<?php echo base_url()?>app/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script src="<?php echo base_url()?>app/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script src="<?php echo base_url()?>app/bower_components/morris.js/morris.min.js"></script>
+	<script src="<?php echo base_url()?>app/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+	<script src="<?php echo base_url()?>app/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+	<!-- AdminLTE App -->
+	<script src="<?php echo base_url()?>app/dist/js/adminlte.min.js"></script>
+	<script src="<?php echo base_url()?>app/dist/js/jquery.gritter.min.js"></script>
+
+	<script>
+
+		$(function () {
+			var tgl = $('#tgl').text();
+			var cc = $('#cc').text();
+			var target = $('#target').text();
+			var url = "<?php echo base_url('ot/ajax_spl_g') ?>";
+			$.ajax({
+				type: "POST",
+				url: url,
+				data: {
+					tanggal: tgl,
+					cc: cc,
+					target: target,
+				},
+				success: function(data) {
+					var s = $.parseJSON(data);
+					var processed_json = new Array();
+					var processed_jsontr = new Array();
+					var processed_jsont = new Array();
+
+					for (i = 0; i < s.length; i++){
+						processed_json.push(parseFloat(s[i][0]));
+						processed_jsontr.push(parseInt(s[i][2]));
+						processed_jsont.push(s[i][1]);
+					}
+
+
+					$('#container').highcharts({
+						title: {
+							text: ''
+						},
+
+						yAxis: {
+							title: {
+								text: ''
+							},
+							min : 0,
+							gridLineColor: '#000',
+							plotLines:[{
+								value:processed_jsontr,
+								color: '#ff0000',
+								width:2,
+								zIndex:4,
+								label:{text:'Target'}
+							}]
+						},
+
+						xAxis: {
+							lineColor: 'transparent',
+							categories : processed_jsont
+						},
+
+						legend: {
+							enabled: false
+						},
+
+						plotOptions: {
+							line: {
+								dataLabels: {
+									enabled: true
+								},
+								enableMouseTracking: false
+							}
+						},
+
+						series: [{
+							name: 'Act',
+							color: '#000',
+							data: processed_json
+						},
+						{
+							name: 'Target',
+							type: 'scatter',
+							marker: {
+								enabled: false
+							},
+							data: processed_jsontr
+						}],
+
+						responsive: {
+							rules: [{
+								condition: {
+									maxWidth: 500
+								},
+								chartOptions: {
+									legend: {
+										layout: 'horizontal',
+										align: 'center',
+										verticalAlign: 'bottom'
+									}
+								}
+							}]
+						},
+						credits: {
+							enabled: false
+						},
+					})
+				}
+			});
+		})
+	</script>
 
 </body>
 </html>

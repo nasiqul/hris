@@ -64,7 +64,7 @@ class Client extends CI_Controller {
 
 	public function ajax_client_data()
 	{
-		$id = $this->session->userdata("id");
+		$id = $this->session->userdata("nik");
 		$list = $this->karyawan_model->get_data_karyawan_by_nik2($id);
 
 		$data = array();

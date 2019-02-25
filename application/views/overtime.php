@@ -32,7 +32,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <a class="btn btn-success" href="<?php echo base_url('home/overtime_form') ?>"> <i class="fa fa-plus"></i> New Entry</a>
               <br>
               <br>
-              <table id="example1" class="table table-responsive table-striped text-center" width="100%">
+              <table id="example1" class="table table-responsive table-striped table-bordered text-center" width="100%">
                 <thead>
                   <tr>
                     <th>ID SPL</th>
@@ -158,10 +158,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- ./wrapper -->
   <script>
     $(document).ready(function() {
-      $('#example1').DataTable({
+      var table = $('#example1').DataTable({
         "lengthMenu"    : [[10, 25, 50, -1], [10, 25, 50, "All"]],
         "processing"    : true,
         "serverSide"    : true,
+        "bInfo": false,
         'order'         : [],
         "ajax": {
           "url": "<?php echo base_url('ot/ajax_ot')?>",       
@@ -212,6 +213,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             "ajax": {
               "url": "<?php echo base_url('ot/ajax_spl_data2')?>",       
               "type": "GET",
+              'async' : false,
               'data' : { id : id2 }
             },
             "columns": [
@@ -251,8 +253,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
     function tombol_print() {
       var str = $("#modal-title").text();
+      var tanggal = $("#tgl").text();
       var s = str.split(" ");
-      var url = "<?php echo base_url('ot/print_preview/'); ?>"+s[2];
+      var url = "<?php echo base_url('ot/print_preview/'); ?>"+s[2]+"/"+tanggal;
 
       window.open(url,'_blank');
     }
@@ -277,6 +280,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           tot:tot
         },
         success: function(data){
+          $('#conf').text(tgl);
           openSuccessGritter();
         }
       })
@@ -294,11 +298,55 @@ scratch. This page gets rid of all links and provides the needed markup only.
       });
     }
 
-    function jam(jam) {
-      alert(jam);
+    function jam(id,jam,nik) {
+      var newdiv1 = $('<input type="text" id="txtPlan'+id+'" class="form-control" value="'+jam+'"/><button class"btn btn-default" onclick="applyJam('+id+','+nik+')" >ok</button>');
+
+      $('#'+id).text('').append(newdiv1);
+
+      $('#txtPlan').focus();
     }
 
- </script>
+    $('#txtPlan').bind("enterKey",function(e){
+      alert("asd");
+    });
+
+    $('#txtPlan').keydown(function(e){
+      if(e.keyCode == 13)
+      {
+        $(this).trigger("enterKey");
+      }
+    });
+
+    function applyJam(id,nik,jam) {
+      $.ajax({
+        url: "<?php echo base_url('ot/changeJam/')?>",
+        type : "POST",
+        data: {
+          nik:nik,
+          id:id,
+          jam:jam
+        },
+        success: function(data){
+          document.getElementById("c"+nik+id).style.display = "none";
+          document.getElementById("d"+nik+id).style.display = "none";
+          openOKGritter();
+          document.getElementById("f"+nik+id).innerHTML = jam;
+        }
+      })
+    }
+
+    function openOKGritter(){
+      jQuery.gritter.add({
+        title: "Berhasil",
+        text: "Perubahan jam final berhasil",
+        class_name: 'growl-success',
+        image: '<?php echo base_url()?>app/img/icon.png',
+        sticky: false,
+        time: '2000'
+      });
+    }
+
+  </script>
 
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the
