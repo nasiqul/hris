@@ -34,7 +34,7 @@
 
               <div class="box box-primary">
                 <div class="box-header with-border">
-                  <h3 class="box-title">About Me</h3>
+                  <h3 class="box-title">About Me <?php echo $this->session->userdata("role"); ?></h3>
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
@@ -157,7 +157,6 @@
             $("#sec").text(data[i][7]);
             $("#foto").attr("src","<?php echo base_url() ?>app/img/photo/"+data[i][8]+"");
             $("#fotoHead").attr("src","<?php echo base_url() ?>app/img/photo/"+data[i][8]+"");
-            $("#fotoHead2").attr("src","<?php echo base_url() ?>app/img/photo/"+data[i][8]+"");
           });
         }
       });

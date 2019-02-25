@@ -13,6 +13,7 @@ class Login extends CI_Controller {
 
 	public function index()
 	{
+		$this->session->sess_destroy();
 		$this->load->view('login');
 	}
 
@@ -44,7 +45,12 @@ class Login extends CI_Controller {
 
 			$this->session->set_userdata($newdata);
 
-			echo json_encode(1);
+			$newdata2 = array(
+				'rows'  => 1,
+				'role'  => $isi[0]->role
+			);
+
+			echo json_encode($newdata2);
 		}
 		else {
 

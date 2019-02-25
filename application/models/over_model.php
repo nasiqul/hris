@@ -371,6 +371,8 @@ class Over_model extends CI_Model {
         WHERE o.tanggal = STR_TO_DATE('".$tgl."', '%d-%m-%Y') AND om.nik = '".$nik."'";
         $this->db->query($sql);
 
+        $q1 = "CALL insert_report('".$tgl."', '".$nik."', ".$val.")";
+
         $this->db->select("k.costCenter");
         $this->db->from("karyawan k");
         $this->db->where("k.nik",$nik);
@@ -380,7 +382,6 @@ class Over_model extends CI_Model {
 
     public function tambah_aktual($id_cc,$val,$tgl)
     {
-
         $query2 = "UPDATE `cost_center_budget` SET `aktual` = `aktual` + ".(float)$val." WHERE `id_cc` = '".$id_cc."' AND MONTH(period) = MONTH(STR_TO_DATE('".$tgl."', '%d-%m-%Y'))";
         $this->db->query($query2);
     }

@@ -153,7 +153,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <div class="box-header">
             <h3 class="box-title"><i class="fa fa-group"></i> Peserta</h3>
             <div class="pull-right">
-              <a id="print" class="btn btn-primary" style="display: none;" data-toggle="tooltip" title="Print" href="<?php echo base_url('ot/print_preview/'.$kode); ?>" target="_blank"><i class="fa fa-print"></i> Print</a>&nbsp&nbsp&nbsp
+              <button class="btn btn-primary" id="print" onclick="tombol_print()" style="display: none;"><i class="fa fa-print"></i> Print</button>&nbsp&nbsp&nbsp
               <button id="submit" class="btn btn-success" onclick="submit1()"><i class="fa fa-check"></i> Simpan</button>
             </div>
           </div>
@@ -486,59 +486,64 @@ scratch. This page gets rid of all links and provides the needed markup only.
         }
       }
     });
-//    document.getElementById("master").submit();
-}
+    //document.getElementById("master").submit();
+  }
 
-function openSuccessGritter(){
-  jQuery.gritter.add({
-    title: "Success",
-    text: "Input Success",
-    class_name: 'growl-success',
-    image: '<?php echo base_url()?>app/img/icon.png',
-    sticky: false,
-    time: '2000'
-  });
-}
+  function openSuccessGritter(){
+    jQuery.gritter.add({
+      title: "Success",
+      text: "Input Success",
+      class_name: 'growl-success',
+      image: '<?php echo base_url()?>app/img/icon.png',
+      sticky: false,
+      time: '2000'
+    });
+  }
 
-function openDangerGritter(){
-  jQuery.gritter.add({
-    title: "Failed",
-    text: "Ada Data yang Kosong",
-    class_name: 'growl-danger',
-    image: '<?php echo base_url()?>app/img/close.png',
-    sticky: false,
-    time: '2000'
-  });
-}
+  function openDangerGritter(){
+    jQuery.gritter.add({
+      title: "Failed",
+      text: "Ada Data yang Kosong",
+      class_name: 'growl-danger',
+      image: '<?php echo base_url()?>app/img/close.png',
+      sticky: false,
+      time: '2000'
+    });
+  }
 
-function openDanger3Gritter(){
-  jQuery.gritter.add({
-    title: "Failed",
-    text: "Karyawan sudah diinput",
-    class_name: 'growl-danger',
-    image: '<?php echo base_url()?>app/img/close.png',
-    sticky: false,
-    time: '2000'
-  });
-}
+  function openDanger3Gritter(){
+    jQuery.gritter.add({
+      title: "Failed",
+      text: "Karyawan sudah diinput",
+      class_name: 'growl-danger',
+      image: '<?php echo base_url()?>app/img/close.png',
+      sticky: false,
+      time: '2000'
+    });
+  }
 
-function openDanger2Gritter(){
-  jQuery.gritter.add({
-    title: "Failed",
-    text: "Karyawan tidak terdaftar pada Bagian",
-    class_name: 'growl-danger',
-    image: '<?php echo base_url()?>app/img/close.png',
-    sticky: false,
-    time: '2000'
-  });
-}
+  function openDanger2Gritter(){
+    jQuery.gritter.add({
+      title: "Failed",
+      text: "Karyawan tidak terdaftar pada Bagian",
+      class_name: 'growl-danger',
+      image: '<?php echo base_url()?>app/img/close.png',
+      sticky: false,
+      time: '2000'
+    });
+  }
 
-function reset() {
-  location.reload();
-  // $('#master').trigger("reset");
-  // $("#peserta").empty();
+  function reset() {
+    location.reload();
+  }
 
-}
+  function tombol_print() {
+    var tanggal = document.getElementById('datepicker').value;
+    
+    var url = "<?php echo base_url('ot/print_preview/'.$kode); ?> /"+tanggal;
+
+    window.open(url,'_blank');
+  }
 </script>
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the

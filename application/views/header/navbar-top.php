@@ -36,7 +36,9 @@
                 <!-- The user image in the navbar-->
                 <img class="user-image" alt="User Image" id="fotoHead">
                 <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                <span class="hidden-xs"><?php echo $this->session->userdata('nik'); ?></span>
+                <span class="hidden-xs"><?php $nik2 = $this->session->userdata('nik'); echo $nik2;?></span>
+
+                &nbsp<i class="fa fa-sort-down"></i>
               </a>
               <ul class="dropdown-menu">
                 <!-- The user image in the menu -->
@@ -49,44 +51,12 @@
                   </p>
                 </li>
                 <!-- Menu Body -->
-                <li class="user-body">
-                  <div class="row">
-                    <div class="col-xs-4 text-center">
-                      <a href="#">Followers</a>
-                    </div>
-                    <div class="col-xs-4 text-center">
-                      <a href="#">Sales</a>
-                    </div>
-                    <div class="col-xs-4 text-center">
-                      <a href="#">Friends</a>
-                    </div>
-                  </div>
-                  <!-- /.row -->
-                </li>
+                
                 <!-- Menu Footer-->
                 <li class="user-footer">
-                  <div class="pull-left">
-                    <a href="#" class="btn btn-default btn-flat">Profile</a>
-                  </div>
                   <div class="pull-right">
-                    <a href="#" class="btn btn-default btn-flat">Sign out</a>
+                    <a href="<?php echo base_url('login') ?>" class="btn btn-default btn-flat">Sign out</a>
                   </div>
-                </li>
-              </ul>
-            </li>
-
-            <li class="dropdown tasks-menu">
-              <!-- Menu Toggle Button -->
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                <i class="fa fa-sort-down"></i>
-              </a>
-              <ul class="dropdown-menu">
-                <li class="header">Options</li>
-                <li>
-                  <!-- Inner menu: contains the tasks -->
-                  <a class="btn btn-danger" href="<?php echo base_url('login') ?>"><i class="fa fa-sign-out"></i> LOGOUT</a>
-                </li>
-                <li class="footer">
                 </li>
               </ul>
             </li>
@@ -97,3 +67,6 @@
       <!-- /.container-fluid -->
     </nav>
   </header>
+  <script type="text/javascript">
+    $("#fotoHead2").attr("src","<?php echo base_url() ?>app/img/photo/<?php echo $nik2; ?>");
+  </script>

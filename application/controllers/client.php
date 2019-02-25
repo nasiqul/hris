@@ -10,7 +10,10 @@ class Client extends CI_Controller {
 
 	public function view()
 	{
-		$this->load->view('client');
+		if (isset($_SESSION['nik']))
+			$this->load->view('client');
+		else
+			redirect('login');
 	}
 
 	public function ajax_client()
