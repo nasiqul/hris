@@ -81,6 +81,11 @@ class Home extends CI_Controller {
         $this->load->view("ot_graph");
     }
 
+    public function ot_report()
+    {
+        $this->load->view("overtime_report");
+    }
+
     public function karyawan_graph()
     {
         $data['status'] = $this->karyawan_model->by_status();

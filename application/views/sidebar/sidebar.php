@@ -49,7 +49,8 @@
         </a>
         <ul class="treeview-menu">
           <li><a href="<?php echo base_url('home/ot_graph'); ?>"><i class="fa fa-bar-chart"></i> Graph</a></li>
-          <li><a href="<?php echo base_url('home/ot'); ?>"><i class="fa fa-male"></i> <span>Overtime Data</span></a>
+          <li><a href="<?php echo base_url('home/ot'); ?>"><i class="fa fa-male"></i> <span>Overtime Data</span></a></li>
+          <li><a href="<?php echo base_url('home/ot_report'); ?>"><i class="fa fa-book"></i> Report</a></li>
           </ul>
         </li>
           <li><a href="<?php echo base_url('home/tanya'); ?>"><i class="fa fa-comments-o"></i> <span>Q & A List</span></a></li>

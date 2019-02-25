@@ -339,7 +339,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
       var oldid = ids;
 
       var removed = arrNik.splice(parseInt(ids) - 1,1);
-      alert(arrNik);
 
       $(elem).parent('div').parent('div').remove();
 

@@ -367,11 +367,9 @@ class Over_model extends CI_Model {
         $sql = "UPDATE over_time_member AS om 
         JOIN over_time AS o ON om.id_ot = o.id 
         JOIN satuan_lembur sl ON sl.jam = om.jam_aktual 
-        SET om.satuan = sl.satuan 
+        SET om.satuan = sl.satuan
         WHERE o.tanggal = STR_TO_DATE('".$tgl."', '%d-%m-%Y') AND om.nik = '".$nik."'";
         $this->db->query($sql);
-
-        $q1 = "CALL insert_report('".$tgl."', '".$nik."', ".$val.")";
 
         $this->db->select("k.costCenter");
         $this->db->from("karyawan k");
@@ -407,15 +405,30 @@ class Over_model extends CI_Model {
     public function get_data_chart($tgl,$cc,$target)
     {
         $q = "select tanggal,jam,".$target." as target from (
-            SELECT tanggal, costCenter, SUM(jam_aktual) as jam from over_time o
-            JOIN over_time_member om ON o.id = om.id_ot
-            JOIN karyawan k ON k.nik = om.nik
-            WHERE costCenter = ".$cc." AND
-            MONTH(tanggal) = MONTH(STR_TO_DATE('".$tgl."', '%Y-%m-%d'))
-            GROUP BY tanggal
-            )a
-            where a.jam > 0";
+        SELECT tanggal, costCenter, SUM(jam_aktual) as jam from over_time o
+        JOIN over_time_member om ON o.id = om.id_ot
+        JOIN karyawan k ON k.nik = om.nik
+        WHERE costCenter = ".$cc." AND
+        MONTH(tanggal) = MONTH(STR_TO_DATE('".$tgl."', '%Y-%m-%d'))
+        GROUP BY tanggal
+        )a
+        where a.jam > 0";
         return $this->db->query($q)->result();
+    }
+
+    public function report_data()
+    {
+        $query = 'select MONTH(o.tanggal) as period, k.nik, k.namaKaryawan,  concat(dp.nama,"-",IF(sc.nama,sc.nama,""),"/", k.kode) as bagian, sum(jam_aktual) as total_jam, sum(satuan) as satuan from over_time o
+        JOIN over_time_member om ON o.id = om.id_ot
+        JOIN karyawan k ON om.nik = k.nik
+        JOIN posisi p ON p.nik = k.nik
+        LEFT JOIN departemen dp ON dp.id = p.id_dep
+        LEFT JOIN section sc ON sc.id = p.id_sec
+
+        GROUP BY MONTH(o.tanggal), k.nik';
+
+        return $this->db->query($query)->result();
+
     }
 }
 ?>
