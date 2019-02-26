@@ -76,10 +76,10 @@ class Ot extends CI_Controller {
 
 			if ($key->status == 0) {
 				$row[] = "<button class='btn btn-primary btn-xs' onclick='detail_spl(".$key->id.")'>Detail</button>
-				<button class='btn btn-success btn-xs' onclick='modalOpen(\"".$key->nik."\",".$key->final2.",\"".$tg."\")'><i class='fa fa-thumbs-up'></i> Confirm</button>";
+				<button class='btn btn-success btn-xs' id='conf".$key->nik.$key->id."' onclick='modalOpen(\"".$key->nik."\",".$key->final2.",\"".$tg."\",\"".$key->id."\")'><i class='fa fa-thumbs-up'></i> Confirm</button>";
 			}
 			else {
-				$row[] = "<button class='btn btn-primary btn-xs' id='conf".$key->nik.$key->id."' onclick='detail_spl(".$key->id.")'>Detail</button>";
+				$row[] = "<button class='btn btn-primary btn-xs' onclick='detail_spl(".$key->id.")'>Detail</button>";
 			}
 
 			$data[] = $row;
@@ -287,8 +287,9 @@ class Ot extends CI_Controller {
 		$nik = $_POST['nik'];
 		$tgl = $_POST['tgl'];
 		$jml = $_POST['tot'];
+		$id = $_POST['id'];
 
-		$cc = $this->over_model->get_cc($nik, $jml, $tgl);
+		$cc = $this->over_model->get_cc($nik, $jml, $tgl, $id);
 
 		$this->over_model->tambah_aktual($cc[0]->costCenter, $jml, $tgl);
 
@@ -394,7 +395,8 @@ class Ot extends CI_Controller {
 	public function ajax_over_jam()
 	{
 		$id = $_POST['id'];
-		$list = $this->over_model->getJam($id);
+		$hari = $_POST['hari'];
+		$list = $this->over_model->getJam($id,$hari);
 		$data = array();
 
 		$row1 = array();
@@ -426,12 +428,22 @@ class Ot extends CI_Controller {
 		$list = $this->over_model->getJam_act($id);
 		$data = array();
 
-		
 		$data[] = $list[0]->jam;
 
-
-            //output to json format
+        //output to json format
 		echo json_encode($data);
+	}
+
+	public function ajax_hari()
+	{
+		$tgl = $_POST['tgl'];
+		$list = $this->over_model->getHari($tgl);
+		
+		if ($list > 0) {
+			echo json_encode("L");
+		} else {
+			echo json_encode("N");
+		}
 	}
 }
 ?>

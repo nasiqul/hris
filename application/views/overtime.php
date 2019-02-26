@@ -133,6 +133,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               </div>
               <div class="modal-body">
                 <p id="tgl2"></p>
+                <p style="display: none" id='id5'></p>
                 <h4>Yakin Konfirmasi "<c id='id_ot'></c>" ? </h4>
                 <p id="tot"></p>
               </div>
@@ -260,9 +261,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
       window.open(url,'_blank');
     }
 
-    function modalOpen(id, jam_lembur, tgl) {
+    function modalOpen(nik, jam_lembur, tgl,id) {
       $('#myModal2').modal({backdrop: 'static', keyboard: false});
-      $('#id_ot').text(id);
+      $('#id5').text(id);
+      $('#id_ot').text(nik);
       $('#tgl2').text(tgl);
       $('#tot').text(jam_lembur);
     }
@@ -271,13 +273,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
       var nik = $('#id_ot').text();
       var tgl2 = $('#tgl2').text();
       var tot = $('#tot').text();
+      var idX = $('#id5').text();
       $.ajax({
         url: "<?php echo base_url('ot/acc/')?>",
         type : "POST",
         data: {
           nik:nik,
           tgl:tgl2,
-          tot:tot
+          tot:tot,
+          id:idX
         },
         success: function(data){
           $('#conf').text(tgl);

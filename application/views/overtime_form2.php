@@ -56,7 +56,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <div class="row">
                   <div class="col-md-6">
                     <p>Tanggal</p>
-                    <input type="text" name="tgl" placeholder="select date" class="form-control" id="datepicker">
+                    <input type="text" name="tgl" placeholder="select date" class="form-control" id="datepicker" onchange="getHari()">
                   </div>
 
                   <div class="col-md-3">
@@ -203,6 +203,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     var idDoc;
 
     var no = 1;
+    var hari = 'N';
     arrNik = [];
 
     var jam = document.getElementById('jam0');
@@ -593,13 +594,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
   function showJam() {
     var idShift = $('#shiftF').find(':selected')[0].value;
-    var jamA = document.getElementById('jam');
+    var hari2 = hari;
 
     $.ajax({
       type: 'POST',
       url: '<?php echo base_url("ot/ajax_over_jam") ?>',
       data: {
-        'id': idShift
+        'id': idShift,
+        'hari' : hari2
       },
       success: function (data) {
             // the next thing you want to do 
@@ -612,7 +614,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             $jamS.append('<option value="" disabled selected>'+ s[0][1] +'</option>');
 
             for (var i = 1; i <= s.length; i++) {
-              $jamS.append('<option id=' + s[i][0] + ' value='+s[i][3]+'>' +s[i][1]+" - "+s[i][2]+ '</option>');
+              $jamS.append('<option id=' + s[i][0] + ' value='+s[i][0]+' name='+s[i][3]+'>' +s[i][1]+" - "+s[i][2]+ '</option>');
             }
             
             //manually trigger a change event for the contry so that the change handler will get triggered
@@ -624,7 +626,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   function hitungJam(jam,id2) {
     var jam = jam;
 
-    var jamX = $('#'+jam).find(':selected')[0].value;
+    var jamX = $('#'+jam).find(':selected').attr("name");
 
     var jamB = document.getElementById(id2);
 
@@ -667,17 +669,36 @@ scratch. This page gets rid of all links and provides the needed markup only.
     }
   });
 
-  $('#transF').change(function () {
+  $('#exfoodF').change(function () {
     for(i= 1; i <= no; i++){
-      if ($('#transF').is(':checked')) {
-        $("#trans"+i).prop('checked', true);
-
+      if ($('#exfoodF').is(':checked')) {
+        $("#exfood"+i).prop('checked', true);
       }
       else{
-        $("#trans"+i).prop('checked', false);
+        $("#exfood"+i).prop('checked', false);
       }
     }
   });
+
+  function getHari() {
+    var tanggals = $("#datepicker").val();
+    console.log(tanggals);
+
+    $.ajax({
+      type: 'POST',
+      url: '<?php echo base_url("ot/ajax_hari") ?>',
+      data: {
+        'tgl': tanggals
+      },
+      success: function (data) {
+            // the next thing you want to do 
+            var s = $.parseJSON(data);
+            hari = s;
+            console.log(hari);
+            
+          }
+        });
+  }
 </script>
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the

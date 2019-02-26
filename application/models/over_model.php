@@ -357,7 +357,7 @@ class Over_model extends CI_Model {
     }
 
 
-    public function get_cc($nik,$val,$tgl)
+    public function get_cc($nik,$val,$tgl,$id)
     {
         $sql = "UPDATE over_time_member AS om JOIN over_time AS o ON om.id_ot = o.id SET om.status = 1, om.jam_aktual = ".(float)$val." WHERE o.tanggal = STR_TO_DATE('".$tgl."', '%d-%m-%Y') AND om.nik = '".$nik."'";
         $this->db->query($sql);
@@ -366,7 +366,9 @@ class Over_model extends CI_Model {
         JOIN over_time AS o ON om.id_ot = o.id 
         JOIN satuan_lembur sl ON sl.jam = om.jam_aktual 
         SET om.satuan = sl.satuan
-        WHERE o.tanggal = STR_TO_DATE('".$tgl."', '%d-%m-%Y') AND om.nik = '".$nik."'";
+        WHERE o.tanggal = STR_TO_DATE('".$tgl."', '%d-%m-%Y') AND om.nik = '".$nik."' AND sl.hari = (
+            SELECT hari from over_time where id = '".$id."'
+        )";
         $this->db->query($sql);
 
         $this->db->select("k.costCenter");
@@ -424,10 +426,11 @@ class Over_model extends CI_Model {
         return $query->result();
     }
 
-    public function getJam($shift)
+    public function getJam($shift, $hari)
     {
         $this->db->select("*");
         $this->db->where("shift",$shift);
+        $this->db->where("hari",$hari);
         $this->db->order_by("id", "ASC");
 
         $query = $this->db->get("master_lembur");
@@ -441,6 +444,15 @@ class Over_model extends CI_Model {
 
         $query = $this->db->get("master_lembur");
         return $query->result();
+    }
+
+    public function getHari($tgl)
+    {
+        $this->db->select("tanggal");
+        $this->db->where("tanggal = STR_TO_DATE('".$tgl."','%d-%m-%Y')");
+
+        $query = $this->db->get("kalender");
+        return $query->num_rows();
     }
 }
 ?>
