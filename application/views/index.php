@@ -50,7 +50,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <div class="form-group">
                     <label for="inputNik"><i class="fa fa-id-badge"></i> <span>NIK</span></label>
                     <input type="text" class="form-control" name="nik" id="inputNik" placeholder="NIK"
-                    <?php if(isset($_SESSION['nik3'])) echo 'value="'.$_SESSION['nik'].'"';?>>
+                    <?php if(isset($_SESSION['nik3'])) echo 'value="'.$_SESSION['nik3'].'"';?>>
                   </div>
                 </div>
 
