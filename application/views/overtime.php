@@ -51,7 +51,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <th>Lembur (jam)<br>Actual</th>
                     <th>Diff</th>
                     <th>Final</th>
-                    <th>Aksi</th>
+                    <th width="10%">Aksi</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -293,12 +293,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
           id:idX
         },
         success: function(data){
-          $('#conf').text(tgl);
+          $('#conf'+nik+idX).css("display","none");
           openSuccessGritter();
         }
       })
     }
-
 
     function openSuccessGritter(){
       jQuery.gritter.add({
