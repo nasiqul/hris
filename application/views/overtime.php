@@ -24,13 +24,18 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <small>Optional description</small>
         </h1>
       </section>
-
       <!-- Main content -->
       <section class="content container-fluid">      
         <div class="col-md-12">
           <div class="box box-solid">
             <div class="box-body">
               <a class="btn btn-success" href="<?php echo base_url('home/overtime_form') ?>"> <i class="fa fa-plus"></i> New Entry</a>
+              <div class="pull-right">
+                <form action="<?php echo base_url();?>import_excel/upload/" method="post" enctype="multipart/form-data">
+                  <button class="btn btn-sm btn-primary pull-right" type="submit"> <i class="fa fa-plus"></i> Import Budget</button>
+                <input type="file" name="file" class="btn pull-right" accept=".csv" />
+              </form>
+              </div>
               <br>
               <br>
               <table id="example1" class="table table-responsive table-striped table-bordered text-center" width="100%">
@@ -177,6 +182,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
             }
             ],
           });
+
+
+
     });
 
     function detail_spl(id) {
