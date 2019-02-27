@@ -24,7 +24,7 @@ class Over_model extends CI_Model {
 
     private function _get_datatables_query()
     {
-    	$this->db->select("*");
+    	$this->db->select("tanggal, nik,nama,masuk,keluar,id,shift,status,jam,final,id_jam,jam_lembur, IFNULL(aktual, 0) as aktual, IFNULL(diff, 0) as diff, IFNULL(final2, 0) as final2");
     	$this->db->from("
             (select tanggal,c.nik1 as nik, d.namaKaryawan as nama, masuk, keluar, id, shift, c.status, jam, final, c.id_jam, c.jam_lembur,
                         (IF(hari = 'L',
@@ -58,8 +58,8 @@ class Over_model extends CI_Model {
             as aktual, 
             ((SELECT aktual) - jam) as diff,
             IF((SELECT aktual) > jam , 
-            IF(final <> 0, ROUND((SELECT final), 1) , ROUND(jam, 1))
-            , ROUND((SELECT aktual), 1))
+                IF(final <> 0, ROUND((SELECT final), 1) , ROUND(jam, 1))
+                , ROUND((SELECT aktual), 1))
             as final2
 
             from (SELECT * from (
