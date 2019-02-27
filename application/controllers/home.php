@@ -194,7 +194,7 @@ class Home extends CI_Controller {
 
     public function ajax()
     {
-        if ((isset($_SESSION['tanggal']) && $_SESSION['tanggal'] != "") || (isset($_SESSION['nik']) && $_SESSION['nik'] != "") || (isset($_SESSION['nama']) && $_SESSION['nama'] != "") || (isset($_SESSION['shift']) && $_SESSION['shift'] != "")) 
+        if ((isset($_SESSION['tanggal']) && $_SESSION['tanggal'] != "") || (isset($_SESSION['nik3']) && $_SESSION['nik3'] != "") || (isset($_SESSION['nama']) && $_SESSION['nama'] != "") || (isset($_SESSION['shift']) && $_SESSION['shift'] != "")) 
         {
             $tgl = $this->session->userdata('tanggal');
             $nik = $this->session->userdata('nik3');
