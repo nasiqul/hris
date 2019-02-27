@@ -325,7 +325,7 @@ class Ot extends CI_Controller {
 				$row[] = $key->total_jam;
 				$row[] = $key->satuan;
 				$row[] = "<button class='btn btn-primary btn-xs' onclick='
-				detail(".$key->nik.",\"".$key->period."\",\"".$key->namaKaryawan."\")'>Detail</button>";
+				detail(\"".$key->nik."\",\"".$key->period."\",\"".$key->namaKaryawan."\")'>Detail</button>";
 
 				$data[] = $row;
 			}
