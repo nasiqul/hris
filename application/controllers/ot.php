@@ -67,7 +67,7 @@ class Ot extends CI_Controller {
 			$row[] = $key->masuk;
 			$row[] = $key->keluar;
 			if ($key->aktual > $key->jam && $key->final == 0)
-				$row[] = "<button class='btn btn-danger btn-xs' id=d".$key->nik.$key->id." onclick='applyJam(".$key->id.",".$key->nik.",".$key->jam.")'><i class='fa fa-close'></i></button>  &nbsp <b>"
+				$row[] = "<button class='btn btn-danger btn-xs' id=d".$key->nik.$key->id." onclick='applyJam(".$key->id.",\"".$key->nik."\",".$key->jam.")'><i class='fa fa-close'></i></button>  &nbsp <b>"
 			.$key->jam."</b> 
 			&nbsp<button class='btn btn-success btn-xs' id=c".$key->nik.$key->id." onclick='applyJam(".$key->id.",\"".$key->nik."\",".$key->aktual.")'><i class='fa fa-check'></i></button>";
 			else
