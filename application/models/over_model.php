@@ -27,8 +27,8 @@ class Over_model extends CI_Model {
     	$this->db->select("*");
     	$this->db->from("
             (
-            select tanggal,c.nik1 as nik, d.namaKaryawan as nama, masuk, keluar, id, shift, c.status, jam, final,
-                        IF(hari = 'L',
+            select tanggal,c.nik1 as nik, d.namaKaryawan as nama, masuk, keluar, id, shift, c.status, jam, final, c.id_jam,
+                        (IF(hari = 'L',
                                 floor((TIME_TO_SEC(TIMEDIFF(concat('2010-08-20 ',keluar), concat('2010-08-20 ',masuk)))) / 60 / 60 * 2) / 2, 
                                     IF(shift = 1,
                                     floor(((TIME_TO_SEC(TIMEDIFF(concat('2010-08-20 ',keluar), '2010-08-20 16:00:00'))) + 
@@ -40,7 +40,7 @@ class Over_model extends CI_Model {
                                             floor(((TIME_TO_SEC(TIMEDIFF(concat('2010-08-20 ',keluar), '2010-08-20 07:00:00'))) + 
                                             (TIME_TO_SEC(TIMEDIFF('2010-08-20 00:00:00' , concat('2010-08-20 ',masuk)))))/ 60 / 60 * 2) / 2
                                             , 0)))
-                                )
+                                ) - (SELECT istirahat from master_lembur where id = c.id_jam))
 
             as aktual, 
             ((SELECT aktual) - jam) as diff,
@@ -50,7 +50,7 @@ class Over_model extends CI_Model {
             as final2
 
             from (SELECT * from (
-            SELECT o.tanggal, o.id, b.jam, b.nik as nik1, b.status as status, final, hari from over_time as o
+            SELECT o.tanggal, o.id, b.jam, b.nik as nik1,b.id_jam as id_jam, b.status as status, final, hari from over_time as o
             LEFT JOIN over_time_member as b
             on o.id = b.id_ot
             ) a
@@ -119,7 +119,7 @@ class Over_model extends CI_Model {
     	$this->db->insert('over_time', $data);
     }
 
-    public function save_member($no_doc, $nik1, $dari1, $sampai1, $jam1, $trans1, $makan1, $exfood1)
+    public function save_member($no_doc, $nik1, $dari1, $sampai1, $jam1, $trans1, $makan1, $exfood1, $idJam1)
     {
     	$data = array(
     		'id_ot' => $no_doc,
@@ -129,7 +129,8 @@ class Over_model extends CI_Model {
     		'jam' => $jam1,
     		'transport' => $trans1,
     		'makan' => $makan1,
-    		'ext_food' => $exfood1
+    		'ext_food' => $exfood1,
+            'id_jam' => $idJam1
     	);
 
     	$this->db->insert('over_time_member', $data);	

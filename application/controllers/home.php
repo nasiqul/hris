@@ -165,7 +165,7 @@ class Home extends CI_Controller {
         {
             $newdata = array(
                 'tanggal'  => $_POST['tanggal'],
-                'nik'     => $_POST['nik'],
+                'nik3'     => $_POST['nik'],
                 'nama' => $_POST['nama'],
                 'shift' => $_POST['shift']
             );
@@ -197,7 +197,7 @@ class Home extends CI_Controller {
         if ((isset($_SESSION['tanggal']) && $_SESSION['tanggal'] != "") || (isset($_SESSION['nik']) && $_SESSION['nik'] != "") || (isset($_SESSION['nama']) && $_SESSION['nama'] != "") || (isset($_SESSION['shift']) && $_SESSION['shift'] != "")) 
         {
             $tgl = $this->session->userdata('tanggal');
-            $nik = $this->session->userdata('nik');
+            $nik = $this->session->userdata('nik3');
             $nama = $this->session->userdata('nama');
             $shift = $this->session->userdata('shift');
 
@@ -653,7 +653,7 @@ public function get_presensi(){
 
 public function session_destroy()
 {
-    $array_items = array('tanggal' , 'nik', 'nama', 'shift');
+    $array_items = array('tanggal' , 'nik3', 'nama', 'shift');
     $this->session->unset_userdata($array_items);
     redirect('home/presensi');
 }

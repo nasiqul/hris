@@ -314,7 +314,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
               "<option value='-' "+t1+">-</option><option value='B' "+t2+">B</option><option value='P' "+t3+">P</option></select></div>"+
               "<div class='col-md-1'><input type='checkbox' id='makan"+no+"' "+cekM+"></div>"+
               "<div class='col-md-1'><input type='checkbox' id='exfood"+no+"' "+cekFd+"></div>"+
-              "<div class='col-md-1'><button class='btn btn-danger btn-xs' id='delete"+no+"' onclick='deleteRow(this)'><i class='fa fa-minus'></i></button></div></div>" );
+              "<div class='col-md-1'><button class='btn btn-danger btn-xs' id='delete"+no+"' onclick='deleteRow(this)'><i class='fa fa-minus'></i></button></div>"+
+              "<input type='hidden' id='idJam"+no+"'></div>" );
 
             $("#peserta").append(newdiv1);
             //var jamSelect = $('#jamF2').find(':selected')[0].value;
@@ -328,6 +329,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
             });
 
             $('#nomor').val(no);
+
+            var idJamIsi = $("#jamF2").find(':selected')[0].id;
+            $("#idJam"+no).val(idJamIsi);
+
             no+=1;
 
             $('#nikF').val('');
@@ -510,6 +515,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
               else
                 exfoodS="0";
 
+              var id_jam = $("#idJam"+i).val();
+
               $.ajax({
                 type: 'POST',
                 url: '<?php echo base_url("ot/ot_member_submit") ?>',
@@ -521,7 +528,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   'jam': jamS,
                   'trans': transS,
                   'makan': makanS,
-                  'exfood': exfoodS
+                  'exfood': exfoodS,
+                  'id_jam': id_jam,
                 },
                 success: function(data){
                   openSuccessGritter();
@@ -636,9 +644,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
   function gantiJam() {
     for(i= 1; i <= no; i++){
-      //var selects = $("#jamF2");
+      var selects = $("#jamF2").find(':selected')[0].id;
       var jamX = $("#jamF2").find(':selected')[0].value;
       var jamZ = $("#jam0").text();
+      $('#idJam'+i).val(selects);
       //$("#jamIsi"+i).eq(i).val($(select).val());
       $("#jamIsi"+i).val(jamX);
 
@@ -649,8 +658,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
   function gantiTrans() {
     for(i= 1; i <= no; i++){
-      //var selects = $("#jamF2");
       var jamX = $("#transF").find(':selected')[0].value;
+
       //$("#jamIsi"+i).eq(i).val($(select).val());
       $("#trans"+i).val(jamX);
 

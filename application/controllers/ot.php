@@ -45,8 +45,9 @@ class Ot extends CI_Controller {
 		$trans = $_POST['trans'];
 		$makan = $_POST['makan'];
 		$exfood = $_POST['exfood'];
+		$idJam = $_POST['id_jam'];
 
-		$this->over_model->save_member($no_doc, $nik, $dari, $sampai, $jam, $trans, $makan, $exfood);
+		$this->over_model->save_member($no_doc, $nik, $dari, $sampai, $jam, $trans, $makan, $exfood, $idJam);
 		
 	}
 
