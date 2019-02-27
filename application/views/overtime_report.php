@@ -70,46 +70,18 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <div class="modal-body">
                 <div class="row">
                   <div class="col-md-12">
-                    <table class="table table-striped">
-                      <tr>
-                        <th colspan="4" class="text-center"><i class="fa fa-bullhorn"></i> Keterangan</th>
-                      </tr>
-                      <tr>
-                        <td>CT</td>
-                        <td>: Cuti Tahunan</td>
-                        <td>Sn</td>
-                        <td>: Cuti Khusus Saudara Kandung Nikah</td>
-                      </tr>
-                      <tr>
-                        <td>CK</td>
-                        <td>: Cuti Khusus Lainnya</td>
-                        <td>N</td>
-                        <td>: Cuti Khusus Menikah</td>
-                      </tr>
-                      <tr>
-                        <td>Im</td>
-                        <td>: Istri Melahirkan</td>
-                        <td>SD</td>
-                        <td>: Sakit dengan Surat Dokter</td>
-                      </tr>
-                      <tr>
-                        <td>Km</td>
-                        <td>: Cuti Khusus Kematian</td>
-                        <td>I</td>
-                        <td>: Ijin</td>
-                      </tr>
-                      <tr>
-                        <td>K</td>
-                        <td>: Cuti Pra-Lahir</td>
-                        <td>A</td>
-                        <td>: Alpha</td>
-                      </tr>
-                      <tr>
-                        <td>M</td>
-                        <td>: Cuti Pasca-Lahir</td>
-                        <td>DL</td>
-                        <td>: Dinas Luar</td>
-                      </tr>
+                    NIK : <c id="nik"></c><br>
+                    Nama : <c id="nama"></c><br>
+                    Bulan : <c id="bulan"></c>
+                    <table class="table table-striped table-responsive" style="width: 100%" id="example2">
+                      <thead>
+                        <tr>
+                          <th>Tanggal</th>
+                          <th>jam Lembur</th>
+                          <th>Satuan</th>
+                        </tr>
+                      </thead>
+                      <tbody></tbody>
                     </table>
                   </div>
                 </div>
@@ -155,8 +127,38 @@ scratch. This page gets rid of all links and provides the needed markup only.
       });
     })
 
-    function detail(nik,tgl) {
-      alert(nik+" "+tgl);
+    function detail(nik,tgl,nama) {
+      $('#nik').text(nik);
+      $('#nama').text(nama);
+      $('#bulan').text(tgl);
+      table2 = $('#example2').DataTable();
+      table2.destroy();
+      //alert(nik+" "+tgl);
+      $("#myModal").modal('show');
+      table2 = $('#example2').DataTable({
+        "lengthMenu"    : [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        "processing"    : true,
+        "serverSide"    : true,
+        "searching": false,
+        "bPaginate": false,
+        "bLengthChange": false,
+        "bFilter": false,
+        "bInfo": false,
+        'order'         : [],
+        "ajax": {
+          "url": "<?php echo base_url('ot/ajax_ot_report_details')?>",
+          "type": "GET",
+          "data" : {
+            nik : nik,
+            period : tgl,
+          }
+        },
+        "columns": [
+        { "data": 2 },
+        { "data": 3 },
+        { "data": 4 }
+        ],
+      });
     }
 
   </script>

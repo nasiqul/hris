@@ -8,6 +8,7 @@ class Ot extends CI_Controller {
 		$this->load->model('cari_over');
 		$this->load->model('over_user_model');
 		$this->load->model('over_report_model');
+		$this->load->model('over_cari_report_model');		
 		$this->load->library('ciqrcode');
 	}
 
@@ -68,7 +69,7 @@ class Ot extends CI_Controller {
 			if ($key->aktual > $key->jam && $key->final == 0)
 				$row[] = "<button class='btn btn-danger btn-xs' id=d".$key->nik.$key->id." onclick='applyJam(".$key->id.",".$key->nik.",".$key->jam.")'><i class='fa fa-close'></i></button>  &nbsp <b>"
 			.$key->jam."</b> 
-			&nbsp<button class='btn btn-success btn-xs' id=c".$key->nik.$key->id." onclick='applyJam(".$key->id.",".$key->nik.",".$key->aktual.")'><i class='fa fa-check'></i></button>";
+			&nbsp<button class='btn btn-success btn-xs' id=c".$key->nik.$key->id." onclick='applyJam(".$key->id.",\"".$key->nik."\",".$key->aktual.")'><i class='fa fa-check'></i></button>";
 			else
 				$row[] = $key->jam;
 			$row[] = ROUND($key->aktual,2);
@@ -323,7 +324,7 @@ class Ot extends CI_Controller {
 				$row[] = $key->total_jam;
 				$row[] = $key->satuan;
 				$row[] = "<button class='btn btn-primary btn-xs' onclick='
-				detail(".$key->nik.",\"".$key->period."\")'>Detail</button>";
+				detail(".$key->nik.",\"".$key->period."\",\"".$key->namaKaryawan."\")'>Detail</button>";
 
 				$data[] = $row;
 			}
@@ -439,12 +440,58 @@ class Ot extends CI_Controller {
 	{
 		$tgl = $_POST['tgl'];
 		$list = $this->over_model->getHari($tgl);
+
+		// $timestamp = strtotime($tgl);
+
+		// $day = date('D', $timestamp);
 		
 		if ($list > 0) {
+			// if ($day = 'Fri') {
+			// 	# code...
+			// }
 			echo json_encode("L");
 		} else {
 			echo json_encode("N");
 		}
+	}
+
+	public function ajax_ot_report_details()
+	{
+		$nik = $_GET['nik'];
+		$tgl = $_GET['period'];
+		$time = strtotime('10 '.$tgl);
+
+		$newformat = date('Y-m-d',$time);
+
+		$list = $this->over_cari_report_model->get_data_report_cari($newformat, $nik);
+
+		$tot = $this->over_cari_report_model->count_all($newformat, $nik);
+		$filter = $this->over_cari_report_model->count_filtered($newformat, $nik);
+
+		$data = array();
+		if(!empty($list)) {
+			foreach ($list as $key) {
+				$row = array();
+				$row[] = $key->nik;
+				$row[] = $key->namaKaryawan;
+				$row[] = $key->tanggal;
+				$row[] = $key->jam_aktual;
+				$row[] = $key->satuan;
+
+				$data[] = $row;
+			}
+
+		}else
+		$data[] = json_decode("{}");
+
+            //output to json format
+		$output = array(
+			"draw" => $_GET['draw'],
+			"recordsFiltered" => $filter,
+			"data" => $data,
+		);
+            //output to json format
+		echo json_encode($output);
 	}
 }
 ?>
