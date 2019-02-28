@@ -20,7 +20,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <!-- Content Header (Page header) -->
       <section class="content-header">
         <h1>
-          Overtime Data
+          Overtime Form
           <small>Optional description</small>
         </h1>
       </section>
@@ -204,6 +204,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
     var no = 1;
     var hari = 'N';
+    var shift3 = 1;
     arrNik = [];
 
     var jam = document.getElementById('jam0');
@@ -704,6 +705,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
             var s = $.parseJSON(data);
             hari = s;
             console.log(hari);
+            
+            showJam();
           }
         });
   }

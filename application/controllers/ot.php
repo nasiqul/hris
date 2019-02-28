@@ -448,14 +448,14 @@ class Ot extends CI_Controller {
 
 		
 		if ($list > 0) {
-			if ($tgl = 'Fri') {
+			if ($newformat == 'Fri') {
 				echo json_encode("JL");
 			}
 			else{
 				echo json_encode("L");
 			}
 		} else {
-			if ($tgl = 'Fri') {
+			if ($newformat == 'Fri') {
 				echo json_encode("JN");
 			}
 			else{

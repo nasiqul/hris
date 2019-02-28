@@ -12,11 +12,20 @@
 <body class="hold-transition login-page">
 	<div class="alert alert-danger" id="notif" style="display: none; cursor: pointer;" onclick="check()">
 		<strong>Login Gagal,</strong> NIK atau Password Salah !!
-	</div>  
-	<div class="login-box">
-		<div class="login-logo">
-			<b>Admin</b>LTE
+	</div> 
+
+	<div class="login-logo" style="margin-top: 100px">
+		<b>HR</b>IS
+		<div class="col-md-12" style="text-align: center;">
+			<span style="font-size: 24px">
+				<b>H</b>uman <b>R</b>esource <b>I</b>nformation <b>S</b>ystem
+			</span>
 		</div>
+	</div>
+
+	<div class="login-box">
+
+		
 		<!-- /.login-logo -->
 		<div class="login-box-body">
 			<p class="login-box-msg">Sign in to start your session</p>
@@ -33,7 +42,7 @@
 				<div class="row">
 					<!-- /.col -->
 					<div class="col-xs-4">
-						<button type="submit" class="btn btn-primary btn-block btn-flat">Log In <i class="fa fa-arrow-right"></i></button>
+						<button type="submit" class="btn btn-primary btn-block btn-flat">Sign In <i class="fa fa-arrow-right"></i></button>
 					</div>
 					<!-- /.col -->
 				</div>

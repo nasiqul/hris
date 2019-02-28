@@ -33,14 +33,14 @@
           </ul>
         </li>
         <li class="treeview">
-          <a href="#"><i class="fa fa-edit"></i> <span>Absent</span>
+          <a href="#"><i class="fa fa-edit"></i> <span>Absence</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
           <ul class="treeview-menu">
             <li><a href="<?php echo base_url('home/absensi_graph'); ?>"><i class="fa fa-bar-chart"></i> Graph</a></li>
-            <li><a href="<?php echo base_url('home/absen'); ?>"><i class="fa fa-edit"></i> <span>Absent Data</span></a>
+            <li><a href="<?php echo base_url('home/absen'); ?>"><i class="fa fa-edit"></i> <span>Absence Data</span></a>
             </ul>
         </li>
         <li class="treeview">
@@ -50,25 +50,26 @@
           </span>
         </a>
         <ul class="treeview-menu">
-          <li><a href="<?php echo base_url('home/ot_graph'); ?>"><i class="fa fa-bar-chart"></i> Graph</a></li>
+          <!-- <li><a href="<?php // echo base_url('home/ot_graph'); ?>"><i class="fa fa-bar-chart"></i> Graph</a></li> -->
           <li><a href="<?php echo base_url('home/ot'); ?>"><i class="fa fa-male"></i> <span>Overtime Data</span></a></li>
           <li><a href="<?php echo base_url('home/ot_report'); ?>"><i class="fa fa-book"></i> Report</a></li>
+          <li><a href="<?php echo base_url('budget'); ?>"><i class="fa fa-cc"></i>Cost-Center Budget</a></li>
           </ul>
         </li>
           <li><a href="<?php echo base_url('home/tanya'); ?>"><i class="fa fa-comments-o"></i> <span>Q & A List</span></a></li>
-          <li class="treeview">
+          <!-- <li class="treeview">
             <a href="#"><i class="fa fa-link"></i> <span>Multilevel</span>
               <span class="pull-right-container">
                 <i class="fa fa-angle-left pull-right"></i>
               </span>
             </a>
             <ul class="treeview-menu">
-              <li><a href="<?php echo base_url('login'); ?>">Login</a></li>
-              <li><a href="<?php echo base_url('home/karyawan_coba'); ?>">Coba</a></li>
-              <li><a href="<?php echo base_url('home/sess_destroy'); ?>">Sess_destroy</a></li>
-              <li><a href="<?php echo base_url('home/overtime_user'); ?>">overtime_user</a></li>       
+              <li><a href="<?php //echo base_url('login'); ?>">Login</a></li>
+              <li><a href="<?php// echo base_url('home/karyawan_coba'); ?>">Coba</a></li>
+              <li><a href="<?php// echo base_url('home/sess_destroy'); ?>">Sess_destroy</a></li>
+              <li><a href="<?php //echo base_url('home/overtime_user'); ?>">overtime_user</a></li>       
             </ul>
-          </li>
+          </li> -->
 
         <?php }  else { ?>
 

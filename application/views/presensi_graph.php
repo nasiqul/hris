@@ -22,7 +22,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <section class="content-header">
         <h1>
           Presence data
-          <small>Optional description</small>
+          <span class="text-purple">出勤データ</span>
         </h1>
       </section>
 
@@ -75,7 +75,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <!-- Custom Tabs -->
           <div class="nav-tabs-custom">
             <ul class="nav nav-tabs">
-              <li class="active"><a href="#tab_1" data-toggle="tab">Stat By Shift</a></li>
+              <li class="active"><a href="#tab_1" data-toggle="tab">
+                By Shift 
+                <br><span class="text-purple">シフト別</span>
+              </a></li>
               <!-- <li><a href="#tab_2" data-toggle="tab">Stat Persentase <span>(%)</span></a></li> -->
 
               <form action="" method="post" id="tglF">

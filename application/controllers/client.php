@@ -8,7 +8,7 @@ class Client extends CI_Controller {
 		$this->load->model('karyawan_model');
 	}
 
-	public function view()
+	public function index()
 	{
 		if (isset($_SESSION['nik']))
 			$this->load->view('client');

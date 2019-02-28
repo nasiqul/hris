@@ -31,7 +31,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <section class="content-header">
         <h1>
           Overtime Report
-          <small>Optional description</small>
+          <span class="text-purple">残業報告</span>
         </h1>
       </section>
 

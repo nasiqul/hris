@@ -23,7 +23,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <section class="content-header">
         <h1>
           Presence data
-          <small>Optional description</small>
+          <span class="text-purple">出勤データ</span>
         </h1>
       </section>
 

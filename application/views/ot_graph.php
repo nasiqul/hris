@@ -22,7 +22,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <section class="content-header">
         <h1>
           Overtime Data
-          <small>Optional description</small>
+          <span class="text-purple">残業データ</span>
+
         </h1>
       </section>
 
@@ -35,8 +36,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <div class="col-md-12">
           <div class="nav-tabs-custom">
             <ul class="nav nav-tabs">
-              <li class="active"><a href="#tab_1" data-toggle="tab">Stat By Bagian</a></li>
-              <li><a href="#tab_2" data-toggle="tab">Stat By Date</a></li>
+              <li class="active"><a href="#tab_1" data-toggle="tab">By Bagian 
+                <br> <span class="text-purple">部門別</span></a></li>
+
+              <li><a href="#tab_2" data-toggle="tab">By Date <br> <span class="text-purple">日付別</span></a></li>
             </ul>
             <div class="tab-content">
               <div class="tab-pane active" id="tab_1">

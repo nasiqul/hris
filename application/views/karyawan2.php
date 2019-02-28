@@ -22,7 +22,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <section class="content-header">
         <h1>
           Employee Data
-          <small>Optional description</small>
+          <span class="text-purple">従業員データ</span>
         </h1>
       </section>
 
@@ -33,6 +33,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <div class="box box-solid">
             <div class="box-body">
               <a class="btn btn-success" href="<?php echo base_url('home/karyawan_t'); ?>"><i class="fa fa-plus"></i> New Entry</a>
+              <a class="btn btn-warning" href="<?php echo base_url('home/reset_karyawan'); ?>"><i class="fa fa-refresh"></i> Reload Data</a>
               <br>
               <br>
               <table id="example1" class="table table-responsive table-striped">

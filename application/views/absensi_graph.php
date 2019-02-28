@@ -21,8 +21,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <!-- Content Header (Page header) -->
       <section class="content-header">
         <h1>
-          Absent data
-          <small>Optional description</small>
+          Absence data
+          <span class="text-purple">欠勤データ</span>
         </h1>
       </section>
 

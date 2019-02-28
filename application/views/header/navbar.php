@@ -27,27 +27,12 @@
             <ul class="dropdown-menu">
               <!-- User image -->
               <li class="user-header">
-                <img src="<?php echo base_url()?>app/img/user1-128x128.jpg" class="img-circle" alt="User Image">
+                <img src="<?php echo base_url()?>app/img/image-user.png" class="img-circle" alt="User Image">
 
                 <p>
                   Alexander Pierce - Web Developer
                   <small>Member since Nov. 2012</small>
                 </p>
-              </li>
-              <!-- Menu Body -->
-              <li class="user-body">
-                <div class="row">
-                  <div class="col-xs-4 text-center">
-                    <a href="#">Followers</a>
-                  </div>
-                  <div class="col-xs-4 text-center">
-                    <a href="#">Sales</a>
-                  </div>
-                  <div class="col-xs-4 text-center">
-                    <a href="#">Friends</a>
-                  </div>
-                </div>
-                <!-- /.row -->
               </li>
               <!-- Menu Footer-->
               <li class="user-footer">
@@ -55,21 +40,18 @@
                   <a href="#" class="btn btn-default btn-flat">Profile</a>
                 </div>
                 <div class="pull-right">
-                  <a href="<?php echo base_url('home/logout'); ?>" class="btn btn-default btn-flat">Sign out</a>
+                  <a href="<?php echo base_url('home/logout'); ?>" class="btn btn-danger btn-flat">Sign out &nbsp<i class="fa fa-sign-out"></i></a>
                 </div>
               </li>
             </ul>
           </li>
         <?php }  else { ?> 
-          <li class="user user-menu"><a href="<?php echo base_url('login'); ?>"><i class="fa fa-key"></i> Login</a></li>
+          <li class="user user-menu"><a href="<?php echo base_url('login'); ?>"><i class="fa fa-lock"></i> Login</a></li>
           <?php } ?>
-          <li>
-            <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
-          </li>
         </ul>
       </div>
     </nav>
   </header>
   <script type="text/javascript">
-    $("#fotoHead2").attr("src","<?php echo base_url() ?>app/img/photo/<?php echo $nik2; ?>");
+    $("#fotoHead2").attr("src","<?php echo base_url() ?>app/img/image-user.png");
   </script>

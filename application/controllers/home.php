@@ -693,7 +693,7 @@ public function karyawan()
 
         $this->session->set_userdata($newdata);
     }
-    $this->load->view("karyawan_coba");
+    $this->load->view("karyawan2");
 }
 
 public function ajax_emp_coba()
@@ -799,5 +799,12 @@ public function sess_destroy()
 {
     $this->session->sess_destroy();
     redirect("home");
+}
+
+public function reset_karyawan()
+{
+    $array_items = array('status' , 'grade', 'grade', 'dep', 'pos');
+    $this->session->unset_userdata($array_items);
+    redirect('home/karyawan');
 }
 }
