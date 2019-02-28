@@ -9,7 +9,8 @@ class Budget extends CI_Controller {
 
 	public function index()
 	{
-		$this->load->view('budget');
+		$data['menu'] = 'cc';
+		$this->load->view('budget',$data);
 	}
 
 	public function ajax_budget()

@@ -44,6 +44,7 @@ class Home extends CI_Controller {
                 $data['report3'] = $this->home_model->report3();
             }
                 // $data['laporan'] = $this->home_model->laporan();
+            $data['menu'] = 'home';
             $this->load->view('report', $data);
         }
     }
@@ -61,12 +62,14 @@ class Home extends CI_Controller {
 
             $this->session->set_userdata($newdata);
         }
-        $this->load->view('absen');
+        $data['menu'] = 'abs';
+        $this->load->view('absen',$data);
     }
 
     public function absensi_graph()
     {
-        $this->load->view("absensi_graph");
+        $data['menu'] = 'absG';
+        $this->load->view("absensi_graph",$data);
     }
 
     public function client()
@@ -78,17 +81,20 @@ class Home extends CI_Controller {
     {
         $data['dep'] = $this->over_model->get_dep();
         $data['id_doc'] = $this->over_model->get_id_doc();
+        $data['menu'] = 'ovr';
         $this->load->view("overtime_form2",$data);
     }
 
     public function ot_graph()
     {
-        $this->load->view("ot_graph");
+        $data['menu'] = 'ovrG';
+        $this->load->view("ot_graph",$data);
     }
 
     public function ot_report()
     {
-        $this->load->view("overtime_report");
+        $data['menu'] = 'ovrR';
+        $this->load->view("overtime_report",$data);
     }
 
     public function karyawan_graph()
@@ -98,6 +104,7 @@ class Home extends CI_Controller {
         $data['grade'] = $this->karyawan_model->by_grade();
         $data['kode'] = $this->karyawan_model->by_kode();
         $data['posisi'] = $this->karyawan_model->by_posisi();
+        $data['menu'] = 'empG';
         $this->load->view("karyawan_graph", $data);
     }
 
@@ -122,7 +129,8 @@ class Home extends CI_Controller {
 
             $this->session->set_userdata($newdata);
         }
-        $this->load->view("karyawan");
+        $data['menu'] = 'emp';
+        $this->load->view("karyawan", $data);
     }
 
     public function detail()
@@ -137,12 +145,14 @@ class Home extends CI_Controller {
 
     public function tanya()
     {
-        $this->load->view('qa');
+        $data['menu'] = 'qa';
+        $this->load->view('qa',$data);
     }
 
     public function overtime_user()
     {
-        $this->load->view('overtime_user');
+        $data['menu'] = 'ovrU';
+        $this->load->view('overtime_user',$data);
     }
 
     public function ot()
@@ -156,7 +166,8 @@ class Home extends CI_Controller {
 
             $this->session->set_userdata($newdata);
         }
-        $this->load->view('overtime');
+        $data['menu'] = 'ovr';
+        $this->load->view('overtime',$data);
     }
 
     public function presensi()
@@ -172,7 +183,8 @@ class Home extends CI_Controller {
 
             $this->session->set_userdata($newdata);
         }
-        $this->load->view('index');
+        $data['menu'] = 'pr';
+        $this->load->view('index',$data);
     }
 
     public function presensi_graph()
@@ -180,6 +192,7 @@ class Home extends CI_Controller {
         $data['persentase'] = $this->home_model->by_persentase();
         $data['persentase_tidakMasuk'] = $this->home_model->persentase_tidakMasuk();
         $data['kary'] = $this->karyawan_model->tot();
+        $data['menu'] = 'prG';
         $this->load->view("presensi_graph", $data);
     }
 
@@ -693,7 +706,8 @@ public function karyawan()
 
         $this->session->set_userdata($newdata);
     }
-    $this->load->view("karyawan2");
+    $data['menu'] = 'emp';
+    $this->load->view("karyawan2", $data);
 }
 
 public function ajax_emp_coba()

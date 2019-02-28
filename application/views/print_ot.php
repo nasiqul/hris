@@ -116,7 +116,7 @@ table tr th {
 		<tr>
 			<td colspan="4"><center><h2>FORM LEMBUR KARYAWAN</h2></center></td>
 			<td style="text-align: center;">
-				<img src="../../app/qr_lembur/<?php echo $list[0]->id_over ?>.png" width="70px"><br>
+				<img src="../../../app/qr_lembur/<?php echo $list[0]->id_over ?>.png" width="70px"><br>
 				<?php echo $list[0]->id_over ?>
 			</td>
 		</tr>
