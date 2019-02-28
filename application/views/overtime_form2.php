@@ -704,7 +704,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             // the next thing you want to do 
             var s = $.parseJSON(data);
             hari = s;
-            // console.log(hari);
+            console.log(hari);
             
             showJam();
           }
