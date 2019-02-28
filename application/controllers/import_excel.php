@@ -57,7 +57,9 @@ class import_excel extends CI_Controller {
             	);
 
                 //sesuaikan nama dengan nama tabel
-            	$insert = $this->db->insert("cost_center_budget",$data);
+
+                $query = "CALL import_excel(".$rowData[0][0].",'".$newformat."',".$rowData[0][2].")";
+            	$this->db->query($query);
             	delete_files($config['upload_path']);
 
             }
