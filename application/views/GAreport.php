@@ -44,7 +44,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <label for="datepicker" class="col-sm-2 control-label">Tanggal</label>
 
                   <div class="col-sm-3">
-                    <input type="text" class="form-control" id="datepicker" placeholder="Select date">
+                    <input type="text" class="form-control" id="datepicker" placeholder="Select date" onchange="changeTanggal()">
                   </div>
                 </div>
 
@@ -53,19 +53,19 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <div class="col-sm-2">
                     <table class="table table-bordered table-striped text-center" id="shf1">
                       <tr><th>Shift 1</th></tr>
-                      <tr><td>0</td></tr>
+                      <tr><td id='makan1'>0</td></tr>
                     </table>
                   </div>
                   <div class="col-sm-2">
                     <table class="table table-bordered table-striped text-center" id="shf1">
                       <tr><th>Shift 2</th></tr>
-                      <tr><td>0</td></tr>
+                      <tr><td id='makan2'>0</td></tr>
                     </table>
                   </div>
                   <div class="col-sm-2">
                     <table class="table table-bordered table-striped text-center" id="shf1">
                       <tr><th>Shift 3</th></tr>
-                      <tr><td>0</td></tr>
+                      <tr><td id='makan3'>0</td></tr>
                     </table>
                   </div>
                 </div>
@@ -77,19 +77,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <table class="table table-bordered table-striped text-center" id="trs">
                       <tr>
                         <th></th>
-                        <th scope="col" width="30%">B</th>
-                        <th scope="col" width="30%">P</th>
+                        <th scope="col" width="30%">Bangil</th>
+                        <th scope="col" width="30%">Pasuruan</th>
                       </tr>
-                      <tr>
-                        <th scope="row" width="30%">16:00 - 18:00</th>
-                        <td>0</td>
-                        <td>0</td>
-                      </tr>
-                      <tr>
-                        <th scope="row">18:00 - 19:00</th>
-                        <td>0</td>
-                        <td>0</td>
-                      </tr>
+                      <tbody id="head">
+
+                      </tbody>
                     </table>
                   </div>
                 </div>
@@ -119,6 +112,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     });
 
     function changeTanggal() {
+      var no = 1;
       var tanggal = $("#datepicker").val();
       $.ajax({
         url: "<?php echo base_url('ot/ga_by_tgl/')?>",
@@ -128,7 +122,38 @@ scratch. This page gets rid of all links and provides the needed markup only.
         },
         success: function(data){
           var s = $.parseJSON(data);
+          if (s[0] != "gagal") {
+            $("#makan1").text(s[0][1]);
+            $("#makan2").text(s[0][2]);
+            $("#makan3").text(s[0][3]); 
+          }
+          else {
+            $("#makan1").text("0");
+            $("#makan2").text("0");
+            $("#makan3").text("0"); 
+          }
+              
+          $.ajax({
+            url: "<?php echo base_url('ot/ga_by_tgl_trans/')?>",
+            type : "POST",
+            data: {
+              tgl:tanggal
+            },
+            dataType: 'json',
+            success: function(data){
+              $("#head").empty();
+              $.each(data, function(i, item) {
+                var newdiv1 = $( "<tr id='hello"+no+"'>"+
+                  "<th scope='row' width='30%'>"+item[1]+" - "+item[2]+"</th>"+
+                  "<td>"+item[3]+"</td><td>"+item[4]+"</td>"+
+                  "</tr>");
 
+                no+=1;
+                $("#head").append(newdiv1);
+
+              });
+            }
+          })
         }
       })
     }

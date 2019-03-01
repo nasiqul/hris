@@ -27,39 +27,39 @@ class Over_model extends CI_Model {
     	$this->db->select("tanggal, nik,nama,masuk,keluar,id,shift,status,jam,final,id_jam,jam_lembur, IFNULL(aktual, 0) as aktual, IFNULL(diff, 0) as diff, IFNULL(final2, 0) as final2");
     	$this->db->from("
             (select tanggal,c.nik1 as nik, d.namaKaryawan as nama, masuk, keluar, id, shift, c.status, jam, final, c.id_jam, c.jam_lembur,
-                        (IF(hari = 'L',
-                                floor((TIME_TO_SEC(TIMEDIFF(concat('2010-08-20 ',keluar), concat('2010-08-20 ',masuk)))) / 60 / 60 * 2) / 2, 
-                                    IF(shift = 1,
-                                    floor((
-                                                                            
-                                        IF(c.jam_lembur = 'Awal',0,(TIME_TO_SEC(TIMEDIFF(concat('2010-08-20 ',keluar), '2010-08-20 16:00:00'))))
-                                        + 
-                                                                            
-                                        IF(c.jam_lembur = 'Awal',(TIME_TO_SEC(TIMEDIFF('2010-08-20 07:00:00' , concat('2010-08-20 ',masuk)))),0)
-                                    )/ 60 / 60 * 2) / 2
-                                    , IF(shift = 2,
-                                        floor((                                                                      IF(c.jam_lembur = 'Awal',0,(TIME_TO_SEC(TIMEDIFF(concat('2010-08-20 ',keluar), '2010-08-20 00:00:00'))))
-                                            
-                                            + 
-                                            
-                                            IF(c.jam_lembur = 'Awal',(TIME_TO_SEC(TIMEDIFF('2010-08-20 16:00:00' , concat('2010-08-20 ',masuk)))),0)
-                                                                                
-                                            )/ 60 / 60 * 2) / 2
-                                        , IF(shift = 3,
-                                            floor((                                                                  IF(c.jam_lembur = 'Awal',0,(TIME_TO_SEC(TIMEDIFF(concat('2010-08-20 ',keluar), '2010-08-20 07:00:00'))))
-                                                
-                                                + 
-                                                
-                                                IF(c.jam_lembur = 'Awal',(TIME_TO_SEC(TIMEDIFF('2010-08-20 00:00:00' , concat('2010-08-20 ',masuk)))),0)
-                                                )/ 60 / 60 * 2) / 2
-                                            , 0)))
-                                ) - (SELECT istirahat from master_lembur where id = c.id_jam))
+            (IF(hari = 'L',
+            floor((TIME_TO_SEC(TIMEDIFF(concat('2010-08-20 ',keluar), concat('2010-08-20 ',masuk)))) / 60 / 60 * 2) / 2, 
+            IF(shift = 1,
+            floor((
+
+            IF(c.jam_lembur = 'Awal',0,(TIME_TO_SEC(TIMEDIFF(concat('2010-08-20 ',keluar), '2010-08-20 16:00:00'))))
+            + 
+
+            IF(c.jam_lembur = 'Awal',(TIME_TO_SEC(TIMEDIFF('2010-08-20 07:00:00' , concat('2010-08-20 ',masuk)))),0)
+            )/ 60 / 60 * 2) / 2
+            , IF(shift = 2,
+            floor((                                                                      IF(c.jam_lembur = 'Awal',0,(TIME_TO_SEC(TIMEDIFF(concat('2010-08-20 ',keluar), '2010-08-20 00:00:00'))))
+
+            + 
+
+            IF(c.jam_lembur = 'Awal',(TIME_TO_SEC(TIMEDIFF('2010-08-20 16:00:00' , concat('2010-08-20 ',masuk)))),0)
+
+            )/ 60 / 60 * 2) / 2
+            , IF(shift = 3,
+            floor((                                                                  IF(c.jam_lembur = 'Awal',0,(TIME_TO_SEC(TIMEDIFF(concat('2010-08-20 ',keluar), '2010-08-20 07:00:00'))))
+
+            + 
+
+            IF(c.jam_lembur = 'Awal',(TIME_TO_SEC(TIMEDIFF('2010-08-20 00:00:00' , concat('2010-08-20 ',masuk)))),0)
+            )/ 60 / 60 * 2) / 2
+            , 0)))
+            ) - (SELECT istirahat from master_lembur where id = c.id_jam))
 
             as aktual, 
             ((SELECT aktual) - jam) as diff,
             IF((SELECT aktual) > jam , 
-                IF(final <> 0, ROUND((SELECT final), 1) , ROUND(jam, 1))
-                , ROUND((SELECT aktual), 1))
+            IF(final <> 0, ROUND((SELECT final), 1) , ROUND(jam, 1))
+            , ROUND((SELECT aktual), 1))
             as final2
 
             from (SELECT * from (
@@ -148,20 +148,20 @@ class Over_model extends CI_Model {
             $jamL = 0;
         }
 
-    	$data = array(
-    		'id_ot' => $no_doc,
-    		'nik' => $nik1,
-    		'dari' => $dari1,
-    		'sampai' => $sampai1,
-    		'jam' => $jam1,
-    		'transport' => $trans1,
-    		'makan' => $makan1,
-    		'ext_food' => $exfood1,
-            'id_jam' => $idJam1,
-            'jam_lembur' => $jamL
-    	);
+        $data = array(
+          'id_ot' => $no_doc,
+          'nik' => $nik1,
+          'dari' => $dari1,
+          'sampai' => $sampai1,
+          'jam' => $jam1,
+          'transport' => $trans1,
+          'makan' => $makan1,
+          'ext_food' => $exfood1,
+          'id_jam' => $idJam1,
+          'jam_lembur' => $jamL
+      );
 
-    	$this->db->insert('over_time_member', $data);	
+        $this->db->insert('over_time_member', $data);	
     }
 
     function count_filtered()
@@ -398,93 +398,135 @@ class Over_model extends CI_Model {
         JOIN satuan_lembur sl ON sl.jam = om.jam_aktual 
         SET om.satuan = sl.satuan
         WHERE o.tanggal = STR_TO_DATE('".$tgl."', '%d-%m-%Y') AND om.nik = '".$nik."' AND sl.hari = (
-            SELECT hari from over_time where id = '".$id."'
-        )";
-        $this->db->query($sql);
+        SELECT hari from over_time where id = '".$id."'
+    )";
+    $this->db->query($sql);
 
-        $this->db->select("k.costCenter");
-        $this->db->from("karyawan k");
-        $this->db->where("k.nik",$nik);
-        $query = $this->db->get();
-        return $query->result();
-    }
+    $this->db->select("k.costCenter");
+    $this->db->from("karyawan k");
+    $this->db->where("k.nik",$nik);
+    $query = $this->db->get();
+    return $query->result();
+}
 
-    public function tambah_aktual($id_cc,$val,$tgl)
-    {
-        $query2 = "UPDATE `cost_center_budget` SET `aktual` = `aktual` + ".(float)$val." WHERE `id_cc` = '".$id_cc."' AND MONTH(period) = MONTH(STR_TO_DATE('".$tgl."', '%d-%m-%Y')) 
-            AND YEAR(period) = YEAR(STR_TO_DATE('".$tgl."', '%d-%m-%Y'))";
-        $this->db->query($query2);
-    }
+public function tambah_aktual($id_cc,$val,$tgl)
+{
+    $query2 = "UPDATE `cost_center_budget` SET `aktual` = `aktual` + ".(float)$val." WHERE `id_cc` = '".$id_cc."' AND MONTH(period) = MONTH(STR_TO_DATE('".$tgl."', '%d-%m-%Y')) 
+    AND YEAR(period) = YEAR(STR_TO_DATE('".$tgl."', '%d-%m-%Y'))";
+    $this->db->query($query2);
+}
 
-    public function get_calendar($tgl)
-    {
-        $this->db->select("tanggal");
-        $this->db->from("kalender");
-        $this->db->where("tanggal = STR_TO_DATE('".$tgl."', '%Y-%m-%d')");
+public function get_calendar($tgl)
+{
+    $this->db->select("tanggal");
+    $this->db->from("kalender");
+    $this->db->where("tanggal = STR_TO_DATE('".$tgl."', '%Y-%m-%d')");
 
-        $query = $this->db->get();
-        return $query->num_rows();
-    }
+    $query = $this->db->get();
+    return $query->num_rows();
+}
 
-    public function set_jam($id, $nik, $jam)
-    {
-        $sql = "UPDATE over_time_member SET 
-        final = ".$jam."
-        WHERE id_ot = ".$id." AND nik = '".$nik."'";
-        $this->db->query($sql);
-    }
+public function set_jam($id, $nik, $jam)
+{
+    $sql = "UPDATE over_time_member SET 
+    final = ".$jam."
+    WHERE id_ot = ".$id." AND nik = '".$nik."'";
+    $this->db->query($sql);
+}
 
-    public function get_data_chart($tgl,$cc,$target)
-    {
-        $q = "select tanggal, jam,".$target." as target from (
-        SELECT tanggal, costCenter, SUM(final) as jam from over_time o
+public function get_data_chart($tgl,$cc,$target)
+{
+    $q = "select tanggal, jam,".$target." as target from (
+    SELECT tanggal, costCenter, SUM(final) as jam from over_time o
+    JOIN over_time_member om ON o.id = om.id_ot
+    JOIN karyawan k ON k.nik = om.nik
+    WHERE costCenter = ".$cc." AND
+    MONTH(tanggal) = MONTH(STR_TO_DATE('".$tgl."', '%Y-%m-%d'))
+    GROUP BY tanggal
+    )a
+    where a.jam > 0";
+    return $this->db->query($q)->result();
+}
+
+public function get_id($tgl)
+{
+    $this->db->select("id");
+    $this->db->where("MONTH(tanggal) = MONTH(STR_TO_DATE('".$tgl."', '%d-%m-%Y'))");
+    $this->db->order_by("id", "DESC");
+
+    $query = $this->db->get("over_time", 1);
+    return $query->result();
+}
+
+public function getJam($shift, $hari)
+{
+    $this->db->select("*");
+    $this->db->where("shift",$shift);
+    $this->db->where("hari",$hari);
+    $this->db->order_by("id", "ASC");
+
+    $query = $this->db->get("master_lembur");
+    return $query->result();
+}
+
+public function getJam_act($id)
+{
+    $this->db->select("jam");
+    $this->db->where("id",$id);
+
+    $query = $this->db->get("master_lembur");
+    return $query->result();
+}
+
+public function getHari($tgl)
+{
+    $this->db->select("tanggal");
+    $this->db->where("tanggal = STR_TO_DATE('".$tgl."','%d-%m-%Y')");
+
+    $query = $this->db->get("kalender");
+    return $query->num_rows();
+}
+
+public function getGA($tgl)
+{
+    $this->db->select("tanggal,  
+        (SELECT IFNULL(SUM(makan), 0) from over_time_member 
+        JOIN over_time ON over_time.id = over_time_member.id_ot
+        JOIN master_lembur ON over_time_member.id_jam = master_lembur.id 
+        WHERE shift = 1 AND over_time.tanggal = STR_TO_DATE('".$tgl."', '%d-%m-%Y')) as makan1 ,
+
+        (SELECT IFNULL(SUM(makan), 0) from over_time_member 
+        JOIN over_time ON over_time.id = over_time_member.id_ot
+        JOIN master_lembur ON over_time_member.id_jam = master_lembur.id 
+        WHERE shift = 2 AND over_time.tanggal = STR_TO_DATE('".$tgl."', '%d-%m-%Y')) as makan2 , 
+
+        (SELECT IFNULL(SUM(makan), 0) from over_time_member 
+        JOIN over_time ON over_time.id = over_time_member.id_ot
+        JOIN master_lembur ON over_time_member.id_jam = master_lembur.id 
+        WHERE shift = 3 AND over_time.tanggal = STR_TO_DATE('".$tgl."', '%d-%m-%Y')) as makan3");
+    $this->db->from("over_time o");
+    $this->db->join("over_time_member om","o.id = om.id_ot");
+    $this->db->where("o.tanggal = STR_TO_DATE('".$tgl."', '%d-%m-%Y')");
+    $this->db->group_by("o.tanggal");
+
+    $query = $this->db->get();
+    return $query->result();
+}
+
+public function getGA_trans($tgl)
+{
+    $this->db->select("*");
+    $this->db->from("(SELECT o.tanggal, ml.jam_awal, ml.jam_akhir, COUNT(if(transport = 'B' , transport, null)) B, COUNT(if(transport = 'P' , transport, null)) P from over_time o 
         JOIN over_time_member om ON o.id = om.id_ot
-        JOIN karyawan k ON k.nik = om.nik
-        WHERE costCenter = ".$cc." AND
-        MONTH(tanggal) = MONTH(STR_TO_DATE('".$tgl."', '%Y-%m-%d'))
-        GROUP BY tanggal
-        )a
-        where a.jam > 0";
-        return $this->db->query($q)->result();
-    }
+        JOIN master_lembur ml ON ml.id = om.id_jam
+        WHERE o.tanggal =  STR_TO_DATE('".$tgl."', '%d-%m-%Y')
+        GROUP BY ml.jam_awal, ml.jam_akhir) a");
+    $this->db->where("a.B <> 0");
+    $this->db->or_where("a.P <> 0");
+    
 
-    public function get_id($tgl)
-    {
-        $this->db->select("id");
-        $this->db->where("MONTH(tanggal) = MONTH(STR_TO_DATE('".$tgl."', '%d-%m-%Y'))");
-        $this->db->order_by("id", "DESC");
-
-        $query = $this->db->get("over_time", 1);
-        return $query->result();
-    }
-
-    public function getJam($shift, $hari)
-    {
-        $this->db->select("*");
-        $this->db->where("shift",$shift);
-        $this->db->where("hari",$hari);
-        $this->db->order_by("id", "ASC");
-
-        $query = $this->db->get("master_lembur");
-        return $query->result();
-    }
-
-    public function getJam_act($id)
-    {
-        $this->db->select("jam");
-        $this->db->where("id",$id);
-
-        $query = $this->db->get("master_lembur");
-        return $query->result();
-    }
-
-    public function getHari($tgl)
-    {
-        $this->db->select("tanggal");
-        $this->db->where("tanggal = STR_TO_DATE('".$tgl."','%d-%m-%Y')");
-
-        $query = $this->db->get("kalender");
-        return $query->num_rows();
-    }
+    $query = $this->db->get();
+    return $query->result();
+}
 }
 ?>

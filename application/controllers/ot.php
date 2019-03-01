@@ -510,22 +510,43 @@ class Ot extends CI_Controller {
 		$list = $this->over_model->getGA($tgl);
 		$data = array();
 
-		if ($list) {
+		if (!empty($list)) {
 			foreach ($list as $key) {
 				$row = array();
 				$row[] = $key->tanggal;
-				$row[] = $key->jam;
 				$row[] = $key->makan1;
 				$row[] = $key->makan2;
 				$row[] = $key->makan3;
-				$row[] = $key->B;
-				$row[] = $key->P;
 
-				array_push($data);
+				$data[] = $row;
 			}
+			echo json_encode($data);
+
+		} else {
+			$data[] = "gagal";
+
+			echo json_encode($data);
+
 		}
-		else
-			echo json_decode("{}");
+	}
+
+	public function ga_by_tgl_trans()
+	{
+		$tgl = $_POST['tgl'];
+
+		$list = $this->over_model->getGA_trans($tgl);
+		$data = array();
+
+		foreach ($list as $key) {
+			$row = array();
+			$row[] = $key->tanggal;
+			$row[] = $key->jam_awal;
+			$row[] = $key->jam_akhir;
+			$row[] = $key->B;
+			$row[] = $key->P;
+
+			$data[] = $row;
+		}
 
             //output to json format
 		echo json_encode($data);
