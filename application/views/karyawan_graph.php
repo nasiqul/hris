@@ -94,59 +94,97 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <a href="#tab_1" data-toggle="tab">By Status Kerja
                   <br><span class="text-purple">ステータス別</span>
                 </a></li>
-              <li>
-                <a href="#tab_2" data-toggle="tab">By Gender 
-                  <br> <span class="text-purple">性別</span>
-                </a></li>
-              <li>
-                <a href="#tab_3" data-toggle="tab">By Grade 
-                  <br><span class="text-purple">グレード別</span>
-                </a></li>
-              <li>
-                <a href="#tab_4" data-toggle="tab">By Department 
-                  <br><span class="text-purple">課別</span>
-                </a></li>
-              <li>
-                <a href="#tab_5" data-toggle="tab">By Jabatan  
-                <br><span class="text-purple">役職別</span>
-              </a></li>
-              
-            </ul>
-            <div class="tab-content">
-              <div class="tab-pane active" id="tab_1">
-                <div id = "container" style = "width: 850px; margin: 0 auto"></div>
-              </div>
-              <!-- /.tab-pane -->
-              <div class="tab-pane" id="tab_2">
-                <div id = "container2" style = "width: 750px; margin: 0 auto"></div>
-              </div>
-              <!-- /.tab-pane -->
-              <div class="tab-pane" id="tab_3">
-                <div id = "container3" style = "width: 850px; margin: 0 auto"></div>
-              </div>
+                <li>
+                  <a href="#tab_2" data-toggle="tab">By Gender 
+                    <br> <span class="text-purple">性別</span>
+                  </a></li>
+                  <li>
+                    <a href="#tab_3" data-toggle="tab">By Grade 
+                      <br><span class="text-purple">グレード別</span>
+                    </a></li>
+                    <li>
+                      <a href="#tab_4" data-toggle="tab">By Department 
+                        <br><span class="text-purple">課別</span>
+                      </a></li>
+                      <li>
+                        <a href="#tab_5" data-toggle="tab">By Jabatan  
+                          <br><span class="text-purple">役職別</span>
+                        </a></li>
 
-              <div class="tab-pane" id="tab_4">
-                <div id = "container4" style = "width: 850px; margin: 0 auto"></div>
+                      </ul>
+                      <div class="tab-content">
+                        <div class="tab-pane active" id="tab_1">
+                          <div id = "container" style = "width: 850px; margin: 0 auto"></div>
+                        </div>
+                        <!-- /.tab-pane -->
+                        <div class="tab-pane" id="tab_2">
+                          <div id = "container2" style = "width: 750px; margin: 0 auto"></div>
+                        </div>
+                        <!-- /.tab-pane -->
+                        <div class="tab-pane" id="tab_3">
+                          <div id = "container3" style = "width: 850px; margin: 0 auto"></div>
+                        </div>
+
+                        <div class="tab-pane" id="tab_4">
+                          <div id = "container4" style = "width: 850px; margin: 0 auto"></div>
+                        </div>
+
+                        <div class="tab-pane" id="tab_5">
+                          <div id = "container5" style = "width: 850px; margin: 0 auto"></div>
+                        </div>
+
+                        <!-- /.tab-pane -->
+                      </div>
+                      <!-- /.tab-content -->
+                    </div>
+                    <!-- nav-tabs-custom -->
+
+
+                    <div class="modal fade" id="myModal">
+                      <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h4 style="float: right;" id="modal-title"></h4>
+                            <h4 class="modal-title"><b>PT. YAMAHA MUSICAL PRODUCT INDONESIA</b></h4>
+                          </div>
+                          <div class="modal-body">
+                            <div class="row">
+                              <div class="col-md-12">
+                                <table id="example2" class="table table-striped table-bordered" style="width: 100%;"> 
+                                  <thead>
+                                    <tr>
+                                      <th>NIK</th>
+                                      <th>Employee Name</th>
+                                      <th>Devision</th>
+                                      <th>Department</th>
+                                      <th>Entry Date</th>
+                                      <th>Employee Status</th>
+                                      <th>Status</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-danger pull-right" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                          </div>
+                        </div>
+                        <!-- /.modal-content -->
+                      </div>
+                      <!-- /.modal-dialog -->
+                    </div>
+                  </div>
+                  <!-- /.modal-dialog -->
+                  <!-- </div> --> 
+
+                </section>
+                <!-- /.content -->
               </div>
-
-              <div class="tab-pane" id="tab_5">
-                <div id = "container5" style = "width: 850px; margin: 0 auto"></div>
-              </div>
-
-              <!-- /.tab-pane -->
-            </div>
-            <!-- /.tab-content -->
-          </div>
-          <!-- nav-tabs-custom -->
-        </div>
-        <!-- /.modal-dialog -->
-        <!-- </div> --> 
-
-      </section>
-      <!-- /.content -->
-    </div>
-    <!-- /.content-wrapper -->
-    <!-- /.control-sidebar -->
+              <!-- /.content-wrapper -->
+              <!-- /.control-sidebar -->
   <!-- Add the sidebar's background. This div must be placed
     immediately after the control sidebar -->
     <div class="control-sidebar-bg"></div>
@@ -183,7 +221,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             point: {
               events: {
                 click: function () {
-                  ShowData(this.name,'','','');
+                  ShowModal(this.name,'','','');
                 }
               }
             },
@@ -280,7 +318,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             point: {
               events: {
                 click: function () {
-                  ShowData('',this.name,'','');
+                  ShowModal('',this.name,'','');
                 }
               }
             },
@@ -338,7 +376,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             point: {
               events: {
                 click: function () {
-                  ShowData('','',this.name,'');
+                  ShowModal('','',this.name,'');
                 }
               }
             },
@@ -379,7 +417,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           type: 'category'
         },
         yAxis: {
-        type: 'logarithmic',
+          type: 'logarithmic',
           title: {
             text: 'Total Employee'
           }
@@ -394,7 +432,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             point: {
               events: {
                 click: function () {
-                  ShowData('','','',this.name);
+                  ShowModal('','','',this.name);
                 }
               }
             },
@@ -448,6 +486,34 @@ scratch. This page gets rid of all links and provides the needed markup only.
         },
         success: function(data) {
           window.location.href = "<?php echo base_url('home/karyawan/')?>";
+        }
+      });
+    }
+
+    function ShowModal(status,grade,dep,pos){
+      tabel = $('#example2').DataTable();
+      tabel.destroy();
+
+      $('#myModal').modal('show');
+      $('#example2').DataTable({
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        "processing": true,
+        "serverSide": true,
+        "searching": true,
+        "bPaginate": true,
+        "bLengthChange": true,
+        "bFilter": false,
+        "bInfo": false,
+        "order": [],
+        "ajax": {
+          "url": "<?php echo base_url('home/ajax_karyawan_cari_g/')?>",            
+          "type": "POST",
+          "data": {
+            status:status,
+            grade:grade,
+            dep:dep,
+            pos:pos
+          }
         }
       });
     }

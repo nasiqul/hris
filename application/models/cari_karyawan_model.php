@@ -2,8 +2,8 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Cari_karyawan_model extends CI_Model {
-	var $column_order = array('k.nik','namaKaryawan','dep/subSec','sec/Group','tanggalMasuk','statusKaryawan'); //set column field database for datatable orderable
-    var $column_search = array('k.nik','namaKaryawan','dep/subSec','sec/Group','tanggalMasuk','statusKaryawan','status'); //set column field database for datatable searchable 
+	var $column_order = array('k.nik','namaKaryawan','dep/subSec','sec/Group','tanggalMasuk','statusKaryawan','status'); //set column field database for datatable orderable
+    var $column_search = array('k.nik','namaKaryawan','dep/subSec','sec/Group','DATE_FORMAT(tanggalMasuk, "%d %b %Y")','statusKaryawan','status'); //set column field database for datatable searchable 
     var $order = array('tanggalMasuk' => 'asc', 'nik' => 'asc'); // default order 
 
     public function __construct()
@@ -23,7 +23,7 @@ class Cari_karyawan_model extends CI_Model {
 
 	private function _get_datatables_query($status, $grade, $dep, $pos)
     {
-        $this->db->select("k.nik, k.namaKaryawan, dv.nama as namadev, dp.nama as namadep, k.tanggalMasuk, k.statusKaryawan, k.status");
+        $this->db->select("k.nik, k.namaKaryawan, dv.nama as namadev, dp.nama as namadep, DATE_FORMAT(k.tanggalMasuk, '%d %b %Y') as tanggalMasuk, k.statusKaryawan, k.status");
         $this->db->from('karyawan k');
         $this->db->join('posisi p','k.nik = p.nik', 'left');
         $this->db->join('devisi dv','p.id_devisi = dv.id', 'left');

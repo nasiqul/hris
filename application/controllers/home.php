@@ -133,11 +133,6 @@ class Home extends CI_Controller {
         $this->load->view("karyawan", $data);
     }
 
-    public function detail()
-    {
-        $this->load->view("detailPerHari");
-    }
-
     public function user_QA()
     {
         $this->load->view("qa_user");
@@ -247,6 +242,47 @@ class Home extends CI_Controller {
             $row[] = $key->shift;
 
             $data[] = $row;
+        }
+
+        $output = array(
+            "draw" => $_POST['draw'],
+            "recordsTotal" => $tot,
+            "recordsFiltered" => $filter,
+            "data" => $data,
+        );
+            //output to json format
+        echo json_encode($output);
+    }
+
+    public function ajax_karyawan_cari_g()
+    {
+        $status = $_POST['status'];
+        $grade = $_POST['grade'];
+        $dep = $_POST['dep'];
+        $pos = $_POST['pos'];
+
+        $list = $this->cari_karyawan_model->get_data_karyawan_cari($status,$grade,$dep,$pos);
+        $tot = $this->cari_karyawan_model->count_all();
+        $filter = $this->cari_karyawan_model->count_filtered($status,$grade,$dep,$pos);
+
+
+        $data = array();
+        foreach ($list as $key) {
+            $row = array();
+            $row[] = $key->nik;
+                //$row[] = $key->foto;
+            $row[] = $key->namaKaryawan;
+            $row[] = $key->namadev;
+            $row[] = $key->namadep;
+            $row[] = $key->tanggalMasuk;
+            $row[] = $key->statusKaryawan;
+            if ($key->status == "Aktif")
+                $row[] = "<p class='text-center'><small class='label bg-green'>".$key->status." <i class='fa fa-check'></i> </small></p>";
+            else
+                $row[] = "<p class='text-center'><small class='label bg-red'>".$key->status." <i class='fa fa-close'></i> </small></p>";
+
+            $data[] = $row;
+
         }
 
         $output = array(

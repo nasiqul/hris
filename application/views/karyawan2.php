@@ -261,9 +261,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         { "data": 4 },
         { "data": 5 },
         { "data": 6 }
-        ],
-        "columnDefs": [
-        { "orderable": false, "targets": 6 }    ]
+        ]
       })
     })
 

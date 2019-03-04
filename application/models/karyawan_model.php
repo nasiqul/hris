@@ -2,7 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Karyawan_model extends CI_Model {
-	var $column_order = array('k.nik','namaKaryawan','dep/subSec','sec/Group','tanggalMasuk','statusKaryawan'); //set column field database for datatable orderable
+	var $column_order = array('k.nik','namaKaryawan','dep/subSec','sec/Group','tanggalMasuk','statusKaryawan','status'); //set column field database for datatable orderable
     var $column_search = array('k.nik','namaKaryawan','dep/subSec','sec/Group','DATE_FORMAT(tanggalMasuk, "%d %M %Y")','statusKaryawan','status'); //set column field database for datatable searchable 
     var $order = array('tanggalMasuk' => 'asc', 'nik' => 'asc'); // default order 
 

@@ -302,7 +302,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
         "processing": true,
         "serverSide": true,
         "searching": false,
-        "bPaginate": false,
         "bLengthChange": false,
         "bFilter": false,
         "bInfo": false,
