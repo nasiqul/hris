@@ -19,7 +19,7 @@
 		-webkit-print-color-adjust: exact;
 	}
 	body {
-		font-size: 20pt;
+		font-size: 14pt;
 	}
 }
 
