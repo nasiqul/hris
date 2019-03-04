@@ -65,7 +65,7 @@ table tr th {
 	page-break-inside: avoid;
 }
 </style>
-<body onload="window.print()">
+<body>
 	<?php 
 	$hari = date("D",strtotime($list[0]->tanggal));
 
@@ -132,7 +132,7 @@ table tr th {
 			<td width="25%"><?php echo $list[0]->departemen ?> - <?php echo $list[0]->section ?></td>
 		</tr>
 	</table>
-	<table width="98%" style="margin-top: 10px" id="anggota"  align="center" border="0">
+	<table width="100%" style="margin-top: 10px" id="anggota"  align="center" border="0">
 		<tr>
 			<th width="3%">No</th>
 			<th width="15%">NIK</th>
@@ -178,7 +178,6 @@ table tr th {
 			<td style="text-align: right;">Total = </td>
 			<td><div class="div"><?php echo $jml; ?></div></td>
 			<td>Jam</td>
-			
 		</tr>
 		<tr><td colspan="3" align="left">Catatan :</td><td colspan="3" ></td></tr>
 		<tr>
@@ -186,24 +185,49 @@ table tr th {
 				<div class="div" style="height: 158px; margin: 0 5px 0 5px; "><?php echo $list[0]->catatan ?></div>
 			</td>
 			<td colspan="9">
-				<table width="100%" id="tb-collapse" style="margin: 0;padding: 0; background-color: #dddddd">
-					<tr>
-						<td width="25%" cellpading="0" cellspacing="0">Diusulkan,</td>
-						<td width="25%">Disetujui,</td>
-						<td width="25%">Diketahui,</td>
-						<td width="25%">Diterima,</td>
-					</tr>
-					<tr>
-						<td>Staff / Leader</td>
-						<td>Chief / Foreman</td>
-						<td>Dept. Manager</td>
-						<td>HR Dept.</td>
-					</tr>
-					<tr>
-						<td height="92px"></td><td></td><td></td><td></td>
-					</tr>
-					<tr><td style="text-align: left;">tgl. </td><td style="text-align: left;">tgl. </td><td style="text-align: left;">tgl. </td><td style="text-align: left;">tgl. </td></tr>
-				</table>
+				<?php if ($list[0]->hari == "N"){ ?>
+
+					<table width="100%" id="tb-collapse" style="margin: 0;padding: 0; background-color: #dddddd">
+						<tr>
+							<td width="25%" cellpading="0" cellspacing="0">Diusulkan,</td>
+							<td width="25%">Disetujui,</td>
+							<td width="25%">Diketahui,</td>
+							<td width="25%">Diterima,</td>
+						</tr>
+						<tr>
+							<td>Staff / Leader</td>
+							<td>Chief / Foreman</td>
+							<td>Dept. Manager</td>
+							<td>HR Dept.</td>
+						</tr>
+						<tr>
+							<td height="92px"></td><td></td><td></td><td></td>
+						</tr>
+						<tr><td style="text-align: left;">tgl. </td><td style="text-align: left;">tgl. </td><td style="text-align: left;">tgl. </td><td style="text-align: left;">tgl. </td></tr>
+					</table>
+
+				<?php } else { ?>
+
+					<table width="100%" id="tb-collapse" style="margin: 0;padding: 0; background-color: #dddddd">
+						<tr>
+							<td width="25%" cellpading="0" cellspacing="0">Diusulkan,</td>
+							<td width="25%">Disetujui,</td>
+							<td width="25%">Disetujui,</td>
+							<td width="25%">Diketahui,</td>
+						</tr>
+						<tr>
+							<td>Chief / Foreman</td>
+							<td>Dept. Manager</td>
+							<td>General Manager Devision</td>
+							<td>HR Direktur</td>
+						</tr>
+						<tr>
+							<td height="92px"></td><td></td><td></td><td></td>
+						</tr>
+						<tr><td style="text-align: left;">tgl. </td><td style="text-align: left;">tgl. </td><td style="text-align: left;">tgl. </td><td style="text-align: left;">tgl. </td></tr>
+					</table>
+
+				<?php } ?>
 			</td>
 		</tr>
 		<tr>
@@ -217,78 +241,87 @@ table tr th {
 					</tr>
 					<tr><td colspan="3" height="150px">
 						<p id="cc" hidden><?php echo $cc_member[0]->costCenter ?></p>
-						<div id="container" style = "height: 148px; margin: 0 auto"></div>
-					</td></tr>
-				</table>
-			</td>
-		</tr>
-	</table>	
+						<div id="chart">
+							<div id="container" style = "height: 148px; margin: 0 auto"></div>
+						</div>
+						</td></tr>
+					</table>
+				</td>
+			</tr>
+		</table>	
 
-	<script src="<?php echo base_url()?>app/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-	<script src="<?php echo base_url()?>app/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-	<script src="<?php echo base_url()?>app/bower_components/morris.js/morris.min.js"></script>
-	<script src="<?php echo base_url()?>app/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
-	<script src="<?php echo base_url()?>app/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
-	<!-- AdminLTE App -->
-	<script src="<?php echo base_url()?>app/dist/js/adminlte.min.js"></script>
-	<script src="<?php echo base_url()?>app/dist/js/jquery.gritter.min.js"></script>
+		<script src="<?php echo base_url()?>app/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+		<script src="<?php echo base_url()?>app/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+		<script src="<?php echo base_url()?>app/bower_components/morris.js/morris.min.js"></script>
+		<script src="<?php echo base_url()?>app/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+		<script src="<?php echo base_url()?>app/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+		<!-- AdminLTE App -->
+		<script src="<?php echo base_url()?>app/dist/js/adminlte.min.js"></script>
+		<script src="<?php echo base_url()?>app/dist/js/jquery.gritter.min.js"></script>
 
-	<script>
+		<script>
 
-		$(function () {
-			var tgl = $('#tgl').text();
-			var cc = $('#cc').text();
-			var target = $('#target').text();
-			var url = "<?php echo base_url('ot/ajax_spl_g') ?>";
-			$.ajax({
-				type: "POST",
-				url: url,
-				data: {
-					tanggal: tgl,
-					cc: cc,
-					target: target,
-				},
-				success: function(data) {
-					var s = $.parseJSON(data);
-					var processed_json = new Array();
-					var processed_jsontr = new Array();
-					var processed_jsont = new Array();
-					var z = 0;
+			$(document).ready(function() {
+				var tgl = $('#tgl').text();
+				var cc = $('#cc').text();
+				var target = $('#target').text();
+				var url = "<?php echo base_url('ot/ajax_spl_g') ?>";
+				$.ajax({
+					type: "POST",
+					url: url,
+					data: {
+						tanggal: tgl,
+						cc: cc,
+						target: target,
+					},
+					success: function(data) {
+						var s = $.parseJSON(data);
+						var processed_json = new Array();
+						var processed_jsontr = new Array();
+						var processed_jsont = new Array();
+						var z = 0;
 
-					for (i = 0; i < s.length; i++){
-						z += parseFloat(s[i][0]);
-						processed_json.push(z);
-						processed_jsontr.push(parseFloat(s[i][2]));
-						processed_jsont.push(s[i][1]);
-					}
+						for (i = 0; i < s.length; i++){
+							z += parseFloat(s[i][0]);
+							processed_json.push(z);
+							processed_jsontr.push(parseFloat(s[i][2]));
+							processed_jsont.push(s[i][1]);
+						}
 
-					var target = s[0][2];
-					console.log(target);
+						var target = s[0][2];
+						console.log(target);
 
 
 
-					$('#container').highcharts({
-						title: {
-							text: ''
-						},
+						var charts = $('#container').highcharts({
 
-						yAxis: {
-							softMax: 50,
-							allowDecimals: true,
-							min: 4,
-							title: {
-								text: 'Resultados'
+							chart:
+							{
+								backgroundColor : "rgba(255, 255, 255, 0.0)",
 							},
-							plotLines: [{
-								value: target,
-								width: 1,
-								color: 'rgba(204,0,0,0.75)'
-							}]
-						},
+							title: {
+								text: ''
+							},
 
-						xAxis: {
-							lineColor: 'transparent',
-							categories : processed_jsont
+							yAxis: {
+								softMax: 50,
+								allowDecimals: true,
+								min: 4,
+								title: {
+									text: 'Resultados'
+								},
+								
+								gridLineColor: '#fff',
+								plotLines: [{
+									value: target,
+									width: 1,
+									color: 'rgba(204,0,0,0.75)'
+								}]
+							},
+
+							xAxis: {
+								lineColor: '#fff',
+								categories : processed_jsont
 							//processed_jsontr
 						},
 
@@ -297,11 +330,13 @@ table tr th {
 						},
 
 						plotOptions: {
+
 							line: {
+								animation: false,
 								dataLabels: {
 									enabled: true
 								},
-								enableMouseTracking: false
+								enableMouseTracking: false,
 							}
 						},
 
@@ -337,10 +372,14 @@ table tr th {
 							enabled: false
 						},
 					})
+
+
+					window.print();
 				}
 			});
-		})
-	</script>
+			})
+
+</script>
 
 </body>
 </html>
