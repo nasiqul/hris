@@ -10,13 +10,16 @@
 
 <style type="text/css">
 @page {
-	size: A4;
+	size: A4 portrait;
 	margin: 1;
 }
 @media print {
 	#tb-collapse {
 		background-color: #dddddd !important;
-		-webkit-print-color-adjust: exact; 
+		-webkit-print-color-adjust: exact;
+	}
+	body {
+		font-size: 20pt;
 	}
 }
 
@@ -103,7 +106,7 @@ table tr th {
 		break;
 	}
 	?>
-	<table width="100%" border="0" style="padding-right: 20px">
+	<table width="100%" border="0" style="padding-right: 20px;">
 		<tr>
 			<td width="85%" colspan="5"><b>PT. YAMAHA MUSICAL PRODUCT INDONESIA</b></td>
 		</tr>
@@ -310,12 +313,11 @@ table tr th {
 								title: {
 									text: 'Resultados'
 								},
-								
 								gridLineColor: '#fff',
 								plotLines: [{
 									value: target,
-									width: 1,
-									color: 'rgba(204,0,0,0.75)'
+									width: 3,
+									color: 'rgba(204,0,0,0.75)',
 								}]
 							},
 
