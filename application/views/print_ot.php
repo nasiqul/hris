@@ -182,12 +182,17 @@ table tr th {
 			<td style="text-align: center;"><?php echo $jml; ?></td>
 			<td>&nbsp; Jam</td>
 		</tr>
-		<tr><td colspan="11" align="left" style="border-left: 1px solid white; border-right: 5px solid white">Catatan :</td></tr>
+	</table>	
+
+	<table border="0" width="100%">
 		<tr>
-			<td colspan="3" style="border: 1px solid white">
+			<tr>
+				<td colspan="2">Catatan :</td>
+			</tr>
+			<td width="50%" style="padding-right: 4px">
 				<div class="div" style="height: 177px; margin: 0; width: 100%"><?php echo $list[0]->catatan ?></div>
 			</td>
-			<td colspan="9" style="border-right: 1px solid white; border-top: 1px solid white;border-bottom: 1px solid white; border-left: 1px solid white">
+			<td style="padding-left: 4px">
 				<?php if ($list[0]->hari == "N"){ ?>
 
 					<table width="100%" id="tb-collapse" style="margin: 0;padding: 0; background-color: #dddddd">
@@ -234,8 +239,8 @@ table tr th {
 			</td>
 		</tr>
 		<tr>
-			<td colspan="11" style="border-left: 1px solid white; border-right: 1px solid white; border-bottom: 1px solid white">
-				<table width="100%" id="tb-collapse" style="background-color: #dddddd; margin-top: 10px ">
+			<td colspan="2">
+				<table width="100%" id="tb-collapse" style="background-color: #dddddd; margin-top: 10px; text-align: center">
 					<tr><td width="34%">TARGET</td><td width="33%">AKTUAL</td><td width="33%">DIFF</td></tr>
 					<tr>
 						<td height="20px"><d id="target" style="font-size: 25pt"><?php echo $cc_member[0]->jml*$total ?></d></td>
@@ -244,86 +249,84 @@ table tr th {
 					</tr>
 					<tr><td colspan="3" height="150px">
 						<p id="cc" hidden><?php echo $cc_member[0]->costCenter ?></p>
-						<div id="chart">
 							<div id="container" style = "height: 148px; margin: 0 auto"></div>
-						</div>
-						</td></tr>
-					</table>
-				</td>
-			</tr>
-		</table>	
+					</td></tr>
+				</table>
+			</td>
+		</tr>
+	</table>
 
-		<script src="<?php echo base_url()?>app/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-		<script src="<?php echo base_url()?>app/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-		<script src="<?php echo base_url()?>app/bower_components/morris.js/morris.min.js"></script>
-		<script src="<?php echo base_url()?>app/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
-		<script src="<?php echo base_url()?>app/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
-		<!-- AdminLTE App -->
-		<script src="<?php echo base_url()?>app/dist/js/adminlte.min.js"></script>
-		<script src="<?php echo base_url()?>app/dist/js/jquery.gritter.min.js"></script>
+	<script src="<?php echo base_url()?>app/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script src="<?php echo base_url()?>app/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script src="<?php echo base_url()?>app/bower_components/morris.js/morris.min.js"></script>
+	<script src="<?php echo base_url()?>app/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+	<script src="<?php echo base_url()?>app/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+	<!-- AdminLTE App -->
+	<script src="<?php echo base_url()?>app/dist/js/adminlte.min.js"></script>
+	<script src="<?php echo base_url()?>app/dist/js/jquery.gritter.min.js"></script>
 
-		<script>
+	<script>
 
-			$(document).ready(function() {
-				var tgl = $('#tgl').text();
-				var cc = $('#cc').text();
-				var target = $('#target').text();
-				var url = "<?php echo base_url('ot/ajax_spl_g') ?>";
-				$.ajax({
-					type: "POST",
-					url: url,
-					data: {
-						tanggal: tgl,
-						cc: cc,
-						target: target,
-					},
-					success: function(data) {
-						var s = $.parseJSON(data);
-						var processed_json = new Array();
-						var processed_jsontr = new Array();
-						var processed_jsont = new Array();
-						var z = 0;
+		$(document).ready(function() {
+			var tgl = $('#tgl').text();
+			var cc = $('#cc').text();
+			var target = $('#target').text();
+			var url = "<?php echo base_url('ot/ajax_spl_g') ?>";
+			$.ajax({
+				type: "POST",
+				url: url,
+				data: {
+					tanggal: tgl,
+					cc: cc,
+					target: target,
+				},
+				success: function(data) {
+					var s = $.parseJSON(data);
+					var processed_json = new Array();
+					var processed_jsontr = new Array();
+					var processed_jsont = new Array();
+					var z = 0;
 
-						for (i = 0; i < s.length; i++){
-							z += parseFloat(s[i][0]);
-							processed_json.push(z);
-							processed_jsontr.push(parseFloat(s[i][2]));
-							processed_jsont.push(s[i][1]);
-						}
+					for (i = 0; i < s.length; i++){
+						z += parseFloat(s[i][0]);
+						processed_json.push(z);
+						processed_jsontr.push(parseFloat(s[i][2]));
+						processed_jsont.push(s[i][1]);
+					}
 
-						var target = s[0][2];
-						console.log(target);
-
+					var target = s[0][2];
+					console.log(target);
 
 
-						var charts = $('#container').highcharts({
 
-							chart:
-							{
-								backgroundColor : "rgba(255, 255, 255, 0.0)",
-							},
+					var charts = $('#container').highcharts({
+
+						chart:
+						{
+							backgroundColor : "rgba(255, 255, 255, 0.0)",
+						},
+						title: {
+							text: ''
+						},
+
+						yAxis: {
+							softMax: 50,
+							allowDecimals: true,
+							min: 4,
 							title: {
-								text: ''
+								text: 'Jumlah Jam'
 							},
+							gridLineColor: '#fff',
+							plotLines: [{
+								value: target,
+								width: 3,
+								color: 'rgba(204,0,0,0.75)'
+							}]
+						},
 
-							yAxis: {
-								softMax: 50,
-								allowDecimals: true,
-								min: 4,
-								title: {
-									text: 'Resultados'
-								},
-								gridLineColor: '#fff',
-								plotLines: [{
-									value: target,
-									width: 3,
-									color: 'rgba(204,0,0,0.75)',
-								}]
-							},
-
-							xAxis: {
-								lineColor: '#fff',
-								categories : processed_jsont
+						xAxis: {
+							lineColor: '#fff',
+							categories : processed_jsont
 							//processed_jsontr
 						},
 
@@ -379,9 +382,9 @@ table tr th {
 					window.print();
 				}
 			});
-			})
+		})
 
-</script>
+	</script>
 
 </body>
 </html>
