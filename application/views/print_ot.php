@@ -19,7 +19,7 @@
 		-webkit-print-color-adjust: exact;
 	}
 	body {
-		font-size: 14pt;
+		font-size: 16pt;
 	}
 }
 
@@ -30,7 +30,7 @@ body {
 .div {
 	border: 1px solid black;
 	width: 90%;
-	height: 25px;
+	height: 35px;
 	margin: 0 auto;
 	text-align: center;
 	line-height: 25px;
@@ -45,11 +45,11 @@ p {
 #anggota {
 	border-top: 1px solid black;
 	border-collapse:collapse;
-	text-align: center;
 }
 #anggota tr th { 
 	border-bottom: 1px solid #000;
 	padding: 5px 0 5px 0;
+	text-align: center;
 }
 #anggota #bottom td { 
 	border-top: 1px solid #000;
@@ -135,32 +135,32 @@ table tr th {
 			<td width="25%"><?php echo $list[0]->departemen ?> - <?php echo $list[0]->section ?></td>
 		</tr>
 	</table>
-	<table width="100%" style="margin-top: 10px" id="anggota"  align="center" border="0">
+	<table width="100%" style="margin-top: 10px" id="anggota"  align="center" border="1">
 		<tr>
 			<th width="3%">No</th>
-			<th width="15%">NIK</th>
+			<th width="9%">NIK</th>
 			<th >Nama</th>
-			<th width="7%">Dari</th>
-			<th width="10%">Sampai</th>
+			<th width="5%">Dari</th>
+			<th width="5%">Sampai</th>
 			<th width="5%">Trans</th>
-			<th width="8%">Makan</th>
-			<th width="8%">E.Food</th>
-			<th width="6%">TTD</th>
-			<th width="6%">jam</th>
+			<th width="6%">Makan</th>
+			<th width="6%">E.Food</th>
+			<th width="8%">TTD</th>
+			<th width="4%">Jam</th>
 			<th width="8%">TTD Atasan</th>
 		</tr>
 		<?php $no=1; $jml=0; $total=0; $mkn=0; $efood=0; $b=0; $p=0; foreach ($list_anggota as $key) { ?>
 			<tr>
-				<td style="padding: 5px 0 5px 0"><?php echo $no ?></td>
-				<td><?php echo $key->nik ?></td>
+				<td style="padding: 10px 0 10px 0; text-align: center"><?php echo $no ?></td>
+				<td style="text-align: center"><?php echo $key->nik ?></td>
 				<td><?php echo $key->namaKaryawan ?></td>
-				<td><?php echo date("H:i",strtotime($key->dari)); ?></td>
-				<td><?php echo date("H:i",strtotime($key->sampai)) ?></td>
-				<td><div class="div"><?php echo $key->transport; ?></div></td>
-				<td><?php if ($key->makan == 1){ echo "&#x2714"; $mkn+=1; }?></td>
-				<td><?php if ($key->ext_food == 1){ echo "&#x2714"; $efood+=1;} ?></td>
+				<td style="text-align: center;"><?php echo date("H:i",strtotime($key->dari)); ?></td>
+				<td style="text-align: center;"><?php echo date("H:i",strtotime($key->sampai)) ?></td>
+				<td style="text-align: center;"><?php echo $key->transport; ?></td>
+				<td style="text-align: center;"><?php if ($key->makan == 1){ echo "&#x2714"; $mkn+=1; }?></td>
+				<td style="text-align: center;"><?php if ($key->ext_food == 1){ echo "&#x2714"; $efood+=1;} ?></td>
 				<td><div class="div"></div></td>
-				<td><div class="div"><?php echo $key->jam ?></div></td>
+				<td style="text-align: center"><?php echo $key->jam ?></td>
 				<td><div class="div"></div></td>
 			</tr>
 			<?php 
@@ -175,19 +175,19 @@ table tr th {
 		} ?>
 		<tr id="bottom">
 			<td colspan="5" style="text-align: left;">B = Bangil <br> P = Pasuruan</td>
-			<td>B = <?php echo $b ?><br>P = <?php echo $p ?></td>
-			<td><?php echo $mkn ?></td>
-			<td><?php echo $efood ?></td>
-			<td style="text-align: right;">Total = </td>
-			<td><div class="div"><?php echo $jml; ?></div></td>
-			<td>Jam</td>
+			<td style="text-align: center;">B = <?php echo $b ?><br>P = <?php echo $p ?></td>
+			<td style="text-align: center;"><?php echo $mkn ?></td>
+			<td style="text-align: center;"><?php echo $efood ?></td>
+			<td style="text-align: right;">Total = &nbsp;</td>
+			<td style="text-align: center;"><?php echo $jml; ?></td>
+			<td>&nbsp; Jam</td>
 		</tr>
-		<tr><td colspan="3" align="left">Catatan :</td><td colspan="3" ></td></tr>
+		<tr><td colspan="11" align="left" style="border-left: 1px solid white; border-right: 5px solid white">Catatan :</td></tr>
 		<tr>
-			<td colspan="3">
-				<div class="div" style="height: 158px; margin: 0 5px 0 5px; "><?php echo $list[0]->catatan ?></div>
+			<td colspan="3" style="border: 1px solid white">
+				<div class="div" style="height: 177px; margin: 0; width: 100%"><?php echo $list[0]->catatan ?></div>
 			</td>
-			<td colspan="9">
+			<td colspan="9" style="border-right: 1px solid white; border-top: 1px solid white;border-bottom: 1px solid white; border-left: 1px solid white">
 				<?php if ($list[0]->hari == "N"){ ?>
 
 					<table width="100%" id="tb-collapse" style="margin: 0;padding: 0; background-color: #dddddd">
@@ -234,7 +234,7 @@ table tr th {
 			</td>
 		</tr>
 		<tr>
-			<td colspan="11">
+			<td colspan="11" style="border-left: 1px solid white; border-right: 1px solid white; border-bottom: 1px solid white">
 				<table width="100%" id="tb-collapse" style="background-color: #dddddd; margin-top: 10px ">
 					<tr><td width="34%">TARGET</td><td width="33%">AKTUAL</td><td width="33%">DIFF</td></tr>
 					<tr>
