@@ -189,10 +189,10 @@ class Karyawan_model extends CI_Model {
 
     public function by_kode(){
         $q = "SELECT dp.nama as dep, COUNT(k.nik) as jml from karyawan k
-                LEFT JOIN posisi p ON p.nik = k.nik 
-                JOIN departemen dp ON dp.id = p.id_dep
-                GROUP BY dp.id
-                ORDER BY jml ASC";
+        LEFT JOIN posisi p ON p.nik = k.nik 
+        JOIN departemen dp ON dp.id = p.id_dep
+        GROUP BY dp.id
+        ORDER BY jml ASC";
         $query = $this->db->query($q);
 
         if($query->num_rows() > 0){
@@ -370,13 +370,14 @@ class Karyawan_model extends CI_Model {
         }    
     }
 
-    public function tambah($nik, $nama, $tmptL, $tglL, $jk, $ktp, $alamat, $statusK, $dev, $dep, $sec, $subsec, $group, $grade, $ngrade, $jab, $kode, $statusKar, $pin, $tglM, $cs, $hp, $bpjstk, $bpjskes, $no_rek, $npwp, $jp){
+    public function tambah($foto, $nik, $nama, $tmptL, $tglL, $jk, $ktp, $alamat, $statusK, $dev, $dep, $sec, $subsec, $group, $grade, $ngrade, $jab, $kode, $statusKar, $pin, $tglM, $cs, $hp, $bpjstk, $bpjskes, $no_rek, $npwp, $jp){
 
         $data = array(
             'pin' => $pin,
             'nik' => $nik,
             'costCenter' => $cs,
             'namaKaryawan' => $nama,
+            'foto' => $foto,
             'kode' => $kode,
             'tanggalMasuk' => date('Y-m-d', strtotime($tglM)),
             'jk' => $jk,
@@ -410,6 +411,8 @@ class Karyawan_model extends CI_Model {
         );
 
         $this->db->insert('posisi', $data2);
+
+        return $result;
     }
 }
 ?>

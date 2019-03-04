@@ -25,7 +25,7 @@ class Login extends CI_Controller {
 
 		$this->session->set_userdata($newdata);
 
-		redirect('client/view');
+		redirect('client');
 	}
 
 

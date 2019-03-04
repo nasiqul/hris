@@ -172,7 +172,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           yAxis: {
             type: 'logarithmic',
             title: {
-              text: 'Total Absent'
+              text: 'Total Absence'
             }
           },
           legend: {
@@ -246,7 +246,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                       },
                       yAxis: {
                         title: {
-                          text: 'Total Absent'
+                          text: 'Total Absence'
                         }
                       },
                       legend: {

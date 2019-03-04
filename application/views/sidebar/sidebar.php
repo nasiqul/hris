@@ -58,6 +58,7 @@
           </ul>
         </li>
           <li class="<?php if($menu == 'qa') echo 'active'?>"><a href="<?php echo base_url('home/tanya'); ?>"><i class="fa fa-comments-o"></i> <span>Q & A List</span></a></li>
+          <li><a href="<?php echo base_url('home/ot_graph'); ?>">  </a></li>
           <!-- <li class="treeview">
             <a href="#"><i class="fa fa-link"></i> <span>Multilevel</span>
               <span class="pull-right-container">

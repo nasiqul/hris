@@ -39,77 +39,83 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <li class="active"><a href="#tab_1" data-toggle="tab">By Bagian 
                 <br> <span class="text-purple">部門別</span></a></li>
 
-              <li><a href="#tab_2" data-toggle="tab">By Date <br> <span class="text-purple">日付別</span></a></li>
-            </ul>
-            <div class="tab-content">
-              <div class="tab-pane active" id="tab_1">
-                <div class="col-md-3 pull-right">
-                  <form action="" method="post" id="rati">
-                    <label>Date : </label>
-                    <input type="text" class="form-control text-muted" placeholder="Select date" id="datepicker" onchange="PostMonth()" name="sortBulan">
-                  </form>
+                <li><a href="#tab_2" data-toggle="tab">By Date <br> <span class="text-purple">日付別</span></a></li>
+              </ul>
+              <div class="tab-content">
+                <div class="tab-pane active" id="tab_1">
+                  <div class="col-md-3 pull-right">
+                    <form action="" method="post" id="rati">
+                      <label>Date : </label>
+                      <input type="text" class="form-control text-muted" placeholder="Select date" id="datepicker" onchange="PostMonth()" name="sortBulan">
+                    </form>
+                  </div>
+                  <div id="container" style ="margin: 0 auto"></div>
                 </div>
-                <div id="container" style ="margin: 0 auto"></div>
+                <div class="tab-pane" id="tab_2">
+                  <div class="col-md-3 pull-right">
+                    <form action="" method="post" id="rati">
+                      <label>Year : </label>
+                      <input type="text" class="form-control text-muted" placeholder="Select year" id="datepicker" onchange="PostMonth()" name="sortBulan">
+                    </form>
+                  </div>
+                  <div id = "container2" style ="width: 850px; margin: 0 auto"></div>
+                </div>
+                <!-- /.tab-pane -->
+                <!-- /.tab-pane -->
               </div>
-              <div class="tab-pane" id="tab_2">
-                <div id = "container2" style = "width: 850px; margin: 0 auto"></div>
-              </div>
-              <!-- /.tab-pane -->
-              <!-- /.tab-pane -->
+              <!-- /.tab-content -->
             </div>
-            <!-- /.tab-content -->
-          </div>
 
-          <div class="modal fade" id="myModal">
-            <div class="modal-dialog modal-lg">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h4 style="float: right;" id="modal-title"></h4>
-                  <h4 class="modal-title"><b>PT. YAMAHA MUSICAL PRODUCT INDONESIA</b></h4>
-                </div>
-                <div class="modal-body">
-                  <div class="row">
-                    <div class="col-md-12">
-                      <table id="example2" class="table table-striped table-bordered" style="width: 100%;"> 
-                        <thead>
-                          <tr>
-                            <th>Departemen</th>
-                            <th>Tanggal</th>
-                            <th>Nama karyawan</th>
-                            <th>Lembur (jam)</th>
-                            <th>Keperluan</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                        <tfoot id="tableFootStock" style="background-color: #ddd">
-                          <th colspan="3" style="text-align: right;">Total : </th>
-                          <th colspan="2"></th>
-                        </tfoot>
-                      </table>
+            <div class="modal fade" id="myModal">
+              <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h4 style="float: right;" id="modal-title"></h4>
+                    <h4 class="modal-title"><b>PT. YAMAHA MUSICAL PRODUCT INDONESIA</b></h4>
+                  </div>
+                  <div class="modal-body">
+                    <div class="row">
+                      <div class="col-md-12">
+                        <table id="example2" class="table table-striped table-bordered" style="width: 100%;"> 
+                          <thead>
+                            <tr>
+                              <th>Departemen</th>
+                              <th>Tanggal</th>
+                              <th>Nama karyawan</th>
+                              <th>Lembur (jam)</th>
+                              <th>Keperluan</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                          </tbody>
+                          <tfoot id="tableFootStock" style="background-color: #ddd">
+                            <th colspan="3" style="text-align: right;">Total : </th>
+                            <th colspan="2"></th>
+                          </tfoot>
+                        </table>
+                      </div>
                     </div>
                   </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-danger pull-right" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                  </div>
                 </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-danger pull-right" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
-                </div>
+                <!-- /.modal-content -->
               </div>
-              <!-- /.modal-content -->
+              <!-- /.modal-dialog -->
             </div>
-            <!-- /.modal-dialog -->
           </div>
-        </div>
-      </section>
+        </section>
 
 
 
 
 
 
-      <!-- /.content -->
-    </div>
-    <!-- /.content-wrapper -->
-    <!-- /.control-sidebar -->
+        <!-- /.content -->
+      </div>
+      <!-- /.content-wrapper -->
+      <!-- /.control-sidebar -->
   <!-- Add the sidebar's background. This div must be placed
     immediately after the control sidebar -->
     <div class="control-sidebar-bg"></div>
@@ -215,72 +221,72 @@ scratch. This page gets rid of all links and provides the needed markup only.
         success: function(data) {
           var s = $.parseJSON(data);
           var processed_json = new Array();
-                    // Populate series
-                    for (i = 0; i < s.length; i++){
-                      processed_json.push([s[i].name, s[i].y]);
+      // Populate series
+      for (i = 0; i < s.length; i++){
+        processed_json.push([s[i].name, s[i].y]);
 
-                      if (s[i].name == null) 
-                        notif.style.display = "block";
-                      else
-                        notif.style.display = "none";
-                    }
+        if (s[i].name == null) 
+          notif.style.display = "block";
+        else
+          notif.style.display = "none";
+      }
 
-                    $('#container').highcharts({
-                      chart: {
-                        type: 'column'
-                      },
-                      title: {
-                        text: s[0].tgl
-                      },
-                      xAxis: {
-                        type: 'category'
-                      },
-                      yAxis: {
-                        title: {
-                          text: 'Jumlah Lembur (Jam)'
-                        }
-                      },
-                      legend: {
-                        enabled: false
-                      },
-                      plotOptions: {
-                        series: {
-                          cursor: 'pointer',
-                          point: {
-                            events: {
-                              click: function () {
-                                TampilModal(s[0].tgl, this.name);
-                                // alert(s[0].tgl);
-                              }
-                            }
-                          },
-                          borderWidth: 0,
-                          dataLabels: {
-                            enabled: true,
-                            format: '{point.y}'
-                          }
-                        }
-                      },
-                      credits: {
-                        enabled: false
-                      },
+      $('#container').highcharts({
+        chart: {
+          type: 'column'
+        },
+        title: {
+          text: s[0].tgl
+        },
+        xAxis: {
+          type: 'category'
+        },
+        yAxis: {
+          title: {
+            text: 'Jumlah Lembur (Jam)'
+          }
+        },
+        legend: {
+          enabled: false
+        },
+        plotOptions: {
+          series: {
+            cursor: 'pointer',
+            point: {
+              events: {
+                click: function () {
+                  TampilModal(s[0].tgl, this.name);
+                  // alert(s[0].tgl);
+                }
+              }
+            },
+            borderWidth: 0,
+            dataLabels: {
+              enabled: true,
+              format: '{point.y}'
+            }
+          }
+        },
+        credits: {
+          enabled: false
+        },
 
-                      tooltip: {
-                        headerFormat: '',
-                        pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b> <br/>'
-                      },
+        tooltip: {
+          headerFormat: '',
+          pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b> <br/>'
+        },
 
-                      "series": [
-                      {
-                        "name": "By Absent",
-                        "colorByPoint": true,
-                        "data": processed_json
-                      }
-                      ]
-                    })
+        "series": [
+        {
+          "name": "By Absent",
+          "colorByPoint": true,
+          "data": processed_json
+        }
+        ]
+      })
 
-                  }
-                });
+    }
+  });
 
     }
 
@@ -309,102 +315,78 @@ scratch. This page gets rid of all links and provides the needed markup only.
         },
         "columnDefs": [
         {
-          "targets": [ 0,1,2,3,4 ], //first column / numbering column
-          "orderable": false, //set not orderable
-        }],
-        "footerCallback": function (tfoot, data, start, end, display) {
-          var intVal = function ( i ) {
-            return typeof i === 'string' ?
-            i.replace(/[\$%,]/g, '')*1 :
-            typeof i === 'number' ?
-            i : 0;
-          };
-          var api = this.api();
-          var totalPlan = api.column(3).data().reduce(function (a, b) {
-            return intVal(a)+intVal(b);
-          }, 0)
-          $(api.column(3).footer()).html(totalPlan.toLocaleString());
+      "targets": [ 0,1,2,3,4 ], //first column / numbering column
+      "orderable": false, //set not orderable
+    }],
+    "footerCallback": function (tfoot, data, start, end, display) {
+      var intVal = function ( i ) {
+        return typeof i === 'string' ?
+        i.replace(/[\$%,]/g, '')*1 :
+        typeof i === 'number' ?
+        i : 0;
+      };
+      var api = this.api();
+      var totalPlan = api.column(3).data().reduce(function (a, b) {
+        return intVal(a)+intVal(b);
+      }, 0)
+      $(api.column(3).footer()).html(totalPlan.toLocaleString());
 
-        }
-      });
+    }
+  });
 
     }
 
-    // LINE CHART
-    $(function () {
-      $.getJSON('<?php echo base_url("ot/ajax_ot_graph_bulan/")?>', function(data) {
+// LINE CHART
+$(function () {
+  // $.getJSON('<?php //echo base_url("ot/ajax_ot_graph_bulan/")?>', function(data) {
 
-        for (i = 0; i < data.length; i++){
-          processed_json.push([data[i].name, data[i].y]);
+  //   for (i = 0; i < data.length; i++){
+  //     processed_json.push([data[i].name, data[i].y]);
 
-          if (data[i].name == null) {
-            notif.style.display = "block";
-          }
-        }
+  //     if (data[i].name == null) {
+  //       notif.style.display = "block";
+  //     }
+  //   }
 
-        $('#container2').highcharts({
+  $('#container2').highcharts({
+    chart: {
+      type: 'line'
+    },
+    title: {
+      text: 'Overtime'
+    },
+    xAxis: {
+      categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    },
+    yAxis: {
+      title: {
+        text: 'Total Jam (Jam)'
+      }
+    },
+    plotOptions: {
+      line: {
+        dataLabels: {
+          enabled: true
+        },
+        enableMouseTracking: false
+      }
+    },
+    credits: {
+      enabled: false
+    },
+    series: [{
+      name: 'MIS',
+      data: [7.0, 6.9, 9.5, 14.5, 18.4, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
+    }, {
+      name: 'PE',
+      data: [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
+    }]
 
-          title: {
-            text: 's[0].tgl'
-          },
+  });
+})
+//})
 
-          yAxis: {
-            title: {
-              text: 'Number of Employees'
-            }
-          },
-          legend: {
-            layout: 'vertical',
-            align: 'right',
-            verticalAlign: 'middle'
-          },
-
-          plotOptions: {
-            series: {
-              label: {
-                connectorAllowed: false
-              },
-              pointStart: 2010
-            }
-          },
-
-          series: [{
-            name: 'Installation',
-            data: [43934, 52503, 57177, 69658, 97031, 119931, 137133, 154175]
-          }, {
-            name: 'Manufacturing',
-            data: [24916, 24064, 29742, 29851, 32490, 30282, 38121, 40434]
-          }, {
-            name: 'Sales & Distribution',
-            data: [11744, 17722, 16005, 19771, 20185, 24377, 32147, 39387]
-          }, {
-            name: 'Project Development',
-            data: [null, null, 7988, 12169, 15112, 22452, 34400, 34227]
-          }, {
-            name: 'Other',
-            data: [12908, 5948, 8105, 11248, 8989, 11816, 18274, 18111]
-          }],
-
-          responsive: {
-            rules: [{
-              condition: {
-                maxWidth: 500
-              },
-              chartOptions: {
-                legend: {
-                  layout: 'horizontal',
-                  align: 'center',
-                  verticalAlign: 'bottom'
-                }
-              }
-            }]
-          }
-
-        });
-      });
-    })
-    
-  </script>
+</script>
 
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the

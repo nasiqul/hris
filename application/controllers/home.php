@@ -203,6 +203,7 @@ class Home extends CI_Controller {
         $data['grade'] = $this->karyawan_model->get_grade();
         $data['jabatan'] = $this->karyawan_model->get_jabatan();
         $data['kode'] = $this->karyawan_model->get_kode();
+        $data['menu'] = 'emp';
         $this->load->view('karyawan_form',$data);
     }
 

@@ -143,35 +143,46 @@ class Karyawan_form extends CI_Controller {
 
 	public function add()
 	{
-		$nik = $_POST['nik'];
-		$nama = $_POST['nama'];
-		$tmptL = $_POST['tmptL'];
-		$tglL = $_POST['tglL'];
-		$jk = $_POST['jk'];
-		$ktp = $_POST['ktp'];
-		$alamat = $_POST['alamat'];
-		$statusK = $_POST['statusK'];
-		$dev = $_POST['dev'];
-		$dep = $_POST['dep'];
-		$sec = $_POST['sec'];
-		$subsec = $_POST['subsec'];
-		$group = $_POST['group'];
-		$grade = $_POST['grade'];
-		$ngrade = $_POST['ngrade'];
-		$jab = $_POST['jab'];
-		$kode = $_POST['kode'];
-		$statusKar = $_POST['statusKar'];
-		$pin = $_POST['pin'];
-		$tglM = $_POST['tglM'];
-		$cs = $_POST['cs'];
-		$hp = $_POST['hp'];
-		$bpjstk = $_POST['bpjstk'];
-		$bpjskes = $_POST['bpjskes'];
-		$no_rek = $_POST['no_rek'];
-		$npwp = $_POST['npwp'];
-		$jp = $_POST['jp'];
+		$config['upload_path']="./app/foto";
+		$config['allowed_types']='jpg|png';
+		$config['encrypt_name'] = TRUE;
 
-		$list = $this->karyawan_model->tambah($nik, $nama, $tmptL, $tglL, $jk, $ktp, $alamat, $statusK, $dev, $dep, $sec, $subsec, $group, $grade, $ngrade, $jab, $kode, $statusKar, $pin, $tglM, $cs, $hp, $bpjstk, $bpjskes, $no_rek, $npwp, $jp);
+		$this->load->library('upload',$config);
+		if($this->upload->do_upload("file")){
+			$data = array('upload_data' => $this->upload->data());
+
+			$nik = $_POST['nik'];
+			$nama = $_POST['nama'];
+			$tmptL = $_POST['tmptL'];
+			$tglL = $_POST['tglL'];
+			$jk = $_POST['jk'];
+			$ktp = $_POST['ktp'];
+			$alamat = $_POST['alamat'];
+			$statusK = $_POST['statusK'];
+			$dev = $_POST['dev'];
+			$dep = $_POST['dep'];
+			$sec = $_POST['sec'];
+			$subsec = $_POST['subsec'];
+			$group = $_POST['group'];
+			$grade = $_POST['grade'];
+			$ngrade = $_POST['ngrade'];
+			$jab = $_POST['jab'];
+			$kode = $_POST['kode'];
+			$statusKar = $_POST['statusKar'];
+			$pin = $_POST['pin'];
+			$tglM = $_POST['tglM'];
+			$cs = $_POST['cs'];
+			$hp = $_POST['hp'];
+			$bpjstk = $_POST['bpjstk'];
+			$bpjskes = $_POST['bpjskes'];
+			$no_rek = $_POST['no_rek'];
+			$npwp = $_POST['npwp'];
+			$jp = $_POST['jp'];
+			$image = $data['upload_data']['file_name']; 
+
+			$result= $this->karyawan_model->tambah($image, $nik, $nama, $tmptL, $tglL, $jk, $ktp, $alamat, $statusK, $dev, $dep, $sec, $subsec, $group, $grade, $ngrade, $jab, $kode, $statusKar, $pin, $tglM, $cs, $hp, $bpjstk, $bpjskes, $no_rek, $npwp, $jp);
+			echo json_decode($result);
+		}
 
 	}
 }

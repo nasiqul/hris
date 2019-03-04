@@ -30,8 +30,8 @@
                 <img src="<?php echo base_url()?>app/img/image-user.png" class="img-circle" alt="User Image">
 
                 <p>
-                  Alexander Pierce - Web Developer
-                  <small>Member since Nov. 2012</small>
+                  <?php echo $nik2 ?>
+                  <small></small>
                 </p>
               </li>
               <!-- Menu Footer-->
