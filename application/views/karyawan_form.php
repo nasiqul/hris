@@ -98,7 +98,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                       <div class="form-group">
                         <label for="statusK">Status Keluarga</label>
-                        <select id="statusK" class="form-control">
+                        <select id="statusK" class="form-control" name="statusK">
                           <option value="0">0</option>
                           <option value="K0">K0</option>
                           <option value="K1">K1</option>
@@ -128,7 +128,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <div class="col-md-6">
                       <div class="form-group">
                         <label for="devisi">Devisi</label>
-                        <select id="devisi" class="form-control" onchange='showDep()'>
+                        <select id="devisi" name="devisi" class="form-control" onchange='showDep()'>
                           <option value="" disabled selected>Select Devisi</option>
                           <?php 
                           foreach ($dev as $key) {
@@ -140,28 +140,28 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                       <div class="form-group">
                         <label for="departemen">Departemen</label>
-                        <select id="departemen" class="form-control" onchange="showSec()">
+                        <select id="departemen" name="departemen" class="form-control" onchange="showSec()">
                           <option value="" disabled selected>Select Departemen</option>
                         </select>
                       </div>
 
                       <div class="form-group">
                         <label for="section">Section</label>
-                        <select id="section" class="form-control" onchange="showSubSec()">
+                        <select id="section" name="section" class="form-control" onchange="showSubSec()">
                           <option value="" disabled selected>Select Section</option>
                         </select>
                       </div>
 
                       <div class="form-group">
                         <label for="subsection">Sub-Section</label>
-                        <select id="subsection" class="form-control" onchange="showGroup()">
+                        <select id="subsection" name="subsection" class="form-control" onchange="showGroup()">
                           <option value="" disabled selected>Select Sub-Section</option>
                         </select>
                       </div>
 
                       <div class="form-group">
                         <label for="group">Group</label>
-                        <select id="group" class="form-control">
+                        <select id="group" class="form-control" name="group">
                           <option value="" disabled selected>Select Group</option>
                         </select>
                       </div>
@@ -172,7 +172,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                       <div class="form-group">
                         <label for="grade">Grade</label>
-                        <select id="grade" class="form-control" onchange="showGrade()">
+                        <select id="grade" class="form-control" onchange="showGrade()" name="grade">
                           <option value="" disabled selected>Select Kode Grade</option>
                           <?php 
                           foreach ($grade as $key) {
@@ -184,12 +184,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                       <div class="form-group">
                         <label for="namaG">Nama Grade</label>
-                        <input type="text" id="namaG" class="form-control" readonly="">
+                        <input type="text" id="namaG" class="form-control" readonly="" name="namaG">
                       </div>
 
                       <div class="form-group">
                         <label for="jabatan">Jabatan</label>
-                        <select id="jabatan" class="form-control">
+                        <select id="jabatan" class="form-control" name="jabatan">
                           <?php 
                           foreach ($jabatan as $key) {
                             echo "<option value='".$key->id."'>".$key->jabatan."</option>";
@@ -200,7 +200,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                       <div class="form-group">
                         <label for="kode">Kode</label>
-                        <select id="kode" class="form-control">
+                        <select id="kode" class="form-control" name="kode">
                           <option value="" disabled selected>Select Kode</option>
                           <?php 
                           foreach ($kode as $key) {
@@ -223,7 +223,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <div class="col-md-6">
                       <div class="form-group">
                         <label for="statusKar">Status Karyawan</label>
-                        <select id="statusKar" class="form-control">
+                        <select id="statusKar" class="form-control" name="statusKar">
                           <option value="Kontrak 1">Kontrak 1</option>
                           <option value="Kontrak 2">Kontrak 2</option>
                           <option value="Tetap">Tetap</option>
@@ -232,7 +232,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                       <div class="form-group">
                         <label for="pin">Pin</label>
-                        <input type="text" id="pin" class="form-control">
+                        <input type="text" id="pin" class="form-control" name="pin">
                       </div>
 
                     </div>
@@ -240,12 +240,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <div class="col-md-6">
                       <div class="form-group">
                         <label for="tglM">Tanggal Masuk</label>
-                        <input type="text" id="tglM" class="form-control" placeholder="Select date">
+                        <input type="text" id="tglM" class="form-control" placeholder="Select date" name="tglM">
                       </div>
 
                       <div class="form-group">
                         <label for="cs">Cost Center</label>
-                        <input type="text" id="cs" class="form-control">
+                        <input type="text" id="cs" class="form-control" name="cs">
                       </div>
                     </div>
                     <div class="col-md-12">
@@ -261,17 +261,17 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <div class="col-md-6">
                       <div class="form-group">
                         <label for="hp">Nomor HP</label>
-                        <input type="text" id="hp" class="form-control">
+                        <input type="text" id="hp" class="form-control" name="hp">
                       </div>
 
                       <div class="form-group">
                         <label for="bpjstk">Nomor BPJS TK</label>
-                        <input type="text" id="bpjstk" class="form-control">
+                        <input type="text" id="bpjstk" class="form-control" name="bpjstk">
                       </div>
 
                       <div class="form-group">
                         <label for="bpjskes">Nomor BPJS KES</label>
-                        <input type="text" id="bpjskes" class="form-control">
+                        <input type="text" id="bpjskes" class="form-control" name="bpjskes">
                       </div>
 
                     </div>
@@ -279,22 +279,22 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <div class="col-md-6">
                       <div class="form-group">
                         <label for="no_rek">Nomor Rekening</label>
-                        <input type="text" id="no_rek" class="form-control">
+                        <input type="text" id="no_rek" class="form-control" name="no_rek">
                       </div>
 
                       <div class="form-group">
                         <label for="npwp">Nomor NPWP</label>
-                        <input type="text" id="npwp" class="form-control">
+                        <input type="text" id="npwp" class="form-control" name="npwp">
                       </div>
 
                       <div class="form-group">
                         <label for="jp">Nomor JP</label>
-                        <input type="text" id="jp" class="form-control">
+                        <input type="text" id="jp" class="form-control" name="jp">
                       </div>
                     </div>
                     <div class="col-md-12">
                       <a onclick="$('#tab3').trigger('click')" class="btn btn-warning pull-left"><i class="fa fa-arrow-left"></i> Back</a>
-                      <button class="btn btn-success pull-right" onclick="submitKaryawan()">Simpan <i class="fa fa-check"></i></button>
+                      <button class="btn btn-success pull-right" type="submit">Simpan <i class="fa fa-check"></i></button>
                     </div>
                   </div>
                 </div>
@@ -318,7 +318,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       $('#submit').submit(function(e){
         e.preventDefault(); 
         $.ajax({
-         url:'<?php echo base_url();?>index.php/upload/do_upload',
+         url:'<?php echo base_url("karyawan_form/add")?>',
          type:"post",
          data:new FormData(this),
          processData:false,
@@ -492,40 +492,40 @@ scratch. This page gets rid of all links and provides the needed markup only.
       var statusK = $('#statusK').children("option:selected").val();
 
       var fileInput = document.getElementById('foto').value;
-  //var foto = fileInput.files[0];
+      //var foto = fileInput.files[0];
 
-  var dev = $('#devisi').children("option:selected").val();
-  var dep = $('#departemen').children("option:selected").val();
-  var sec = $('#section').children("option:selected").val();
-  var subsec = $('#subsection').children("option:selected").val();
-  var group = $('#group').children("option:selected").val();
-  var grade = $('#grade').children("option:selected").val();
-  var ngrade = $('#namaG').val();
-  var jab = $('#jabatan').children("option:selected").val();
-  var kode = $('#kode').children("option:selected").val();
-  var statusKar = $('#statusKar').children("option:selected").val();
-  var pin = document.getElementById('pin').value;
-  var tglM = document.getElementById('tglM').value;
-  var cs = document.getElementById('cs').value;
-  var hp = document.getElementById('hp').value;
-  var bpjstk = document.getElementById('bpjstk').value;
-  var bpjskes = document.getElementById('bpjskes').value;
-  var no_rek = document.getElementById('no_rek').value;
-  var npwp = document.getElementById('npwp').value;
-  var jp = document.getElementById('jp').value;
+      var dev = $('#devisi').children("option:selected").val();
+      var dep = $('#departemen').children("option:selected").val();
+      var sec = $('#section').children("option:selected").val();
+      var subsec = $('#subsection').children("option:selected").val();
+      var group = $('#group').children("option:selected").val();
+      var grade = $('#grade').children("option:selected").val();
+      var ngrade = $('#namaG').val();
+      var jab = $('#jabatan').children("option:selected").val();
+      var kode = $('#kode').children("option:selected").val();
+      var statusKar = $('#statusKar').children("option:selected").val();
+      var pin = document.getElementById('pin').value;
+      var tglM = document.getElementById('tglM').value;
+      var cs = document.getElementById('cs').value;
+      var hp = document.getElementById('hp').value;
+      var bpjstk = document.getElementById('bpjstk').value;
+      var bpjskes = document.getElementById('bpjskes').value;
+      var no_rek = document.getElementById('no_rek').value;
+      var npwp = document.getElementById('npwp').value;
+      var jp = document.getElementById('jp').value;
 
-  $.ajax({
-    type: 'POST',
-    url: '<?php echo base_url("karyawan_form/add") ?>',
-    data: {
-      'nik': nik,
-      'nama' : nama,
-      'tmptL' : tmptL,
-      'tglL' : tglL,
-      'jk' : jk,
-      'ktp' : ktp,
-      'alamat' : alamat,
-      'statusK' : statusK,
+      $.ajax({
+        type: 'POST',
+        url: '<?php echo base_url("karyawan_form/add") ?>',
+        data: {
+          'nik': nik,
+          'nama' : nama,
+          'tmptL' : tmptL,
+          'tglL' : tglL,
+          'jk' : jk,
+          'ktp' : ktp,
+          'alamat' : alamat,
+          'statusK' : statusK,
       //'foto' : foto,
       'dev' : dev,
       'dep' : dep,
@@ -551,29 +551,29 @@ scratch. This page gets rid of all links and provides the needed markup only.
       openSuccessGritter();    
     }
   });
-}
+    }
 
-$('#tglL').datepicker({
-  autoclose: true,
-  format: 'dd/mm/yyyy',
-})
+    $('#tglL').datepicker({
+      autoclose: true,
+      format: 'dd-mm-yyyy',
+    })
 
-$('#tglM').datepicker({
-  autoclose: true,
-  format: 'dd/mm/yyyy',
-})
+    $('#tglM').datepicker({
+      autoclose: true,
+      format: 'dd-mm-yyyy',
+    })
 
-function openSuccessGritter(){
-  jQuery.gritter.add({
-    title: "Success",
-    text: "Input Success",
-    class_name: 'growl-success',
-    image: '<?php echo base_url()?>app/img/icon.png',
-    sticky: false,
-    time: '2000'
-  });
-}
-</script>
+    function openSuccessGritter(){
+      jQuery.gritter.add({
+        title: "Success",
+        text: "Input Success",
+        class_name: 'growl-success',
+        image: '<?php echo base_url()?>app/img/icon.png',
+        sticky: false,
+        time: '2000'
+      });
+    }
+  </script>
 
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the

@@ -46,6 +46,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <div class="col-sm-3">
                     <input type="text" class="form-control" id="datepicker" placeholder="Select date" onchange="changeTanggal()">
                   </div>
+                  <?php echo date('Y/m/d', strtotime("27-02-2019")) ?>
                 </div>
 
                 <div class="form-group">

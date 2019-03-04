@@ -145,10 +145,9 @@ class Karyawan_form extends CI_Controller {
 	{
 		$config['upload_path']="./app/foto";
 		$config['allowed_types']='jpg|png';
-		$config['encrypt_name'] = TRUE;
 
 		$this->load->library('upload',$config);
-		if($this->upload->do_upload("file")){
+		if($this->upload->do_upload("foto")){
 			$data = array('upload_data' => $this->upload->data());
 
 			$nik = $_POST['nik'];
@@ -159,14 +158,14 @@ class Karyawan_form extends CI_Controller {
 			$ktp = $_POST['ktp'];
 			$alamat = $_POST['alamat'];
 			$statusK = $_POST['statusK'];
-			$dev = $_POST['dev'];
-			$dep = $_POST['dep'];
-			$sec = $_POST['sec'];
-			$subsec = $_POST['subsec'];
+			$dev = $_POST['devisi'];
+			$dep = $_POST['departemen'];
+			$sec = $_POST['section'];
+			$subsec = $_POST['subsection'];
 			$group = $_POST['group'];
 			$grade = $_POST['grade'];
-			$ngrade = $_POST['ngrade'];
-			$jab = $_POST['jab'];
+			$ngrade = $_POST['namaG'];
+			$jab = $_POST['jabatan'];
 			$kode = $_POST['kode'];
 			$statusKar = $_POST['statusKar'];
 			$pin = $_POST['pin'];

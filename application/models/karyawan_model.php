@@ -372,34 +372,32 @@ class Karyawan_model extends CI_Model {
 
     public function tambah($foto, $nik, $nama, $tmptL, $tglL, $jk, $ktp, $alamat, $statusK, $dev, $dep, $sec, $subsec, $group, $grade, $ngrade, $jab, $kode, $statusKar, $pin, $tglM, $cs, $hp, $bpjstk, $bpjskes, $no_rek, $npwp, $jp){
 
-        $data = array(
-            'pin' => $pin,
-            'nik' => $nik,
-            'costCenter' => $cs,
-            'namaKaryawan' => $nama,
-            'foto' => $foto,
-            'kode' => $kode,
-            'tanggalMasuk' => date('Y-m-d', strtotime($tglM)),
-            'jk' => $jk,
-            'statusKaryawan' => $statusKar,
-            'grade' => $grade,
-            'namaGrade' => $ngrade,
-            'jabatan' => $jab,
-            'statusKeluarga' => $statusK,
-            'tempatLahir' => $tmptL,
-            'tanggalLahir' => date('Y-m-d', strtotime($tglL)),
-            'alamat' => $alamat,
-            'hp' => $hp,
-            'ktp' => $ktp,
-            'rekening' => $no_rek,
-            'bpjstk' => $bpjstk,
-            'jp' => $jp,
-            'bpjskes' => $bpjskes,
-            'npwp' => $npwp,
-            'status' => 'Aktif'
-        );
+        $this->db->set('pin', $pin);
+        $this->db->set('nik', $nik);
+        $this->db->set('costCenter', $cs);
+        $this->db->set('namaKaryawan', $nama);
+        $this->db->set('foto', $foto);
+        $this->db->set('kode', $kode);
+        $this->db->set('tanggalMasuk', date('Y/m/d', strtotime($tglM)));
+        $this->db->set('jk', $jk);
+        $this->db->set('statusKaryawan', $statusKar);
+        $this->db->set('namaGrade', $ngrade);
+        $this->db->set('jabatan', $jab);
+        $this->db->set('statusKeluarga', $statusK);
+        $this->db->set('tempatLahir', $tmptL);
+        $this->db->set('tanggalLahir', date('Y/m/d', strtotime($tglL)));
+        $this->db->set('alamat', $alamat);
+        $this->db->set('hp', $hp);
+        $this->db->set('ktp', $ktp);
+        $this->db->set('rekening', $no_rek);
+        $this->db->set('bpjstk', $bpjstk);
+        $this->db->set('jp', $jp);
+        $this->db->set('bpjskes', $bpjskes);
+        $this->db->set('npwp', $npwp);
+        $this->db->set('status', 'Aktif');
 
-        $this->db->insert('karyawan', $data);
+
+        $this->db->insert('karyawan');
 
         $data2 = array(
             'nik' => $nik,
