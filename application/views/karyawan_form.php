@@ -172,19 +172,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                       <div class="form-group">
                         <label for="grade">Grade</label>
-                        <select id="grade" class="form-control" onchange="showGrade()" name="grade">
+                        <select id="grade" class="form-control" name="grade">
                           <option value="" disabled selected>Select Kode Grade</option>
                           <?php 
                           foreach ($grade as $key) {
-                            echo "<option value='".$key->kode_grade."' name='".$key->nama_grade."'>".$key->kode_grade."</option>";
+                            echo "<option value='".$key->id."'>[ ".$key->kode_grade." ] ".$key->nama_grade."</option>";
                           }
                           ?>
                         </select>
-                      </div>
-
-                      <div class="form-group">
-                        <label for="namaG">Nama Grade</label>
-                        <input type="text" id="namaG" class="form-control" readonly="" name="namaG">
                       </div>
 
                       <div class="form-group">
@@ -475,83 +470,78 @@ scratch. This page gets rid of all links and provides the needed markup only.
   });
     }
 
-    function showGrade() {
-      var id_grade = $('#grade').find(':selected').attr("name");
-      var gradeN = $('#namaG');
-      gradeN.val(id_grade);
-    }
 
-    function submitKaryawan() {
-      var nik = $('#nik').val();
-      var nama = document.getElementById('nama').value;
-      var tmptL = document.getElementById('tmptL').value;
-      var tglL = document.getElementById('tglL').value;
-      var jk = $("input[name='jk']:checked").val();
-      var ktp = document.getElementById('ktp').value;
-      var alamat = document.getElementById('alamat').value;
-      var statusK = $('#statusK').children("option:selected").val();
+  //   function submitKaryawan() {
+  //     var nik = $('#nik').val();
+  //     var nama = document.getElementById('nama').value;
+  //     var tmptL = document.getElementById('tmptL').value;
+  //     var tglL = document.getElementById('tglL').value;
+  //     var jk = $("input[name='jk']:checked").val();
+  //     var ktp = document.getElementById('ktp').value;
+  //     var alamat = document.getElementById('alamat').value;
+  //     var statusK = $('#statusK').children("option:selected").val();
 
-      var fileInput = document.getElementById('foto').value;
-      //var foto = fileInput.files[0];
+  //     var fileInput = document.getElementById('foto').value;
+  //     var foto = fileInput.files[0];
 
-      var dev = $('#devisi').children("option:selected").val();
-      var dep = $('#departemen').children("option:selected").val();
-      var sec = $('#section').children("option:selected").val();
-      var subsec = $('#subsection').children("option:selected").val();
-      var group = $('#group').children("option:selected").val();
-      var grade = $('#grade').children("option:selected").val();
-      var ngrade = $('#namaG').val();
-      var jab = $('#jabatan').children("option:selected").val();
-      var kode = $('#kode').children("option:selected").val();
-      var statusKar = $('#statusKar').children("option:selected").val();
-      var pin = document.getElementById('pin').value;
-      var tglM = document.getElementById('tglM').value;
-      var cs = document.getElementById('cs').value;
-      var hp = document.getElementById('hp').value;
-      var bpjstk = document.getElementById('bpjstk').value;
-      var bpjskes = document.getElementById('bpjskes').value;
-      var no_rek = document.getElementById('no_rek').value;
-      var npwp = document.getElementById('npwp').value;
-      var jp = document.getElementById('jp').value;
+  //     var dev = $('#devisi').children("option:selected").val();
+  //     var dep = $('#departemen').children("option:selected").val();
+  //     var sec = $('#section').children("option:selected").val();
+  //     var subsec = $('#subsection').children("option:selected").val();
+  //     var group = $('#group').children("option:selected").val();
+  //     var grade = $('#grade').children("option:selected").val();
+  //     var ngrade = $('#namaG').val();
+  //     var jab = $('#jabatan').children("option:selected").val();
+  //     var kode = $('#kode').children("option:selected").val();
+  //     var statusKar = $('#statusKar').children("option:selected").val();
+  //     var pin = document.getElementById('pin').value;
+  //     var tglM = document.getElementById('tglM').value;
+  //     var cs = document.getElementById('cs').value;
+  //     var hp = document.getElementById('hp').value;
+  //     var bpjstk = document.getElementById('bpjstk').value;
+  //     var bpjskes = document.getElementById('bpjskes').value;
+  //     var no_rek = document.getElementById('no_rek').value;
+  //     var npwp = document.getElementById('npwp').value;
+  //     var jp = document.getElementById('jp').value;
 
-      $.ajax({
-        type: 'POST',
-        url: '<?php echo base_url("karyawan_form/add") ?>',
-        data: {
-          'nik': nik,
-          'nama' : nama,
-          'tmptL' : tmptL,
-          'tglL' : tglL,
-          'jk' : jk,
-          'ktp' : ktp,
-          'alamat' : alamat,
-          'statusK' : statusK,
-      //'foto' : foto,
-      'dev' : dev,
-      'dep' : dep,
-      'sec' : sec,
-      'subsec' : subsec,
-      'group' : group,
-      'grade' : grade,
-      'ngrade' : ngrade,
-      'jab' : jab,
-      'kode' : kode,
-      'statusKar' : statusKar,
-      'pin' : pin,
-      'tglM' : tglM,
-      'cs' : cs,
-      'hp' : hp,
-      'bpjstk' : bpjstk,
-      'bpjskes' : bpjskes,
-      'no_rek' : no_rek,
-      'npwp' : npwp,
-      'jp' : jp
-    },
-    success: function(data){
-      openSuccessGritter();    
-    }
-  });
-    }
+  //     $.ajax({
+  //       type: 'POST',
+  //       url: '<?php echo base_url("karyawan_form/add") ?>',
+  //       data: {
+  //         'nik': nik,
+  //         'nama' : nama,
+  //         'tmptL' : tmptL,
+  //         'tglL' : tglL,
+  //         'jk' : jk,
+  //         'ktp' : ktp,
+  //         'alamat' : alamat,
+  //         'statusK' : statusK,
+  //     //'foto' : foto,
+  //     'dev' : dev,
+  //     'dep' : dep,
+  //     'sec' : sec,
+  //     'subsec' : subsec,
+  //     'group' : group,
+  //     'grade' : grade,
+  //     'ngrade' : ngrade,
+  //     'jab' : jab,
+  //     'kode' : kode,
+  //     'statusKar' : statusKar,
+  //     'pin' : pin,
+  //     'tglM' : tglM,
+  //     'cs' : cs,
+  //     'hp' : hp,
+  //     'bpjstk' : bpjstk,
+  //     'bpjskes' : bpjskes,
+  //     'no_rek' : no_rek,
+  //     'npwp' : npwp,
+  //     'jp' : jp
+  //   },
+  //   success: function(data){
+  //     openSuccessGritter();    
+  //   }
+  // });
+  //   }
 
     $('#tglL').datepicker({
       autoclose: true,
@@ -573,6 +563,22 @@ scratch. This page gets rid of all links and provides the needed markup only.
         time: '2000'
       });
     }
+
+    $('#grade').select2({
+      placeholder: 'Select a month'
+    });
+
+    $('#jabatan').select2({
+      placeholder: 'Select a month'
+    });
+
+    $('#kode').select2({
+      placeholder: 'Select a month'
+    });
+
+    $('#statusK').select2({
+      placeholder: 'Select a month'
+    });
   </script>
 
 <!-- Optionally, you can add Slimscroll and FastClick plugins.

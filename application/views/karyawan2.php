@@ -142,7 +142,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 <p id="kode"></p>
 
                                 <p class="text-muted">Grade</p>
-                                <p id="namaGrade"></p><p id="grade"></p>
+                                <p id="grade"></p>
+                                <!-- <span id="namaGrade"></span> -->
 
                                 <p class="text-muted">Jabatan</p>
                                 <p id="jabatan"></p>
@@ -214,8 +215,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-danger pull-left"><i class="fa fa-times"></i> Terminasi</button>
+                <button type="button" class="btn btn-danger pull-left" id="terminasi"><i class="fa fa-times"></i> Terminasi</button>
                 <button type="button" class="btn btn-warning pull-left" id="edit"><i class="fa fa-pencil"></i> Edit Data</button>
+                <button type="button" class="btn btn-success pull-left" id="edit2" style="display: none"><i class="fa fa-check"></i> Edit Data</button>
               </div>
             </div>
             <!-- /.modal-content -->
@@ -242,6 +244,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
     var section = [];
     var sub_section = [];
     var group = [];
+    var kode = [];
+    var jabatan = [];
+    var grade = [];
+    var id_grd;
 
     $(document).ready(function() {
       $('#example1').DataTable({
@@ -305,9 +311,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
             $("#dev").text(data[i][5]);
             $("#dep").text(data[i][6]);
             $("#sec").text(data[i][7]);
+            $("#sub-sec").text(data[i][31]);
+            $("#group").text(data[i][32]);
             $("#kode").text(data[i][8]);
-            $("#grade").text("("+data[i][12]+")");
-            $("#namaGrade").text(data[i][11]);
+            $("#grade").text("[ "+data[i][12]+" ] "+data[i][13]+"");
+            // $("#namaGrade").text();
             $("#jabatan").text(data[i][14]);
             $("#statKaryawan").text(data[i][11]);
             $("#tglMasuk").text(data[i][9]);
@@ -332,6 +340,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
             var id_dep = data[i][28];
             var id_sec = data[i][29];
             var id_sub_sec = data[i][30];
+            id_grd = data[i][34];
+            console.log(id_grd);
 
             //----------------- AJAX DEPARTEMEN -----------
             $.ajax({
@@ -393,9 +403,45 @@ scratch. This page gets rid of all links and provides the needed markup only.
               }
             });
 
+            //----------------- AJAX KODE -----------
+            $.ajax({
+              type : "POST",
+              url: "<?php echo base_url('home/ajax_kode/') ?>",
+              dataType: 'json',
+              success: function(data){
+                $.each(data, function(i, value){
+                  kode.push(data[i]);
+                });
+              }
+            });
+
+            //----------------- AJAX GRADE -----------
+            $.ajax({
+              type : "POST",
+              url: "<?php echo base_url('home/ajax_grade/') ?>",
+              dataType: 'json',
+              success: function(data){
+                $.each(data, function(i, value){
+                  grade.push(data[i]);
+                });
+              }
+            });
+
+            //----------------- AJAX JABATAN -----------
+            $.ajax({
+              type : "POST",
+              url: "<?php echo base_url('home/ajax_jabatan/') ?>",
+              dataType: 'json',
+              success: function(data){
+                $.each(data, function(i, value){
+                  jabatan.push(data[i]);
+                });
+              }
+            });
+
           });
-        }
-      });
+}
+});
 
       // ---------------- AJAX KELUARGA ----------------
       $.ajax({
@@ -426,37 +472,43 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
     $('#edit').on('click',function() {
 
-     var tmpt = $('#tempatLahir').text();
-     $('#tempatLahir').text('').append($('<input />',
-     {
-      'value' : tmpt, 
-      'type' : 'text', 
-      'class' : 'form-control', 
-      'id' : 'txtTempat'}
-      ));
-     $('#txtTempat').focus();
+      $('#edit').css('display','none');
+      $('#terminasi').css('display','none');
+      $('#edit2').css('display','block');
 
-     var tanggalLahir = $('#tanggalLahir').text();
-     $('#tanggalLahir').text('').append($('<input />',
-     {
-      'value' : tanggalLahir, 
-      'type' : 'date', 
-      'class' : 'form-control', 
-      'id' : 'txttanggalLahir'}
-      ));
+      $('#change').css('display','block');
 
-     var jk = $('#jk').text();
-     if (jks == "L") {
-      $('#jk').text('').append($('<select class="form-control" id="txtJK"> <option value="L" selected>Laki - laki</option> <option value="P">Perempuan</option> </select>'));
-    }
-    else if (jks == "P"){
-      $('#jk').text('').append($('<select class="form-control" id="txtJK"> <option value="L">Laki - laki</option> <option value="P" selected>Perempuan</option> </select>'));
-    }
+      var tmpt = $('#tempatLahir').text();
+      $('#tempatLahir').text('').append($('<input />',
+      {
+        'value' : tmpt, 
+        'type' : 'text', 
+        'class' : 'form-control', 
+        'id' : 'txtTempat'}
+        ));
+      $('#txtTempat').focus();
 
-    var alamat = $('#alamat').text();
-    $('#alamat').text('').append($('<textarea class="form-control" id="txtAlamat">'+alamat+'</textarea>'));
+      var tanggalLahir = $('#tanggalLahir').text();
+      $('#tanggalLahir').text('').append($('<input />',
+      {
+        'value' : tanggalLahir, 
+        'type' : 'text', 
+        'class' : 'form-control', 
+        'id' : 'txttanggalLahir'}
+        )).datepicker({ autoclose: true, format: 'dd-mm-yyyy' });
 
-    
+      var jk = $('#jk').text();
+      if (jks == "L") {
+        $('#jk').text('').append($('<select class="form-control" id="txtJK"> <option value="L" selected>Laki - laki</option> <option value="P">Perempuan</option> </select>'));
+      }
+      else if (jks == "P"){
+        $('#jk').text('').append($('<select class="form-control" id="txtJK"> <option value="L">Laki - laki</option> <option value="P" selected>Perempuan</option> </select>'));
+      }
+
+      var alamat = $('#alamat').text();
+      $('#alamat').text('').append($('<textarea class="form-control" id="txtAlamat">'+alamat+'</textarea>'));
+
+
     // ----------------- Select Option Keluarga ------------------
 
     var keluarga2 = $('#sKeluarga').text();
@@ -484,6 +536,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
     var list2 = [];
     var options2 = [];
 
+    options2.push('<option value="" disabled selected>Select Devisi</option>');
+
     for (var i = 0; i < devisi.length; i++) {
       list2.push(i) ;
       if (devisi2 == devisi[i][1])
@@ -504,6 +558,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     var list3 = [];
     var options3 = [];
 
+    options3.push('<option value="" disabled selected>Select Departemen</option>');
 
     for (var i = 0; i < departemen.length; i++) {
       list3.push(i) ;
@@ -524,9 +579,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
     var list4 = [];
     var options4 = [];
+    options4.push('<option value="" disabled selected>Select Section</option>');
 
     for (var i = 0; i < section.length; i++) {
-      list4.push(i) ;
+      list4.push(i);
+
       if (section2 == section[i][1])
         options4.push('<option value="'+section[i][0]+'" selected>'+section[i][1]+'</option>');
       else
@@ -537,20 +594,174 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
     $("#SelectSection").html(options4.join(''));
 
+    //------------------------ SELECT Option Sub-Section-------------------------
+
+    var subsec2 = $('#sub-sec').text();
+
+    var list5 = [];
+    var options5 = [];
+    options5.push('<option value="" disabled selected>Select Sub Section</option>');
+
+    for (var i = 0; i < sub_section.length; i++) {
+      list5.push(i);
+
+      if (subsec2 == sub_section[i][1])
+        options5.push('<option value="'+sub_section[i][0]+'" selected>'+sub_section[i][1]+'</option>');
+      else
+        options5.push('<option value="'+sub_section[i][0]+'">'+sub_section[i][1]+'</option>');
+    }
+
+    $('#sub-sec').text('').append($('<select id="SelectSubSection" class="form-control"></select>'));
+
+    $("#SelectSubSection").html(options5.join(''));
+
+
+    //--------------------------- Select Option Group ------------------------
+
+    var group2 = $('#group').text();
+
+    var list6 = [];
+    var options6 = [];
+    options6.push('<option value="" disabled selected>Select Group</option>');
+
+    for (var i = 0; i < group.length; i++) {
+      list6.push(i);
+
+      if (subsec2 == group[i][1])
+        options6.push('<option value="'+group[i][0]+'" selected>'+group[i][1]+'</option>');
+      else
+        options6.push('<option value="'+group[i][0]+'">'+group[i][1]+'</option>');
+    }
+
+    $('#group').text('').append($('<select id="SelectGroup" class="form-control"></select>'));
+
+    $("#SelectGroup").html(options6.join(''));
+
+
+    //--------------------------- Select Option Kode ------------------------
+
+    var kode2 = $('#kode').text();
+
+    var list7 = [];
+    var options7 = [];
+    options7.push('<option value="" disabled selected>Select Kode</option>');
+
+    for (var i = 0; i < kode.length; i++) {
+      list7.push(i);
+
+      if (kode2 == kode[i][1])
+        options7.push('<option value="'+kode[i][0]+'" selected>'+kode[i][1]+'</option>');
+      else
+        options7.push('<option value="'+kode[i][0]+'">'+kode[i][1]+'</option>');
+    }
+
+    $('#kode').text('').append($('<select id="SelectKode" class="form-control"></select>'));
+
+    $("#SelectKode").html(options7.join(''));
+
+
+    //--------------------------- Select Option Grade ------------------------
+
+    var grade2 = id_grd;
+
+    var list8 = [];
+    var options8 = [];
+    options8.push('<option value="" disabled selected>Select Grade</option>');
+
+    for (var i = 0; i < grade.length; i++) {
+      list8.push(i);
+
+      if (grade2 == grade[i][0])
+        options8.push('<option value="'+grade[i][0]+'" selected>[ '+grade[i][1]+' ] '+grade[i][2]+'</option>');
+      else
+        options8.push('<option value="'+grade[i][0]+'">[ '+grade[i][1]+' ] '+grade[i][2]+'</option>');
+    }
+
+    $('#grade').text('').append($('<select id="SelectGrade" class="form-control"></select>'));
+
+    $("#SelectGrade").html(options8.join(''));
+
+    //--------------------------- Select Option Jabatan ------------------------
+
+    var jabatan2 = $('#jabatan').text();;
+
+    var list9 = [];
+    var options9 = [];
+    options9.push('<option value="" disabled selected>Select Jabatan</option>');
+
+    for (var i = 0; i < jabatan.length; i++) {
+      list9.push(i);
+
+      if (jabatan2 == jabatan[i][1])
+        options9.push('<option value="'+jabatan[i][0]+'" selected>'+jabatan[i][1]+'</option>');
+      else
+        options9.push('<option value="'+jabatan[i][0]+'">'+jabatan[i][1]+'</option>');
+    }
+
+    $('#jabatan').text('').append($('<select id="SelectJabatan" class="form-control"></select>'));
+
+    $("#SelectJabatan").html(options9.join(''));
+
+
+    //--------------------------- Select Option Status karyawan ------------------------
+
+    var statusKar2 = $('#statKaryawan').text();
+
+    $('#statKaryawan').text('').append($('<select id="SelectStatusKar" class="form-control"><option value="Kontrak 1">Kontrak 1</option><option value="Kontrak 2">Kontrak 2</option><option value="Percobaan">Percobaan</option><option value="Tetap">Tetap</option></select>'));
+
+    $("#SelectStatusKar").val(statusKar2).trigger("change");
+
+
+
+    var tglM = $('#tglMasuk').text();
+
+    $('#tglMasuk').text('').append($('<input type="text" class="form-control" id="tglMasuk2" value="'+tglM+'">')).datepicker({ autoclose: true, format: 'dd-mm-yyyy' });
+
+
+    var pin2 = $('#pin').text();
+    $('#pin').text('').append($('<input />',
+    {
+      'value' : pin2, 
+      'type' : 'text', 
+      'class' : 'form-control', 
+      'id' : 'txtpin'}
+      ));
+
+    var cc2 = $('#costC').text();
+    $('#costC').text('').append($('<input />',
+    {
+      'value' : cc2, 
+      'type' : 'text', 
+      'class' : 'form-control', 
+      'id' : 'txtCC'}
+      ));
+
   })
 
 
-    $('#myModal').on('hidden.bs.modal', function () {
-      keluarga = [];
-      devisi = [];
-      departemen = [];
-      section = [];
-      sub_section = [];
-      group = [];
-    })
+$('#myModal').on('hidden.bs.modal', function () {
+  keluarga = [];
+  devisi = [];
+  departemen = [];
+  section = [];
+  sub_section = [];
+  group = [];
+  kode = [];
+  jabatan = [];
+  grade = [];
+  id_grd = "";
 
+  $('#edit').css('display','block');
+  $('#terminasi').css('display','block');
+  $('#edit2').css('display','none');
+})
 
-  </script>
+$('#tglMasuk2').datepicker({
+  autoclose: true,
+  format: 'dd-mm-yyyy',
+})
+
+</script>
 
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the

@@ -163,8 +163,7 @@ class Karyawan_form extends CI_Controller {
 			$sec = $_POST['section'];
 			$subsec = $_POST['subsection'];
 			$group = $_POST['group'];
-			$grade = $_POST['grade'];
-			$ngrade = $_POST['namaG'];
+			$grade = $_POST['grade'];			
 			$jab = $_POST['jabatan'];
 			$kode = $_POST['kode'];
 			$statusKar = $_POST['statusKar'];
@@ -179,7 +178,7 @@ class Karyawan_form extends CI_Controller {
 			$jp = $_POST['jp'];
 			$image = $data['upload_data']['file_name']; 
 
-			$result= $this->karyawan_model->tambah($image, $nik, $nama, $tmptL, $tglL, $jk, $ktp, $alamat, $statusK, $dev, $dep, $sec, $subsec, $group, $grade, $ngrade, $jab, $kode, $statusKar, $pin, $tglM, $cs, $hp, $bpjstk, $bpjskes, $no_rek, $npwp, $jp);
+			$result= $this->karyawan_model->tambah($image, $nik, $nama, $tmptL, $tglL, $jk, $ktp, $alamat, $statusK, $dev, $dep, $sec, $subsec, $group, $grade, $jab, $kode, $statusKar, $pin, $tglM, $cs, $hp, $bpjstk, $bpjskes, $no_rek, $npwp, $jp);
 			echo json_decode($result);
 		}
 
