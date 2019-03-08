@@ -39,10 +39,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 By Bagian <br> <span class="text-purple">部門別</span></a>
               </li>
 
-              <li><a href="#tab_2" data-toggle="tab">
-                By Date <br> <span class="text-purple">日付別</span></a>
-              </li>
-
               <li><a href="#tab_3" data-toggle="tab">
                 By Dep <br> <span class="text-purple">???</span></a>
               </li>
