@@ -54,25 +54,29 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </ul>
             <div class="tab-content">
               <div class="tab-pane active" id="tab_1">
-                <div class="col-md-3 pull-right">
-                  <form action="" method="post" id="rati">
-                    <label>Date : </label>
-                    <input type="text" class="form-control text-muted" placeholder="Select date" id="datepicker" onchange="PostMonth()" name="sortBulan">
-                  </form>
+                <div class="row">
+                  <div class="col-md-3 pull-right">
+                    <form action="" method="post" id="rati">
+                      <label>Date : </label>
+                      <input type="text" class="form-control text-muted" placeholder="Select date" id="datepicker" onchange="PostMonth()" name="sortBulan">
+                    </form>
+                  </div>
                 </div>
                 <div id="container" style ="margin: 0 auto"></div>
               </div>
               <div class="tab-pane" id="tab_2">
-                <div class="col-md-3 pull-right">
-                  <form action="" method="post" id="rati">
-                    <label>Year : </label>
-                    <input type="text" class="form-control text-muted" placeholder="Select year" id="datepicker" onchange="PostMonth()" name="sortBulan">
-                  </form>
+                <div class="row">
+                  <div class="col-md-3 pull-right">
+                    <form action="" method="post" id="rati">
+                      <label>Year : </label>
+                      <input type="text" class="form-control text-muted" placeholder="Select year" id="datepicker" onchange="PostMonth()" name="sortBulan">
+                    </form>
+                  </div>
                 </div>
-                <div id = "container2" style ="width: 850px; margin: 0 auto"></div>
+                <div id = "container2" style ="margin: 0 auto"></div>
               </div>
               <div class="tab-pane" id="tab_3">
-                <div id = "container3" style ="width: 850px; margin: 0 auto"></div>
+                <div id = "container3" style ="margin: 0 auto"></div>
               </div>
               <div class="tab-pane" id="tab_4">
 
@@ -467,59 +471,101 @@ $(function () {
     $('#container3').highcharts({
       chart: {
         type: 'line',
-        backgroundColor : "rgba(255, 255, 255, 0.0)",
-        
+        backgroundColor : "#3d3f3f",   
       },
+      legend: {
+        align: 'right',
+        verticalAlign: 'top',
+        layout: 'vertical',
+        x: 0,
+        y: 100,
+        itemStyle: {
+         color: '#FFF'
+       },
+       itemHoverStyle: {
+         color: '#DDD'
+       },
+       itemHiddenStyle: {
+         color: '#616363'
+       }
+     },
+     exporting : {
+      enabled : true
+    },
+    title: {
+      text: data[0][5],
+      style: {
+        color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+      }
+    },
+    xAxis: {
+      gridLineWidth: 1,
+      gridLineColor: "#7a7c7c",
+      categories: cat,
+      labels: {
+        style: {
+          color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+        }
+      }
+    },
+    yAxis: {
+      min:0,
+      gridLineColor: "#7a7c7c",
       title: {
-        text: data[0][5]
-      },
-      xAxis: {
-        categories: cat
-      },
-      yAxis: {
-        min:0,
-        title: {
-          text: 'Manpower'
+        text: 'Jumlah (orang)',
+        style: {
+          color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
         }
       },
-      plotOptions: {
-        line: {
-          dataLabels: {
-            enabled: true
-          },
-          enableMouseTracking: true
+      labels: {
+        style: {
+          color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+        }
+      }
+    },
+    plotOptions: {
+      line: {
+        dataLabels: {
+          enabled: true,
+          color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
         },
-        series: {
-          cursor: 'pointer',
-          point: {
-            events: {
-              click: function(e) {  
-                show(data[0][5], this.category, this.series.name);
-              }
+        enableMouseTracking: true
+      },
+      series: {
+        cursor: 'pointer',
+        point: {
+          events: {
+            click: function(e) {  
+              show(data[0][5], this.category, this.series.name);
             }
           }
         }
-      },
-      credits: {
-        enabled: false
-      },
-      series: [{
-        name: 'OT > 3 JAM / HARI',
-        data: tiga_jam
-      }, {
-        name: 'OT > 14 JAM / MGG',
-        data: per_minggu
-      },
-      {
-        name: 'OT > 3 dan > 14 Jam',
-        data: per_bulan
-      },
-      {
-        name: 'OT > 56 JAM / BLN',
-        data: manam_bulan
-      }]
+      }
+    },
+    credits: {
+      enabled: false
+    },
+    series: [{
+      name: 'OT > 3 JAM / HARI',
+      color: '#2598db',
+      data: tiga_jam
+    }, {
+      name: 'OT > 14 JAM / MGG',
+      color: '#f2ad96',
+      data: per_minggu
+    },
+    {
+      name: 'OT > 3 dan > 14 Jam',
+      color: '#f90031',
+      data: per_bulan
+    },
+    {
+      name: 'OT > 56 JAM / BLN',
+      color: '#d756f7',
+      data: manam_bulan
+    }]
 
-    });
+  });
   });
 })
 
@@ -550,7 +596,7 @@ function show(tgl, cat, kode) {
     //       "targets": [ 0,1,2,3,4 ], //first column / numbering column
     //       "orderable": false, //set not orderable
     //     }]
-      });
+  });
 
 }
 
