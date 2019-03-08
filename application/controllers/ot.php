@@ -11,6 +11,7 @@ class Ot extends CI_Controller {
 		$this->load->model('over_cari_report_model');
 		$this->load->model('over_cari_chart');
 		$this->load->library('ciqrcode');
+		$this->load->model('over_cari_chart2');
 	}
 
 	public function ot_submit()
@@ -578,6 +579,31 @@ class Ot extends CI_Controller {
 		echo json_encode($data);
 	}
 
+	public function overtime_chart2()
+	{
+		$list = $this->over_model->chart2();
+		$data = array();
+
+		foreach ($list as $key) {
+			$time = strtotime($key->month_name);
+
+			$newformat = date('F Y',$time);
+
+			$row = array();
+			$row[] = $key->nama;
+			$row[] = $key->tiga_jam;
+			$row[] = $key->blas_jam;
+			$row[] = $key->tiga_blas_jam;
+			$row[] = $key->manam_jam;
+			$row[] = $newformat;
+
+			$data[] = $row;
+		}
+
+            //output to json format
+		echo json_encode($data);
+	}
+
 	public function ajax_ot_g_detail()
 	{
 		$tgl = date('d-m-Y' ,strtotime('10 '.$_GET['tgl']));
@@ -630,9 +656,56 @@ class Ot extends CI_Controller {
 		echo json_encode($output);
 	}
 
-	public function coba()
+	public function ajax_ot_g_detail2()
 	{
-		$this->load->view('coba');
+		$tgl = date('d-m-Y' ,strtotime('10 '.$_GET['tgl']));
+		$kode = $_GET['kode'];
+		$cat = $_GET['cat'];
+
+		if ($kode == 'OT > 3 JAM / HARI') {
+			$list = $this->over_cari_chart2->get_data($tgl,$cat);
+			$tot = $this->over_cari_chart2->count_all_3($tgl,$cat);
+			$filter = $this->over_cari_chart2->count_filtered_3($tgl,$cat);
+		}
+		else if ($kode == 'OT > 14 JAM / MGG') {
+			$list = $this->over_cari_chart2->get_data_14($tgl,$cat);
+			$tot = $this->over_cari_chart2->count_all_14($tgl,$cat);
+			$filter = $this->over_cari_chart2->count_filtered_14($tgl,$cat);
+		}
+		else if ($kode == 'OT > 3 dan > 14 Jam') {
+			$list = $this->over_cari_chart2->get_data_3_14($tgl,$cat);
+			$tot = $this->over_cari_chart2->count_all_3_14($tgl,$cat);
+			$filter = $this->over_cari_chart2->count_filtered_3_14($tgl,$cat);
+		}
+		else if ($kode == 'OT > 56 JAM / BLN') {
+			$list = $this->over_cari_chart2->get_data_56($tgl,$cat);
+			$tot = $this->over_cari_chart2->count_all_56($tgl,$cat);
+			$filter = $this->over_cari_chart2->count_filtered_56($tgl,$cat);
+		}
+
+		$data = array();
+
+		foreach ($list as $key) {
+			$row = array();
+			$row[] = $key->nik;
+			$row[] = $key->namaKaryawan;
+			$row[] = $key->departemen;
+			$row[] = $key->section;
+			$row[] = $key->kode;
+			$row[] = $key->avg;
+
+			$data[] = $row;
+		}
+
+        //output to json format
+		$output = array(
+			"draw" => $_GET['draw'],
+			"recordsFiltered" => $filter,
+			"recordsTotal" => $tot,
+			"data" => $data,
+		);
+            //output to json format
+		echo json_encode($output);
 	}
 }
 ?>

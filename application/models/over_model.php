@@ -582,6 +582,7 @@ left join
         join over_time on over_time.id = over_time_member.id_ot
         join karyawan k on k.nik = over_time_member.nik
         WHERE MONTH(over_time.tanggal) = MONTH('".$tgl."') AND YEAR(over_time.tanggal) = YEAR('".$tgl."')
+        AND over_time.hari = 'N'
         GROUP BY k.kode, k.nik, date_format(over_time.tanggal, '%m-%Y')
         ) as d
         GROUP BY kode, nik
@@ -589,6 +590,76 @@ left join
 ) a
 
 GROUP BY kode
+) t on t.kode = kode.nama
+GROUP by kode.nama
+
+
+";
+    $query = $this->db->query($q);
+    return $query->result();
+}
+
+
+public function chart2()
+{
+    $tgl = date("Y-m-d");
+    $q = "select kode.nama, '".$tgl."' month_name, IFNULL(SUM(3_jam),0) tiga_jam, IFNULL(14_jam,0) blas_jam, IFNULL(3_14_jam,0) tiga_blas_jam, IFNULL(56_jam,0) manam_jam from kode left join
+(
+    select date_format(over.tanggal, '%m-%Y') as month_name, over.nik, karyawan.kode, if(count(over.nik) > 1, 1, count(over.nik)) as 3_jam from over 
+    left join karyawan on karyawan.nik = over.nik 
+    where over.jam > 3 and over.status = 'N' AND MONTH(over.tanggal) = MONTH('".$tgl."') AND YEAR(over.tanggal) = YEAR('".$tgl."')
+    group by date_format(over.tanggal, '%m-%Y'), karyawan.kode, over.nik
+) as a on a.kode = kode.nama
+left join
+(
+    select b.month_name, b.nik, b.kode, count(b.nik) as 14_jam from 
+    (
+        select date_format(over.tanggal, '%m-%Y') as month_name, week(over.tanggal) as week_name, karyawan.nik, karyawan.kode, sum(over.jam) as jam from over
+        left join karyawan on karyawan.nik = over.nik 
+        where over.status = 'N' AND MONTH(over.tanggal) = MONTH('".$tgl."') AND YEAR(over.tanggal) = YEAR('".$tgl."')
+        group by date_format(over.tanggal, '%m-%Y'), week(over.tanggal), karyawan.kode, karyawan.nik having jam > 14
+    ) as b GROUP BY b.kode
+) as c on c.kode = kode.nama
+left join
+(
+        SELECT u.month_name as bulan, u.kode, COUNT(u.nik) as 3_14_jam from 
+        (
+            select date_format(over.tanggal, '%m-%Y') as month_name, over.nik, karyawan.kode, if(count(over.nik) > 1, 1, count(over.nik)) as 3_jam from over 
+            left join karyawan on karyawan.nik = over.nik 
+            where over.jam > 3 and over.status = 'N' AND MONTH(over.tanggal) = MONTH('".$tgl."') AND YEAR(over.tanggal) = YEAR('".$tgl."')
+            group by date_format(over.tanggal, '%m-%Y'), karyawan.kode, over.nik
+        ) as u
+            
+            JOIN
+            
+            (
+            select b.month_name, b.nik, b.kode, count(b.nik) as 14_jam from 
+            (
+                select date_format(over.tanggal, '%m-%Y') as month_name, week(over.tanggal) as week_name, karyawan.nik, karyawan.kode, sum(over.jam) as jam from over
+                left join karyawan on karyawan.nik = over.nik 
+                where over.status = 'N' AND MONTH(over.tanggal) = MONTH('".$tgl."') AND YEAR(over.tanggal) = YEAR('".$tgl."')
+                group by date_format(over.tanggal, '%m-%Y'), week(over.tanggal), karyawan.kode, karyawan.nik having jam > 14
+                ) as b 
+            GROUP BY b.kode
+            ) as l
+            on u.nik = l.nik
+            GROUP BY u.kode
+) as z on z.kode = kode.nama
+left join
+(
+    select month_name, kode, sum(nik) as 56_jam from (
+        select month_name, kode, COUNT(nik) as nik, jam from (
+        select date_format(over.tanggal, '%m-%Y') as month_name, sum(over.jam) as jam, k.nik, k.kode from over
+        join karyawan k on k.nik = over.nik
+        WHERE MONTH(over.tanggal) = MONTH('".$tgl."') AND YEAR(over.tanggal) = YEAR('".$tgl."') AND over.status = 'N'
+        GROUP BY k.kode, k.nik, date_format(over.tanggal, '%m-%Y')
+        ) as d
+        GROUP BY kode, nik
+        HAVING jam > 56
+) a
+
+GROUP BY kode
+
 ) t on t.kode = kode.nama
 GROUP by kode.nama
 

@@ -6,7 +6,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <html>
 <!-- HEADER -->
 <?php require_once(APPPATH.'views/header/head.php'); ?>
-<?php if (! $this->session->userdata('nik')) { redirect('home/overtime_user'); }?>
 
 <body class="hold-transition skin-purple sidebar-mini">
   <div class="wrapper">
@@ -36,7 +35,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <div class="col-md-12">
           <div class="nav-tabs-custom">
             <ul class="nav nav-tabs">
-              <li class="active"><a href="#tab_1" data-toggle="tab">
+              <li><a href="#tab_1" data-toggle="tab">
                 By Bagian <br> <span class="text-purple">部門別</span></a>
               </li>
 
@@ -48,12 +47,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 By Dep <br> <span class="text-purple">???</span></a>
               </li>
 
+              <li class="active"><a href="#tab_4" data-toggle="tab">
+                By Dep 2 <br> <span class="text-purple">???</span></a>
+              </li>
+
               <!-- <li><a href="#tab_4" data-toggle="tab">
                 > 3 Jam <br> <span class="text-purple">???</span></a>
               </li> -->
             </ul>
             <div class="tab-content">
-              <div class="tab-pane active" id="tab_1">
+              <div class="tab-pane" id="tab_1">
                 <div class="row">
                   <div class="col-md-3 pull-right">
                     <form action="" method="post" id="rati">
@@ -78,18 +81,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <div class="tab-pane" id="tab_3">
                 <div id = "container3" style ="margin: 0 auto"></div>
               </div>
-              <div class="tab-pane" id="tab_4">
-
-                <table>
-                  <thead>
-                    <tr>
-                      <th>bagian</th>
-                      <th>Jam</th>
-                      <th>Tanggal</th>
-                    </tr>
-                  </thead>
-                </table>
-
+              <div class="tab-pane active" id="tab_4">
+                <div id = "container4" style ="margin: 0 auto"></div>
               </div>
               <!-- /.tab-pane -->
               <!-- /.tab-pane -->
@@ -548,20 +541,44 @@ $(function () {
     series: [{
       name: 'OT > 3 JAM / HARI',
       color: '#2598db',
+      shadow: {
+        color: '#2598db',
+        width: 7,
+        offsetX: 0,
+        offsetY: 0
+      },
       data: tiga_jam
     }, {
       name: 'OT > 14 JAM / MGG',
       color: '#f2ad96',
+      shadow: {
+        color: '#f2ad96',
+        width: 7,
+        offsetX: 0,
+        offsetY: 0
+      },
       data: per_minggu
     },
     {
       name: 'OT > 3 dan > 14 Jam',
       color: '#f90031',
+      shadow: {
+        color: '#f90031',
+        width: 7,
+        offsetX: 0,
+        offsetY: 0
+      },
       data: per_bulan
     },
     {
       name: 'OT > 56 JAM / BLN',
       color: '#d756f7',
+      shadow: {
+        color: '#d756f7',
+        width: 7,
+        offsetX: 0,
+        offsetY: 0
+      },
       data: manam_bulan
     }]
 
@@ -590,14 +607,176 @@ function show(tgl, cat, kode) {
         kode : kode,
         cat: cat
       }
-    },
-    // "columnDefs": [
-    // {
-    //       "targets": [ 0,1,2,3,4 ], //first column / numbering column
-    //       "orderable": false, //set not orderable
-    //     }]
+    }
   });
+}
 
+$(function () {
+  var cat = new Array();
+  var tiga_jam = new Array();
+  var per_minggu = new Array();
+  var per_bulan = new Array();
+  var manam_bulan = new Array();
+
+  $.getJSON('<?php echo base_url("ot/overtime_chart2/")?>', function(data) {
+
+    for (i = 0; i < data.length; i++){
+      cat.push(data[i][0]);
+      tiga_jam.push(parseInt(data[i][1]));
+      per_minggu.push(parseInt(data[i][2]));
+      per_bulan.push(parseInt(data[i][3]));
+      manam_bulan.push(parseInt(data[i][4]));
+    }
+
+    $('#container4').highcharts({
+      chart: {
+        type: 'line',
+        backgroundColor : "#3d3f3f",   
+      },
+      legend: {
+        align: 'right',
+        verticalAlign: 'top',
+        layout: 'vertical',
+        x: 0,
+        y: 100,
+        itemStyle: {
+         color: '#FFF'
+       },
+       itemHoverStyle: {
+         color: '#DDD'
+       },
+       itemHiddenStyle: {
+         color: '#616363'
+       }
+     },
+     exporting : {
+      enabled : true
+    },
+    title: {
+      text: data[0][5],
+      style: {
+        color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+      }
+    },
+    xAxis: {
+      gridLineWidth: 1,
+      gridLineColor: "#7a7c7c",
+      categories: cat,
+      labels: {
+        style: {
+          color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+        }
+      }
+    },
+    yAxis: {
+      min:0,
+      gridLineColor: "#7a7c7c",
+      title: {
+        text: 'Jumlah (orang)',
+        style: {
+          color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+        }
+      },
+      labels: {
+        style: {
+          color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+        }
+      }
+    },
+    plotOptions: {
+      line: {
+        dataLabels: {
+          enabled: true,
+          color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+        },
+        enableMouseTracking: true
+      },
+      series: {
+        cursor: 'pointer',
+        point: {
+          events: {
+            click: function(e) {  
+              show2(data[0][5], this.category, this.series.name);
+            }
+          }
+        }
+      }
+    },
+    credits: {
+      enabled: false
+    },
+    series: [{
+      name: 'OT > 3 JAM / HARI',
+      color: '#2598db',
+      shadow: {
+        color: '#2598db',
+        width: 7,
+        offsetX: 0,
+        offsetY: 0
+      },
+      data: tiga_jam
+    }, {
+      name: 'OT > 14 JAM / MGG',
+      color: '#f2ad96',
+      shadow: {
+        color: '#f2ad96',
+        width: 7,
+        offsetX: 0,
+        offsetY: 0
+      },
+      data: per_minggu
+    },
+    {
+      name: 'OT > 3 dan > 14 Jam',
+      color: '#f90031',
+      shadow: {
+        color: '#f90031',
+        width: 7,
+        offsetX: 0,
+        offsetY: 0
+      },
+      data: per_bulan
+    },
+    {
+      name: 'OT > 56 JAM / BLN',
+      color: '#d756f7',
+      shadow: {
+        color: '#d756f7',
+        width: 7,
+        offsetX: 0,
+        offsetY: 0
+      },
+      data: manam_bulan
+    }]
+
+  });
+  });
+})
+
+
+function show2(tgl, cat, kode) {
+  tabel = $('#example3').DataTable();
+  tabel.destroy();
+
+  $('#myModal2').modal('show');
+
+  $('#example3').DataTable({
+    "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+    "processing": true,
+    "serverSide": true,
+    "searching": true,
+    "bLengthChange": true,
+    "order": [],
+    "ajax": {
+      "url": "<?php echo base_url('ot/ajax_ot_g_detail2/')?>",            
+      "type": "GET",
+      "data": {
+        tgl : tgl,
+        kode : kode,
+        cat: cat
+      }
+    }
+  });
 }
 
 </script>
