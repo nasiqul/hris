@@ -36,6 +36,8 @@
    <script src="<?php echo base_url()?>app/bower_components/jquery/dist/jquery.min.js"></script>
    <script src="<?php echo base_url()?>app/bower_components/jquery/dist/jquery.js"></script>
    <script src="<?php echo base_url()?>app/dist/js/highcharts.js"></script>
+   <script src="<?php echo base_url()?>app/dist/js/exporting.js"></script>
+   <script src="<?php echo base_url()?>app/dist/js/export-data.js"></script>
    <script src="<?php echo base_url()?>app/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
    <script src="<?php echo base_url()?>app/plugins/timepicker/bootstrap-timepicker.min.js"></script>
    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->

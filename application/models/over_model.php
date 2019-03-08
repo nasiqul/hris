@@ -5,7 +5,7 @@ class Over_model extends CI_Model {
 
 	var $column_order = array('id','tanggal','nik','nama','masuk','keluar','jam','aktual','diff','final2'); //set column field database for datatable orderable
     var $column_search = array('id','DATE_FORMAT(tanggal, "%d-%m-%Y")','nik','nama','masuk','keluar','jam','aktual','diff','final2'); //set column field database for datatable searchable 
-    var $order = array('tanggal' => 'desc'); // default order 
+    var $order = array('id' => 'desc'); // default order 
 
     public function __construct()
     {
@@ -526,6 +526,75 @@ public function getGA_trans($tgl)
     
 
     $query = $this->db->get();
+    return $query->result();
+}
+
+public function chart()
+{
+    $tgl = date("Y-m-d");
+        $q = "
+        select kode.nama, '03-2019' month_name, IFNULL(SUM(3_jam),0) tiga_jam, IFNULL(14_jam,0) blas_jam, IFNULL(3_14_jam,0) tiga_blas_jam, IFNULL(56_jam,0) manam_jam from kode left join
+(
+    select date_format(over_time.tanggal, '%m-%Y') as month_name, over_time_member.nik, karyawan.kode, if(count(over_time_member.nik) > 1, 1, count(over_time_member.nik)) as 3_jam from over_time_member 
+    right join over_time on over_time.id = over_time_member.id_ot 
+    left join karyawan on karyawan.nik = over_time_member.nik 
+    where over_time_member.final > 3 and over_time.hari = 'N' AND MONTH(over_time.tanggal) = MONTH('".$tgl."') AND YEAR(over_time.tanggal) = YEAR('".$tgl."')
+    group by date_format(over_time.tanggal, '%m-%Y'), karyawan.kode, over_time_member.nik
+) as a on a.kode = kode.nama
+left join
+(
+    select b.month_name, b.kode, count(b.nik) as 14_jam from 
+    (
+        select date_format(over_time.tanggal, '%m-%Y') as month_name, week(over_time.tanggal) as week_name, karyawan.nik, karyawan.kode, sum(over_time_member.      final) as jam from over_time_member right join over_time on over_time.id = over_time_member.id_ot left join karyawan on karyawan.nik = over_time_member         .nik 
+        where over_time.hari = 'N' AND MONTH(over_time.tanggal) = MONTH('".$tgl."') AND YEAR(over_time.tanggal) = YEAR('".$tgl."')
+        group by date_format(over_time.tanggal, '%m-%Y'), week(over_time.tanggal), karyawan.kode, karyawan.nik having jam > 14
+    ) as b GROUP BY b.kode
+) as c on c.kode = kode.nama
+left join
+(
+        SELECT u.month_name as bulan, u.kode, COUNT(u.nik) as 3_14_jam from 
+        (
+            SELECT date_format(over_time.tanggal, '%m-%Y') as month_name, over_time_member.nik, karyawan.kode, if(count(over_time_member.nik) > 1, 1, count(over_time_member.nik)) as 3_jam from over_time_member 
+            right join over_time on over_time.id = over_time_member.id_ot 
+            left join karyawan on karyawan.nik = over_time_member.nik 
+            where over_time_member.final > 3 and over_time.hari = 'N'  AND MONTH(over_time.tanggal) = MONTH('".$tgl."') AND YEAR(over_time.tanggal) = YEAR('".$tgl."')
+            group by date_format(over_time.tanggal, '%m-%Y'), karyawan.kode, over_time_member.nik
+        ) as u
+            
+            JOIN
+            
+            (select b.month_name, b.kode, count(b.nik) as 14_jam, b.nik as nik from 
+                (
+                    select date_format(over_time.tanggal, '%m-%Y') as month_name, week(over_time.tanggal) as week_name, karyawan.nik, karyawan.kode, sum(                               over_time_member.final) as jam from over_time_member right join over_time on over_time.id = over_time_member.id_ot left join karyawan on                            karyawan.nik = over_time_member.nik 
+                    where over_time.hari = 'N'  AND MONTH(over_time.tanggal) = MONTH('".$tgl."') AND YEAR(over_time.tanggal) = YEAR('".$tgl."')
+                    group by date_format(over_time.tanggal, '%m-%Y'), week(over_time.tanggal), karyawan.kode, karyawan.nik having jam > 14
+                ) as b 
+                GROUP BY b.nik) as l
+                on u.nik = l.nik
+                GROUP BY u.kode
+
+) as z on z.kode = kode.nama
+left join
+(
+    select month_name, kode, sum( nik) as 56_jam from (
+        select month_name, kode, COUNT(nik) as nik, final from (
+        select date_format(over_time.tanggal, '%m-%Y') as month_name, sum(over_time_member.final) as final, k.nik, k.kode from over_time_member
+        join over_time on over_time.id = over_time_member.id_ot
+        join karyawan k on k.nik = over_time_member.nik
+        WHERE MONTH(over_time.tanggal) = MONTH('".$tgl."') AND YEAR(over_time.tanggal) = YEAR('".$tgl."')
+        GROUP BY k.kode, k.nik, date_format(over_time.tanggal, '%m-%Y')
+        ) as d
+        GROUP BY kode, nik
+        HAVING final > 56
+) a
+
+GROUP BY kode
+) t on t.kode = kode.nama
+GROUP by kode.nama
+
+
+";
+    $query = $this->db->query($q);
     return $query->result();
 }
 }

@@ -36,86 +36,146 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <div class="col-md-12">
           <div class="nav-tabs-custom">
             <ul class="nav nav-tabs">
-              <li class="active"><a href="#tab_1" data-toggle="tab">By Bagian 
-                <br> <span class="text-purple">部門別</span></a></li>
+              <li class="active"><a href="#tab_1" data-toggle="tab">
+                By Bagian <br> <span class="text-purple">部門別</span></a>
+              </li>
 
-                <li><a href="#tab_2" data-toggle="tab">By Date <br> <span class="text-purple">日付別</span></a></li>
-              </ul>
-              <div class="tab-content">
-                <div class="tab-pane active" id="tab_1">
-                  <div class="col-md-3 pull-right">
-                    <form action="" method="post" id="rati">
-                      <label>Date : </label>
-                      <input type="text" class="form-control text-muted" placeholder="Select date" id="datepicker" onchange="PostMonth()" name="sortBulan">
-                    </form>
-                  </div>
-                  <div id="container" style ="margin: 0 auto"></div>
+              <li><a href="#tab_2" data-toggle="tab">
+                By Date <br> <span class="text-purple">日付別</span></a>
+              </li>
+
+              <li><a href="#tab_3" data-toggle="tab">
+                By Dep <br> <span class="text-purple">???</span></a>
+              </li>
+
+              <!-- <li><a href="#tab_4" data-toggle="tab">
+                > 3 Jam <br> <span class="text-purple">???</span></a>
+              </li> -->
+            </ul>
+            <div class="tab-content">
+              <div class="tab-pane active" id="tab_1">
+                <div class="col-md-3 pull-right">
+                  <form action="" method="post" id="rati">
+                    <label>Date : </label>
+                    <input type="text" class="form-control text-muted" placeholder="Select date" id="datepicker" onchange="PostMonth()" name="sortBulan">
+                  </form>
                 </div>
-                <div class="tab-pane" id="tab_2">
-                  <div class="col-md-3 pull-right">
-                    <form action="" method="post" id="rati">
-                      <label>Year : </label>
-                      <input type="text" class="form-control text-muted" placeholder="Select year" id="datepicker" onchange="PostMonth()" name="sortBulan">
-                    </form>
-                  </div>
-                  <div id = "container2" style ="width: 850px; margin: 0 auto"></div>
-                </div>
-                <!-- /.tab-pane -->
-                <!-- /.tab-pane -->
+                <div id="container" style ="margin: 0 auto"></div>
               </div>
-              <!-- /.tab-content -->
-            </div>
+              <div class="tab-pane" id="tab_2">
+                <div class="col-md-3 pull-right">
+                  <form action="" method="post" id="rati">
+                    <label>Year : </label>
+                    <input type="text" class="form-control text-muted" placeholder="Select year" id="datepicker" onchange="PostMonth()" name="sortBulan">
+                  </form>
+                </div>
+                <div id = "container2" style ="width: 850px; margin: 0 auto"></div>
+              </div>
+              <div class="tab-pane" id="tab_3">
+                <div id = "container3" style ="width: 850px; margin: 0 auto"></div>
+              </div>
+              <div class="tab-pane" id="tab_4">
 
-            <div class="modal fade" id="myModal">
-              <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h4 style="float: right;" id="modal-title"></h4>
-                    <h4 class="modal-title"><b>PT. YAMAHA MUSICAL PRODUCT INDONESIA</b></h4>
-                  </div>
-                  <div class="modal-body">
-                    <div class="row">
-                      <div class="col-md-12">
-                        <table id="example2" class="table table-striped table-bordered" style="width: 100%;"> 
-                          <thead>
-                            <tr>
-                              <th>Departemen</th>
-                              <th>Tanggal</th>
-                              <th>Nama karyawan</th>
-                              <th>Lembur (jam)</th>
-                              <th>Keperluan</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                          </tbody>
-                          <tfoot id="tableFootStock" style="background-color: #ddd">
-                            <th colspan="3" style="text-align: right;">Total : </th>
-                            <th colspan="2"></th>
-                          </tfoot>
-                        </table>
-                      </div>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>bagian</th>
+                      <th>Jam</th>
+                      <th>Tanggal</th>
+                    </tr>
+                  </thead>
+                </table>
+
+              </div>
+              <!-- /.tab-pane -->
+              <!-- /.tab-pane -->
+            </div>
+            <!-- /.tab-content -->
+          </div>
+
+          <div class="modal fade" id="myModal">
+            <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 style="float: right;" id="modal-title"></h4>
+                  <h4 class="modal-title"><b>PT. YAMAHA MUSICAL PRODUCT INDONESIA</b></h4>
+                </div>
+                <div class="modal-body">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <table id="example2" class="table table-striped table-bordered" style="width: 100%;"> 
+                        <thead>
+                          <tr>
+                            <th>Departemen</th>
+                            <th>Tanggal</th>
+                            <th>Nama karyawan</th>
+                            <th>Lembur (jam)</th>
+                            <th>Keperluan</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                        <tfoot id="tableFootStock" style="background-color: #ddd">
+                          <th colspan="3" style="text-align: right;">Total : </th>
+                          <th colspan="2"></th>
+                        </tfoot>
+                      </table>
                     </div>
                   </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-danger pull-right" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-danger pull-right" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                </div>
+              </div>
+              <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+          </div>
+
+
+          <div class="modal fade" id="myModal2">
+            <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 style="float: right;" id="modal-title"></h4>
+                  <h4 class="modal-title"><b>PT. YAMAHA MUSICAL PRODUCT INDONESIA</b></h4>
+                </div>
+                <div class="modal-body">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <table id="example3" class="table table-striped table-bordered" style="width: 100%;"> 
+                        <thead>
+                          <tr>
+                            <th>NIK</th>
+                            <th>Nama karyawan</th>
+                            <th>Departemen</th>
+                            <th>Section</th>
+                            <th>Kode</th>
+                            <th>Avg (jam)</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                 </div>
-                <!-- /.modal-content -->
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-danger pull-right" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                </div>
               </div>
-              <!-- /.modal-dialog -->
+              <!-- /.modal-content -->
             </div>
+            <!-- /.modal-dialog -->
           </div>
-        </section>
+        </div>
+      </section>
 
 
-
-
-
-
-        <!-- /.content -->
-      </div>
-      <!-- /.content-wrapper -->
-      <!-- /.control-sidebar -->
+      <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+    <!-- /.control-sidebar -->
   <!-- Add the sidebar's background. This div must be placed
     immediately after the control sidebar -->
     <div class="control-sidebar-bg"></div>
@@ -384,7 +444,115 @@ $(function () {
 
   });
 })
-//})
+
+
+
+$(function () {
+  var cat = new Array();
+  var tiga_jam = new Array();
+  var per_minggu = new Array();
+  var per_bulan = new Array();
+  var manam_bulan = new Array();
+
+  $.getJSON('<?php echo base_url("ot/overtime_chart/")?>', function(data) {
+
+    for (i = 0; i < data.length; i++){
+      cat.push(data[i][0]);
+      tiga_jam.push(parseInt(data[i][1]));
+      per_minggu.push(parseInt(data[i][2]));
+      per_bulan.push(parseInt(data[i][3]));
+      manam_bulan.push(parseInt(data[i][4]));
+    }
+
+    $('#container3').highcharts({
+      chart: {
+        type: 'line',
+        backgroundColor : "rgba(255, 255, 255, 0.0)",
+        
+      },
+      title: {
+        text: data[0][5]
+      },
+      xAxis: {
+        categories: cat
+      },
+      yAxis: {
+        min:0,
+        title: {
+          text: 'Manpower'
+        }
+      },
+      plotOptions: {
+        line: {
+          dataLabels: {
+            enabled: true
+          },
+          enableMouseTracking: true
+        },
+        series: {
+          cursor: 'pointer',
+          point: {
+            events: {
+              click: function(e) {  
+                show(data[0][5], this.category, this.series.name);
+              }
+            }
+          }
+        }
+      },
+      credits: {
+        enabled: false
+      },
+      series: [{
+        name: 'OT > 3 JAM / HARI',
+        data: tiga_jam
+      }, {
+        name: 'OT > 14 JAM / MGG',
+        data: per_minggu
+      },
+      {
+        name: 'OT > 3 dan > 14 Jam',
+        data: per_bulan
+      },
+      {
+        name: 'OT > 56 JAM / BLN',
+        data: manam_bulan
+      }]
+
+    });
+  });
+})
+
+function show(tgl, cat, kode) {
+  tabel = $('#example3').DataTable();
+  tabel.destroy();
+
+  $('#myModal2').modal('show');
+
+  $('#example3').DataTable({
+    "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+    "processing": true,
+    "serverSide": true,
+    "searching": true,
+    "bLengthChange": true,
+    "order": [],
+    "ajax": {
+      "url": "<?php echo base_url('ot/ajax_ot_g_detail/')?>",            
+      "type": "GET",
+      "data": {
+        tgl : tgl,
+        kode : kode,
+        cat: cat
+      }
+    },
+    // "columnDefs": [
+    // {
+    //       "targets": [ 0,1,2,3,4 ], //first column / numbering column
+    //       "orderable": false, //set not orderable
+    //     }]
+      });
+
+}
 
 </script>
 
@@ -393,3 +561,5 @@ $(function () {
      user experience. -->
    </body>
    </html>
+
+

@@ -127,14 +127,14 @@ class Karyawan_model extends CI_Model {
         return $this->db->count_all_results();
     }
 
-    // public function get_data_karyawan_by_nik($nik)
-    // {
-    //     $this->db->select("pin, k.nik, costCenter, foto, namaKaryawan, dep/subSec as dep, sec/Group as group, kode, tanggalMasuk, jk, statusKaryawan, grade, namaGrade, jabatan, statusKeluarga, tanggalLahir, tempatLahir, alamat, hp, ktp, rekening, bpjstk, jp, bpjskes, npwp, status");
-    //     $this->db->from('karyawan k');
-    //     $this->db->like('k.nik',$nik);
-    //     $query = $this->db->get();
-    //     return $query->result();
-    // }
+    public function get_data_karyawan_by_nik($nik)
+    {
+        $this->db->select("pin, k.nik, costCenter, foto, namaKaryawan, dep/subSec as dep, sec/Group as group, kode, tanggalMasuk, jk, statusKaryawan, grade, namaGrade, jabatan, statusKeluarga, tanggalLahir, tempatLahir, alamat, hp, ktp, rekening, bpjstk, jp, bpjskes, npwp, status");
+        $this->db->from('karyawan k');
+        $this->db->like('k.nik',$nik);
+        $query = $this->db->get();
+        return $query->result();
+    }
 
     public function get_data_karyawan_by_nik2($nik)
     {

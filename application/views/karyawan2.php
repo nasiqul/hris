@@ -736,6 +736,60 @@ scratch. This page gets rid of all links and provides the needed markup only.
       'id' : 'txtCC'}
       ));
 
+    var hp2 = $('#hp').text();
+    $('#hp').text('').append($('<input />',
+    {
+      'value' : hp2, 
+      'type' : 'text', 
+      'class' : 'form-control', 
+      'id' : 'txtHP'}
+      ));
+
+    var rek2 = $('#rek').text();
+    $('#rek').text('').append($('<input />',
+    {
+      'value' : rek2, 
+      'type' : 'text', 
+      'class' : 'form-control', 
+      'id' : 'txtRek'}
+      ));
+
+    var ktp2 = $('#ktp').text();
+    $('#ktp').text('').append($('<input />',
+    {
+      'value' : ktp2, 
+      'type' : 'text', 
+      'class' : 'form-control', 
+      'id' : 'txtKTP'}
+      ));
+
+    var npwp2 = $('#npwp').text();
+    $('#npwp').text('').append($('<input />',
+    {
+      'value' : npwp2, 
+      'type' : 'text', 
+      'class' : 'form-control', 
+      'id' : 'txtNPWP'}
+      ));
+
+    var bpjs2 = $('#bpjstk').text();
+    $('#bpjstk').text('').append($('<input />',
+    {
+      'value' : bpjs2, 
+      'type' : 'text', 
+      'class' : 'form-control', 
+      'id' : 'txtBPJSTK'}
+      ));
+
+    var hp2 = $('#hp').text();
+    $('#hp').text('').append($('<input />',
+    {
+      'value' : hp2, 
+      'type' : 'text', 
+      'class' : 'form-control', 
+      'id' : 'txtHP'}
+      ));
+
   })
 
 
