@@ -138,7 +138,7 @@ class Karyawan_model extends CI_Model {
 
     public function get_data_karyawan_by_nik2($nik)
     {
-        $this->db->select("pin, k.nik, costCenter, foto, namaKaryawan, d.nama as dev, dp.nama as dep, IFNULL(sc.nama,'-') as sec, tanggalMasuk, jk, statusKaryawan, jb.jabatan, statusKeluarga, tanggalLahir, tempatLahir, alamat, hp, ktp, rekening, bpjstk, jp, bpjskes, npwp, status, p.id_devisi, p.id_dep, p.id_sec, p.id_sub_sec, IFNULL(sub_sec.nama,'-') as sub_sec2, IFNULL(gr.nama,'-') as grup, kd.id as kode, kd.nama as nama_kode, gd.kode_grade as grade, gd.nama_grade as nama_grade, k.namaGrade as gdid");
+        $this->db->select("pin, k.nik, costCenter, foto, namaKaryawan, d.nama as dev, dp.nama as dep, IFNULL(sc.nama,'-') as sec, tanggalMasuk, jk, statusKaryawan, jb.jabatan, statusKeluarga, tanggalLahir, tempatLahir, alamat, hp, ktp, rekening, bpjstk, jp, bpjskes, npwp, status, p.id_devisi, p.id_dep, p.id_sec, p.id_sub_sec, IFNULL(sub_sec.nama,'-') as sub_sec2, IFNULL(gr.nama,'-') as grup, kd.id as kode, k.kode, gd.kode_grade as grade, gd.nama_grade as nama_grade, k.namaGrade as gdid");
         $this->db->from('karyawan k');
         $this->db->join('posisi p', 'p.nik = k.nik', 'left');
         $this->db->join('devisi d', 'p.id_devisi = d.id', 'left');

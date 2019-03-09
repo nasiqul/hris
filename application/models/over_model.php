@@ -611,13 +611,17 @@ public function chart2($tgl)
 ) as a on a.kode = kode.nama
 left join
 (
-    select b.month_name, b.nik, b.kode, count(b.nik) as 14_jam from 
+        select m.month_name, m.kode, sum(14_jam) as 14_jam from 
     (
-        select date_format(over.tanggal, '%m-%Y') as month_name, week(over.tanggal) as week_name, karyawan.nik, karyawan.kode, sum(over.jam) as jam from over
-        left join karyawan on karyawan.nik = over.nik 
-        where over.status = 'N' AND MONTH(over.tanggal) = MONTH('".$tgl."') AND YEAR(over.tanggal) = YEAR('".$tgl."')
-        group by date_format(over.tanggal, '%m-%Y'), week(over.tanggal), karyawan.kode, karyawan.nik having jam > 14
-    ) as b GROUP BY b.kode
+        select b.month_name, b.kode, if(count(b.nik) > 1, 1, count(b.nik)) as 14_jam, b.nik from 
+        (
+            select date_format(over.tanggal, '%m-%Y') as month_name, week(over.tanggal) as week_name, karyawan.nik, karyawan.kode, sum(over.jam) as jam from over
+            left join karyawan on karyawan.nik = over.nik 
+            where over.status = 'N' AND MONTH(over.tanggal) = MONTH('".$tgl."') AND YEAR(over.tanggal) = YEAR('".$tgl."')
+            group by date_format(over.tanggal, '%m-%Y'), week(over.tanggal), karyawan.nik, karyawan.kode
+            having jam > 14
+        ) as b GROUP BY b.nik
+    ) as m GROUP BY m.kode
 ) as c on c.kode = kode.nama
 left join
 (

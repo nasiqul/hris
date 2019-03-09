@@ -650,9 +650,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
       list7.push(i);
 
       if (kode2 == kode[i][1])
-        options7.push('<option value="'+kode[i][0]+'" selected>'+kode[i][1]+'</option>');
+        options7.push('<option value="'+kode[i][1]+'" selected>'+kode[i][1]+'</option>');
       else
-        options7.push('<option value="'+kode[i][0]+'">'+kode[i][1]+'</option>');
+        options7.push('<option value="'+kode[i][1]+'">'+kode[i][1]+'</option>');
     }
 
     $('#kode').text('').append($('<select id="SelectKode" class="form-control"></select>'));
@@ -736,7 +736,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       'id' : 'txtCC'}
       ));
 
-    var hp2 = $('#hp').text();
+    var hp2 = $('#hp').text();    
     $('#hp').text('').append($('<input />',
     {
       'value' : hp2, 
@@ -781,13 +781,22 @@ scratch. This page gets rid of all links and provides the needed markup only.
       'id' : 'txtBPJSTK'}
       ));
 
-    var hp2 = $('#hp').text();
-    $('#hp').text('').append($('<input />',
+    var bpjskes2 = $('#bpjskes').text();
+    $('#bpjskes').text('').append($('<input />',
     {
-      'value' : hp2, 
+      'value' : bpjskes2, 
       'type' : 'text', 
       'class' : 'form-control', 
-      'id' : 'txtHP'}
+      'id' : 'txtBPJSKES'}
+      ));
+
+    var jp2 = $('#jp').text();
+    $('#jp').text('').append($('<input />',
+    {
+      'value' : jp2, 
+      'type' : 'text', 
+      'class' : 'form-control', 
+      'id' : 'txtJP'}
       ));
 
   })

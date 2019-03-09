@@ -31,10 +31,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <div class="col-md-12">
           <div class="nav-tabs-custom">
             <ul class="nav nav-tabs">
-              <li class="active"><a href="#activity" data-toggle="tab" id="tab1"><i class="fa fa-user"></i>  Privacy</a></li>
-              <li><a href="#devisiT" data-toggle="tab" id="tab2"><i class="fa fa-building"></i> Devision</a></li>
-              <li><a href="#kerja" data-toggle="tab" id="tab3"><i class="fa fa-briefcase"></i> Employement</a></li>
-              <li><a href="#admin" data-toggle="tab" id="tab4"><i class="fa fa-briefcase"></i> Administration</a></li>
+              <li class="active"><a href="#activity" data-toggle="tab" id="tab1"><i class="fa fa-user"></i>  Employee Data</a></li>
             </ul>
             
             <div class="tab-content">
@@ -118,7 +115,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                     </div>
                     <div class="col-md-12">
-                      <a onclick="$('#tab2').trigger('click')" class="btn btn-primary pull-right">Next <i class="fa fa-arrow-right"></i></a>
+                      <hr>
                     </div>
                   </div>
                 </div>
@@ -199,7 +196,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                           <option value="" disabled selected>Select Kode</option>
                           <?php 
                           foreach ($kode as $key) {
-                            echo "<option value='".$key->id."'>".$key->nama."</option>";
+                            echo "<option value='".$key->nama."'>".$key->nama."</option>";
                           }
                           ?>
                         </select>
@@ -207,8 +204,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                     </div>
                     <div class="col-md-12">
-                      <a onclick="$('#tab1').trigger('click')" class="btn btn-warning pull-left"><i class="fa fa-arrow-left"></i> Back</a>
-                      <a onclick="$('#tab3').trigger('click')" class="btn btn-primary pull-right">Next <i class="fa fa-arrow-right"></i></a>
+                      <hr>
                     </div>
                   </div>
                 </div>
@@ -221,6 +217,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <select id="statusKar" class="form-control" name="statusKar">
                           <option value="Kontrak 1">Kontrak 1</option>
                           <option value="Kontrak 2">Kontrak 2</option>
+                          <option value="Percobaan">Percobaan</option>
                           <option value="Tetap">Tetap</option>
                         </select>
                       </div>
@@ -244,8 +241,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                       </div>
                     </div>
                     <div class="col-md-12">
-                      <a onclick="$('#tab2').trigger('click')" class="btn btn-warning pull-left"><i class="fa fa-arrow-left"></i> Back</a>
-                      <a onclick="$('#tab4').trigger('click')" class="btn btn-primary pull-right">Next <i class="fa fa-arrow-right"></i></a>
+                      <hr>
                     </div>
                   </div>
                 </div>
@@ -288,7 +284,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
                       </div>
                     </div>
                     <div class="col-md-12">
-                      <a onclick="$('#tab3').trigger('click')" class="btn btn-warning pull-left"><i class="fa fa-arrow-left"></i> Back</a>
                       <button class="btn btn-success pull-right" type="submit">Simpan <i class="fa fa-check"></i></button>
                     </div>
                   </div>
@@ -321,7 +316,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
          cache:false,
          async:false,
          success: function(data){
-          alert("Upload Image Successful.");
+          alert("Tambah Sukses");
         }
       });
       });

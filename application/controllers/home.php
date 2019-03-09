@@ -902,7 +902,7 @@ public function ajax_emp_by_nik_coba($id)
         $row[] = $key->dev;
         $row[] = $key->dep;
         $row[] = $key->sec;
-        $row[] = $key->nama_kode;
+        $row[] = $key->kode;
         $row[] = date("d-m-Y", strtotime($key->tanggalMasuk));
         $row[] = $key->jk;
         $row[] = $key->statusKaryawan;
