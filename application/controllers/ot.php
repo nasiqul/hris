@@ -562,7 +562,7 @@ class Ot extends CI_Controller {
 		foreach ($list as $key) {
 			$time = strtotime('10-'.$key->month_name);
 
-			$newformat = date('F Y',$time);
+			$newformat = date('F-Y',$time);
 
 			$row = array();
 			$row[] = $key->nama;
@@ -581,13 +581,19 @@ class Ot extends CI_Controller {
 
 	public function overtime_chart2()
 	{
-		$list = $this->over_model->chart2();
+		if (isset($_POST['tgl'])) {
+			$tgl = date('Y-m-d', strtotime('10-'.$_POST['tgl']));
+		} else {
+			$tgl = date('Y-m-d');
+		}
+
+		$list = $this->over_model->chart2($tgl);
 		$data = array();
 
 		foreach ($list as $key) {
 			$time = strtotime($key->month_name);
 
-			$newformat = date('F Y',$time);
+			$newformat = date('F-Y',$time);
 
 			$row = array();
 			$row[] = $key->nama;
@@ -606,7 +612,7 @@ class Ot extends CI_Controller {
 
 	public function ajax_ot_g_detail()
 	{
-		$tgl = date('d-m-Y' ,strtotime('10 '.$_GET['tgl']));
+		$tgl = date('d-m-Y' ,strtotime('10-'.$_GET['tgl']));
 		$kode = $_GET['kode'];
 		$cat = $_GET['cat'];
 
@@ -658,7 +664,7 @@ class Ot extends CI_Controller {
 
 	public function ajax_ot_g_detail2()
 	{
-		$tgl = date('d-m-Y' ,strtotime('10 '.$_GET['tgl']));
+		$tgl = date('d-m-Y' ,strtotime('10-'.$_GET['tgl']));
 		$kode = $_GET['kode'];
 		$cat = $_GET['cat'];
 

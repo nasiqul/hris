@@ -39,6 +39,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 By Bagian <br> <span class="text-purple">部門別</span></a>
               </li>
 
+              <!-- <li><a href="#tab_2" data-toggle="tab">
+                By Date <br> <span class="text-purple">日付別</span></a>
+              </li> -->
+
               <li><a href="#tab_3" data-toggle="tab">
                 By Dep <br> <span class="text-purple">???</span></a>
               </li>
@@ -78,6 +82,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <div id = "container3" style ="margin: 0 auto"></div>
               </div>
               <div class="tab-pane active" id="tab_4">
+                <div class="row">
+                  <div class="col-md-3 pull-right">
+                    <form action="" method="post" id="rati2">
+                      <label>Month : </label>
+                      <input type="text" class="form-control text-muted" placeholder="Select Month" id="datepicker2" onchange="date_change()" name="date2">
+                    </form>
+                  </div>
+                </div>
                 <div id = "container4" style ="margin: 0 auto"></div>
               </div>
               <!-- /.tab-pane -->
@@ -177,6 +189,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- ./wrapper -->
   <script>
     var notif = document.getElementById("notif");
+    var tgl;
 
     function check() {
       notif.style.display = "none";
@@ -189,6 +202,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
     });
 
      $('#datepicker').datepicker({
+      autoclose: true,
+      format: "mm-yyyy",
+      viewMode: "months", 
+      minViewMode: "months"
+    })
+
+     $('#datepicker2').datepicker({
       autoclose: true,
       format: "mm-yyyy",
       viewMode: "months", 
@@ -624,6 +644,9 @@ $(function () {
       manam_bulan.push(parseInt(data[i][4]));
     }
 
+    tgl = data[0][5];
+    console.log(tgl);
+
     $('#container4').highcharts({
       chart: {
         type: 'line',
@@ -748,6 +771,163 @@ $(function () {
   });
   });
 })
+
+function date_change() {
+  tgl = $('#datepicker2').val();
+  console.log(tgl);
+
+  var url = "<?php echo base_url('ot/overtime_chart2') ?>";
+  $.ajax({
+    type: "POST",
+    url: url,
+    data: {
+      tgl:tgl
+    },
+    success: function(data) {
+      var s = $.parseJSON(data);
+      
+      var cat = new Array();
+      var tiga_jam = new Array();
+      var per_minggu = new Array();
+      var per_bulan = new Array();
+      var manam_bulan = new Array();
+
+      // Populate series
+      for (i = 0; i < s.length; i++){
+        cat.push(s[i][0]);
+        tiga_jam.push(parseInt(s[i][1]));
+        per_minggu.push(parseInt(s[i][2]));
+        per_bulan.push(parseInt(s[i][3]));
+        manam_bulan.push(parseInt(s[i][4]));
+
+      }
+
+      $('#container4').highcharts({
+        chart: {
+          type: 'line',
+          backgroundColor : "#3d3f3f",   
+        },
+        legend: {
+          align: 'right',
+          verticalAlign: 'top',
+          layout: 'vertical',
+          x: 0,
+          y: 100,
+          itemStyle: {
+           color: '#FFF'
+         },
+         itemHoverStyle: {
+           color: '#DDD'
+         },
+         itemHiddenStyle: {
+           color: '#616363'
+         }
+       },
+       exporting : {
+        enabled : true
+      },
+      title: {
+        text: s[0][5],
+        style: {
+          color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+        }
+      },
+      xAxis: {
+        gridLineWidth: 1,
+        gridLineColor: "#7a7c7c",
+        categories: cat,
+        labels: {
+          style: {
+            color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+          }
+        }
+      },
+      yAxis: {
+        min:0,
+        gridLineColor: "#7a7c7c",
+        title: {
+          text: 'Jumlah (orang)',
+          style: {
+            color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+          }
+        },
+        labels: {
+          style: {
+            color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+          }
+        }
+      },
+      plotOptions: {
+        line: {
+          dataLabels: {
+            enabled: true,
+            color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+          },
+          enableMouseTracking: true
+        },
+        series: {
+          cursor: 'pointer',
+          point: {
+            events: {
+              click: function(e) {  
+                show2(s[0][5], this.category, this.series.name);
+              }
+            }
+          }
+        }
+      },
+      credits: {
+        enabled: false
+      },
+      series: [{
+        name: 'OT > 3 JAM / HARI',
+        color: '#2598db',
+        shadow: {
+          color: '#2598db',
+          width: 7,
+          offsetX: 0,
+          offsetY: 0
+        },
+        data: tiga_jam
+      }, {
+        name: 'OT > 14 JAM / MGG',
+        color: '#f2ad96',
+        shadow: {
+          color: '#f2ad96',
+          width: 7,
+          offsetX: 0,
+          offsetY: 0
+        },
+        data: per_minggu
+      },
+      {
+        name: 'OT > 3 dan > 14 Jam',
+        color: '#f90031',
+        shadow: {
+          color: '#f90031',
+          width: 7,
+          offsetX: 0,
+          offsetY: 0
+        },
+        data: per_bulan
+      },
+      {
+        name: 'OT > 56 JAM / BLN',
+        color: '#d756f7',
+        shadow: {
+          color: '#d756f7',
+          width: 7,
+          offsetX: 0,
+          offsetY: 0
+        },
+        data: manam_bulan
+      }]
+
+    });
+
+    }
+  })
+}
 
 
 function show2(tgl, cat, kode) {

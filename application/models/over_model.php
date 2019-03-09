@@ -600,9 +600,8 @@ GROUP by kode.nama
 }
 
 
-public function chart2()
+public function chart2($tgl)
 {
-    $tgl = date("Y-m-d");
     $q = "select kode.nama, '".$tgl."' month_name, IFNULL(SUM(3_jam),0) tiga_jam, IFNULL(14_jam,0) blas_jam, IFNULL(3_14_jam,0) tiga_blas_jam, IFNULL(56_jam,0) manam_jam from kode left join
 (
     select date_format(over.tanggal, '%m-%Y') as month_name, over.nik, karyawan.kode, if(count(over.nik) > 1, 1, count(over.nik)) as 3_jam from over 
