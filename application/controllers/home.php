@@ -91,6 +91,7 @@ class Home extends CI_Controller {
     public function ot_graph()
     {
         $data['menu'] = 'ovrG';
+        $data['prs'] = $this->over_model->get_p_data();
         $this->load->view("ot_graph",$data);
     }
 

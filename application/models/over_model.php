@@ -602,7 +602,7 @@ GROUP by kode.nama
 
 public function chart2($tgl)
 {
-    $q = "select kode.nama, '".$tgl."' month_name, IFNULL(SUM(3_jam),0) tiga_jam, IFNULL(14_jam,0) blas_jam, IFNULL(3_14_jam,0) tiga_blas_jam, IFNULL(56_jam,0) manam_jam from kode left join
+    $q = "SELECT kode.nama, '".$tgl."' month_name, IFNULL(SUM(3_jam),0) tiga_jam, IFNULL(14_jam,0) blas_jam, IFNULL(3_14_jam,0) tiga_blas_jam, IFNULL(56_jam,0) manam_jam from kode left join
 (
     select date_format(over.tanggal, '%m-%Y') as month_name, over.nik, karyawan.kode, if(count(over.nik) > 1, 1, count(over.nik)) as 3_jam from over 
     left join karyawan on karyawan.nik = over.nik 
@@ -668,6 +668,56 @@ GROUP BY kode
 GROUP by kode.nama
 
 
+";
+    $query = $this->db->query($q);
+    return $query->result();
+}
+
+public function get_p_data()
+{
+    $q = "SELECT presensi.tanggal, (DAY(LAST_DAY(presensi.tanggal)) - v.hari) as hari_kerja, z.final as total_lembur, jam_ketidakhadiran, total_keluar, totalMasuk, tot
+        from presensi
+    JOIN (
+        SELECT tanggal, COUNT(tanggal) as hari from kalender GROUP BY DATE_FORMAT(tanggal,'%m-%Y')
+    ) as v on v.tanggal = presensi.tanggal
+    LEFT JOIN (
+        SELECT tanggal, ROUND(SUM(jam)) as final from over 
+        WHERE tanggal IS NOT NULL
+        GROUP BY DATE_FORMAT(tanggal,'%m-%Y')
+    ) z on DATE_FORMAT(z.tanggal,'%m-%Y') = DATE_FORMAT(presensi.tanggal,'%m-%Y')
+    LEFT JOIN
+    (
+        SELECT i.*, (CT+SD+I+A) total_absen, (CT+SD+I+A)*8 jam_ketidakhadiran FROM (
+            SELECT tanggal,
+            COUNT(if(shift = 'CT' , shift, null)) CT,
+            COUNT(if(shift = 'SD' , shift, null)) SD,
+            COUNT(if(shift = 'I' , shift, null)) I,
+            COUNT(if(shift = 'A' , shift, null)) A
+            from presensi
+            GROUP BY DATE_FORMAT(tanggal,'%m-%Y')
+        ) as i 
+    ) u on DATE_FORMAT(u.tanggal,'%m-%Y') = DATE_FORMAT(presensi.tanggal,'%m-%Y')
+    LEFT JOIN
+    (
+        
+
+            Select c.*, d.totalMasuk from (     
+                        SELECT count(nik) as total_keluar, tanggalKeluar, (SELECT count(nik) from karyawan) as tot
+                    from karyawan
+                        WHERE tanggalKeluar IS NOT NULL
+                        GROUP BY DATE_FORMAT(tanggalKeluar,'%m-%Y')
+                        
+            ) c 
+            JOIN (
+                            SELECT COUNT(nik) totalMasuk, tanggalMasuk from karyawan
+                        GROUP BY DATE_FORMAT(tanggalMasuk,'%m-%Y')
+                        ) d on DATE_FORMAT(d.tanggalMasuk,'%m-%Y') = DATE_FORMAT(c.tanggalKeluar,'%m-%Y')
+                    
+                    
+    ) as r 
+    on DATE_FORMAT(r.tanggalKeluar,'%m-%Y') = DATE_FORMAT(presensi.tanggal,'%m-%Y')
+
+    GROUP BY presensi.tanggal;
 ";
     $query = $this->db->query($q);
     return $query->result();

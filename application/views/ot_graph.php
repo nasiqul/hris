@@ -106,32 +106,50 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </div>
                 <div id = "container4" style ="width: 90%;margin: 0 auto"></div>
                 <br>
-                <table class="table table-bordered">
+                <table class="table table-bordered table-hover table-striped">
                   <tr>
                     <th></th>
-                    <th>JAN</th>
-                    <th>FEB</th>
+                    <th>Hari Kerja</th>
+                    <th>Total Lembur</th>
+                    <th>total karyawan</th>
+                    <th>Karyawan Non-Aktif</th>
+                    <th>Karyawan Aktif</th>
+                    <th>Jam ketidakhadiran</th>
+                    <th>jam Kerja Total</th>
+                    <th>(%) Presentase Kehadiran</th>
                   </tr>
+                  <?php $no = 0; $no2 = 0; foreach ($prs as $key) { ?>
+                    
                   <tr>
-                    <th>Total Manpower</th>
-                    <td>1000</td>
-                    <td>2000</td>
+                    <th><?php echo date('F',strtotime($key->tanggal)) ?></th>
+                    <td><?php echo $key->hari_kerja ?></td>
+                    <td><?php echo $key->total_lembur ?></td>
+                    <td>
+                      <?php 
+                      $no += $key->total_keluar;
+                      $tot = $key->tot - $no;
+                      echo $tot;
+                      ?>
+                    </td>
+                    <td><?php echo $key->total_keluar ?></td>
+                    <td><?php echo $key->totalMasuk ?></td>
+                    <td><?php echo $key->jam_ketidakhadiran ?></td>
+                    <td>
+                      <?php 
+                      $jm_kerja = ($key->hari_kerja*$tot*8) + $key->total_lembur;
+                      echo $jm_kerja;
+                      ?>
+                    </td>
+                    <td>
+                      <?php 
+                      $prsn = ROUND(($jm_kerja - $key->jam_ketidakhadiran) / $jm_kerja * 100, 2);
+                      echo $prsn." %";
+                      ?>
+                    </td>
                   </tr>
-                  <tr>
-                    <th>% Kehadiran Kerja</th>
-                    <td>95.66%</td>
-                    <td>95.65%</td>
-                  </tr>
-                  <tr>
-                    <th>Jml Karyawan Aktif</th>
-                    <td>1</td>
-                    <td>500</td>
-                  </tr>
-                  <tr>
-                    <th>Jml Karyawan Non Aktif</th>
-                    <td>2</td>
-                    <td>500</td>
-                  </tr>
+
+                  <?php } ?>
+
                 </table>
               </div>
               <div class="tab-pane" id="tab_5">

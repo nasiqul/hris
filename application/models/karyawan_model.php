@@ -412,7 +412,6 @@ class Karyawan_model extends CI_Model {
         $this->db->set('npwp', $npwp);
         $this->db->set('status', 'Aktif');
 
-
         $this->db->insert('karyawan');
 
         $data2 = array(
@@ -425,8 +424,6 @@ class Karyawan_model extends CI_Model {
         );
 
         $this->db->insert('posisi', $data2);
-
-        return $result;
     }
 }
 ?>
