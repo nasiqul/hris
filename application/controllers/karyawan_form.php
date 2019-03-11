@@ -145,6 +145,7 @@ class Karyawan_form extends CI_Controller {
 	{
 		$config['upload_path']="./app/foto";
 		$config['allowed_types']='jpg|png';
+		$config['file_name'] = $_POST['nik'];
 
 		$this->load->library('upload',$config);
 		if($this->upload->do_upload("foto")){
