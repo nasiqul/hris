@@ -9,7 +9,7 @@
       <li class="<?php if($menu == 'home') echo 'active'?>"><a href="<?php echo base_url(); ?>"><i class="fa fa-home"></i> <span>HOME</span></a></li>
       
       <?php if ($this->session->userdata('nik')) { ?>
-      <li class="treeview <?php if($menu == 'emp' || $menu == 'empG') echo 'active'?>">
+      <li class="treeview <?php if($menu == 'emp' || $menu == 'empG' || $menu == 'OutS') echo 'active'?>">
         <a href="#"><i class="fa fa-industry"></i> <span>Employee</span>
           <span class="pull-right-container">
             <i class="fa fa-angle-left pull-right"></i>
@@ -18,6 +18,7 @@
         <ul class="treeview-menu">
           <li class="<?php if($menu == 'empG') echo 'active'?>"><a href="<?php echo base_url('home/karyawan_graph'); ?>"><i class="fa fa-bar-chart"></i> Graph</a></li>
           <li class="<?php if($menu == 'emp') echo 'active'?>"><a href="<?php echo base_url('home/karyawan'); ?>"><i class="fa fa-group"></i> <span>Employee Data</span></a></li>
+          <li class="<?php if($menu == 'OutS') echo 'active'?>"><a href="<?php echo base_url('home/outSource'); ?>"><i class="fa fa-odnoklassniki"></i> <span>Outsource Employee</span></a></li>
         </ul>
       </li>
       <li class="treeview <?php if($menu == 'pr' || $menu == 'prG') echo 'active'?>">

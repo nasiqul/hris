@@ -5,6 +5,7 @@ class Karyawan_form extends CI_Controller {
 	function __construct(){
 		parent::__construct();
 		$this->load->model('karyawan_model');
+		$this->load->model('outsource_model');
 	}
 
 	public function ajax_dep()
@@ -184,5 +185,49 @@ class Karyawan_form extends CI_Controller {
 		}
 
 	}
+
+	public function outsource_data()
+	{
+		$list = $this->outsource_model->outsource_data();
+		$tot = $this->outsource_model->count_all();
+		$filter = $this->outsource_model->count_filtered();
+
+		$data = array();
+
+		if ($list) {
+			foreach ($list as $key) {
+				$row = array();
+
+				$row[] = $key->bulan2;
+				$row[] = $key->masuk;
+				$row[] = $key->keluar;
+				$row[] = $key->total;
+
+				$data[] = $row;
+			}
+		}
+
+		$output = array(
+            "draw" => $_POST['draw'],
+            "recordsTotal" => $tot,
+            "recordsFiltered" => $filter,
+            "data" => $data,
+        );
+            //output to json format
+        echo json_encode($output);
+	}
+
+
+	public function add_outsource()
+	{
+		$periode = $_POST['periode'];
+		$masuk = $_POST['masuk'];
+		$keluar = $_POST['keluar'];
+		$tot = $_POST['tot'];
+
+		$result = $this->outsource_model->tambah($periode, $masuk, $keluar, $tot);
+		echo json_decode($result);
+	}
+
 }
 ?>

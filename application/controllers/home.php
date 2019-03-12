@@ -75,6 +75,12 @@ class Home extends CI_Controller {
         $this->load->view("absensi_graph",$data);
     }
 
+    public function outSource()
+    {
+        $data['menu'] = 'OutS';
+        $this->load->view("outsource",$data);
+    }
+
     public function client()
     {
         $this->load->view("client");

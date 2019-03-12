@@ -155,7 +155,7 @@ class Karyawan_model extends CI_Model {
     }
 
     public function by_status(){
-        $q = "SELECT statusKaryawan, COUNT(*) AS jml from karyawan group by statusKaryawan ORDER BY FIELD(statusKaryawan,'Tetap','Percobaan','Kontrak 1','Kontrak 2')";
+        $q = "SELECT statusKaryawan, COUNT(*) AS jml from karyawan group by statusKaryawan";
         $query = $this->db->query($q);
 
         if($query->num_rows() > 0){
@@ -424,6 +424,20 @@ class Karyawan_model extends CI_Model {
         );
 
         $this->db->insert('posisi', $data2);
+    }
+
+
+    public function get_outsource()
+    {
+        $q = "SELECT * from outsourcing";
+        $query = $this->db->query($q);
+
+        if($query->num_rows() > 0){
+            foreach($query->result() as $data){
+                $hasil[] = $data;
+            }
+            return $hasil;
+        }  
     }
 }
 ?>

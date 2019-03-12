@@ -120,33 +120,33 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   </tr>
                   <?php $no = 0; $no2 = 0; foreach ($prs as $key) { ?>
                     
-                  <tr>
-                    <th><?php echo date('F',strtotime($key->tanggal)) ?></th>
-                    <td><?php echo $key->hari_kerja ?></td>
-                    <td><?php echo $key->total_lembur ?></td>
-                    <td>
-                      <?php 
-                      $no += $key->total_keluar;
-                      $tot = $key->tot - $no;
-                      echo $tot;
-                      ?>
-                    </td>
-                    <td><?php echo $key->total_keluar ?></td>
-                    <td><?php echo $key->totalMasuk ?></td>
-                    <td><?php echo $key->jam_ketidakhadiran ?></td>
-                    <td>
-                      <?php 
-                      $jm_kerja = ($key->hari_kerja*$tot*8) + $key->total_lembur;
-                      echo $jm_kerja;
-                      ?>
-                    </td>
-                    <td>
-                      <?php 
-                      $prsn = ROUND(($jm_kerja - $key->jam_ketidakhadiran) / $jm_kerja * 100, 2);
-                      echo $prsn." %";
-                      ?>
-                    </td>
-                  </tr>
+                    <tr>
+                      <th><?php echo date('F',strtotime($key->tanggal)) ?></th>
+                      <td><?php echo $key->hari_kerja ?></td>
+                      <td><?php echo $key->total_lembur ?></td>
+                      <td>
+                        <?php 
+                        $no += $key->total_keluar;
+                        $tot = $key->tot - $no;
+                        echo $tot;
+                        ?>
+                      </td>
+                      <td><?php echo $key->total_keluar ?></td>
+                      <td><?php echo $key->totalMasuk ?></td>
+                      <td><?php echo $key->jam_ketidakhadiran ?></td>
+                      <td>
+                        <?php 
+                        $jm_kerja = ($key->hari_kerja*$tot*8) + $key->total_lembur;
+                        echo $jm_kerja;
+                        ?>
+                      </td>
+                      <td>
+                        <?php 
+                        $prsn = ROUND(($jm_kerja - $key->jam_ketidakhadiran) / $jm_kerja * 100, 3);
+                        echo $prsn." %";
+                        ?>
+                      </td>
+                    </tr>
 
                   <?php } ?>
 
@@ -946,7 +946,13 @@ function date_change() {
          }
        },
        exporting : {
-        enabled : true
+        enabled : true,
+        buttons: {
+          contextButton: {
+            align: 'right',
+            x: -25
+          }
+        }
       },
       title: {
         text: s[0][5],
