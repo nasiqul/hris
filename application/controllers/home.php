@@ -98,6 +98,27 @@ class Home extends CI_Controller {
     {
         $data['menu'] = 'ovrG';
         $data['prs'] = $this->over_model->get_p_data();
+        $data['prs2'] = $this->over_model->tes1();
+
+        $d = date('n');
+        $data3 = array();
+        for ($i = $d; $i > 0; $i--) {
+            $s = date('d-m-Y',strtotime('2019-'.$d.'-01'));
+
+            $list = $this->over_model->coba1($s);
+
+            $data2 = array();
+
+            foreach ($list as $key) {
+                $row = array();
+                $row[] = $key->bulan;
+                $row[] = $key->tot;
+
+                array_push($data2, $row);
+            }
+            array_push($data3, $data2);
+        }
+        $data['tes'] = $data3;
         $this->load->view("ot_graph",$data);
     }
 
@@ -164,6 +185,12 @@ class Home extends CI_Controller {
     {
         $data['menu'] = 'GAreport';
         $this->load->view('GAreport',$data);
+    }
+
+    public function karyawan_2()
+    {
+        $data['menu'] = 'emp2';
+        $this->load->view('karyawan_2',$data);
     }
 
     public function ot()
@@ -961,5 +988,60 @@ public function reset_karyawan()
     $array_items = array('status' , 'grade', 'grade', 'dep', 'pos');
     $this->session->unset_userdata($array_items);
     redirect('home/karyawan');
+}
+
+public function ajax_kar()
+{
+    $bulan = $_POST['bulan'];
+    $list = $this->karyawan_model->get_karywan2($bulan);
+    $data = array();
+    foreach ($list as $key) {
+        $row = array();
+        $row[] = $key->tanggal_tanya;
+        $row[] = $key->nik_penanya;
+        $row[] = $key->pertanyaan;
+        $row[] = $key->jawaban;
+        $row[] = $key->nik_penjawab;
+        if ($key->tanggal_jawab != 0) {
+            $row[] = $key->tanggal_jawab;
+        }
+        else
+            $row[] = "";
+        $row[] = "<button class='btn btn-success'><i class='fa fa-bullhorn'></i> Answer</button>";
+
+        $data[] = $row;
+    }
+
+    $output = array(
+        "draw" => $_POST['draw'],
+        "recordsTotal" => $this->qa_model->count_all(),
+        "recordsFiltered" => $this->qa_model->count_filtered(),
+        "data" => $data,
+    );
+            //output to json format
+    echo json_encode($output);
+}
+
+public function ajax_dep_over($tgl)
+{
+    $tanggal = date('Y-m-d',strtotime($tgl));
+
+    $list = $this->over_model->chart_dep2($tanggal);
+    $data = array();
+    if(!empty($list)) {
+        foreach ($list as $key) {
+            $row = array();
+            $row['tgl'] = $key->tanggal;
+            $row['name'] = $key->namaDep;
+            $row['y'] = $key->tot;
+
+            $data[] = $row;
+        }
+    } else {
+        $data[] = json_decode("{}");
+    }
+
+    //output to json format
+    echo json_encode($data);
 }
 }

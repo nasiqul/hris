@@ -19,6 +19,7 @@
           <li class="<?php if($menu == 'empG') echo 'active'?>"><a href="<?php echo base_url('home/karyawan_graph'); ?>"><i class="fa fa-bar-chart"></i> Graph</a></li>
           <li class="<?php if($menu == 'emp') echo 'active'?>"><a href="<?php echo base_url('home/karyawan'); ?>"><i class="fa fa-group"></i> <span>Employee Data</span></a></li>
           <li class="<?php if($menu == 'OutS') echo 'active'?>"><a href="<?php echo base_url('home/outSource'); ?>"><i class="fa fa-odnoklassniki"></i> <span>Outsource Employee</span></a></li>
+          <li class="<?php if($menu == 'emp2') echo 'active'?>"><a href="<?php echo base_url('home/karyawan_2'); ?>"><i class="fa fa-odnoklassniki"></i> <span>Employee2</span></a></li>
         </ul>
       </li>
       <li class="treeview <?php if($menu == 'pr' || $menu == 'prG') echo 'active'?>">

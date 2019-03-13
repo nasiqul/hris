@@ -10,6 +10,7 @@ class Ot extends CI_Controller {
 		$this->load->model('over_report_model');
 		$this->load->model('over_cari_report_model');
 		$this->load->model('over_cari_chart');
+		$this->load->model('cari_over_dep');
 		$this->load->library('ciqrcode');
 		$this->load->model('over_cari_chart2');
 	}
@@ -763,6 +764,65 @@ class Ot extends CI_Controller {
 		);
             //output to json format
 		echo json_encode($output);
+	}
+
+
+	public function ajax_kar2()
+	{
+		$d = date('n');
+		for ($i = $d; $i > 0; $i--) {
+			$s = date('d-m-Y',strtotime('2019-'.$d.'-01'));
+
+			$list = $this->over_model->coba1($s);
+
+			$data = array();
+
+			foreach ($list as $key) {
+				$row = array();
+				$row[] = $key->bulan;
+				$row[] = $key->tot;
+
+				array_push($data, $row);
+			}
+		}
+            //output to json format
+		echo json_encode($data);
+	}
+
+
+	public function ajax_dp_g_detail()
+	{
+		$tgl = $_GET['tgl'];
+		$bagian = $_GET['bagian'];
+
+		$list = $this->cari_over_dep->get_data_ot_g2($tgl,$bagian);
+		$tot = $this->cari_over_dep->count_all($tgl,$bagian);
+		$filter = $this->cari_over_dep->count_filtered($tgl,$bagian);
+
+		$data = array();
+
+		foreach ($list as $key) {
+			$row = array();
+			$row[] = $key->nik;
+			$row[] = $key->namaKaryawan;
+			$row[] = $key->dep;
+			$row[] = $key->sec;
+			$row[] = $key->jam;
+
+			$data[] = $row;
+		}
+
+        //output to json format
+		$output = array(
+			"draw" => $_GET['draw'],
+			"recordsFiltered" => $filter,
+			"recordsTotal" => $tot,
+			"data" => $data,
+		);
+            //output to json format
+		echo json_encode($output);
+
+
 	}
 }
 ?>

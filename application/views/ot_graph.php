@@ -41,13 +41,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 By Bagian <br> <span class="text-purple">部門別</span></a>
               </li>
 
-              <!-- <li><a href="#tab_2" data-toggle="tab">
+              <li><a href="#tab_2" data-toggle="tab">
                 By Date <br> <span class="text-purple">日付別</span></a>
-              </li> -->
-
-              <li><a href="#tab_3" data-toggle="tab">
-                By Dep <br> <span class="text-purple">???</span></a>
               </li>
+
+              <!-- <li><a href="#tab_3" data-toggle="tab">
+                By Dep <br> <span class="text-purple">???</span></a>
+              </li> -->
 
               <li class="active"><a href="#tab_4" data-toggle="tab">
                 By Dep 2 <br> <span class="text-purple">???</span></a>
@@ -84,13 +84,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <div class="tab-pane" id="tab_2">
                 <div class="row">
                   <div class="col-md-3 pull-right">
+                    <input type="hidden" id="tgls2" value="<?php echo date('d-m-Y'); ?>">
                     <form action="" method="post" id="rati">
-                      <label>Year : </label>
-                      <input type="text" class="form-control text-muted" placeholder="Select year" id="datepicker" onchange="PostMonth()" name="sortBulan">
+                      <label>Month : </label>
+                      <input type="text" class="form-control text-muted" placeholder="Select month" id="datepicker3" onchange="gantiTgl()" name="sortBulan">
                     </form>
                   </div>
                 </div>
-                <div id = "container2" style ="margin: 0 auto"></div>
+                <div id ="container2" style ="margin: 0 auto"></div>
               </div>
               <div class="tab-pane" id="tab_3">
                 <div id = "container3" style ="margin: 0 auto"></div>
@@ -119,7 +120,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <th>(%) Presentase Kehadiran</th>
                   </tr>
                   <?php $no = 0; $no2 = 0; foreach ($prs as $key) { ?>
-                    
+
                     <tr>
                       <th><?php echo date('F',strtotime($key->tanggal)) ?></th>
                       <td><?php echo $key->hari_kerja ?></td>
@@ -151,8 +152,26 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <?php } ?>
 
                 </table>
+
+                <table class="table">
+                  <tr>
+                    <th>bulan</th>
+                    <th>aktif</th>
+                    <th>non-aktif</th>
+                    <th>Total Karyawan</th>
+                  </tr>
+                  <?php foreach ($prs2 as $key2) { ?>
+                    <tr>
+                      <td><?php echo $key2->periode ?></td>
+                      <td><?php echo $key2->aktif ?></td>
+                      <td><?php echo $key2->non_aktif ?></td>
+                      <td><?php echo $key2->total_karyawan ?></td>
+                    </tr>
+                  <?php } ?>
+                </table>
               </div>
               <div class="tab-pane" id="tab_5">
+                <p class="3_jam2"></p>
                 <table class="table table-bordered table-responsive" style="width: 100%" id="3jam">
                   <thead>
                     <tr>
@@ -168,6 +187,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </table>
               </div>
               <div class="tab-pane" id="tab_6">
+                <p class="14_jam2"></p>
                 <table class="table table-bordered table-responsive" style="width: 100%" id="14jam">
                   <thead>
                     <tr>
@@ -183,6 +203,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </table>
               </div>
               <div class="tab-pane" id="tab_7">
+                <p class="3_14jam2"></p>
                 <table class="table table-bordered table-responsive" style="width: 100%" id="3_14jam">
                   <thead>
                     <tr>
@@ -198,6 +219,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </table>
               </div>
               <div class="tab-pane" id="tab_8">
+                <p class="56jam2"></p>
                 <table class="table table-bordered table-responsive" style="width: 100%" id="56jam">
                   <thead>
                     <tr>
@@ -292,6 +314,42 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </div>
             <!-- /.modal-dialog -->
           </div>
+
+
+          <div class="modal fade" id="myModal5">
+            <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 style="float: right;" id="modal-title"></h4>
+                  <h4 class="modal-title"><b>PT. YAMAHA MUSICAL PRODUCT INDONESIA</b></h4>
+                </div>
+                <div class="modal-body">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <table id="example5" class="table table-striped table-bordered" style="width: 100%;"> 
+                        <thead>
+                          <tr>
+                            <th>NIK</th>
+                            <th>Nama karyawan</th>
+                            <th>Departemen</th>
+                            <th>Section</th>
+                            <th>Jam</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-danger pull-right" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                </div>
+              </div>
+              <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+          </div>
         </div>
       </section>
 
@@ -309,6 +367,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <script>
     var notif = document.getElementById("notif");
     var tgl = $("#tgls").val();
+    $("#3_jam2").html("as");
+    $("#14_jam2").html(tgl);
+    $("#3_14jam2").html(tgl);
+    $("#56_jam2").html(tgl);
 
     function check() {
       notif.style.display = "none";
@@ -321,6 +383,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
     });
 
      $('#datepicker').datepicker({
+      autoclose: true,
+      format: "mm-yyyy",
+      viewMode: "months", 
+      minViewMode: "months"
+    });
+
+     $('#datepicker3').datepicker({
       autoclose: true,
       format: "mm-yyyy",
       viewMode: "months", 
@@ -531,51 +600,75 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 // LINE CHART
 $(function () {
-  // $.getJSON('<?php //echo base_url("ot/ajax_ot_graph_bulan/")?>', function(data) {
+  var ttanggal2 = $("#tgls2").val();
 
-  //   for (i = 0; i < data.length; i++){
-  //     processed_json.push([data[i].name, data[i].y]);
+  $.getJSON('<?php echo base_url("home/ajax_dep_over/")?>'+ttanggal2, function(data) {
 
-  //     if (data[i].name == null) {
-  //       notif.style.display = "block";
-  //     }
-  //   }
+    var processed_json2 = new Array();
 
-  $('#container2').highcharts({
-    chart: {
-      type: 'line'
-    },
-    title: {
-      text: 'Overtime'
-    },
-    xAxis: {
-      categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-    },
-    yAxis: {
+    for (i = 0; i < data.length; i++){
+      processed_json2.push([data[i].name, parseFloat(data[i].y)]);
+
+    }
+
+    if (data[0].name == null) {
+      notif.style.display = "block";
+    }
+
+    $('#container2').highcharts({
+      chart: {
+        type: 'column'
+      },
       title: {
-        text: 'Total Jam (Jam)'
-      }
-    },
-    plotOptions: {
-      line: {
-        dataLabels: {
-          enabled: true
-        },
-        enableMouseTracking: false
-      }
-    },
-    credits: {
-      enabled: false
-    },
-    series: [{
-      name: 'MIS',
-      data: [7.0, 6.9, 9.5, 14.5, 18.4, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
-    }, {
-      name: 'PE',
-      data: [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
-    }]
+        text: data[0].tgl
+      },
+      xAxis: {
+        type: 'category'
+      },
+      yAxis: {
+        title: {
+          text: 'Jumlah Lembur (Jam)'
+        }
 
-  });
+      },
+      legend: {
+        enabled: false
+      },
+      plotOptions: {
+        series: {
+          cursor: 'pointer',
+          point: {
+            events: {
+              click: function () {
+                TampilKaryawan(data[0].tgl,this.name);
+              }
+            }
+          },
+          borderWidth: 0,
+          dataLabels: {
+            enabled: true,
+            format: '{point.y}'
+          }
+        }
+      },
+      credits: {
+        enabled: false
+      },
+
+      tooltip: {
+        headerFormat: '',
+        pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b> <br/>'
+      },
+
+      "series": [
+      {
+        "name": "By Bagian",
+        "colorByPoint": true,
+        "data": processed_json2
+      }
+      ]
+    })
+  })
 })
 
 
@@ -895,6 +988,11 @@ $(function () {
 
 function date_change() {
   tgl = $('#datepicker2').val();
+  $("#3_jam2").text(tgl);
+  $("#14_jam2").text(tgl);
+  $("#3_14jam2").text(tgl);
+  $("#56_jam2").text(tgl);
+
   $('#tgls').val('10-'+tgl);
   console.log(tgl);
 
@@ -946,13 +1044,7 @@ function date_change() {
          }
        },
        exporting : {
-        enabled : true,
-        buttons: {
-          contextButton: {
-            align: 'right',
-            x: -25
-          }
-        }
+        enabled : true
       },
       title: {
         text: s[0][5],
@@ -1176,6 +1268,107 @@ function limaenam_jam() {
       }
     }
   })
+}
+
+function gantiTgl() {
+  var tanggal2 = $("#datepicker3").val();
+  var ttanggal2 = $("#tgls2").val('10-'+tanggal2);
+
+  $.ajax({
+    type: "POST",
+    url: "<?php echo base_url('home/ajax_dep_over/') ?>"+$("#tgls2").val()+"",
+    success: function(data) {
+      var s = $.parseJSON(data);
+      var processed_json5 = new Array();
+      // Populate series
+      for (i = 0; i < s.length; i++){
+        processed_json5.push([s[i].name, parseFloat(s[i].y)]);
+
+      }
+
+      if (s[0].name == null) {
+        notif.style.display = "block";
+      }
+
+      $('#container2').highcharts({
+        chart: {
+          type: 'column'
+        },
+        title: {
+          text: s[0].tgl
+        },
+        xAxis: {
+          type: 'category'
+        },
+        yAxis: {
+          title: {
+            text: 'Jumlah Lembur (Jam)'
+          }
+        },
+        legend: {
+          enabled: false
+        },
+        plotOptions: {
+          series: {
+            cursor: 'pointer',
+            point: {
+              events: {
+                click: function () {
+                  TampilKaryawan(s[0].tgl, this.name);
+                }
+              }
+            },
+            borderWidth: 0,
+            dataLabels: {
+              enabled: true,
+              format: '{point.y}'
+            }
+          }
+        },
+        credits: {
+          enabled: false
+        },
+
+        tooltip: {
+          headerFormat: '',
+          pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b> <br/>'
+        },
+
+        "series": [
+        {
+          "name": "By Date",
+          "colorByPoint": true,
+          "data": processed_json5
+        }
+        ]
+      })
+
+    }
+  });
+}
+
+function TampilKaryawan(tgl,bagian) {
+  tabel = $('#example5').DataTable();
+  tabel.destroy();
+
+  $('#myModal5').modal('show');
+
+  $('#example5').DataTable({
+    "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+    "processing": true,
+    "serverSide": true,
+    "searching": true,
+    "bLengthChange": true,
+    "order": [],
+    "ajax": {
+      "url": "<?php echo base_url('ot/ajax_dp_g_detail/')?>",
+      "type": "GET",
+      "data": {
+        tgl : tgl,
+        bagian : bagian
+      }
+    }
+  });
 }
 
 </script>
