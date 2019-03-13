@@ -80,6 +80,43 @@ scratch. This page gets rid of all links and provides the needed markup only.
     </div>
   </div>
 
+  <div class="modal fade" id="myModal2">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 style="float: right;" id="modal-title"></h4>
+          <h4 class="modal-title"><b>PT. YAMAHA MUSICAL PRODUCT INDONESIA</b></h4>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-12">
+              <table id="example9" class="table table-striped table-bordered" style="width: 100%;"> 
+                <thead>
+                  <tr>
+                    <th>Tanggal</th>
+                    <th>NIK</th>
+                    <th>Nama karyawan</th>
+                    <th>Section</th>
+                    <th>Check-in</th>
+                    <th>Check-out</th>
+                    <th>Shift</th>
+                  </tr>
+                </thead>
+                <tbody>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger pull-right" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+
   <!-- Load chart dengan menggunakan ID -->
   <!-- END load chart -->
 </section>
@@ -164,7 +201,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     point: {
       events: {
         click:function(event) {
-            alert(event.point.category);
+          showDetail(event.point.category);
         }
       }
     },
@@ -201,6 +238,29 @@ series : [{
         },
         success: function(data) {
           window.location.href = "<?php echo base_url('home/')?>";
+        }
+      });
+    }
+
+    function showDetail(tgl) {
+      tabel = $('#example9').DataTable();
+      tabel.destroy();
+
+      $('#myModal2').modal('show');
+
+      $('#example9').DataTable({
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        "processing": true,
+        "serverSide": true,
+        "searching": true,
+        "bLengthChange": true,
+        "order": [],
+        "ajax": {
+          "url": "<?php echo base_url('home/report_detail/')?>",            
+          "type": "GET",
+          "data": {
+            tgl : tgl
+          }
         }
       });
     }

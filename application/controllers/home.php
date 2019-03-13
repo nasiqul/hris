@@ -13,6 +13,7 @@ class Home extends CI_Controller {
         $this->load->model('cari_karyawan_model');
         $this->load->model('karyawan_graph_model');
         $this->load->model('karyawan_by_period_model');
+        $this->load->model('report_detail_m');
         $this->load->model('over_model');
     }
 
@@ -41,13 +42,10 @@ class Home extends CI_Controller {
             $data['report3'] = $this->home_model->report3();
         }
         
-        if ($this->session->userdata("nik")) {
+        
             $data['menu'] = 'home';
             $this->load->view('report', $data);
-        }
-        else {
-            redirect('home/overtime_user');
-        }
+        
         
         
     }
@@ -1043,5 +1041,36 @@ public function ajax_dep_over($tgl)
 
     //output to json format
     echo json_encode($data);
+}
+
+
+public function report_detail()
+{
+    $tgl = $_GET['tgl'];
+    $tanggal = date('Y-m-d',strtotime($tgl));
+
+    $list = $this->report_detail_m->get_data($tanggal);
+    $data = array();
+    foreach ($list as $key) {
+        $row = array();
+        $row[] = $key->tanggal;
+        $row[] = $key->nik;
+        $row[] = $key->namaKaryawan;
+        $row[] = $key->section;
+        $row[] = $key->masuk;
+        $row[] = $key->keluar;
+        $row[] = $key->shift;
+
+        $data[] = $row;
+    }
+
+    $output = array(
+        "draw" => $_GET['draw'],
+        "recordsTotal" => $this->report_detail_m->count_all($tanggal),
+        "recordsFiltered" => $this->report_detail_m->count_filtered($tanggal),
+        "data" => $data,
+    );
+            //output to json format
+    echo json_encode($output);
 }
 }
