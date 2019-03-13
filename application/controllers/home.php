@@ -32,14 +32,12 @@ class Home extends CI_Controller {
 
             $bln = $this->session->userdata("bulan");
 
-            $data['report1'] = $this->home_model->report1_by_tgl($bln);
-            $data['report2'] = $this->home_model->report2_by_tgl($bln);
-            $data['report3'] = $this->home_model->report3_by_tgl($bln);
+            $data['report1'] = $this->home_model->report1_1_by_tgl($bln);
+            $data['report2'] = $this->home_model->report2_2_by_tgl($bln);
         }
         else {
-            $data['report1'] = $this->home_model->report1();
-            $data['report2'] = $this->home_model->report2();
-            $data['report3'] = $this->home_model->report3();
+            $data['report1'] = $this->home_model->report1_1();
+            $data['report2'] = $this->home_model->report2_2();
         }
         
         
@@ -124,6 +122,12 @@ class Home extends CI_Controller {
     {
         $data['menu'] = 'ovrR';
         $this->load->view("overtime_report",$data);
+    }
+
+    public function ot_report2()
+    {
+        $data['menu'] = 'ovrR2';
+        $this->load->view("overtime_report2",$data);
     }
 
     public function karyawan_graph()

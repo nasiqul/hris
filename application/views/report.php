@@ -30,10 +30,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <div class="col-md-12">
           <?php
           //check if
-          if(!empty($report1) && !empty($report2) && !empty($report3)) {
+          if(!empty($report1) && !empty($report2)) {
 
             foreach($report1 as $result1){
-              $bln = date('F Y', strtotime($result1->tanggal));
+            $bln = date('F Y', strtotime($result1->tanggal));
             $tgl1[] = date('d M Y', strtotime($result1->tanggal)); //ambil tanggal
             $value1[] = (float) $result1->jml; //ambil jumlah
           }
@@ -43,10 +43,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
             $value2[] = (float) $result2->jml; //ambil jumlah
           }
 
-          foreach($report3 as $result3){
-            // $tgl3[] = $result3->tanggal; //ambil tanggal
-            $value3[] = (float) $result3->jml; //ambil jumlah
+
+          foreach ($value1 as $key) {
+            $total[] = $value1 + $value2;
           }
+
           /* end mengambil query*/
         }
         else {
@@ -57,7 +58,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           $tgl1[] = null;
           $value1[] = null;
           $value2[] = null;
-          $value3[] = null;
+          $total[] = null;
 
           if ($this->session->userdata("bulan"))
            $b = $this->session->userdata("bulan");
@@ -157,7 +158,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
        yAxis : {
          min: 0,
          title: {
-          text: 'Employee Total'
+          text: 'Employee Total (percentage)'
         },
         stackLabels: {
           enabled: true,
@@ -179,16 +180,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
        borderWidth: 1,
        shadow: false
      },   
-     tooltip : {
-       formatter: function () {
-        return '<b>' + this.x + '</b><br/>' +
-        this.series.name + ': ' + this.y + '<br/>' +
-        'Total: ' + this.point.stackTotal;
-      }
+     tooltip: {
+      pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.percentage:.0f}%)<br/>'
     },
     plotOptions : {
      column: {
-      stacking: 'normal',
+      stacking: 'percent',
       dataLabels: {
        enabled: true,
        color: (Highcharts.theme && Highcharts.theme.dataLabelsColor)
@@ -205,19 +202,25 @@ scratch. This page gets rid of all links and provides the needed markup only.
         }
       }
     },
+  },
+  series : {
+    dataLabels:{
+      enabled:true,
+      formatter:function() {
+        var pcnt = this.y;
+        return Highcharts.numberFormat(pcnt);
+      }
+    }
   }
 },
 credits : {
  enabled: false
 },
 series : [{
-  name: 'Shift3',
-  data: <?php echo json_encode($value3) ?>
-}, {
-  name: 'Shift2',
+  name: 'Tidak Hadir',
   data: <?php echo json_encode($value2) ?>
 }, {
-  name: 'Shift1',
+  name: 'Hadir',
   data: <?php echo json_encode($value1) ?>
 }]
 });

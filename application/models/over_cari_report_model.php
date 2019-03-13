@@ -23,7 +23,7 @@ class Over_cari_report_model extends CI_Model {
 
     private function _get_report_cari($tgl, $nik)
     {
-        $this->db->select('k.nik, k.namaKaryawan, o.tanggal, om.jam_aktual, om.satuan');
+        $this->db->select('k.nik, k.namaKaryawan, o.tanggal, om.final, om.satuan');
         $this->db->from('over_time_member om');
         $this->db->join('karyawan k','k.nik = om.nik');
         $this->db->join('over_time o','om.id_ot = o.id');

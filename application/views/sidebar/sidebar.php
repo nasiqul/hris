@@ -44,7 +44,7 @@
             <li class="<?php if($menu == 'abs') echo 'active'?>"><a href="<?php echo base_url('home/absen'); ?>"><i class="fa fa-edit"></i> <span>Absence Data</span></a>
             </ul>
         </li>
-        <li class="treeview <?php if($menu == 'ovr' || $menu == 'ovrR' || $menu == 'cc' || $menu == 'GAreport' || $menu == 'ovrG') echo 'active'?>">
+        <li class="treeview <?php if($menu == 'ovr' || $menu == 'ovrR' || $menu == 'cc' || $menu == 'GAreport' || $menu == 'ovrG' || $menu == 'ovrR2') echo 'active'?>">
         <a href="#"><i class="fa fa-line-chart"></i> <span>Overtime</span>
           <span class="pull-right-container">
             <i class="fa fa-angle-left pull-right"></i>
@@ -54,6 +54,7 @@
           <li class="<?php if($menu == 'ovrG') echo 'active'?>"><a href="<?php echo base_url('home/ot_graph'); ?>"><i class="fa fa-bar-chart"></i> Graph</a></li>
           <li class="<?php if($menu == 'ovr') echo 'active'?>"><a href="<?php echo base_url('home/ot'); ?>"><i class="fa fa-male"></i> <span>Overtime Data</span></a></li>
           <li class="<?php if($menu == 'ovrR') echo 'active'?>"><a href="<?php echo base_url('home/ot_report'); ?>"><i class="fa fa-book"></i> Report</a></li>
+          <li class="<?php if($menu == 'ovrR2') echo 'active'?>"><a href="<?php echo base_url('home/ot_report2'); ?>"><i class="fa fa-book"></i> Report 2</a></li>
           <li class="<?php if($menu == 'cc') echo 'active'?>"><a href="<?php echo base_url('budget'); ?>"><i class="fa fa-cc"></i>Cost - Center Budget</a></li>
           <li class="<?php if($menu == 'GAreport') echo 'active'?>"><a href="<?php echo base_url('home/report_GA'); ?>"><i class="fa fa-cubes"></i>GA - Report</a></li>
           </ul>

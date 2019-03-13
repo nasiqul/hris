@@ -25,14 +25,14 @@ class Over_report_model extends CI_Model {
 
     private function _get_datatables_query()
     {
-        $this->db->select('DATE_FORMAT(o.tanggal, "%M %Y") as period, k.nik, k.namaKaryawan,  concat(dp.nama,"-",IF(sc.nama,sc.nama,""),"/", k.kode) as bagian, sum(jam_aktual) as total_jam, sum(satuan) as satuan');
+        $this->db->select('DATE_FORMAT(o.tanggal, "%M %Y") as period, k.nik, k.namaKaryawan,  concat(dp.nama,"-",IF(sc.nama,sc.nama,""),"/", k.kode) as bagian, sum(final) as total_jam, sum(satuan) as satuan');
         $this->db->from("over_time o");
         $this->db->join("over_time_member om","o.id = om.id_ot");
         $this->db->join("karyawan k","om.nik = k.nik");
         $this->db->join("posisi p","p.nik = k.nik");
         $this->db->join("departemen dp","dp.id = p.id_dep", "left");
         $this->db->join("section sc","sc.id = p.id_sec", "left");
-        $this->db->group_by(array("MONTH(o.tanggal)", "k.nik"));
+        $this->db->group_by(array("date_format(o.tanggal, '%m-%Y')", "k.nik"));
 
 
         $i = 0;
@@ -78,7 +78,81 @@ class Over_report_model extends CI_Model {
 
     public function count_all()
     {
-        $this->db->from('over_time');
+        $this->_get_datatables_query();
+        return $this->db->count_all_results();
+    }
+
+
+    // ---------------------- [ 2 ] --------------
+
+    public function get_ot_report2()
+    {
+        $this->_get_datatables_query2();
+        if($_GET['length'] != -1){
+            $this->db->limit($_GET['length'], $_GET['start']);
+        }
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+    private function _get_datatables_query2()
+    {
+        $this->db->select('DATE_FORMAT(d.tanggal, "%M %Y") as period, d.nik, k.namaKaryawan, concat(dp.nama,"-",IF(sc.nama,sc.nama,""),"/", k.kode) as bagian, total_jam');
+        $this->db->from("(
+            select tanggal, nik, sum(jam) as total_jam from over
+            group by DATE_FORMAT(tanggal, '%M %Y'),nik
+        ) as d");
+        $this->db->join("karyawan k","d.nik = k.nik","left");
+        $this->db->join("posisi p","p.nik = d.nik","left");
+        $this->db->join("departemen dp","dp.id = p.id_dep", "left");
+        $this->db->join("section sc","sc.id = p.id_sec", "left");
+        $this->db->order_by("period","DESC");
+
+
+        $i = 0;
+
+        foreach ($this->column_search as $item) // loop column 
+        {
+            if($_GET['search']['value']) // if datatable send POST for search
+            {
+
+                if($i===0) // first loop
+                {
+                    $this->db->group_start(); // open bracket. query Where with OR clause better with bracket. because maybe can combine with other WHERE with AND.
+                    $this->db->like($item, $_GET['search']['value']);
+                }
+                else
+                {
+                    $this->db->or_like($item, $_GET['search']['value']);
+                }
+
+                if(count($this->column_search) - 1 == $i) //last loop
+                    $this->db->group_end(); //close bracket
+                }
+                $i++;
+            }
+
+        if(isset($_GET['order'])) // here order processing
+        {
+            $this->db->order_by($this->column_order[$_GET['order']['0']['column']], $_GET['order']['0']['dir']);
+        } 
+        else if(isset($this->order))
+        {
+            $order = $this->order;
+            $this->db->order_by(key($order), $order[key($order)]);
+        }
+    }
+
+    function count_filtered2()
+    {
+        $this->_get_datatables_query2();
+        $query = $this->db->get();
+        return $query->num_rows();
+    }
+
+    public function count_all2()
+    {
+        $this->_get_datatables_query2();
         return $this->db->count_all_results();
     }
 }

@@ -340,6 +340,43 @@ class Ot extends CI_Controller {
 		$output = array(
 			"draw" => $_GET['draw'],
 			"recordsFiltered" => $filter,
+			"recordsTotal" => $tot,
+			"data" => $data,
+		);
+            //output to json format
+		echo json_encode($output);
+	}
+
+	public function ajax_ot_report_d()
+	{
+		$list = $this->over_report_model->get_ot_report2();
+
+		$tot = $this->over_report_model->count_all2();
+		$filter = $this->over_report_model->count_filtered2();
+
+		$data = array();
+		if(!empty($list)) {
+			foreach ($list as $key) {
+				$row = array();
+				$row[] = $key->period;
+				$row[] = $key->nik;
+				$row[] = $key->namaKaryawan;
+				$row[] = $key->bagian;
+				$row[] = $key->total_jam;
+				$row[] = "<button class='btn btn-primary btn-xs' onclick='
+				detail(\"".$key->nik."\",\"".$key->period."\",\"".$key->namaKaryawan."\")'>Detail</button>";
+
+				$data[] = $row;
+			}
+
+		}else
+		$data[] = json_decode("{}");
+
+            //output to json format
+		$output = array(
+			"draw" => $_GET['draw'],
+			"recordsFiltered" => $filter,
+			"recordsTotal" => $tot,
 			"data" => $data,
 		);
             //output to json format
@@ -487,7 +524,7 @@ class Ot extends CI_Controller {
 				$row[] = $key->nik;
 				$row[] = $key->namaKaryawan;
 				$row[] = $key->tanggal;
-				$row[] = $key->jam_aktual;
+				$row[] = $key->final;
 				$row[] = $key->satuan;
 
 				$data[] = $row;
