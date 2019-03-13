@@ -25,9 +25,9 @@ class Report_detail_m extends CI_Model {
     {
         $this->db->select('presensi.tanggal, karyawan.nik, karyawan.namaKaryawan, presensi.masuk, section.nama as section, presensi.keluar, presensi.shift');
         $this->db->from('presensi');
-        $this->db->join('karyawan','karyawan.nik = presensi.nik');
-        $this->db->join('posisi','posisi.nik = karyawan.nik');
-        $this->db->join('section','section.id = posisi.id_sec');
+        $this->db->join('karyawan','karyawan.nik = presensi.nik','left');
+        $this->db->join('posisi','posisi.nik = karyawan.nik','left');
+        $this->db->join('section','section.id = posisi.id_sec','left');
         $this->db->where('date(presensi.tanggal) = STR_TO_DATE("'.$tgl.'", "%Y-%m-%d")');
         $this->db->where('presensi.shift REGEXP "^[1-9]+$"');
 
