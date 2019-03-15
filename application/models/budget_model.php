@@ -75,8 +75,11 @@ class Budget_model extends CI_Model {
 
     public function get_chart_data($tgl)
     {
-        $q = "select id_cc, budget, aktual from cost_center_budget
-        where period = '".$tgl."'";
+        $q = "select COUNT(C.NIK) as jumlah, c.costCenter, b.name, a.budget, a.aktual from karyawan as c
+        LEFT JOIN cost_center_budget as a on a.id_cc = c.costCenter
+        LEFT JOIN master_cc as b on a.id_cc = b.id_cc
+        GROUP BY c.costCenter
+        where b.period = '".$tgl."'";
         $query = $this->db->query($q);
         return $query->result();
     }

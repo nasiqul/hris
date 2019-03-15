@@ -56,7 +56,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   </tr>
                   <?php foreach ($cc as $key) { ?>
                     <tr>
-                      <th><?php echo "asd" ?></th>
+                      <th><?php echo $key->name ?></th>
                       <td><?php echo $key->budget ?></td>
                       <td><?php echo $key->aktual ?></td>
                     </tr>
