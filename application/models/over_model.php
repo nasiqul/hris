@@ -467,7 +467,7 @@ public function caobaaa_default()
 
     function count_filtered()
     {
-        $this->_get_datatables_query($tgl);
+        $this->_get_datatables_query_defaeult();
         $query = $this->db->get();
         return $query->num_rows();
     }

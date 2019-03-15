@@ -129,7 +129,7 @@ table tr th {
 			<td width="25%"><p id='tgl'>
 				<?php $time = strtotime($list[0]->tanggal);
 
-				$newformat = date('d/m/Y',$time);
+				$newformat = date('d-m-Y',$time);
 
 				echo $newformat;
 				?></p></td>
@@ -247,7 +247,7 @@ table tr th {
 			<tr>
 				<td colspan="2">
 					<table width="100%" id="tb-collapse" style="background-color: #dddddd; margin-top: 10px; text-align: center">
-						<tr><td width="34%">TARGET</td><td width="33%">AKTUAL</td><td width="33%">DIFF</td></tr>
+						<tr><td width="34%">MAX.OT</td><td width="33%">AKTUAL</td><td width="33%">DIFF</td></tr>
 						<tr>
 							<td height="20px"><d id="target" style="font-size: 25pt"><?php echo $cc_member[0]->jml*$total ?></d></td>
 							<td><d style="font-size: 25pt"><?php echo $aktual ?></d></td>

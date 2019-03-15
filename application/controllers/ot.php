@@ -59,7 +59,7 @@ class Ot extends CI_Controller {
 
 	public function ajax_ot()
 	{
-		if($_GET["tgl"] != ""){
+		if(isset($_GET["tgl"])){
 			$list = $this->over_model->get_data_ot(date("Y-m-d",strtotime($_GET["tgl"])));
 		}else{
 			$list = $this->over_model->get_data_ot_defaeult();	
@@ -207,9 +207,6 @@ class Ot extends CI_Controller {
 			$data[] = $row;
 			$no++;
 		}
-
-		$tot = $this->over_model->count_all();
-		$filter = $this->over_model->count_filtered();
 
 		$output = array(
 			"draw" => $_GET['draw'],
