@@ -29,7 +29,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <div class="col-md-12">
           <div class="box box-solid">
             <div class="box-body">
-              <a class="btn btn-success" href="<?php echo base_url('home/overtime_form') ?>"> <i class="fa fa-plus"></i> New Entry</a>
+              Tanggal<br>
+              <input type="text" name="tglfilter" id="tglfilter" class="form-control datepicker pull-left" style="width: 10%" onchange="gantitanggal();">
+              <a class="btn btn-success pull-right" href="<?php echo base_url('home/overtime_form') ?>"> <i class="fa fa-plus"></i> New Entry</a>
               <br>
               <br>
               <table id="example1" class="table table-responsive table-striped table-bordered text-center" width="100%">
@@ -159,80 +161,105 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- ./wrapper -->
   <script>
     $(document).ready(function() {
-      var table = $('#example1').DataTable({
-        "lengthMenu"    : [[10, 25, 50, -1], [10, 25, 50, "All"]],
-        "processing"    : true,
-        "serverSide"    : true,
-        "bInfo": false,
-        'order'         : [],
-        "ajax": {
-          "url": "<?php echo base_url('ot/ajax_ot')?>",       
-          "type": "GET"
-        },
-        "columnDefs": [
-        {
+      konfirm();
+      buattable();
+    });
+
+    function gantitanggal() {
+     konfirm();
+     buattable();
+   }
+
+   function konfirm() {
+    var tgl =$('#tglfilter').val();
+    $.ajax({
+      url: '<?php echo base_url('ot/updatedataover')?>',
+      data :{
+        tgl:tgl
+      },
+      success: function() {
+          // alert("gdfghjl");
+        }
+      });
+  }
+
+  function buattable() {
+   var table2 = $('#example1').DataTable();
+   table2.destroy();
+   var tgl =$('#tglfilter').val();
+   $('#example1').DataTable({
+    "lengthMenu"    : [[10, 25, 50, -1], [10, 25, 50, "All"]],
+    "processing"    : true,
+    "serverSide"    : true,
+    "bInfo": false,
+    'order'         : [],
+    "ajax": {
+      "url": "<?php echo base_url('ot/ajax_ot')?>",
+      "data":{
+        tgl:tgl
+      } ,      
+      "type": "GET"
+    },
+    "columnDefs": [
+    {
               "targets": [ 10 ], //first column / numbering column
               "orderable": false, //set not orderable
             }
             ],
           });
+ }
+ function detail_spl(id) {
+  tabel = $('#example2').DataTable();
+  tabel.destroy();
+  $.ajax({
+    url: "<?php echo base_url('ot/ajax_spl_data/')?>",
+    type : "POST",
+    data: {
+      id:id
+    },
+    success: function(data){
+      var s = $.parseJSON(data);
+
+      $('#myModal').modal('show');
+      $("#modal-title").text("No : " + s[0][0]);
+      var id2 = s[0][0];
+
+      $("#hari").text(s[0][1]);
+      $("#tgl").text(s[0][2]);
+      $("#dep").text(s[0][3]);
+      $("#sec").text(s[0][4]);
+      $("#kep").val(s[0][5]);
+      $("#cat").val(s[0][6]);
 
 
-
-    });
-
-    function detail_spl(id) {
-      tabel = $('#example2').DataTable();
-      tabel.destroy();
-      $.ajax({
-        url: "<?php echo base_url('ot/ajax_spl_data/')?>",
-        type : "POST",
-        data: {
-          id:id
+      $('#example2').DataTable({
+        "processing"    : true,
+        "serverSide"    : true,
+        "searching": false,
+        "bPaginate": false,
+        "bLengthChange": false,
+        "bFilter": false,
+        "bInfo": false,
+        'order'         : [],
+        "ajax": {
+          "url": "<?php echo base_url('ot/ajax_spl_data2')?>",       
+          "type": "GET",
+          'async' : false,
+          'data' : { id : id2 }
         },
-        success: function(data){
-          var s = $.parseJSON(data);
-
-          $('#myModal').modal('show');
-          $("#modal-title").text("No : " + s[0][0]);
-          var id2 = s[0][0];
-          
-          $("#hari").text(s[0][1]);
-          $("#tgl").text(s[0][2]);
-          $("#dep").text(s[0][3]);
-          $("#sec").text(s[0][4]);
-          $("#kep").val(s[0][5]);
-          $("#cat").val(s[0][6]);
-
-
-          $('#example2').DataTable({
-            "processing"    : true,
-            "serverSide"    : true,
-            "searching": false,
-            "bPaginate": false,
-            "bLengthChange": false,
-            "bFilter": false,
-            "bInfo": false,
-            'order'         : [],
-            "ajax": {
-              "url": "<?php echo base_url('ot/ajax_spl_data2')?>",       
-              "type": "GET",
-              'async' : false,
-              'data' : { id : id2 }
-            },
-            "columns": [
-            { "data": 0 },
-            { "data": 3 },
-            { "data": 4 },
-            { "data": 5 },
-            { "data": 6 },
-            { "data": 7 },
-            { "data": 8 },
-            { "data": 9 },
-            { "data": 10 }
-            ],
-            "columnDefs": [
-            {
+        "columns": [
+        { "data": 0 },
+        { "data": 3 },
+        { "data": 4 },
+        { "data": 5 },
+        { "data": 6 },
+        { "data": 7 },
+        { "data": 8 },
+        { "data": 9 },
+        { "data": 10 }
+        ],
+        "columnDefs": [
+        {
               "targets": [ 5,6,7,8 ], //first column / numbering column
               "orderable": false, //set not orderable
             }
@@ -251,112 +278,119 @@ scratch. This page gets rid of all links and provides the needed markup only.
               $(api.column(5).footer()).html(totalPlan.toLocaleString());
             }
           })
-        }
-      });
     }
+  });
+}
 
-    function tombol_print() {
-      var str = $("#modal-title").text();
-      var tanggal = $("#tgl").text();
-      var s = str.split(" ");
-      console.log(s[2]+" "+tanggal);
-      
-      var url = "<?php echo base_url('ot/print_preview/'); ?>"+s[2]+"/"+tanggal;
+function tombol_print() {
+  var str = $("#modal-title").text();
+  var tanggal = $("#tgl").text();
+  var s = str.split(" ");
+  console.log(s[2]+" "+tanggal);
 
-      window.open(url,'_blank');
+  var url = "<?php echo base_url('ot/print_preview/'); ?>"+s[2]+"/"+tanggal;
+
+  window.open(url,'_blank');
+}
+
+function modalOpen(nik, jam_lembur, tgl,id) {
+  $('#myModal2').modal({backdrop: 'static', keyboard: false});
+  $('#id5').text(id);
+  $('#id_ot').text(nik);
+  $('#tgl2').text(tgl);
+  $('#tot').text(jam_lembur);
+}
+
+function ok() {
+  var nik = $('#id_ot').text();
+  var tgl2 = $('#tgl2').text();
+  var tot = $('#tot').text();
+  var idX = $('#id5').text();
+  $.ajax({
+    url: "<?php echo base_url('ot/acc/')?>",
+    type : "POST",
+    data: {
+      nik:nik,
+      tgl:tgl2,
+      tot:tot,
+      id:idX
+    },
+    success: function(data){
+      gantiJam(nik,idX,tot);
+      document.getElementById("f"+nik+idX).innerHTML = tot;
+      $('#conf'+nik+idX).css("display","none");
+      $('#c'+nik+idX).css("display","none");
+      $('#d'+nik+idX).css("display","none");
+      openSuccessGritter();
     }
+  })
+}
 
-    function modalOpen(nik, jam_lembur, tgl,id) {
-      $('#myModal2').modal({backdrop: 'static', keyboard: false});
-      $('#id5').text(id);
-      $('#id_ot').text(nik);
-      $('#tgl2').text(tgl);
-      $('#tot').text(jam_lembur);
+function openSuccessGritter(){
+  jQuery.gritter.add({
+    title: "Success",
+    text: "Confirmation Success",
+    class_name: 'growl-success',
+    image: '<?php echo base_url()?>app/img/ok.png',
+    sticky: false,
+    time: '2000'
+  });
+}
+
+function jam(id,jam,nik) {
+  var newdiv1 = $('<input type="text" id="txtPlan'+id+'" class="form-control" value="'+jam+'"/><button class"btn btn-default" onclick="applyJam('+id+','+nik+')" >ok</button>');
+
+  $('#'+id).text('').append(newdiv1);
+
+  $('#txtPlan').focus();
+}
+
+$('#txtPlan').bind("enterKey",function(e){
+  alert("asd");
+});
+
+$('#txtPlan').keydown(function(e){
+  if(e.keyCode == 13)
+  {
+    $(this).trigger("enterKey");
+  }
+});
+
+function applyJam(id,nik,jam,tgl) {
+  modalOpen(nik,jam,tgl,id);
+}
+
+function gantiJam(nik,id,jam) {
+  $.ajax({
+    url: "<?php echo base_url('ot/changeJam/')?>",
+    type : "POST",
+    data: {
+      nik:nik,
+      id:id,
+      jam:jam
     }
+  })
+}
 
-    function ok() {
-      var nik = $('#id_ot').text();
-      var tgl2 = $('#tgl2').text();
-      var tot = $('#tot').text();
-      var idX = $('#id5').text();
-      $.ajax({
-        url: "<?php echo base_url('ot/acc/')?>",
-        type : "POST",
-        data: {
-          nik:nik,
-          tgl:tgl2,
-          tot:tot,
-          id:idX
-        },
-        success: function(data){
-          gantiJam(nik,idX,tot);
-          document.getElementById("f"+nik+idX).innerHTML = tot;
-          $('#conf'+nik+idX).css("display","none");
-          $('#c'+nik+idX).css("display","none");
-          $('#d'+nik+idX).css("display","none");
-          openSuccessGritter();
-        }
-      })
-    }
+function openOKGritter(){
+  jQuery.gritter.add({
+    title: "Berhasil",
+    text: "Perubahan jam final berhasil",
+    class_name: 'growl-success',
+    image: '<?php echo base_url()?>app/img/icon.png',
+    sticky: false,
+    time: '2000'
+  });
+}
 
-    function openSuccessGritter(){
-      jQuery.gritter.add({
-        title: "Success",
-        text: "Confirmation Success",
-        class_name: 'growl-success',
-        image: '<?php echo base_url()?>app/img/ok.png',
-        sticky: false,
-        time: '2000'
-      });
-    }
+$('.datepicker').datepicker({
+  autoclose: true,
+  format: "dd-mm-yyyy"
+});
 
-    function jam(id,jam,nik) {
-      var newdiv1 = $('<input type="text" id="txtPlan'+id+'" class="form-control" value="'+jam+'"/><button class"btn btn-default" onclick="applyJam('+id+','+nik+')" >ok</button>');
+</script>
 
-      $('#'+id).text('').append(newdiv1);
 
-      $('#txtPlan').focus();
-    }
-
-    $('#txtPlan').bind("enterKey",function(e){
-      alert("asd");
-    });
-
-    $('#txtPlan').keydown(function(e){
-      if(e.keyCode == 13)
-      {
-        $(this).trigger("enterKey");
-      }
-    });
-
-    function applyJam(id,nik,jam,tgl) {
-      modalOpen(nik,jam,tgl,id);
-    }
-
-    function gantiJam(nik,id,jam) {
-      $.ajax({
-        url: "<?php echo base_url('ot/changeJam/')?>",
-        type : "POST",
-        data: {
-          nik:nik,
-          id:id,
-          jam:jam
-        }
-      })
-    }
-
-    function openOKGritter(){
-      jQuery.gritter.add({
-        title: "Berhasil",
-        text: "Perubahan jam final berhasil",
-        class_name: 'growl-success',
-        image: '<?php echo base_url()?>app/img/icon.png',
-        sticky: false,
-        time: '2000'
-      });
-    }
-
-  </script>
 
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the

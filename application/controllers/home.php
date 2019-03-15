@@ -40,12 +40,12 @@ class Home extends CI_Controller {
             $data['report2'] = $this->home_model->report2_2();
         }
         
-        
+        if (! $this->session->userdata('nik')) { 
+            redirect('home/overtime_form'); 
+        } else {
             $data['menu'] = 'home';
             $this->load->view('report', $data);
-        
-        
-        
+        }
     }
 
     public function absen()
@@ -80,6 +80,12 @@ class Home extends CI_Controller {
     public function client()
     {
         $this->load->view("client");
+    }
+
+    public function ot_m()
+    {
+        $data['menu'] = 'OT-m';
+        $this->load->view("ot_management",$data);
     }
 
     public function overtime_form()

@@ -9,6 +9,7 @@ class Ot extends CI_Controller {
 		$this->load->model('over_user_model');
 		$this->load->model('over_report_model');
 		$this->load->model('over_cari_report_model');
+		$this->load->model('over_cari_report_model_2');
 		$this->load->model('over_cari_chart');
 		$this->load->model('cari_over_dep');
 		$this->load->library('ciqrcode');
@@ -57,7 +58,12 @@ class Ot extends CI_Controller {
 
 	public function ajax_ot()
 	{
-		$list = $this->over_model->get_data_ot();
+		if($_GET["tgl"] != ""){
+			$list = $this->over_model->get_data_ot(date("Y-m-d",strtotime($_GET["tgl"])));
+		}else{
+			$list = $this->over_model->get_data_ot_defaeult();	
+		}
+		
 
 		$data = array();
 		foreach ($list as $key) {
@@ -97,6 +103,62 @@ class Ot extends CI_Controller {
 		);
             //output to json format
 		echo json_encode($output);
+	}
+
+	public function updatedataover()
+	{
+
+		if($_GET["tgl"] != ""){
+			$list = $this->over_model->caobaaa(date("Y-m-d",strtotime($_GET["tgl"])) );
+		}else{
+			$list = $this->over_model->caobaaa_default();
+		}
+		
+		$data = array();
+		foreach ($list as $key) {
+			$cost = 0;	
+			$budget = 0;
+			
+
+			if ($key->diff =="0") {				
+				$where = array(
+					'nik' => $key->nik,
+					'id_ot' =>$key->id
+				);
+
+				$this->over_model->update_data_over($where,'over_time_member');
+				$this->over_model->update_data_final($where,'over_time_member',$key->final2);
+
+				$nikkar = "";
+				$nikkar = $this->db->query("SELECT costCenter FROM karyawan WHERE NIK='".$key->nik."'");
+				
+				foreach ($nikkar->result() as $row) //Iterate through results
+				{
+					$cost=$row->costCenter;
+					$aktual = "";
+					$aktual = $this->db->query("SELECT aktual FROM cost_center_budget WHERE id_cc='".$cost."'");
+					foreach ($aktual->result() as $row) //Iterate through results
+					{
+						$budget=$row->aktual;
+						$total =  (float) $budget + (float) $key->final2;
+						$tgl = date('Y-m',strtotime($key->tanggal))."-01";
+
+						$where2 = array(
+							'id_cc' => $cost,
+							'period' => $tgl
+						);
+						$this->over_model->update_data_budget($where2,'cost_center_budget',$total);
+					}
+
+				}
+				
+
+
+			}
+
+			echo json_encode($budget);
+		}
+
 	}
 
 	public function ajax_spl_data()
@@ -364,7 +426,7 @@ class Ot extends CI_Controller {
 				$row[] = $key->bagian;
 				$row[] = $key->total_jam;
 				$row[] = "<button class='btn btn-primary btn-xs' onclick='
-				detail(\"".$key->nik."\",\"".$key->period."\",\"".$key->namaKaryawan."\")'>Detail</button>";
+				detail2(\"".$key->nik."\",\"".$key->period."\",\"".$key->namaKaryawan."\")'>Detail</button>";
 
 				$data[] = $row;
 			}
@@ -521,8 +583,6 @@ class Ot extends CI_Controller {
 		if(!empty($list)) {
 			foreach ($list as $key) {
 				$row = array();
-				$row[] = $key->nik;
-				$row[] = $key->namaKaryawan;
 				$row[] = $key->tanggal;
 				$row[] = $key->final;
 				$row[] = $key->satuan;
@@ -542,6 +602,43 @@ class Ot extends CI_Controller {
             //output to json format
 		echo json_encode($output);
 	}
+
+	public function ajax_ot_report_details_2()
+	{
+		$nik = $_GET['nik'];
+		$tgl = $_GET['period'];
+		$time = strtotime('10 '.$tgl);
+
+		$newformat = date('m-Y',$time);
+
+		$list = $this->over_cari_report_model_2->get_data_report_cari_2($newformat, $nik);
+
+		$tot = $this->over_cari_report_model_2->count_all_2($newformat, $nik);
+		$filter = $this->over_cari_report_model_2->count_filtered_2($newformat, $nik);
+
+		$data = array();
+		if(!empty($list)) {
+			foreach ($list as $key) {
+				$row = array();
+				$row[] = $key->tgl;
+				$row[] = $key->jam;
+
+				$data[] = $row;
+			}
+
+		}else
+		$data[] = json_decode("{}");
+
+            //output to json format
+		$output = array(
+			"draw" => $_GET['draw'],
+			"recordsFiltered" => $filter,
+			"data" => $data,
+		);
+            //output to json format
+		echo json_encode($output);
+	}
+
 
 	public function ga_by_tgl()
 	{
@@ -859,6 +956,70 @@ class Ot extends CI_Controller {
             //output to json format
 		echo json_encode($output);
 
+
+	}
+
+	public function ajax_ot_manaj($tahun,$section)
+	{
+
+		$list = $this->over_model->nik_by_cc($section);
+		$data = array();
+
+		foreach ($list as $key) {
+			$data2 = array();
+
+			$nik = $key->nik;
+
+			$data2["name"] = $key->namaKaryawan;
+
+			$list2 = $this->over_model->jam_by_nik($nik,$tahun);
+
+			$row2 = array();
+
+			foreach ($list2 as $key2) {
+				$row = array();
+				$row[] = (float) $key2->tot;
+
+				array_push($row2, $row);
+			}
+
+			$data2["data"] =  $row2;
+			array_push($data, $data2);
+		}
+
+            //output to json format
+		echo json_encode($data);
+	}
+
+	public function overtime_chart_per_dep()
+	{
+		$list = $this->over_model->get_tgl();
+		$data = array();
+
+		foreach ($list as $key) {
+			$data2 = array();
+
+			$tgl = $key->tanggal;
+
+			$data2["name"] = $tgl;
+
+			$list2 = $this->over_model->get_o_data($tgl);
+
+			$row2 = array();
+
+			foreach ($list2 as $key2) {
+				$row = array();
+				$row[] = (float) $key2->jam;
+
+				array_push($row2, $row);
+			}
+
+			$data2["data"] =  $row2;
+			array_push($data, $data2);
+		}
+
+            //output to json format
+		echo json_encode($data);
 
 	}
 }

@@ -77,6 +77,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                           <p class="text-muted text-center" id="nik"></p>
                           <p class="text-center" id="status"></p>
+                          <label style="display: none" id="textout">Tanggal Terminasi</label>
+                          <input type="text" name="tglout" id="tglout" class="form-control datepicker" style="display: none"><br>
+                          <button class="btn btn-danger btn-md" style="width:100%;display: none" id="btnout" onclick="getConfirmation()">Terminasi</button>
                         </div>
                         <!-- /.box-body -->
                       </div>
@@ -215,9 +218,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-danger pull-left" id="terminasi"><i class="fa fa-times"></i> Terminasi</button>
+                <button type="button" class="btn btn-danger pull-left" id="terminasi" onclick="keluar()"><i class="fa fa-times"></i> Terminasi</button>
                 <button type="button" class="btn btn-warning pull-left" id="edit"><i class="fa fa-pencil"></i> Edit Data</button>
-                <button type="button" class="btn btn-success pull-left" id="edit2" style="display: none"><i class="fa fa-check"></i> Edit Data</button>
+                <button type="button" class="btn btn-success pull-left" id="edit2" style="display: none" onclick="ubah()"><i class="fa fa-check"></i> Edit Data</button>
               </div>
             </div>
             <!-- /.modal-content -->
@@ -547,7 +550,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         options2.push('<option value="'+devisi[i][0]+'">'+devisi[i][1]+'</option>');
     }
 
-    $('#dev').text('').append($('<select id="SelectDevisi" class="form-control"></select>'));
+    $('#dev').text('').append($('<select id="SelectDevisi" class="form-control" onchange="showDep();"></select>'));
 
     $("#SelectDevisi").html(options2.join(''));
 
@@ -569,7 +572,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         options3.push('<option value="'+departemen[i][0]+'">'+departemen[i][1]+'</option>');
     }
 
-    $('#dep').text('').append($('<select id="SelectDepartemen" class="form-control"></select>'));
+    $('#dep').text('').append($('<select id="SelectDepartemen" class="form-control" onchange="showSec()"></select>'));
 
     $("#SelectDepartemen").html(options3.join(''));
 
@@ -590,7 +593,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         options4.push('<option value="'+section[i][0]+'">'+section[i][1]+'</option>');
     }
 
-    $('#sec').text('').append($('<select id="SelectSection" class="form-control"></select>'));
+    $('#sec').text('').append($('<select id="SelectSection" class="form-control" onchange="showSubSec()"></select>'));
 
     $("#SelectSection").html(options4.join(''));
 
@@ -611,7 +614,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         options5.push('<option value="'+sub_section[i][0]+'">'+sub_section[i][1]+'</option>');
     }
 
-    $('#sub-sec').text('').append($('<select id="SelectSubSection" class="form-control"></select>'));
+    $('#sub-sec').text('').append($('<select id="SelectSubSection" class="form-control" onchange="showGroup()"></select>'));
 
     $("#SelectSubSection").html(options5.join(''));
 
@@ -633,7 +636,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         options6.push('<option value="'+group[i][0]+'">'+group[i][1]+'</option>');
     }
 
-    $('#group').text('').append($('<select id="SelectGroup" class="form-control"></select>'));
+    $('#group').text('').append($('<select id="SelectGroup" class="form-control" ></select>'));
 
     $("#SelectGroup").html(options6.join(''));
 
@@ -824,7 +827,271 @@ $('#tglMasuk2').datepicker({
   format: 'dd-mm-yyyy',
 })
 
-</script>
+//----------------------- ALI ganti dep----------------------------------------------------
+
+function showDep() {
+  var id_dev = $('#SelectDevisi').find(':selected')[0].value;
+
+  $.ajax({
+    type: 'POST',
+    url: '<?php echo base_url("karyawan_form/ajax_dep") ?>',
+    data: {
+      'id': id_dev
+    },
+    success: function(data){
+
+      var $dep = $('#SelectDepartemen');
+      var $sec = $('#SelectSection');
+      var $subsec = $('#SelectSubSection');
+      var $group = $('#SelectGroup');
+
+      $dep.empty();
+      $sec.empty();
+      $subsec.empty();
+      $group.empty();
+
+      $sec.append('<option value="" disabled selected>Select Section</option>');
+      $subsec.append('<option value="" disabled selected>Select Sub Section</option>');
+      $group.append('<option value="" disabled selected>Select Group</option>');
+
+      var s = $.parseJSON(data);
+
+      $dep.append('<option value="" disabled selected>'+ s[0][1] +'</option>');
+
+      for (var i = 1; i <= s.length -1; i++) {
+        $dep.append('<option id=' + s[i][0] + ' value=' + s[i][0] + '>' + s[i][1] + '</option>');
+      }
+
+      //manually trigger a change event for the contry so that the change handler will get triggered
+      $dep.change();
+    }
+  });
+}
+
+
+function showSec() {
+  var id_dep = $('#SelectDepartemen').find(':selected')[0].value;
+
+  $.ajax({
+    type: 'POST',
+    url: '<?php echo base_url("karyawan_form/ajax_sec") ?>',
+    data: {
+      'id': id_dep
+    },
+    success: function(data){
+
+
+      var $sec = $('#SelectSection');
+      var $subsec = $('#SelectSubSection');
+      var $group = $('#SelectGroup');
+
+      $sec.empty();
+      $subsec.empty();
+      $group.empty();
+
+      $subsec.append('<option value="" disabled selected>Select Sub Section</option>');
+      $group.append('<option value="" disabled selected>Select Group</option>');
+
+      var s = $.parseJSON(data);
+      $sec.append('<option value="" disabled selected>'+ s[0][1] +'</option>');
+
+      if (s.length > 1) {
+        for (var i = 1; i <= s.length -1; i++) {
+          $sec.append('<option id=' + s[i][0] + ' value=' + s[i][0] + '>' + s[i][1] + '</option>');
+        }
+      }
+
+      //manually trigger a change event for the contry so that the change handler will get triggered
+      $sec.change();
+    }
+  });
+}
+
+function showSubSec() {
+  var id_sec = $('#SelectSection').find(':selected')[0].value;
+
+  $.ajax({
+    type: 'POST',
+    url: '<?php echo base_url("karyawan_form/ajax_subsec") ?>',
+    data: {
+      'id': id_sec
+    },
+    success: function(data){
+
+      var $ssec = $('#SelectSubSection');
+      var $group = $('#SelectGroup');
+
+      $group.empty();
+      $ssec.empty();
+
+      $group.append('<option value="" disabled selected>Select Group</option>');
+
+      var s = $.parseJSON(data);
+
+      $ssec.append('<option value="" disabled selected>'+ s[0][1] +'</option>');
+
+      if (s.length > 1) {
+        for (var i = 1; i <= s.length -1; i++) {
+          $ssec.append('<option id=' + s[i][0] + ' value=' + s[i][0] + '>' + s[i][1] + '</option>');
+        }
+      }
+
+      //manually trigger a change event for the contry so that the change handler will get triggered
+      $ssec.change();
+    }
+  });
+}
+
+function showGroup() {
+  var id_gr = $('#SelectSubSection').find(':selected')[0].value;
+
+  $.ajax({
+    type: 'POST',
+    url: '<?php echo base_url("karyawan_form/ajax_group") ?>',
+    data: {
+      'id': id_gr
+    },
+    success: function(data){
+
+      var $gr = $('#SelectGroup');
+
+      $gr.empty();
+
+      var s = $.parseJSON(data);
+
+      $gr.append('<option value="" disabled selected>'+ s[0][1] +'</option>');
+
+      if (s.length > 1) {
+        for (var i = 1; i <= s.length -1; i++) {
+          $gr.append('<option id=' + s[i][0] + ' value=' + s[i][0] + '>' + s[i][1] + '</option>');
+        }
+      }
+
+      //manually trigger a change event for the contry so that the change handler will get triggered
+      $gr.change();
+    }
+  });
+}
+
+    //--------------ALI update data karyawan -----------------------------
+
+    function ubah() {
+      //-------- privacy ------
+      var tempatLahir = $('#txtTempat').val();
+      var tglLahir = $('#txttanggalLahir').val();
+      var jk = $('#txtJK').val();
+      var alamat = $('#txtAlamat').val();
+      var keluarga = $('#SelectKeluarga').val();
+
+      //----------- devision -------
+      var dev = $('#SelectDevisi').val();
+      var dept = $('#SelectDepartemen').val();
+      var sect = $('#SelectSection').val();
+      var subsect = $('#SelectSubSection').val();
+      var group = $('#SelectGroup').val();
+      var kode = $('#SelectKode').val();
+      var grade = $('#SelectGrade').val();
+      var jabatan = $('#SelectJabatan').val();
+
+      //---- employement --------------
+      var status = $('#SelectStatusKar').val();
+      var masuk = $('#tglMasuk2').val();
+      var pin = $('#txtpin').val();
+      var cost = $('#txtCC').val();
+
+      // --------- admin -------
+      var hp = $('#txtHP').val();
+      var rek = $('#txtRek').val();
+      var ktp = $('#txtKTP').val();
+      var npwp = $('#txtNPWP').val();
+      var bpjs_tk = $('#txtBPJSTK').val();
+      var bpjs_kes = $('#txtBPJSKES').val();
+      var jp = $('#txtJP').val();
+      var nik = $('#nik').text();
+
+      $.ajax({
+        type: 'POST',
+        url: '<?php echo base_url("karyawan_form/update_karyawan") ?>',
+        data: {
+          'nik': nik,
+          'tempatLahir': tempatLahir,
+          'tglLahir': tglLahir,
+          'jk': jk,
+          'alamat': alamat,
+          'keluarga': keluarga,
+          //-----devision
+          'dev': dev,
+          'dept': dept,
+          'sect': sect,
+          'subsect': subsect,
+          'group': group,
+          'kode': kode,
+          'grade': grade,
+          'jabatan': jabatan,
+          //---employement
+          'status': status,
+          'masuk': masuk,
+          'pin': pin,
+          'cost': cost,
+          // --------- admin -------
+          'hp': hp,
+          'rek': rek,
+          'ktp': ktp,
+          'npwp': npwp,
+          'bpjs_tk': bpjs_tk,
+          'bpjs_kes': bpjs_kes,
+          'jp': jp,
+
+        },
+        success: function(){
+         location.reload();
+       }
+     });
+    }
+
+    function keluar() {
+      $('#tglout').css({'display':'block'})
+      $('#btnout').css({'display':'block'})
+      $('#textout').css({'display':'block'})
+    }
+
+    function terminasi() {
+      var tglout = $('#tglout').val();
+      var status ="Non-Aktif";
+      var nik = $('#nik').text();
+
+      $.ajax({
+        type: 'POST',
+        url: '<?php echo base_url("karyawan_form/update_karyawan_terminasi") ?>',
+        data: {
+          'nik': nik,
+          'tglout': tglout,
+          'status': status
+        },
+        success: function(){
+         location.reload();
+       }
+     });
+    }
+
+     function getConfirmation() {
+               var retVal = confirm("Do you want to continue ?");
+               if( retVal == true ) {
+                  terminasi();
+                  return true;
+               } else {
+                  
+                  return false;
+               }
+            }
+
+
+    $('.datepicker').datepicker({
+      autoclose: true,
+      format: "dd-mm-yyyy"
+    });
+
+  </script>
 
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the

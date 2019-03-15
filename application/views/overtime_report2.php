@@ -41,7 +41,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <div class="col-md-12">
           <div class="box box-solid">
             <div class="box-body">
-              <table id="example1" class="table table-responsive table-striped">
+              <table id="example1" class="table table-responsive table-striped" style="width: 100%">
                 <thead>
                   <tr>
                     <th>Period</th>
@@ -80,6 +80,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         </tr>
                       </thead>
                       <tbody></tbody>
+                      <tfoot style="background-color: blue">
+                        <th>Total</th>
+                        <th></th>
+                      </tfoot>
                     </table>
                   </div>
                 </div>
@@ -151,6 +155,56 @@ scratch. This page gets rid of all links and provides the needed markup only.
         { "data": 4 }
         ],
       });
+    }
+
+
+    function detail2(nik,tgl,nama) {
+      $('#nik').text(nik);
+      $('#nama').text(nama);
+      $('#bulan').text(tgl);
+      table2 = $('#example2').DataTable();
+      table2.destroy();
+      //alert(nik+" "+tgl);
+      $("#myModal").modal('show');
+      table2 = $('#example2').DataTable({
+        "lengthMenu"    : [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        "processing"    : true,
+        "serverSide"    : true,
+        "searching": false,
+        "bPaginate": false,
+        "bLengthChange": false,
+        "bFilter": false,
+        "bInfo": false,
+        'order'         : [],
+        "ajax": {
+          "url": "<?php echo base_url('ot/ajax_ot_report_details_2')?>",
+          "type": "GET",
+          "data" : {
+            nik : nik,
+            period : tgl,
+          }
+        },
+        "columnDefs" : [
+        {
+          'targets': 1,
+          'createdCell':  function (td, cellData, rowData, row, col) {
+           $(td).attr('id', 'ct'); 
+         }
+       }],
+       "footerCallback": function (tfoot, data, start, end, display) {
+        var intVal = function ( i ) {
+          return typeof i === 'string' ?
+          i.replace(/[\$%,]/g, '')*1 :
+          typeof i === 'number' ?
+          i : 0;
+        };
+        var api = this.api();
+        var totalPlan = api.column(1).data().reduce(function (a, b) {
+          return intVal(a)+intVal(b);
+        }, 0)
+        $(api.column(1).footer()).html(totalPlan.toLocaleString());
+      }
+    });
     }
 
   </script>

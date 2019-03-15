@@ -229,5 +229,108 @@ class Karyawan_form extends CI_Controller {
 		echo json_decode($result);
 	}
 
+	public function update_karyawan()
+	{
+		$tempatLahir = $_POST['tempatLahir'];
+		$tglLahir = $_POST['tglLahir'];
+		$jk = $_POST['jk'];
+		$alamat = $_POST['alamat'];
+		$keluarga = $_POST['keluarga'];
+		//------------devision
+
+		$dev = $_POST['dev'];
+		$dept = $_POST['dept'];
+		$sect = $_POST['sect'];
+		$subsect = $_POST['subsect'];
+		$group = $_POST['group'];
+		$kode = $_POST['kode'];
+		$grade = $_POST['grade'];
+		$jabatan = $_POST['jabatan'];
+
+		//---- employement --------------
+		$status = $_POST['status'];
+		$masuk = $_POST['masuk'];
+		$pin = $_POST['pin'];
+		$cost = $_POST['cost'];
+
+		// --------- admin -------
+		$hp = $_POST['hp'];
+		$rek = $_POST['rek'];
+		$ktp = $_POST['ktp'];
+		$npwp = $_POST['npwp'];
+		$bpjs_tk = $_POST['bpjs_tk'];
+		$bpjs_kes = $_POST['bpjs_kes'];
+		$jp = $_POST['jp'];
+		$nik = $_POST['nik'];
+
+		$data = array(
+			'tempatLahir' => $tempatLahir,
+			'tanggalLahir' => date('Y/m/d', strtotime($tglLahir)),
+			'Alamat' => $alamat,
+			'jk' => $jk,
+			'statusKeluarga' => $keluarga,
+
+			// -----EMPLOY ---
+			'statusKaryawan' => $status,
+			'pin' => $pin,
+			'tanggalMasuk' => date('Y/m/d', strtotime($masuk)),			
+			'costCenter' => $cost,	
+			
+
+			// -----ADMIN ---
+			'hp' => $hp,
+			'ktp' => $ktp,
+			'rekening' => $rek,
+			'bpjstk' => $bpjs_tk,
+			'jp' => $jp,
+			'bpjskes' => $bpjs_kes,
+			'npwp' => $npwp,
+
+			// DEVISI
+			'kode' => $kode,
+			'namaGrade' => $grade,
+			'jabatan' => $jabatan
+			
+		);
+
+		$posisi = array(
+			'id_devisi' => $dev,
+			'id_dep' => $dept,
+			'id_sec' => $sect,
+			'id_sub_sec' => $subsect,
+			'id_group' => $group,
+		);
+
+		$where = array(
+			'nik' => $nik
+			
+		);
+		$this->karyawan_model->update_data($where,$data,'karyawan');
+		$this->karyawan_model->update_data($where,$posisi,'posisi');
+		
+		// $this->karyawan_model->update_data($tempatLahir,$tglLahir,$jk,$alamat,$keluarga,$dev,$dept,$sect,$subsect,$group,$kode,$grade,$jabatan,$status,$masuk,$pin,$cost,$hp,$rek,$ktp,$npwp,$bpjs_tk,$bpjs_kes,$jp)
+
+	}
+
+	public function update_karyawan_terminasi()
+	{
+		$tglout = $_POST['tglout'];
+		$status = $_POST['status'];
+		$nik = $_POST['nik'];
+
+		$data = array(
+			'Status' => $status,
+			'tanggalKeluar' => date('Y-m-d', strtotime($tglout))
+		);
+
+		$where = array(
+			'nik' => $nik
+			
+		);
+
+		$this->karyawan_model->update_data_terminasi($where,$data,'karyawan');
+
+	}
+
 }
 ?>

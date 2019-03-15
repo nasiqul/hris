@@ -13,40 +13,66 @@ class Over_model extends CI_Model {
     	$this->load->database();
     }
 
-    public function get_data_ot()
+    public function get_data_ot_defaeult()
     {
-    	$this->_get_datatables_query();
-    	if($_GET['length'] != -1)
-    		$this->db->limit($_GET['length'], $_GET['start']);
-    	$query = $this->db->get();
-    	return $query->result();
+        $this->_get_datatables_query_defaeult();
+        if($_GET['length'] != -1)
+            $this->db->limit($_GET['length'], $_GET['start']);
+        $query = $this->db->get();
+        return $query->result();
     }
 
-    private function _get_datatables_query()
+    public function get_data_ot($tgl)
     {
-    	$this->db->select("tanggal, nik,nama,masuk,keluar,id,shift,status,jam,final,id_jam,jam_lembur, IFNULL(aktual, 0) as aktual, IFNULL(diff, 0) as diff, IFNULL(final2, 0) as final2");
-    	$this->db->from("
+        $this->_get_datatables_query($tgl);
+        if($_GET['length'] != -1)
+            $this->db->limit($_GET['length'], $_GET['start']);
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+    
+public function caobaaa_default()
+    {
+        $this->db->select("tanggal, nik,nama,masuk,keluar,id,shift,status,jam,final,id_jam,jam_lembur, IFNULL(aktual, 0) as aktual, IFNULL(diff, 0) as diff, IFNULL(final2, 0) as final2");
+        $this->db->from("
             (select tanggal,c.nik1 as nik, d.namaKaryawan as nama, masuk, keluar, id, shift, c.status, jam, final, c.id_jam, c.jam_lembur,
             (IF(hari = 'L',
             floor((TIME_TO_SEC(TIMEDIFF(concat('2010-08-20 ',keluar), concat('2010-08-20 ',masuk)))) / 60 / 60 * 2) / 2, 
             IF(shift = 1,
             floor((
 
-            IF(c.jam_lembur = 'Awal',0,(TIME_TO_SEC(TIMEDIFF(concat('2010-08-20 ',keluar), '2010-08-20 16:00:00'))))
+            IF(c.jam_lembur = 'Awal',0,
+            IF(DATE_FORMAT(tanggal,'%a') = 'Fri',
+            (TIME_TO_SEC(TIMEDIFF(concat('2010-08-20 ',keluar), '2010-08-20 16:30:00'))),
+            (TIME_TO_SEC(TIMEDIFF(concat('2010-08-20 ',keluar), '2010-08-20 16:00:00'))))
+            )
             + 
 
             IF(c.jam_lembur = 'Awal',(TIME_TO_SEC(TIMEDIFF('2010-08-20 07:00:00' , concat('2010-08-20 ',masuk)))),0)
             )/ 60 / 60 * 2) / 2
             , IF(shift = 2,
-            floor((                                                                      IF(c.jam_lembur = 'Awal',0,(TIME_TO_SEC(TIMEDIFF(concat('2010-08-20 ',keluar), '2010-08-20 00:00:00'))))
+            floor((IF(c.jam_lembur = 'Awal',0,
+            IF(DATE_FORMAT(tanggal,'%a') = 'Fri'
+            ,(TIME_TO_SEC(TIMEDIFF(concat('2010-08-20 ',keluar), '2010-08-20 00:45:00')))
+            ,(TIME_TO_SEC(TIMEDIFF(concat('2010-08-20 ',keluar), '2010-08-20 00:15:00'))))
+            )
 
             + 
 
-            IF(c.jam_lembur = 'Awal',(TIME_TO_SEC(TIMEDIFF('2010-08-20 16:00:00' , concat('2010-08-20 ',masuk)))),0)
+            IF(c.jam_lembur = 'Awal',
+            IF(DATE_FORMAT(tanggal,'%a') = 'Fri'
+            ,(TIME_TO_SEC(TIMEDIFF('2010-08-20 16:30:00' , concat('2010-08-20 ',masuk))))
+            ,(TIME_TO_SEC(TIMEDIFF('2010-08-20 16:00:00' , concat('2010-08-20 ',masuk)))))                          
+            ,0)
 
             )/ 60 / 60 * 2) / 2
             , IF(shift = 3,
-            floor((                                                                  IF(c.jam_lembur = 'Awal',0,(TIME_TO_SEC(TIMEDIFF(concat('2010-08-20 ',keluar), '2010-08-20 07:00:00'))))
+            floor((IF(c.jam_lembur = 'Awal',0,
+            IF(DATE_FORMAT(tanggal,'%a') = 'Fri'
+            ,(TIME_TO_SEC(TIMEDIFF(concat('2010-08-20 ',keluar), '2010-08-20 07:40:00')))
+            ,(TIME_TO_SEC(TIMEDIFF(concat('2010-08-20 ',keluar), '2010-08-20 07:10:00'))))
+            )
 
             + 
 
@@ -73,7 +99,159 @@ class Over_model extends CI_Model {
             ) b on a.tanggal = b.tanggalpresensi and a.nik1 = b.nik) c
             left join karyawan d on c.nik = d.nik ) tmp
             ");
-    	$this->db->where(1,1);
+
+        $this->db->where("tanggal = curdate()");
+        $this->db->where("status = '0'");
+
+        $query = $this->db->get();
+        return $query->result();
+
+    }
+
+    public function caobaaa($tgl)
+    {
+        $this->db->select("tanggal, nik,nama,masuk,keluar,id,shift,status,jam,final,id_jam,jam_lembur, IFNULL(aktual, 0) as aktual, IFNULL(diff, 0) as diff, IFNULL(final2, 0) as final2");
+        $this->db->from("
+            (select tanggal,c.nik1 as nik, d.namaKaryawan as nama, masuk, keluar, id, shift, c.status, jam, final, c.id_jam, c.jam_lembur,
+            (IF(hari = 'L',
+            floor((TIME_TO_SEC(TIMEDIFF(concat('2010-08-20 ',keluar), concat('2010-08-20 ',masuk)))) / 60 / 60 * 2) / 2, 
+            IF(shift = 1,
+            floor((
+
+            IF(c.jam_lembur = 'Awal',0,
+            IF(DATE_FORMAT(tanggal,'%a') = 'Fri',
+            (TIME_TO_SEC(TIMEDIFF(concat('2010-08-20 ',keluar), '2010-08-20 16:30:00'))),
+            (TIME_TO_SEC(TIMEDIFF(concat('2010-08-20 ',keluar), '2010-08-20 16:00:00'))))
+            )
+            + 
+
+            IF(c.jam_lembur = 'Awal',(TIME_TO_SEC(TIMEDIFF('2010-08-20 07:00:00' , concat('2010-08-20 ',masuk)))),0)
+            )/ 60 / 60 * 2) / 2
+            , IF(shift = 2,
+            floor((IF(c.jam_lembur = 'Awal',0,
+            IF(DATE_FORMAT(tanggal,'%a') = 'Fri'
+            ,(TIME_TO_SEC(TIMEDIFF(concat('2010-08-20 ',keluar), '2010-08-20 00:45:00')))
+            ,(TIME_TO_SEC(TIMEDIFF(concat('2010-08-20 ',keluar), '2010-08-20 00:15:00'))))
+            )
+
+            + 
+
+            IF(c.jam_lembur = 'Awal',
+            IF(DATE_FORMAT(tanggal,'%a') = 'Fri'
+            ,(TIME_TO_SEC(TIMEDIFF('2010-08-20 16:30:00' , concat('2010-08-20 ',masuk))))
+            ,(TIME_TO_SEC(TIMEDIFF('2010-08-20 16:00:00' , concat('2010-08-20 ',masuk)))))                          
+            ,0)
+
+            )/ 60 / 60 * 2) / 2
+            , IF(shift = 3,
+            floor((IF(c.jam_lembur = 'Awal',0,
+            IF(DATE_FORMAT(tanggal,'%a') = 'Fri'
+            ,(TIME_TO_SEC(TIMEDIFF(concat('2010-08-20 ',keluar), '2010-08-20 07:40:00')))
+            ,(TIME_TO_SEC(TIMEDIFF(concat('2010-08-20 ',keluar), '2010-08-20 07:10:00'))))
+            )
+
+            + 
+
+            IF(c.jam_lembur = 'Awal',(TIME_TO_SEC(TIMEDIFF('2010-08-20 00:00:00' , concat('2010-08-20 ',masuk)))),0)
+            )/ 60 / 60 * 2) / 2
+            , 0)))
+            ) - (SELECT istirahat from master_lembur where id = c.id_jam))
+
+            as aktual, 
+            ((SELECT aktual) - jam) as diff,
+            IF((SELECT aktual) > jam , 
+            IF(final <> 0, ROUND((SELECT final), 1) , ROUND(jam, 1))
+            , ROUND((SELECT aktual), 1))
+            as final2
+
+            from (SELECT * from (
+            SELECT o.tanggal, o.id, b.jam, b.nik as nik1,b.id_jam as id_jam,b.jam_lembur as jam_lembur, b.status as status, final, hari from over_time as o
+            LEFT JOIN over_time_member as b
+            on o.id = b.id_ot
+            ) a
+
+            left join (
+            SELECT presensi.nik,presensi.masuk,presensi.keluar,presensi.tanggal as tanggalpresensi, shift from presensi where presensi.nik in (SELECT over_time_member.nik from over_time_member) and presensi.tanggal in (SELECT over_time.tanggal from over_time)
+            ) b on a.tanggal = b.tanggalpresensi and a.nik1 = b.nik) c
+            left join karyawan d on c.nik = d.nik ) tmp
+            ");
+
+       $this->db->where("tanggal = '".$tgl."'");
+        $this->db->where("status = '0'");
+
+        $query = $this->db->get();
+        return $query->result();
+
+    }
+    private function _get_datatables_query($tgl)
+    {
+        $this->db->select("tanggal, nik,nama,masuk,keluar,id,shift,status,jam,final,id_jam,jam_lembur, IFNULL(aktual, 0) as aktual, IFNULL(diff, 0) as diff, IFNULL(final2, 0) as final2");
+        $this->db->from("
+            (select tanggal,c.nik1 as nik, d.namaKaryawan as nama, masuk, keluar, id, shift, c.status, jam, final, c.id_jam, c.jam_lembur,
+            (IF(hari = 'L',
+            floor((TIME_TO_SEC(TIMEDIFF(concat('2010-08-20 ',keluar), concat('2010-08-20 ',masuk)))) / 60 / 60 * 2) / 2, 
+            IF(shift = 1,
+            floor((
+
+            IF(c.jam_lembur = 'Awal',0,
+            IF(DATE_FORMAT(tanggal,'%a') = 'Fri',
+            (TIME_TO_SEC(TIMEDIFF(concat('2010-08-20 ',keluar), '2010-08-20 16:30:00'))),
+            (TIME_TO_SEC(TIMEDIFF(concat('2010-08-20 ',keluar), '2010-08-20 16:00:00'))))
+            )
+            + 
+
+            IF(c.jam_lembur = 'Awal',(TIME_TO_SEC(TIMEDIFF('2010-08-20 07:00:00' , concat('2010-08-20 ',masuk)))),0)
+            )/ 60 / 60 * 2) / 2
+            , IF(shift = 2,
+            floor((IF(c.jam_lembur = 'Awal',0,
+            IF(DATE_FORMAT(tanggal,'%a') = 'Fri'
+            ,(TIME_TO_SEC(TIMEDIFF(concat('2010-08-20 ',keluar), '2010-08-20 00:45:00')))
+            ,(TIME_TO_SEC(TIMEDIFF(concat('2010-08-20 ',keluar), '2010-08-20 00:15:00'))))
+            )
+
+            + 
+
+            IF(c.jam_lembur = 'Awal',
+            IF(DATE_FORMAT(tanggal,'%a') = 'Fri'
+            ,(TIME_TO_SEC(TIMEDIFF('2010-08-20 16:30:00' , concat('2010-08-20 ',masuk))))
+            ,(TIME_TO_SEC(TIMEDIFF('2010-08-20 16:00:00' , concat('2010-08-20 ',masuk)))))                          
+            ,0)
+
+            )/ 60 / 60 * 2) / 2
+            , IF(shift = 3,
+            floor((IF(c.jam_lembur = 'Awal',0,
+            IF(DATE_FORMAT(tanggal,'%a') = 'Fri'
+            ,(TIME_TO_SEC(TIMEDIFF(concat('2010-08-20 ',keluar), '2010-08-20 07:40:00')))
+            ,(TIME_TO_SEC(TIMEDIFF(concat('2010-08-20 ',keluar), '2010-08-20 07:10:00'))))
+            )
+
+            + 
+
+            IF(c.jam_lembur = 'Awal',(TIME_TO_SEC(TIMEDIFF('2010-08-20 00:00:00' , concat('2010-08-20 ',masuk)))),0)
+            )/ 60 / 60 * 2) / 2
+            , 0)))
+            ) - (SELECT istirahat from master_lembur where id = c.id_jam))
+
+            as aktual, 
+            ((SELECT aktual) - jam) as diff,
+            IF((SELECT aktual) > jam , 
+            IF(final <> 0, ROUND((SELECT final), 1) , ROUND(jam, 1))
+            , ROUND((SELECT aktual), 1))
+            as final2
+
+            from (SELECT * from (
+            SELECT o.tanggal, o.id, b.jam, b.nik as nik1,b.id_jam as id_jam,b.jam_lembur as jam_lembur, b.status as status, final, hari from over_time as o
+            LEFT JOIN over_time_member as b
+            on o.id = b.id_ot
+            ) a
+
+            left join (
+            SELECT presensi.nik,presensi.masuk,presensi.keluar,presensi.tanggal as tanggalpresensi, shift from presensi where presensi.nik in (SELECT over_time_member.nik from over_time_member) and presensi.tanggal in (SELECT over_time.tanggal from over_time)
+            ) b on a.tanggal = b.tanggalpresensi and a.nik1 = b.nik) c
+            left join karyawan d on c.nik = d.nik ) tmp
+            ");
+        $this->db->where("tanggal = '".$tgl."'");
+        $this->db->where("status = '0'");
 
 
         $i = 0;
@@ -90,7 +268,7 @@ class Over_model extends CI_Model {
                 }
                 else
                 {
-                	$this->db->or_like($item, $_GET['search']['value']);
+                    $this->db->or_like($item, $_GET['search']['value']);
                 }
 
                 if(count($this->column_search) - 1 == $i) //last loop
@@ -101,14 +279,137 @@ class Over_model extends CI_Model {
 
         if(isset($_GET['order'])) // here order processing
         {
-        	$this->db->order_by($this->column_order[$_GET['order']['0']['column']], $_GET['order']['0']['dir']);
+            $this->db->order_by($this->column_order[$_GET['order']['0']['column']], $_GET['order']['0']['dir']);
         } 
         else if(isset($this->order))
         {
-        	$order = $this->order;
-        	$this->db->order_by(key($order), $order[key($order)]);
+            $order = $this->order;
+            $this->db->order_by(key($order), $order[key($order)]);
         }
     }
+
+    private function _get_datatables_query_defaeult()
+    {
+        $this->db->select("tanggal, nik,nama,masuk,keluar,id,shift,status,jam,final,id_jam,jam_lembur, IFNULL(aktual, 0) as aktual, IFNULL(diff, 0) as diff, IFNULL(final2, 0) as final2");
+        $this->db->from("
+            (select tanggal,c.nik1 as nik, d.namaKaryawan as nama, masuk, keluar, id, shift, c.status, jam, final, c.id_jam, c.jam_lembur,
+            (IF(hari = 'L',
+            floor((TIME_TO_SEC(TIMEDIFF(concat('2010-08-20 ',keluar), concat('2010-08-20 ',masuk)))) / 60 / 60 * 2) / 2, 
+            IF(shift = 1,
+            floor((
+
+            IF(c.jam_lembur = 'Awal',0,
+            IF(DATE_FORMAT(tanggal,'%a') = 'Fri',
+            (TIME_TO_SEC(TIMEDIFF(concat('2010-08-20 ',keluar), '2010-08-20 16:30:00'))),
+            (TIME_TO_SEC(TIMEDIFF(concat('2010-08-20 ',keluar), '2010-08-20 16:00:00'))))
+            )
+            + 
+
+            IF(c.jam_lembur = 'Awal',(TIME_TO_SEC(TIMEDIFF('2010-08-20 07:00:00' , concat('2010-08-20 ',masuk)))),0)
+            )/ 60 / 60 * 2) / 2
+            , IF(shift = 2,
+            floor((IF(c.jam_lembur = 'Awal',0,
+            IF(DATE_FORMAT(tanggal,'%a') = 'Fri'
+            ,(TIME_TO_SEC(TIMEDIFF(concat('2010-08-20 ',keluar), '2010-08-20 00:45:00')))
+            ,(TIME_TO_SEC(TIMEDIFF(concat('2010-08-20 ',keluar), '2010-08-20 00:15:00'))))
+            )
+
+            + 
+
+            IF(c.jam_lembur = 'Awal',
+            IF(DATE_FORMAT(tanggal,'%a') = 'Fri'
+            ,(TIME_TO_SEC(TIMEDIFF('2010-08-20 16:30:00' , concat('2010-08-20 ',masuk))))
+            ,(TIME_TO_SEC(TIMEDIFF('2010-08-20 16:00:00' , concat('2010-08-20 ',masuk)))))                          
+            ,0)
+
+            )/ 60 / 60 * 2) / 2
+            , IF(shift = 3,
+            floor((IF(c.jam_lembur = 'Awal',0,
+            IF(DATE_FORMAT(tanggal,'%a') = 'Fri'
+            ,(TIME_TO_SEC(TIMEDIFF(concat('2010-08-20 ',keluar), '2010-08-20 07:40:00')))
+            ,(TIME_TO_SEC(TIMEDIFF(concat('2010-08-20 ',keluar), '2010-08-20 07:10:00'))))
+            )
+
+            + 
+
+            IF(c.jam_lembur = 'Awal',(TIME_TO_SEC(TIMEDIFF('2010-08-20 00:00:00' , concat('2010-08-20 ',masuk)))),0)
+            )/ 60 / 60 * 2) / 2
+            , 0)))
+            ) - (SELECT istirahat from master_lembur where id = c.id_jam))
+
+            as aktual, 
+            ((SELECT aktual) - jam) as diff,
+            IF((SELECT aktual) > jam , 
+            IF(final <> 0, ROUND((SELECT final), 1) , ROUND(jam, 1))
+            , ROUND((SELECT aktual), 1))
+            as final2
+
+            from (SELECT * from (
+            SELECT o.tanggal, o.id, b.jam, b.nik as nik1,b.id_jam as id_jam,b.jam_lembur as jam_lembur, b.status as status, final, hari from over_time as o
+            LEFT JOIN over_time_member as b
+            on o.id = b.id_ot
+            ) a
+
+            left join (
+            SELECT presensi.nik,presensi.masuk,presensi.keluar,presensi.tanggal as tanggalpresensi, shift from presensi where presensi.nik in (SELECT over_time_member.nik from over_time_member) and presensi.tanggal in (SELECT over_time.tanggal from over_time)
+            ) b on a.tanggal = b.tanggalpresensi and a.nik1 = b.nik) c
+            left join karyawan d on c.nik = d.nik ) tmp
+            ");
+        $this->db->where("tanggal = curdate()");
+        $this->db->where("status = '0'");
+
+
+        $i = 0;
+
+        foreach ($this->column_search as $item) // loop column 
+        {
+            if($_GET['search']['value']) // if datatable send POST for search
+            {
+
+                if($i===0) // first loop
+                {
+                    $this->db->group_start(); // open bracket. query Where with OR clause better with bracket. because maybe can combine with other WHERE with AND.
+                    $this->db->like($item, $_GET['search']['value']);
+                }
+                else
+                {
+                    $this->db->or_like($item, $_GET['search']['value']);
+                }
+
+                if(count($this->column_search) - 1 == $i) //last loop
+                    $this->db->group_end(); //close bracket
+                }
+                $i++;
+            }
+
+        if(isset($_GET['order'])) // here order processing
+        {
+            $this->db->order_by($this->column_order[$_GET['order']['0']['column']], $_GET['order']['0']['dir']);
+        } 
+        else if(isset($this->order))
+        {
+            $order = $this->order;
+            $this->db->order_by(key($order), $order[key($order)]);
+        }
+    }
+
+    public function update_data_over($where,$table){
+        $this->db->set('status', "1");
+        $this->db->where($where);
+        $this->db->update($table);
+    }   
+
+     public function update_data_final($where,$table,$data){
+        $this->db->set('final', $data);
+        $this->db->where($where);
+        $this->db->update($table);
+    }  
+
+     public function update_data_budget($where,$table,$data){
+        $this->db->set('aktual', $data);
+        $this->db->where($where);
+        $this->db->update($table);
+    }  
 
     public function get_dep()
     {
@@ -676,49 +977,49 @@ public function chart2($tgl)
 public function get_p_data()
 {
     $q = "SELECT presensi.tanggal, (DAY(LAST_DAY(presensi.tanggal)) - v.hari) as hari_kerja, z.final as total_lembur, jam_ketidakhadiran, total_keluar, totalMasuk, tot
-        from presensi
+    from presensi
     JOIN (
-        SELECT tanggal, COUNT(tanggal) as hari from kalender GROUP BY DATE_FORMAT(tanggal,'%m-%Y')
+    SELECT tanggal, COUNT(tanggal) as hari from kalender GROUP BY DATE_FORMAT(tanggal,'%m-%Y')
     ) as v on v.tanggal = presensi.tanggal
     LEFT JOIN (
-        SELECT tanggal, ROUND(SUM(jam)) as final from over 
-        WHERE tanggal IS NOT NULL
-        GROUP BY DATE_FORMAT(tanggal,'%m-%Y')
+    SELECT tanggal, ROUND(SUM(jam)) as final from over 
+    WHERE tanggal IS NOT NULL
+    GROUP BY DATE_FORMAT(tanggal,'%m-%Y')
     ) z on DATE_FORMAT(z.tanggal,'%m-%Y') = DATE_FORMAT(presensi.tanggal,'%m-%Y')
     LEFT JOIN
     (
-        SELECT i.*, (CT+SD+I+A) total_absen, (CT+SD+I+A)*8 jam_ketidakhadiran FROM (
-            SELECT tanggal,
-            COUNT(if(shift = 'CT' , shift, null)) CT,
-            COUNT(if(shift = 'SD' , shift, null)) SD,
-            COUNT(if(shift = 'I' , shift, null)) I,
-            COUNT(if(shift = 'A' , shift, null)) A
-            from presensi
-            GROUP BY DATE_FORMAT(tanggal,'%m-%Y')
-        ) as i 
+    SELECT i.*, (CT+SD+I+A) total_absen, (CT+SD+I+A)*8 jam_ketidakhadiran FROM (
+    SELECT tanggal,
+    COUNT(if(shift = 'CT' , shift, null)) CT,
+    COUNT(if(shift = 'SD' , shift, null)) SD,
+    COUNT(if(shift = 'I' , shift, null)) I,
+    COUNT(if(shift = 'A' , shift, null)) A
+    from presensi
+    GROUP BY DATE_FORMAT(tanggal,'%m-%Y')
+    ) as i 
     ) u on DATE_FORMAT(u.tanggal,'%m-%Y') = DATE_FORMAT(presensi.tanggal,'%m-%Y')
     LEFT JOIN
     (
 
 
-            Select c.*, d.totalMasuk from (     
-                        SELECT count(nik) as total_keluar, tanggalKeluar, (SELECT count(nik) from karyawan) as tot
-                    from karyawan
-                        WHERE tanggalKeluar IS NOT NULL
-                        GROUP BY DATE_FORMAT(tanggalKeluar,'%m-%Y')
+    Select c.*, d.totalMasuk from (     
+    SELECT count(nik) as total_keluar, tanggalKeluar, (SELECT count(nik) from karyawan) as tot
+    from karyawan
+    WHERE tanggalKeluar IS NOT NULL
+    GROUP BY DATE_FORMAT(tanggalKeluar,'%m-%Y')
 
-            ) c 
-            JOIN (
-                            SELECT COUNT(nik) totalMasuk, tanggalMasuk from karyawan
-                        GROUP BY DATE_FORMAT(tanggalMasuk,'%m-%Y')
-                        ) d on DATE_FORMAT(d.tanggalMasuk,'%m-%Y') = DATE_FORMAT(c.tanggalKeluar,'%m-%Y')
+    ) c 
+    JOIN (
+    SELECT COUNT(nik) totalMasuk, tanggalMasuk from karyawan
+    GROUP BY DATE_FORMAT(tanggalMasuk,'%m-%Y')
+    ) d on DATE_FORMAT(d.tanggalMasuk,'%m-%Y') = DATE_FORMAT(c.tanggalKeluar,'%m-%Y')
 
 
     ) as r 
     on DATE_FORMAT(r.tanggalKeluar,'%m-%Y') = DATE_FORMAT(presensi.tanggal,'%m-%Y')
 
     GROUP BY presensi.tanggal;
-";
+    ";
 
     // $this->db->select("STR_TO_DATE('".$bulan."', '%d-%m-%Y') - INTERVAL 1 MONTH as bulan, count(nik) as tot");
     // $this->db->from('karyawan');
@@ -772,6 +1073,60 @@ public function chart_dep2($tgl)
     return $query->result();
 }
 
+
+public function nik_by_cc($sec)
+{
+    $q = "select nik, namaKaryawan from karyawan
+    where costCenter = ".$sec."
+    ORDER BY nik ASC";
+    $query = $this->db->query($q);
+    return $query->result();
+}
+
+public function jam_by_nik($nik, $tahun)
+{
+    $q = "select tanggal, nik, sum(jam) as tot from over where nik = '".$nik."' and DATE_FORMAT(tanggal, '%Y') = '".$tahun."' group by DATE_FORMAT(tanggal, '%M %Y')";
+    $query = $this->db->query($q);
+    return $query->result();
+}
+
+public function get_chart_dep()
+{
+    $q = "select tanggal, ROUND(sum(jam),1) as jam, IFNULL(k.costCenter,0) as cc from over
+    left join karyawan k on k.nik = over.nik
+    WHERE DATE_FORMAT(tanggal,'%m-%Y') = '02-2019'
+    GROUP BY k.costCenter, tanggal";
+    $query = $this->db->query($q);
+    return $query->result();
+}
+
+public function get_tgl()
+{
+    $q = "select tanggal from over
+    where DATE_FORMAT(tanggal, '%m-%Y') = '02-2019'
+    group by tanggal";
+    $query = $this->db->query($q);
+    return $query->result();
+}
+
+public function get_cc2()
+{
+    $q = "select id_cc from cost_center_budget
+    group by id_cc";
+    $query = $this->db->query($q);
+    return $query->result();
+}
+
+public function get_o_data($tgl)
+{
+    $q = "select IFNULL(costCenter,0) as cc, tanggal, sum(jam) as jam from over
+    left join karyawan k on k.nik = over.nik
+    where DATE_FORMAT(tanggal, '%m-%Y') = '02-2019'
+    and tanggal = '".$tgl."'
+    group by costCenter";
+    $query = $this->db->query($q);
+    return $query->result();
+}
 
 }
 ?>

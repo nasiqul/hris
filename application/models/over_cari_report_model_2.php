@@ -1,10 +1,10 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Over_cari_report_model extends CI_Model {
-	var $column_order = array('o.tanggal','om.jam_aktual','om.satuan'); //set column field database for datatable orderable
-    var $column_search = array('o.tanggal'); //set column field database for datatable searchable 
-    var $order = array('o.tanggal' => 'asc'); // default order 
+class Over_cari_report_model_2 extends CI_Model {
+	var $column_order = array('tanggal','jam'); //set column field database for datatable orderable
+    var $column_search = array('tanggal'); //set column field database for datatable searchable 
+    var $order = array('tanggal' => 'asc'); // default order 
 
     public function __construct()
     {
@@ -12,22 +12,22 @@ class Over_cari_report_model extends CI_Model {
         $this->load->database();
     }
 
-    public function get_data_report_cari($tgl, $nik)
+    public function get_data_report_cari_2($tgl, $nik)
     {
-        $this->_get_report_cari($tgl, $nik);
+        $this->_get_report_cari_2($tgl, $nik);
         if($_GET['length'] != -1)
             $this->db->limit($_GET['length'], $_GET['start']);
         $query = $this->db->get();
         return $query->result();
     }
 
-    private function _get_report_cari($tgl, $nik)
+    private function _get_report_cari_2($tgl, $nik)
     {
-        $this->db->select('o.tanggal, om.final, om.satuan');
-        $this->db->from('over_time_member om');
-        $this->db->join('over_time o','om.id_ot = o.id');
-        $this->db->where('om.nik',$nik);
-        $this->db->where('MONTH(o.tanggal) = MONTH("'.$tgl.'")');
+        $this->db->select('date_format(tanggal, "%d-%m-%Y") as tgl, jam');
+        $this->db->from('over');
+        $this->db->where('nik',$nik);
+        $this->db->where('jam <> 0');
+        $this->db->where('date_format(tanggal, "%m-%Y") = "'.$tgl.'"');
 
         $i = 0;
 
@@ -63,16 +63,16 @@ class Over_cari_report_model extends CI_Model {
         }
     }
 
-    function count_filtered($tgl, $nik)
+    function count_filtered_2($tgl, $nik)
     {
-        $this->_get_report_cari($tgl, $nik);
+        $this->_get_report_cari_2($tgl, $nik);
         $query = $this->db->get();
         return $query->num_rows();
     }
 
-    public function count_all($tgl, $nik)
+    public function count_all_2($tgl, $nik)
     {
-        $this->_get_report_cari($tgl, $nik);
+        $this->_get_report_cari_2($tgl, $nik);
         return $this->db->count_all_results();
     }
 }

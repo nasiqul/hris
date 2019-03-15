@@ -68,6 +68,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <li><a href="#tab_8" data-toggle="tab" onclick="limaenam_jam()">
                 > 56 Jam / Bulan<br> <span class="text-purple">???</span></a>
               </li>
+
+              <li><a href="#tab_9" data-toggle="tab">
+                Tes<br> <span class="text-purple">???</span></a>
+              </li>
+
+
             </ul>
             <div class="tab-content">
               <div class="tab-pane" id="tab_1">
@@ -233,6 +239,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   </thead>
                   <tbody></tbody>
                 </table>
+              </div>
+              <div class="tab-pane" id="tab_9">
+                <div id="container8" style="width: 100%"></div>
               </div>
               <!-- /.tab-pane -->
               <!-- /.tab-pane -->
@@ -670,7 +679,6 @@ $(function () {
     })
   })
 })
-
 
 
 $(function () {
@@ -1370,6 +1378,102 @@ function TampilKaryawan(tgl,bagian) {
     }
   });
 }
+
+
+$(function () {
+  var cat = new Array();
+  var tiga_jam = new Array();
+  var per_minggu = new Array();
+  var per_bulan = new Array();
+  var manam_bulan = new Array();
+
+  $.getJSON('<?php echo base_url("ot/overtime_chart_per_dep/")?>', function(data) {
+
+    // var s = $.parseJSON(data);
+
+    // var seriesData = [];
+    // var cat = [];
+    // var nama = [];
+    // // Populate series
+
+    // for(i = 0; i < data.length; i++){
+
+    //   cat.push(data[i][0]);
+    //   // seriesData.push(data[i][1]);
+    // }
+
+    // for (var i = 0; i < data.length; i++) {
+    //   seriesData[i] = {name: data[i][2], data: [data[i][1]]}
+    // }
+
+    // for (var i = 0; i < data.length; i++) {
+    //   nama = data[];
+    //   for (var z = 0; z < Things.length; z++) {
+    //     Things[z]
+    //   }
+    // }
+
+    // for (i = 0; i < data.length; i++){
+    //   cat.push(data[i][0]);
+    //   tiga_jam.push(parseInt(data[i][1]));
+    //   per_minggu.push(parseInt(data[i][2]));
+    //   per_bulan.push(parseInt(data[i][3]));
+    //   manam_bulan.push(parseInt(data[i][4]));
+    // }
+
+    $('#container8').highcharts({
+      chart: {
+        type: 'column'
+      },
+      title: {
+        text: 'Stacked column chart'
+      },
+      xAxis: {
+        categories: [3, 4, 4, 2, 5,3, 4, 4, 2, 5,3, 4, 4, 2, 5,3, 4, 4, 2, 5,3, 4, 4]
+      },
+      yAxis: {
+        min: 0,
+        title: {
+          text: 'Total fruit consumption'
+        },
+        stackLabels: {
+          enabled: true,
+          style: {
+            fontWeight: 'bold',
+            color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+          }
+        }
+      },
+      legend: {
+        align: 'right',
+        x: -30,
+        verticalAlign: 'top',
+        y: 25,
+        floating: true,
+        backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
+        borderColor: '#CCC',
+        borderWidth: 1,
+        shadow: false
+      },
+      tooltip: {
+        headerFormat: '<b>{point.x}</b><br/>',
+        pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+      },
+      plotOptions: {
+        column: {
+          stacking: 'normal',
+          dataLabels: {
+            enabled: true,
+            color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+          }
+        }
+      },
+      series: data
+
+    });
+  });
+});
+
 
 </script>
 

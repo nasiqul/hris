@@ -44,7 +44,7 @@
             <li class="<?php if($menu == 'abs') echo 'active'?>"><a href="<?php echo base_url('home/absen'); ?>"><i class="fa fa-edit"></i> <span>Absence Data</span></a>
             </ul>
         </li>
-        <li class="treeview <?php if($menu == 'ovr' || $menu == 'ovrR' || $menu == 'cc' || $menu == 'GAreport' || $menu == 'ovrG' || $menu == 'ovrR2') echo 'active'?>">
+        <li class="treeview <?php if($menu == 'ovr' || $menu == 'ovrR' || $menu == 'cc' || $menu == 'GAreport' || $menu == 'ovrG' || $menu == 'ovrR2' || $menu == 'OT-m') echo 'active'?>">
         <a href="#"><i class="fa fa-line-chart"></i> <span>Overtime</span>
           <span class="pull-right-container">
             <i class="fa fa-angle-left pull-right"></i>
@@ -57,6 +57,7 @@
           <li class="<?php if($menu == 'ovrR2') echo 'active'?>"><a href="<?php echo base_url('home/ot_report2'); ?>"><i class="fa fa-book"></i> Report 2</a></li>
           <li class="<?php if($menu == 'cc') echo 'active'?>"><a href="<?php echo base_url('budget'); ?>"><i class="fa fa-cc"></i>Cost - Center Budget</a></li>
           <li class="<?php if($menu == 'GAreport') echo 'active'?>"><a href="<?php echo base_url('home/report_GA'); ?>"><i class="fa fa-cubes"></i>GA - Report</a></li>
+          <li class="<?php if($menu == 'OT-m') echo 'active'?>"><a href="<?php echo base_url('home/ot_m'); ?>"><i class="fa fa-cubes"></i>Management Section</a></li>
           </ul>
         </li>
           <li class="<?php if($menu == 'qa') echo 'active'?>"><a href="<?php echo base_url('home/tanya'); ?>"><i class="fa fa-comments-o"></i> <span>Q & A List</span></a></li>
@@ -76,11 +77,11 @@
           </li> -->
 
         <?php }  else { ?>
-          <li class="<?php if($menu == 'empG') echo 'active'?>"><a href="<?php echo base_url('home/karyawan_graph'); ?>"><i class="fa fa-bar-chart"></i> Employee Graph</a></li>
+          <!-- <li class="<?php if($menu == 'empG') echo 'active'?>"><a href="<?php echo base_url('home/karyawan_graph'); ?>"><i class="fa fa-bar-chart"></i> Employee Graph</a></li>
           <li class="<?php if($menu == 'prG') echo 'active'?>"><a href="<?php echo base_url('home/presensi_graph'); ?>"><i class="fa fa-bar-chart"></i> Presence Graph</a></li>
           <li class="<?php if($menu == 'absG') echo 'active'?>"><a href="<?php echo base_url('home/absensi_graph'); ?>"><i class="fa fa-bar-chart"></i> Absence Graph</a></li>
           <li class="<?php if($menu == 'ovrG') echo 'active'?>"><a href="<?php echo base_url('home/ot_graph'); ?>"><i class="fa fa-bar-chart"></i> Overtime Graph</a></li>
-          <li class="<?php if($menu == 'ovrU') echo 'active'?>"><a href="<?php echo base_url('home/overtime_user'); ?>"><i class="fa fa-line-chart"></i> <span>overtime_user</span></a></li>
+          <li class="<?php if($menu == 'ovrU') echo 'active'?>"><a href="<?php echo base_url('home/overtime_user'); ?>"><i class="fa fa-line-chart"></i> <span>overtime_user</span></a></li> -->
         <?php } ?>
         </ul>
         <!-- /.sidebar-menu -->

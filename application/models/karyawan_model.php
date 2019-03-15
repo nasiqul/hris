@@ -386,6 +386,17 @@ class Karyawan_model extends CI_Model {
         }    
     }
 
+    function update_data($where,$data,$table){
+        $this->db->where($where);
+        $this->db->update($table,$data);
+    }   
+
+    function update_data_terminasi($where,$data,$table){
+        $this->db->where($where);
+        $this->db->update($table,$data);
+    }  
+
+
     public function tambah($foto, $nik, $nama, $tmptL, $tglL, $jk, $ktp, $alamat, $statusK, $dev, $dep, $sec, $subsec, $group, $grade, $jab, $kode, $statusKar, $pin, $tglM, $cs, $hp, $bpjstk, $bpjskes, $no_rek, $npwp, $jp){
 
         $this->db->set('pin', $pin);

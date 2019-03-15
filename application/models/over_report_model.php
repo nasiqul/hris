@@ -106,6 +106,7 @@ class Over_report_model extends CI_Model {
         $this->db->join("posisi p","p.nik = d.nik","left");
         $this->db->join("departemen dp","dp.id = p.id_dep", "left");
         $this->db->join("section sc","sc.id = p.id_sec", "left");
+        $this->db->where("total_jam <> 0");
         $this->db->order_by("period","DESC");
 
 

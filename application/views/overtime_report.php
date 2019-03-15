@@ -152,12 +152,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             nik : nik,
             period : tgl,
           }
-        },
-        "columns": [
-        { "data": 2 },
-        { "data": 3 },
-        { "data": 4 }
-        ],
+        }
       });
     }
 
