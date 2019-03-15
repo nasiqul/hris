@@ -15,6 +15,7 @@ class Home extends CI_Controller {
         $this->load->model('karyawan_by_period_model');
         $this->load->model('report_detail_m');
         $this->load->model('over_model');
+        $this->load->model('budget_model');
     }
 
     public function index()
@@ -69,6 +70,28 @@ class Home extends CI_Controller {
     {
         $data['menu'] = 'absG';
         $this->load->view("absensi_graph",$data);
+    }
+    
+//---------------chart
+    public function budget_chart()
+    {
+        $data['menu'] = 'absG';
+        if (isset($_POST['tgl2'])) {
+            $n = date('Y-m', strtotime($_POST['tgl2']));
+            $tgl = $n."-01";
+        }
+        else {
+            $tgl = date('Y-m')."-01";
+        }
+        $data['cc'] = $this->budget_model->get_chart_data($tgl);
+        $this->load->view("budget_graph",$data);
+    }
+
+    public function budget_chart_mp()
+    {
+        $data['menu'] = 'absG';
+        $data['cc2'] = $this->budget_model->get_chart_data_mp();
+        $this->load->view("budget_graph_mp",$data);
     }
 
     public function outSource()
@@ -778,6 +801,32 @@ public function ajax_over_section()
     echo json_encode($data);
 }
 
+
+public function ajax_over_subsection()
+{
+    $id = $_POST['id'];
+    $list = $this->karyawan_model->get_sub_sec($id);
+    $data = array();
+
+    $row1 = array();
+    $row1[] = "";
+    $row1[] = "Select Sub Section";
+
+    $data[] = $row1;
+    if ($list) {
+        foreach ($list as $key) {
+            $row = array();
+            $row[] = $key->id;
+            $row[] = $key->nama;
+
+            array_push($data, $row);
+        }
+    }
+
+            //output to json format
+    echo json_encode($data);
+}
+
 public function ajax_get_nama()
 {
     $nik = $_POST['nik'];
@@ -1060,6 +1109,36 @@ public function report_detail()
     $tanggal = date('Y-m-d',strtotime($tgl));
 
     $list = $this->report_detail_m->get_data($tanggal);
+    $data = array();
+    foreach ($list as $key) {
+        $row = array();
+        $row[] = $key->tanggal;
+        $row[] = $key->nik;
+        $row[] = $key->namaKaryawan;
+        $row[] = $key->section;
+        $row[] = $key->masuk;
+        $row[] = $key->keluar;
+        $row[] = $key->shift;
+
+        $data[] = $row;
+    }
+
+    $output = array(
+        "draw" => $_GET['draw'],
+        "recordsTotal" => $this->report_detail_m->count_all($tanggal),
+        "recordsFiltered" => $this->report_detail_m->count_filtered($tanggal),
+        "data" => $data,
+    );
+            //output to json format
+    echo json_encode($output);
+}
+
+public function ajax_budget_g()
+{
+    $tgl = '10-'.$_POST['tgl'];
+    $tanggal = date('Y-m-d',strtotime($tgl));
+
+    $list = $this->_m->get_data($tanggal);
     $data = array();
     foreach ($list as $key) {
         $row = array();

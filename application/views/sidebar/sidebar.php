@@ -77,6 +77,8 @@
           </li> -->
 
         <?php }  else { ?>
+          <li><a href="<?php echo base_url('home/budget_chart'); ?>"> Budget Total</a></li>
+          <li><a href="<?php echo base_url('home/budget_chart_mp'); ?>"> Budget Total / MP</a></li>
           <!-- <li class="<?php if($menu == 'empG') echo 'active'?>"><a href="<?php echo base_url('home/karyawan_graph'); ?>"><i class="fa fa-bar-chart"></i> Employee Graph</a></li>
           <li class="<?php if($menu == 'prG') echo 'active'?>"><a href="<?php echo base_url('home/presensi_graph'); ?>"><i class="fa fa-bar-chart"></i> Presence Graph</a></li>
           <li class="<?php if($menu == 'absG') echo 'active'?>"><a href="<?php echo base_url('home/absensi_graph'); ?>"><i class="fa fa-bar-chart"></i> Absence Graph</a></li>

@@ -24,6 +24,7 @@ class Ot extends CI_Controller {
 		$sec = $_POST['sec'];
 		$kep = $_POST['kep'];
 		$cat = $_POST['cat'];
+		$subsec = $_POST['subsec'];
 
 		$params['data'] = $no_doc;
 		$params['level'] = 'H';
@@ -34,9 +35,9 @@ class Ot extends CI_Controller {
 		$kalender = $this->over_model->get_calendar($tgl);
 
 		if ($kalender == 0)
-			$this->over_model->save_master($no_doc, $tgl, $dep, $sec, $kep, $cat, 'N');
+			$this->over_model->save_master($no_doc, $tgl, $dep, $sec, $subsec, $kep, $cat, 'N');
 		else
-			$this->over_model->save_master($no_doc, $tgl, $dep, $sec, $kep, $cat, 'L');
+			$this->over_model->save_master($no_doc, $tgl, $dep, $sec, $subsec, $kep, $cat, 'L');
 	}
 
 	public function ot_member_submit()

@@ -417,7 +417,7 @@ public function caobaaa_default()
     	return $query->result();
     }
 
-    public function save_master($no_doc, $tgl, $dep, $sec, $kep, $cat, $hari)
+    public function save_master($no_doc, $tgl, $dep, $sec, $subsec, $kep, $cat, $hari)
     {
     	$data = array(
     		'id' => $no_doc,
@@ -427,7 +427,7 @@ public function caobaaa_default()
     		'keperluan' => $kep,
     		'catatan' => $cat,
             'hari' => $hari,
-            'status' => 0
+            'sub_sec' => $subsec
         );
 
     	$this->db->insert('over_time', $data);

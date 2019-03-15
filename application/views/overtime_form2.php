@@ -39,19 +39,23 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <div class="box-body">
             <form method="POST" id="master">
               <div class="col-md-6">
-                <p>Nomor Dokumen :</p>
-                <?php 
-                error_reporting(0);
-                $dt = date('ym'); 
-                if ($id_doc[0]->id) 
-                  $ids = (substr($id_doc[0]->id, -4))+1;
-                else
-                  $ids = 1;
-                
-                $nod = sprintf('%04u', $ids);
-                $kode = $dt.$nod;
-                ?>
-                <input type="text" name="no" placeholder="nomor dokumen" class="form-control" id="no_doc" value="<?php echo $kode ?>" readonly>
+                <div class="row">
+                  <div class="col-md-4">No Dokumen :</div>
+                  <?php 
+                  error_reporting(0);
+                  $dt = date('ym'); 
+                  if ($id_doc[0]->id) 
+                    $ids = (substr($id_doc[0]->id, -4))+1;
+                  else
+                    $ids = 1;
+
+                  $nod = sprintf('%04u', $ids);
+                  $kode = $dt.$nod;
+                  ?>
+                  <div class="col-md-6">
+                    <input type="text" name="no" placeholder="nomor dokumen" class="form-control" id="no_doc" value="<?php echo $kode ?>" readonly>
+                  </div>
+                </div>
 
                 <div class="row">
                   <div class="col-md-4">
@@ -87,33 +91,34 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     </div>
                   </div>
 
-                  
+                  <div class="col-md-12">
+                    <p>Bagian :</p>
+                      <select name="dep" class="form-control" id="dep" onchange='showSec()'>
+                        <option value="" disabled selected>Select Departemen</option>
+                        <?php 
+                        foreach ($dep as $key) {
+                          echo "<option value='".$key->id."'>".$key->nama."</option>";
+                        }
+                        ?>
+                      </select>
+                  </div>
 
+                  <div class="col-md-12">
+                      <select name="sec" class="form-control" id="sec" onchange='showSubSec()'>
+                        <option value="" disabled selected>Select Section</option>
+                      </select>
+                  </div>
+
+                  <div class="col-md-12">
+                      <select name="subsec" class="form-control" id="subsec">
+                        <option value="" disabled selected>Select Sub Section</option>
+                      </select>
+                  </div>
 
                 </div>
 
-
               </div>
               <div class="col-md-6">
-
-                <p>Bagian :</p>
-                <div class="row">
-                  <div class="col-md-6">
-                    <select name="dep" class="form-control" id="dep" onchange='showSec()'>
-                      <option value="" disabled selected>Select Departemen</option>
-                      <?php 
-                      foreach ($dep as $key) {
-                        echo "<option value='".$key->id."'>".$key->nama."</option>";
-                      }
-                      ?>
-                    </select>
-                  </div>
-                  <div class="col-md-6">
-                    <select name="sec" class="form-control" id="sec">
-                      <option value="" disabled selected>Select Section</option>
-                    </select>
-                  </div>
-                </div>               
 
                 <p>Keperluan :</p>
                 <input type="text" name="kep" placeholder="keperluan" class="form-control" id="kep">
@@ -150,7 +155,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               </div>
             </div>
           </div>
-          
+
           <input type="hidden" name="nodoc2" id="nodoc2" value="<?php echo $dt; echo $nod ?>">
           <div class="box-body">
             <div class="col-md-12">
@@ -204,7 +209,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
             </div>
           </div>
-          
+
         </div>
       </div>
 
@@ -441,6 +446,35 @@ scratch. This page gets rid of all links and provides the needed markup only.
         });
     }
 
+    function showSubSec() {
+      var id = $('#sec').find(':selected')[0].value;
+
+      $.ajax({
+        type: 'POST',
+        url: '<?php echo base_url("home/ajax_over_subsection") ?>',
+        data: {
+          'id': id
+        },
+        success: function (data) {
+            // the next thing you want to do 
+            var $subsec = $('#subsec');
+
+            $subsec.empty();
+
+            var s = $.parseJSON(data);
+
+            $subsec.append('<option value="" disabled selected>'+ s[0][1] +'</option>');
+
+            for (var i = 1; i <= s.length; i++) {
+              $subsec.append('<option id=' + s[i][0] + ' value=' + s[i][0] + '>' + s[i][1] + '</option>');
+            }
+            
+            //manually trigger a change event for the contry so that the change handler will get triggered
+            $subsec.change();
+          }
+        });
+    }
+
     $('#dariF').change(function() {
       jamChanged();
     });
@@ -481,6 +515,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     var tgl = document.getElementById('datepicker').value;
     var dep = document.getElementById('dep').value;
     var sec = document.getElementById('sec').value;
+    var subsec = document.getElementById('subsec').value;
     var kep = document.getElementById('kep').value;
     var cat = document.getElementById('cat').value;
 
@@ -506,7 +541,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
             'dep': dep,
             'sec': sec,
             'kep': kep,
-            'cat': cat
+            'cat': cat,
+            'subsec' : subsec
           },
           success: function(data){
 
