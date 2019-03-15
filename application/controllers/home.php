@@ -90,7 +90,14 @@ class Home extends CI_Controller {
     public function budget_chart_mp()
     {
         $data['menu'] = 'absG';
-        $data['cc2'] = $this->budget_model->get_chart_data_mp();
+        if (isset($_POST['tgl2'])) {
+            $n = date('Y-m', strtotime($_POST['tgl2']));
+            $tgl = $n."-01";
+        }
+        else {
+            $tgl = date('Y-m')."-01";
+        }
+        $data['cc2'] = $this->budget_model->get_chart_data_mp($tgl);
         $this->load->view("budget_graph_mp",$data);
     }
 

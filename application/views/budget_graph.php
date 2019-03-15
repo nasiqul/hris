@@ -57,7 +57,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <?php foreach ($cc as $key) { ?>
                     <tr>
                       <th><?php echo $key->name ?></th>
-                      <td><?php echo $key->budget ?></td>
+                      <td><?php echo $key->budget * $key->jumlah ?></td>
                       <td><?php echo $key->aktual ?></td>
                     </tr>
                   <?php } ?>
@@ -91,6 +91,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       text: 'Data extracted from a HTML table in the page'
     },
     yAxis: {
+       type: 'logarithmic',
       allowDecimals: false,
       title: {
         text: 'Units'
