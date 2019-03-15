@@ -52,11 +52,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <th>Budget</th>
                     <th>Aktual</th>
                   </tr>
-                  <?php foreach ($cc as $key) { ?>
+                  <?php foreach ($cc as $key) {  ?>
                     <tr>
                       <th><?php echo $key->name ?></th>
                       <td><?php echo $key->budget * $key->jumlah ?></td>
                       <td><?php echo $key->aktual ?></td>
+                      <p id="tglx" hidden=""><?php echo date("F Y",strtotime($key->period)) ?></p>
                     </tr>
                   <?php } ?>
                 </tbody>
@@ -86,7 +87,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       type: 'column'
     },
     title: {
-      text: 'Budget Total'
+      text: 'Budget Total '+$("#tglx").text()
     },
     yAxis: {
      type: 'logarithmic',

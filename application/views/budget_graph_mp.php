@@ -57,6 +57,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <th><?php echo $key->name ?></th>
                     <td><?php echo $key->budget ?></td>
                     <td><?php echo round(($key->aktual / $key->jumlah),2) ?></td>
+                    <p id="tglx" hidden=""><?php echo date("F Y",strtotime($key->period)) ?></p>
                   </tr>
                 <?php } ?>
               </tbody>
@@ -86,7 +87,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       type: 'column'
     },
     title: {
-      text: 'Budget Total / MP'
+      text: 'Budget Total / MP '+$("#tglx").text()
     },
     yAxis: {
      type: 'logarithmic',

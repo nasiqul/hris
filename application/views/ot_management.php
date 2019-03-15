@@ -82,7 +82,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   </div>
                   <div class="pull-right" style="margin-right: 20px">
                     Section : 
-                    <input type="text" name="section" id="section" class="form-control">
+                    <select name="section" class="form-control" id="section">
+                      <?php foreach ($section as $key) { ?>
+                        <option value="<?php echo $key->id_cc ?>"><?php echo $key->name ?></option>
+                      <?php } ?>
+                    </select>
                   </div>
                 </div>
                 <div id="container" style ="width: 95%;margin: 0 auto"></div>
@@ -143,14 +147,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
           type: 'line'
         },
         title: {
-          text: 'YEAR 20??'
+          text: 'YEAR'
         },
         xAxis: {
-          categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+          categories: []
         },
         yAxis: {
           title: {
-            text: 'Temperature (°C)'
+            text: 'Total Jam'
           }
         },
         legend: {
@@ -169,13 +173,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             }
           }
         },
-        series: [{
-          "name": 'Ali',
-          "data": [[7.0], [6.9], [9.5], [14.5], [18.4], 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
-        }, {
-          "name": 'Nasiqul',
-          "data": [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
-        }]
+        series: []
       });
     });
     // })
@@ -238,14 +236,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         type: 'line'
                       },
                       title: {
-                        text: 'YEAR 20??'
+                        text: 'YEAR '+$("#tahun").val()
                       },
                       xAxis: {
                         categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
                       },
                       yAxis: {
                         title: {
-                          text: 'Temperature (°C)'
+                          text: 'Total Jam'
                         }
                       },
                       legend: {

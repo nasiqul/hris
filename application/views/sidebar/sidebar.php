@@ -54,7 +54,7 @@
           <li class="<?php if($menu == 'ovrG') echo 'active'?>"><a href="<?php echo base_url('home/ot_graph'); ?>"><i class="fa fa-bar-chart"></i> Graph</a></li>
           <li><a href="<?php echo base_url('home/budget_chart'); ?>"> <i class="fa fa-bar-chart"></i> Budget Total</a></li>
           <li><a href="<?php echo base_url('home/budget_chart_mp'); ?>"> <i class="fa fa-bar-chart"></i> Budget Total / MP</a></li>
-          <li><a href="<?php echo base_url('home/chart_per_tgl'); ?>"> <i class="fa fa-bar-chart"></i> Budget Total / MP</a></li>
+          <li><a href="<?php echo base_url('home/chart_per_tgl'); ?>"> <i class="fa fa-bar-chart"></i> Chart per tgl</a></li>
           <li class="<?php if($menu == 'ovr') echo 'active'?>"><a href="<?php echo base_url('home/ot'); ?>"><i class="fa fa-male"></i> <span>Overtime Data</span></a></li>
           <li class="<?php if($menu == 'ovrR') echo 'active'?>"><a href="<?php echo base_url('home/ot_report'); ?>"><i class="fa fa-book"></i> Report</a></li>
           <li class="<?php if($menu == 'ovrR2') echo 'active'?>"><a href="<?php echo base_url('home/ot_report2'); ?>"><i class="fa fa-book"></i> Report 2</a></li>

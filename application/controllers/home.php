@@ -115,6 +115,7 @@ class Home extends CI_Controller {
     public function ot_m()
     {
         $data['menu'] = 'OT-m';
+        $data['section'] = $this->budget_model->get_name_cc();
         $this->load->view("ot_management",$data);
     }
 
