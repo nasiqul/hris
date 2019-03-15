@@ -161,12 +161,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- ./wrapper -->
   <script>
     $(document).ready(function() {
-      konfirm();
+      //konfirm();
       buattable();
     });
 
     function gantitanggal() {
-     konfirm();
+     //konfirm();
      buattable();
    }
 

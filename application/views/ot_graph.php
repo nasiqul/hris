@@ -1286,12 +1286,38 @@ function gantiTgl() {
     type: "POST",
     url: "<?php echo base_url('home/ajax_dep_over/') ?>"+$("#tgls2").val()+"",
     success: function(data) {
-      var s = $.parseJSON(data);
-      var processed_json5 = new Array();
+      // var s = $.parseJSON(data);
+      // var processed_json5 = new Array();
       // Populate series
-      for (i = 0; i < s.length; i++){
-        processed_json5.push([s[i].name, parseFloat(s[i].y)]);
-
+      var data = $.parseJSON(data);
+      var seriesData = [];
+      var xCategories = [];
+      var i, cat;
+      var intVal = function ( i ) {
+        return typeof i === 'string' ?
+        i.replace(/[\$,]/g, '')*1 :
+        typeof i === 'number' ?
+        i : 0;
+      };
+      for(i = 0; i < data.length; i++){
+        cat = data[i].shipment_date;
+        if(xCategories.indexOf(cat) === -1){
+          xCategories[xCategories.length] = cat;
+        }
+      }
+      for(i = 0; i < data.length; i++){
+        if(seriesData){
+          var currSeries = seriesData.filter(function(seriesObject){ return seriesObject.name == data[i].status;});
+          if(currSeries.length === 0){
+            seriesData[seriesData.length] = currSeries = {name: data[i].status, data: []};
+          } else {
+            currSeries = currSeries[0];
+          }
+          var index = currSeries.data.length;
+          currSeries.data[index] = data[i].quantity;
+        } else {
+          seriesData[0] = {name: data[i].status, data: [data[i].quantity]}
+        }
       }
 
       if (s[0].name == null) {

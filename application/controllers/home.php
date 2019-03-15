@@ -75,7 +75,7 @@ class Home extends CI_Controller {
 //---------------chart
     public function budget_chart()
     {
-        $data['menu'] = 'absG';
+        $data['menu'] = 'ovrG';
         if (isset($_POST['tgl2'])) {
             $n = date('Y-m', strtotime($_POST['tgl2']));
             $tgl = $n."-01";
@@ -89,7 +89,7 @@ class Home extends CI_Controller {
 
     public function budget_chart_mp()
     {
-        $data['menu'] = 'absG';
+        $data['menu'] = 'ovrG';
         if (isset($_POST['tgl2'])) {
             $n = date('Y-m', strtotime($_POST['tgl2']));
             $tgl = $n."-01";
