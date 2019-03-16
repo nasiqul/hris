@@ -33,6 +33,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
         </div>
 
         <div class="col-md-12">
+          <input type="text" id="tgls" value="<?php echo date('d-m-Y'); ?>">
+
           <div class="nav-tabs-custom">
             <ul class="nav nav-tabs">
               <li><a href="#tab_1" data-toggle="tab">
@@ -51,9 +53,21 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 By Dep 2 <br> <span class="text-purple">???</span></a>
               </li>
 
-              <!-- <li><a href="#tab_4" data-toggle="tab">
-                > 3 Jam <br> <span class="text-purple">???</span></a>
-              </li> -->
+              <li><a href="#tab_5" data-toggle="tab" onclick="tiga_jam()">
+                > 3 Jam / Hari<br> <span class="text-purple">???</span></a>
+              </li>
+
+              <li><a href="#tab_6" data-toggle="tab" onclick="empatbelas_jam()">
+                > 14 Jam / Minggu<br> <span class="text-purple">???</span></a>
+              </li>
+
+              <li><a href="#tab_7" data-toggle="tab" onclick="tiga_dan_empatbelas_jam()">
+                > 3 Jam  & 14 Jam<br> <span class="text-purple">???</span></a>
+              </li>
+
+              <li><a href="#tab_8" data-toggle="tab" onclick="limaenam_jam()">
+                > 56 Jam / Bulan<br> <span class="text-purple">???</span></a>
+              </li>
             </ul>
             <div class="tab-content">
               <div class="tab-pane" id="tab_1">
@@ -91,6 +105,66 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   </div>
                 </div>
                 <div id = "container4" style ="margin: 0 auto"></div>
+              </div>
+              <div class="tab-pane" id="tab_5">
+                <table class="table table-bordered table-responsive" style="width: 100%" id="3jam">
+                  <thead>
+                    <tr>
+                      <th>NIK</th>
+                      <th>Nama Karyawan</th>
+                      <th>Departemen</th>
+                      <th>Section</th>
+                      <th>Kode</th>
+                      <th>Rata2 Jam</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+              <div class="tab-pane" id="tab_6">
+                <table class="table table-bordered table-responsive" style="width: 100%" id="14jam">
+                  <thead>
+                    <tr>
+                      <th>NIK</th>
+                      <th>Nama Karyawan</th>
+                      <th>Departemen</th>
+                      <th>Section</th>
+                      <th>Kode</th>
+                      <th>Rata2 Jam</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+              <div class="tab-pane" id="tab_7">
+                <table class="table table-bordered table-responsive" style="width: 100%" id="3_14jam">
+                  <thead>
+                    <tr>
+                      <th>NIK</th>
+                      <th>Nama Karyawan</th>
+                      <th>Departemen</th>
+                      <th>Section</th>
+                      <th>Kode</th>
+                      <th>Rata2 Jam</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+              <div class="tab-pane" id="tab_8">
+                <table class="table table-bordered table-responsive" style="width: 100%" id="56jam">
+                  <thead>
+                    <tr>
+                      <th>NIK</th>
+                      <th>Nama Karyawan</th>
+                      <th>Departemen</th>
+                      <th>Section</th>
+                      <th>Kode</th>
+                      <th>Rata2 Jam</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
               </div>
               <!-- /.tab-pane -->
               <!-- /.tab-pane -->
@@ -189,7 +263,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- ./wrapper -->
   <script>
     var notif = document.getElementById("notif");
-    var tgl;
+    var tgl = $("#tgls").val();
 
     function check() {
       notif.style.display = "none";
@@ -206,14 +280,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
       format: "mm-yyyy",
       viewMode: "months", 
       minViewMode: "months"
-    })
+    });
 
      $('#datepicker2').datepicker({
       autoclose: true,
       format: "mm-yyyy",
       viewMode: "months", 
       minViewMode: "months"
-    })
+    });
+
    });
 
     $(function () {
@@ -785,7 +860,7 @@ function date_change() {
     },
     success: function(data) {
       var s = $.parseJSON(data);
-      
+
       var cat = new Array();
       var tiga_jam = new Array();
       var per_minggu = new Array();
@@ -953,6 +1028,101 @@ function show2(tgl, cat, kode) {
       }
     }
   });
+}
+
+function tiga_jam() {
+  var tabel0 = $('#3jam').DataTable();
+  tabel0.destroy();
+  var ttanggal = $("#tgls").val();
+
+  tabel0 = $('#3jam').DataTable({
+      "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+      "processing": true,
+      "serverSide": true,
+      "searching": true,
+      "bLengthChange": true,
+      "order": [],
+      "ajax": {
+        "url": "<?php echo base_url('ot/ajax_ot_jam/')?>",            
+        "type": "GET",
+        "data": {
+          tgl2 : ttanggal,
+          cat: "3jam"
+        }
+      }
+    })
+}
+
+
+function empatbelas_jam() {
+  var tabel9 = $('#14jam').DataTable();
+  tabel9.destroy();
+  var ttanggal = $("#tgls").val();
+
+  tabel9 = $('#14jam').DataTable({
+      "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+      "processing": true,
+      "serverSide": true,
+      "searching": true,
+      "bLengthChange": true,
+      "order": [],
+      "ajax": {
+        "url": "<?php echo base_url('ot/ajax_ot_jam/')?>",            
+        "type": "GET",
+        "data": {
+          tgl2 : ttanggal,
+          cat: "14jam"
+        }
+      }
+    })
+}
+
+
+function tiga_dan_empatbelas_jam() {
+  var tabel8 = $('#3_14jam').DataTable();
+  tabel8.destroy();
+  var ttanggal = $("#tgls").val();
+
+  tabel8 = $('#3_14jam').DataTable({
+      "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+      "processing": true,
+      "serverSide": true,
+      "searching": true,
+      "bLengthChange": true,
+      "order": [],
+      "ajax": {
+        "url": "<?php echo base_url('ot/ajax_ot_jam/')?>",            
+        "type": "GET",
+        "data": {
+          tgl2 : ttanggal,
+          cat: "3_14jam"
+        }
+      }
+    })
+}
+
+
+function limaenam_jam() {
+  var tabel7 = $('#56jam').DataTable();
+  tabel7.destroy();
+  var ttanggal = $("#tgls").val();
+
+  tabel7 = $('#56jam').DataTable({
+      "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+      "processing": true,
+      "serverSide": true,
+      "searching": true,
+      "bLengthChange": true,
+      "order": [],
+      "ajax": {
+        "url": "<?php echo base_url('ot/ajax_ot_jam/')?>",            
+        "type": "GET",
+        "data": {
+          tgl2 : ttanggal,
+          cat: "56jam"
+        }
+      }
+    })
 }
 
 </script>

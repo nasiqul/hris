@@ -713,6 +713,57 @@ class Ot extends CI_Controller {
             //output to json format
 		echo json_encode($output);
 	}
+
+	public function ajax_ot_jam()
+	{
+		$tgl = $_GET['tgl2'];
+		$cat = $_GET['cat'];
+		
+		if ($cat == "3jam") {
+			$list = $this->over_cari_chart2->get_data_3_t($tgl);
+			$tot = $this->over_cari_chart2->count_all_3_t($tgl);
+			$filter = $this->over_cari_chart2->count_filtered_3_t($tgl);
+		}
+		else if ($cat == "14jam") {
+			$list = $this->over_cari_chart2->get_data_14_t($tgl);
+			$tot = $this->over_cari_chart2->count_all_14_t($tgl);
+			$filter = $this->over_cari_chart2->count_filtered_14_t($tgl);
+		}
+		else if ($cat == "3_14jam") {
+			$list = $this->over_cari_chart2->get_data_3_14_t($tgl);
+			$tot = $this->over_cari_chart2->count_all_3_14_t($tgl);
+			$filter = $this->over_cari_chart2->count_filtered_3_14_t($tgl);
+		}
+		else if ($cat == "56jam") {
+			$list = $this->over_cari_chart2->get_data_56_t($tgl);
+			$tot = $this->over_cari_chart2->count_all_56_t($tgl);
+			$filter = $this->over_cari_chart2->count_filtered_56_t($tgl);
+		}
+		
+		
+		$data = array();
+		foreach ($list as $key) {
+			$row = array();
+			$row[] = $key->nik;
+			$row[] = $key->namaKaryawan;
+			$row[] = $key->departemen;
+			$row[] = $key->section;
+			$row[] = $key->kode;
+			$row[] = $key->avg;
+
+			$data[] = $row;
+		}
+
+
+            //output to json format
+		$output = array(
+			"draw" => $_GET['draw'],
+			"recordsFiltered" => $filter,
+			"data" => $data,
+		);
+            //output to json format
+		echo json_encode($output);
+	}
 }
 ?>
 

@@ -636,17 +636,18 @@ left join
             JOIN
             
             (
-            select b.month_name, b.nik, b.kode, count(b.nik) as 14_jam from 
-            (
-                select date_format(over.tanggal, '%m-%Y') as month_name, week(over.tanggal) as week_name, karyawan.nik, karyawan.kode, sum(over.jam) as jam from over
-                left join karyawan on karyawan.nik = over.nik 
-                where over.status = 'N' AND MONTH(over.tanggal) = MONTH('".$tgl."') AND YEAR(over.tanggal) = YEAR('".$tgl."')
-                group by date_format(over.tanggal, '%m-%Y'), week(over.tanggal), karyawan.kode, karyawan.nik having jam > 14
-                ) as b 
-            GROUP BY b.kode
+                select b.month_name, b.kode, b.nik from 
+                (
+                    select date_format(over.tanggal, '%m-%Y') as month_name, week(over.tanggal) as week_name, karyawan.nik, karyawan.kode, sum(over.jam) as jam from over
+                    left join karyawan on karyawan.nik = over.nik 
+                    where over.status = 'N' AND MONTH(over.tanggal) = MONTH('".$tgl."') AND YEAR(over.tanggal) = YEAR('".$tgl."')
+                    group by date_format(over.tanggal, '%m-%Y'), week(over.tanggal), karyawan.nik, karyawan.kode
+                    having jam > 14
+                ) as b GROUP BY b.nik
             ) as l
             on u.nik = l.nik
             GROUP BY u.kode
+
 ) as z on z.kode = kode.nama
 left join
 (
