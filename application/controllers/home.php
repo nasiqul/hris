@@ -112,6 +112,24 @@ class Home extends CI_Controller {
         $this->load->view("client");
     }
 
+    public function monthly()
+    {
+        $data['menu'] = 'ovrMo';
+        $this->load->view("ot_summary", $data);
+    }
+
+    public function monthlyMon()
+    {
+        $data['menu'] = 'ovrMon';
+        $this->load->view("ot_monthly_monitor", $data);
+    }
+
+    public function monthlyC()
+    {
+        $data['menu'] = 'ovrMoC';
+        $this->load->view("ot_monthly_control", $data);
+    }
+
     public function ot_m()
     {
         $data['menu'] = 'OT-m';

@@ -82,7 +82,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   </div>
                   <div class="pull-right" style="margin-right: 20px">
                     Section : 
-                    <select name="section" class="form-control" id="section">
+                    <select name="section" class="form-control" id="section" onchange="postTahun()">
                       <?php foreach ($section as $key) { ?>
                         <option value="<?php echo $key->id_cc ?>"><?php echo $key->name ?></option>
                       <?php } ?>
@@ -194,10 +194,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
           var nama;
                     // Populate series
 
-                    for(i = 0; i < data.length; i++){
-                      nama = data[i].name;
-                    }
-
                     // for(i = 0; i < data.length; i++){
                     //   if(seriesData){
                     //     var currSeries = seriesData.filter(function(seriesObject){ return seriesObject.name == data[i].hpl;});
@@ -267,38 +263,38 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                   }
                 });
-}
+    }
 
-function ShowData(tgl, by){
-  tabel = $('#example2').DataTable();
-  tabel.destroy();
+    function ShowData(tgl, by){
+      tabel = $('#example2').DataTable();
+      tabel.destroy();
 
-  $('#myModal').modal('show');
-  $('#example2').DataTable({
-    "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
-    "processing": true,
-    "serverSide": true,
-    "bInfo": false,
-    "order": [],
-    "ajax": {
-      "url": "<?php echo base_url('home/ajax_presensi_cari_g/')?>",            
-      "type": "POST",
-      "data": {
-        tanggal:tgl,
-        nik:'',
-        nama:'',
-        shift:by,
-      }
-    },
-    "columnDefs": [
-    {
+      $('#myModal').modal('show');
+      $('#example2').DataTable({
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        "processing": true,
+        "serverSide": true,
+        "bInfo": false,
+        "order": [],
+        "ajax": {
+          "url": "<?php echo base_url('home/ajax_presensi_cari_g/')?>",            
+          "type": "POST",
+          "data": {
+            tanggal:tgl,
+            nik:'',
+            nama:'',
+            shift:by,
+          }
+        },
+        "columnDefs": [
+        {
           "targets": [ 0,1,2,3,4,5 ], //first column / numbering column
           "orderable": false, //set not orderable
         }]
       });
-}
+    }
 
-</script>
+  </script>
 
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the

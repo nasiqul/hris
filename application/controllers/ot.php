@@ -12,8 +12,11 @@ class Ot extends CI_Controller {
 		$this->load->model('over_cari_report_model_2');
 		$this->load->model('over_cari_chart');
 		$this->load->model('cari_over_dep');
-		$this->load->library('ciqrcode');
 		$this->load->model('over_cari_chart2');
+		$this->load->model('ot_summary');
+		$this->load->library('ciqrcode');
+		$this->load->helper('file');
+		$this->load->library(array('PHPExcel','PHPExcel/IOFactory'));
 	}
 
 	public function ot_submit()
@@ -962,6 +965,7 @@ class Ot extends CI_Controller {
 
 		$list = $this->over_model->nik_by_cc($section);
 		$data = array();
+		$data3 = array();
 
 		foreach ($list as $key) {
 			$data2 = array();
@@ -969,20 +973,26 @@ class Ot extends CI_Controller {
 			$nik = $key->nik;
 
 			$data2["name"] = $key->namaKaryawan;
+			$data3["name"] = $key->target;
 
 			$list2 = $this->over_model->jam_by_nik($nik,$tahun);
 
 			$row2 = array();
+			$d = array();
 
 			foreach ($list2 as $key2) {
 				$row = array();
 				$row[] = (float) $key2->tot;
 
 				array_push($row2, $row);
+				array_push($d, (float) $key2->budget);
 			}
 
 			$data2["data"] =  $row2;
+			$data3["data"] =  $d;
+
 			array_push($data, $data2);
+			array_push($data, $data3);
 		}
 
             //output to json format
@@ -991,35 +1001,99 @@ class Ot extends CI_Controller {
 
 	public function overtime_chart_per_dep()
 	{
+		
 		$list = $this->over_model->get_tgl();
+		$list2 = $this->over_model->get_cc5();
 		$data = array();
+		$data2 = array();
 
 		foreach ($list as $key) {
-			$data2 = array();
+			
+			array_push($data, $key->tanggal);
 
-			$tgl = $key->tanggal;
-
-			$data2["name"] = $tgl;
-
-			$list2 = $this->over_model->get_o_data($tgl);
-
-			$row2 = array();
-
-			foreach ($list2 as $key2) {
-				$row = array();
-				$row[] = (float) $key2->jam;
-
-				array_push($row2, $row);
-			}
-
-			$data2["data"] =  $row2;
-			array_push($data, $data2);
 		}
 
-            //output to json format
-		echo json_encode($data);
+		foreach ($list2 as $key2) {
+			$row = array();
+			$row[] = $key2->tanggal; 
+			$row[] = $key2->departemen;
+			$row[] = (float) $key2->jam;
 
+			$data2[] = $row;
+		}
+
+		//array_push($data, $data2);
+
+            //output to json format
+		echo json_encode($data2);
+
+	}
+
+
+	public function createXLS($id) {
+		// create file name
+		$fileName = 'data-'.time().'.xlsx';  
+		// load excel library
+		$this->load->library('excel');
+		$empInfo = $this->over_model->get_over_by_id_member($id);
+		$objPHPExcel = new PHPExcel();
+		$objPHPExcel->setActiveSheetIndex(0);
+        // set Header
+		$objPHPExcel->getActiveSheet()->SetCellValue('A1', 'id_over');
+		$objPHPExcel->getActiveSheet()->SetCellValue('B1', 'nik');
+		$objPHPExcel->getActiveSheet()->SetCellValue('C1', 'nama');
+		$objPHPExcel->getActiveSheet()->SetCellValue('D1', 'dari');
+		$objPHPExcel->getActiveSheet()->SetCellValue('E1', 'sampai');
+		$objPHPExcel->getActiveSheet()->SetCellValue('F1', 'transport');  
+		$objPHPExcel->getActiveSheet()->SetCellValue('G1', 'makan');         
+		$objPHPExcel->getActiveSheet()->SetCellValue('H1', 'efood');  
+		$objPHPExcel->getActiveSheet()->SetCellValue('I1', 'jam');  
+        // set Row
+		$rowCount = 2;
+		foreach ($empInfo as $element) {
+			$objPHPExcel->getActiveSheet()->SetCellValue('A' . $rowCount, $element['id_over']);
+			$objPHPExcel->getActiveSheet()->SetCellValue('B' . $rowCount, $element['nik']);
+			$objPHPExcel->getActiveSheet()->SetCellValue('C' . $rowCount, $element['namaKaryawan']);
+			$objPHPExcel->getActiveSheet()->SetCellValue('D' . $rowCount, $element['dari']);
+			$objPHPExcel->getActiveSheet()->SetCellValue('E' . $rowCount, $element['sampai']);
+			$objPHPExcel->getActiveSheet()->SetCellValue('F' . $rowCount, $element['transport']);
+			$objPHPExcel->getActiveSheet()->SetCellValue('G' . $rowCount, $element['makan']);
+			$objPHPExcel->getActiveSheet()->SetCellValue('H' . $rowCount, $element['efood']);
+			$objPHPExcel->getActiveSheet()->SetCellValue('I' . $rowCount, $element['jam']);
+			$rowCount++;
+		}
+		$objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
+		$objWriter->save(ROOT_UPLOAD_IMPORT_PATH.$fileName);
+		// download file
+		header("Content-Type: application/vnd.ms-excel");
+		redirect(HTTP_UPLOAD_IMPORT_PATH.$fileName);        
+	}
+
+	public function ajax_summary()
+	{
+		
+	}
+
+	public function ajax_mountly()
+	{
+		
+		$list = $this->over_model->get_data_ot_month();
+		$data = array();
+
+		foreach ($list as $key2) {
+			$row = array();
+			$row[] = $key2->mon; 
+			$row[] = (float) $key2->budget_tot;
+			$row[] = (float) $key2->act_tot;
+			$row[] = (float) $key2->forecast_tot;
+			$row[] = $key2->bagian;
+
+			$data[] = $row;
+		}
+
+		echo json_encode($data);
 	}
 }
 ?>
+
 

@@ -220,7 +220,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-danger pull-left" id="terminasi" onclick="keluar()"><i class="fa fa-times"></i> Terminasi</button>
                 <button type="button" class="btn btn-warning pull-left" id="edit"><i class="fa fa-pencil"></i> Edit Data</button>
-                <button type="button" class="btn btn-success pull-left" id="edit2" style="display: none" onclick="ubah()"><i class="fa fa-check"></i> Edit Data</button>
+                <button type="button" class="btn btn-success pull-left" id="edit2" style="display: none" onclick="ubah()"><i class="fa fa-check"></i> Save</button>
               </div>
             </div>
             <!-- /.modal-content -->

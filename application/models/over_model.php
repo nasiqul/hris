@@ -32,7 +32,7 @@ class Over_model extends CI_Model {
     }
 
     
-public function caobaaa_default()
+    public function caobaaa_default()
     {
         $this->db->select("tanggal, nik,nama,masuk,keluar,id,shift,status,jam,final,id_jam,jam_lembur, IFNULL(aktual, 0) as aktual, IFNULL(diff, 0) as diff, IFNULL(final2, 0) as final2");
         $this->db->from("
@@ -176,7 +176,7 @@ public function caobaaa_default()
             left join karyawan d on c.nik = d.nik ) tmp
             ");
 
-       $this->db->where("tanggal = '".$tgl."'");
+        $this->db->where("tanggal = '".$tgl."'");
         $this->db->where("status = '0'");
 
         $query = $this->db->get();
@@ -399,13 +399,13 @@ public function caobaaa_default()
         $this->db->update($table);
     }   
 
-     public function update_data_final($where,$table,$data){
+    public function update_data_final($where,$table,$data){
         $this->db->set('final', $data);
         $this->db->where($where);
         $this->db->update($table);
     }  
 
-     public function update_data_budget($where,$table,$data){
+    public function update_data_budget($where,$table,$data){
         $this->db->set('aktual', $data);
         $this->db->where($where);
         $this->db->update($table);
@@ -1076,7 +1076,7 @@ public function chart_dep2($tgl)
 
 public function nik_by_cc($sec)
 {
-    $q = "select nik, namaKaryawan from karyawan
+    $q = "select nik, namaKaryawan, 'target' target from karyawan
     where costCenter = ".$sec."
     ORDER BY nik ASC";
     $query = $this->db->query($q);
@@ -1085,7 +1085,15 @@ public function nik_by_cc($sec)
 
 public function jam_by_nik($nik, $tahun)
 {
-    $q = "select tanggal, nik, sum(jam) as tot from over where nik = '".$nik."' and DATE_FORMAT(tanggal, '%Y') = '".$tahun."' group by DATE_FORMAT(tanggal, '%M %Y')";
+    $q = "select ab.tanggal, ab.nik, ab.tot, budget from (
+    select tanggal, nik, ROUND(sum(jam), 1) as tot from over
+    where nik = '".$nik."' and DATE_FORMAT(tanggal, '%Y') = '".$tahun."' 
+    group by DATE_FORMAT(tanggal, '%M %Y')
+    ) as ab
+
+    join karyawan on karyawan.nik = ab.nik
+    join cost_center_budget on cost_center_budget.id_cc = karyawan.costCenter
+    group by DATE_FORMAT(ab.tanggal, '%M %Y')";
     $query = $this->db->query($q);
     return $query->result();
 }
@@ -1124,6 +1132,71 @@ public function get_o_data($tgl)
     where DATE_FORMAT(tanggal, '%m-%Y') = '02-2019'
     and tanggal = '".$tgl."'
     group by costCenter";
+    $query = $this->db->query($q);
+    return $query->result();
+}
+
+public function get_cc5()
+{
+    $q = "  
+            select c.mon, c.tanggal, c.departemen, coalesce(d.total_jam, 0) as jam from
+            (
+            select a.mon, a.tanggal, b.departemen from
+            (
+            select distinct date_format(over.tanggal, '%m-%Y') as mon, over.tanggal 
+            from over 
+            where date_format(over.tanggal, '%m-%Y') = '02-2019'
+            ) as a
+            left join
+            (
+            select distinct '02-2019' as mon, departemen from master_cc
+            ) as b on b.mon = date_format(a.tanggal, '%m-%Y')
+            ) as c
+            left join
+            (
+            select '02-2019' as mon, tanggal, departemen, round(sum(jam),1) as total_jam from over
+            left join karyawan on karyawan.nik = over.nik
+            left join master_cc on master_cc.id_cc = karyawan.costCenter
+            where DATE_FORMAT(tanggal, '%m-%Y') = '02-2019'
+            GROUP BY mon, tanggal, departemen
+            ) as d on c.mon = d.mon and c.departemen = d.departemen and c.tanggal = d.tanggal";
+    $query = $this->db->query($q);
+    return $query->result();
+}
+
+public function get_data_ot_month()
+{
+    $q = "
+            select c.mon, (budget*jml_kar) budget_tot, (act*jml_kar) act_tot, (fr*jml_kar) forecast_tot, c.bagian from
+            (
+            SELECT mon, SUM(budget) as budget , SUM(aktual) act, SUM(forecast) as fr, bagian from
+            (
+            SELECT date_format(period, '%Y-%m') as mon, master_cc.id_cc, budget, aktual, forecast, IF(kode = '0fc','OFFICE','PRODUCTION') as bagian from master_cc
+            LEFT JOIN cost_center_budget ON master_cc.id_cc = cost_center_budget.id_cc
+            LEFT join karyawan on karyawan.costCenter = cost_center_budget.id_cc
+            GROUP BY date_format(period, '%Y-%m'), id_cc
+            ) as b
+            group by bagian, mon
+            ) as c
+            left join
+            (
+            select mon, bagian, count(if(if(date_format(a.tanggalMasuk, '%Y-%m') < mon, 1, 0 )-if(date_format(a.tanggalKeluar, '%Y-%m') < mon, 1, 0 ) = 0, null, 1)) as jml_kar from
+            (
+            select distinct fiskal, date_format(tanggal, '%Y-%m') as mon
+            from kalender_fy where fiskal = '195'
+            ) as b
+            left join
+            (
+            select '195' as fy, karyawan.kode, tanggalKeluar, tanggalMasuk, nik, IF(kode = '0fc','OFFICE','PRODUCTION') as bagian
+            from karyawan
+            ) as a
+            on a.fy = b.fiskal
+            group by mon, bagian
+            ) as d on c.mon = d.mon and c.bagian = d.bagian
+
+            group by mon, c.bagian
+
+";
     $query = $this->db->query($q);
     return $query->result();
 }
