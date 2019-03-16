@@ -259,18 +259,22 @@ class Over_cari_chart2 extends CI_Model {
 
     private function _get_over_cari_56($tgl, $cat)
     {
-        $this->db->select('date_format(over.tanggal, "%m-%Y") as month_name, karyawan.nik, karyawan.namaKaryawan, dp.nama as departemen, sc.nama as section, karyawan.kode, avg(over.jam) as avg');
-        $this->db->from('over');
-        $this->db->join('karyawan','karyawan.nik = over.nik');
+        $this->db->select('month_name, d.jam as avg, karyawan.nik, karyawan.namaKaryawan, dp.nama as departemen, sc.nama as section, karyawan.kode');
+        $this->db->from('(
+        select date_format(over.tanggal, "%m-%Y") as month_name, sum(over.jam) as jam, k.nik, k.kode from over
+        join karyawan k on k.nik = over.nik
+        WHERE MONTH(over.tanggal) = MONTH(STR_TO_DATE("'.$tgl.'","%d-%m-%Y"))
+        AND YEAR(over.tanggal) = YEAR(STR_TO_DATE("'.$tgl.'","%d-%m-%Y")) 
+        AND over.status = "N"
+        GROUP BY k.kode, k.nik, date_format(over.tanggal, "%m-%Y")
+        ) as d');
+        $this->db->join('karyawan','karyawan.nik = d.nik');
         $this->db->join('posisi p','p.nik = karyawan.nik');
         $this->db->join('departemen dp','dp.id = p.id_dep');
         $this->db->join('section sc','sc.id = p.id_sec');
-        
-        $this->db->where('MONTH(over.tanggal) = MONTH(STR_TO_DATE("'.$tgl.'","%d-%m-%Y"))');
-        $this->db->where('YEAR(over.tanggal) = YEAR(STR_TO_DATE("'.$tgl.'","%d-%m-%Y"))');
-        $this->db->where('karyawan.kode', $cat);
-        $this->db->group_by(array("karyawan.kode", "karyawan.nik", "date_format(over.tanggal, '%m-%Y')"));
-        $this->db->having("sum(over.jam) > 56");
+        $this->db->where('karyawan.kode',$cat);
+        $this->db->group_by(array("karyawan.kode", "karyawan.nik"));
+        $this->db->having("d.jam > 56");
 
         $i = 0;
 
@@ -567,17 +571,21 @@ class Over_cari_chart2 extends CI_Model {
 
     private function _get_over_cari_56_t($tgl)
     {
-        $this->db->select('date_format(over.tanggal, "%m-%Y") as month_name, karyawan.nik, karyawan.namaKaryawan, dp.nama as departemen, sc.nama as section, karyawan.kode, avg(over.jam) as avg');
-        $this->db->from('over');
-        $this->db->join('karyawan','karyawan.nik = over.nik');
+        $this->db->select('month_name, d.jam as avg, karyawan.nik, karyawan.namaKaryawan, dp.nama as departemen, sc.nama as section, karyawan.kode');
+        $this->db->from('(
+        select date_format(over.tanggal, "%m-%Y") as month_name, sum(over.jam) as jam, k.nik, k.kode from over
+        join karyawan k on k.nik = over.nik
+        WHERE MONTH(over.tanggal) = MONTH(STR_TO_DATE("'.$tgl.'","%d-%m-%Y"))
+        AND YEAR(over.tanggal) = YEAR(STR_TO_DATE("'.$tgl.'","%d-%m-%Y")) 
+        AND over.status = "N"
+        GROUP BY k.kode, k.nik, date_format(over.tanggal, "%m-%Y")
+        ) as d');
+        $this->db->join('karyawan','karyawan.nik = d.nik');
         $this->db->join('posisi p','p.nik = karyawan.nik');
         $this->db->join('departemen dp','dp.id = p.id_dep');
         $this->db->join('section sc','sc.id = p.id_sec');
-        
-        $this->db->where('MONTH(over.tanggal) = MONTH(STR_TO_DATE("'.$tgl.'","%d-%m-%Y"))');
-        $this->db->where('YEAR(over.tanggal) = YEAR(STR_TO_DATE("'.$tgl.'","%d-%m-%Y"))');
-        $this->db->group_by(array("karyawan.kode", "karyawan.nik", "date_format(over.tanggal, '%m-%Y')"));
-        $this->db->having("sum(over.jam) > 56");
+        $this->db->group_by(array("karyawan.kode", "karyawan.nik"));
+        $this->db->having("d.jam > 56");
 
         $i = 0;
 

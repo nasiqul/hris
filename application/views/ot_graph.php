@@ -33,7 +33,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         </div>
 
         <div class="col-md-12">
-          <input type="text" id="tgls" value="<?php echo date('d-m-Y'); ?>">
+          <input type="hidden" id="tgls" value="<?php echo date('d-m-Y'); ?>">
 
           <div class="nav-tabs-custom">
             <ul class="nav nav-tabs">
@@ -849,6 +849,7 @@ $(function () {
 
 function date_change() {
   tgl = $('#datepicker2').val();
+  $('#tgls').val('10-'+tgl);
   console.log(tgl);
 
   var url = "<?php echo base_url('ot/overtime_chart2') ?>";
