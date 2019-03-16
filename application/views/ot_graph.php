@@ -728,11 +728,6 @@ $(function () {
         backgroundColor : "#3d3f3f",   
       },
       legend: {
-        align: 'right',
-        verticalAlign: 'top',
-        layout: 'vertical',
-        x: 0,
-        y: 100,
         itemStyle: {
          color: '#FFF'
        },
@@ -800,7 +795,7 @@ $(function () {
       enabled: false
     },
     series: [{
-      name: 'OT > 3 JAM / HARI',
+      name: 'OT>3 JAM / HARI',
       color: '#2598db',
       shadow: {
         color: '#2598db',
@@ -810,7 +805,7 @@ $(function () {
       },
       data: tiga_jam
     }, {
-      name: 'OT > 14 JAM / MGG',
+      name: 'OT>14 JAM / MGG',
       color: '#f2ad96',
       shadow: {
         color: '#f2ad96',
@@ -821,7 +816,7 @@ $(function () {
       data: per_minggu
     },
     {
-      name: 'OT > 3 dan > 14 Jam',
+      name: 'OT>3 & >14 JAM',
       color: '#f90031',
       shadow: {
         color: '#f90031',
@@ -832,7 +827,7 @@ $(function () {
       data: per_bulan
     },
     {
-      name: 'OT > 56 JAM / BLN',
+      name: 'OT>56 JAM / BLN',
       color: '#d756f7',
       shadow: {
         color: '#d756f7',
@@ -956,7 +951,7 @@ function date_change() {
         enabled: false
       },
       series: [{
-        name: 'OT > 3 JAM / HARI',
+        name: 'ot>3 JAM / HARI',
         color: '#2598db',
         shadow: {
           color: '#2598db',
@@ -966,7 +961,7 @@ function date_change() {
         },
         data: tiga_jam
       }, {
-        name: 'OT > 14 JAM / MGG',
+        name: 'OT>14 JAM / MGG',
         color: '#f2ad96',
         shadow: {
           color: '#f2ad96',
@@ -977,7 +972,7 @@ function date_change() {
         data: per_minggu
       },
       {
-        name: 'OT > 3 dan > 14 Jam',
+        name: 'OT>3 & >14 Jam',
         color: '#f90031',
         shadow: {
           color: '#f90031',
@@ -988,7 +983,7 @@ function date_change() {
         data: per_bulan
       },
       {
-        name: 'OT > 56 JAM / BLN',
+        name: 'OT>56 JAM / BLN',
         color: '#d756f7',
         shadow: {
           color: '#d756f7',
