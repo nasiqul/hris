@@ -104,7 +104,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     </form>
                   </div>
                 </div>
-                <div id = "container4" style ="margin: 0 auto"></div>
+                <div id = "container4" style ="width: 90%;margin: 0 auto"></div>
               </div>
               <div class="tab-pane" id="tab_5">
                 <table class="table table-bordered table-responsive" style="width: 100%" id="3jam">
@@ -739,7 +739,13 @@ $(function () {
        }
      },
      exporting : {
-      enabled : true
+      enabled : true,
+       buttons: {
+    contextButton: {
+      align: 'right',
+      x: -25
+    }
+  }
     },
     title: {
       text: data[0][5],
