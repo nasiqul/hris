@@ -668,22 +668,22 @@ class Ot extends CI_Controller {
 		$kode = $_GET['kode'];
 		$cat = $_GET['cat'];
 
-		if ($kode == 'OT > 3 JAM / HARI') {
+		if ($kode == 'OT>3 JAM / HARI') {
 			$list = $this->over_cari_chart2->get_data($tgl,$cat);
 			$tot = $this->over_cari_chart2->count_all_3($tgl,$cat);
 			$filter = $this->over_cari_chart2->count_filtered_3($tgl,$cat);
 		}
-		else if ($kode == 'OT > 14 JAM / MGG') {
+		else if ($kode == 'OT>14 JAM / MGG') {
 			$list = $this->over_cari_chart2->get_data_14($tgl,$cat);
 			$tot = $this->over_cari_chart2->count_all_14($tgl,$cat);
 			$filter = $this->over_cari_chart2->count_filtered_14($tgl,$cat);
 		}
-		else if ($kode == 'OT > 3 dan > 14 Jam') {
+		else if ($kode == 'OT>3 & >14 JAM') {
 			$list = $this->over_cari_chart2->get_data_3_14($tgl,$cat);
 			$tot = $this->over_cari_chart2->count_all_3_14($tgl,$cat);
 			$filter = $this->over_cari_chart2->count_filtered_3_14($tgl,$cat);
 		}
-		else if ($kode == 'OT > 56 JAM / BLN') {
+		else if ($kode == 'OT>56 JAM / BLN') {
 			$list = $this->over_cari_chart2->get_data_56($tgl,$cat);
 			$tot = $this->over_cari_chart2->count_all_56($tgl,$cat);
 			$filter = $this->over_cari_chart2->count_filtered_56($tgl,$cat);

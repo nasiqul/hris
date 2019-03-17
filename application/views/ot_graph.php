@@ -105,6 +105,34 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   </div>
                 </div>
                 <div id = "container4" style ="width: 90%;margin: 0 auto"></div>
+                <br>
+                <table class="table table-bordered">
+                  <tr>
+                    <th></th>
+                    <th>JAN</th>
+                    <th>FEB</th>
+                  </tr>
+                  <tr>
+                    <th>Total Manpower</th>
+                    <td>1000</td>
+                    <td>2000</td>
+                  </tr>
+                  <tr>
+                    <th>% Kehadiran Kerja</th>
+                    <td>95.66%</td>
+                    <td>95.65%</td>
+                  </tr>
+                  <tr>
+                    <th>Jml Karyawan Aktif</th>
+                    <td>1</td>
+                    <td>500</td>
+                  </tr>
+                  <tr>
+                    <th>Jml Karyawan Non Aktif</th>
+                    <td>2</td>
+                    <td>500</td>
+                  </tr>
+                </table>
               </div>
               <div class="tab-pane" id="tab_5">
                 <table class="table table-bordered table-responsive" style="width: 100%" id="3jam">
@@ -210,7 +238,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </div>
             <!-- /.modal-dialog -->
           </div>
-
 
           <div class="modal fade" id="myModal2">
             <div class="modal-dialog modal-lg">
@@ -740,12 +767,12 @@ $(function () {
      },
      exporting : {
       enabled : true,
-       buttons: {
-    contextButton: {
-      align: 'right',
-      x: -25
-    }
-  }
+      buttons: {
+        contextButton: {
+          align: 'right',
+          x: -25
+        }
+      }
     },
     title: {
       text: data[0][5],
@@ -957,7 +984,7 @@ function date_change() {
         enabled: false
       },
       series: [{
-        name: 'ot>3 JAM / HARI',
+        name: 'OT>3 JAM / HARI',
         color: '#2598db',
         shadow: {
           color: '#2598db',
@@ -1038,21 +1065,21 @@ function tiga_jam() {
   var ttanggal = $("#tgls").val();
 
   tabel0 = $('#3jam').DataTable({
-      "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
-      "processing": true,
-      "serverSide": true,
-      "searching": true,
-      "bLengthChange": true,
-      "order": [],
-      "ajax": {
-        "url": "<?php echo base_url('ot/ajax_ot_jam/')?>",            
-        "type": "GET",
-        "data": {
-          tgl2 : ttanggal,
-          cat: "3jam"
-        }
+    "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+    "processing": true,
+    "serverSide": true,
+    "searching": true,
+    "bLengthChange": true,
+    "order": [],
+    "ajax": {
+      "url": "<?php echo base_url('ot/ajax_ot_jam/')?>",            
+      "type": "GET",
+      "data": {
+        tgl2 : ttanggal,
+        cat: "3jam"
       }
-    })
+    }
+  })
 }
 
 
@@ -1062,21 +1089,21 @@ function empatbelas_jam() {
   var ttanggal = $("#tgls").val();
 
   tabel9 = $('#14jam').DataTable({
-      "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
-      "processing": true,
-      "serverSide": true,
-      "searching": true,
-      "bLengthChange": true,
-      "order": [],
-      "ajax": {
-        "url": "<?php echo base_url('ot/ajax_ot_jam/')?>",            
-        "type": "GET",
-        "data": {
-          tgl2 : ttanggal,
-          cat: "14jam"
-        }
+    "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+    "processing": true,
+    "serverSide": true,
+    "searching": true,
+    "bLengthChange": true,
+    "order": [],
+    "ajax": {
+      "url": "<?php echo base_url('ot/ajax_ot_jam/')?>",            
+      "type": "GET",
+      "data": {
+        tgl2 : ttanggal,
+        cat: "14jam"
       }
-    })
+    }
+  })
 }
 
 
@@ -1086,21 +1113,21 @@ function tiga_dan_empatbelas_jam() {
   var ttanggal = $("#tgls").val();
 
   tabel8 = $('#3_14jam').DataTable({
-      "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
-      "processing": true,
-      "serverSide": true,
-      "searching": true,
-      "bLengthChange": true,
-      "order": [],
-      "ajax": {
-        "url": "<?php echo base_url('ot/ajax_ot_jam/')?>",            
-        "type": "GET",
-        "data": {
-          tgl2 : ttanggal,
-          cat: "3_14jam"
-        }
+    "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+    "processing": true,
+    "serverSide": true,
+    "searching": true,
+    "bLengthChange": true,
+    "order": [],
+    "ajax": {
+      "url": "<?php echo base_url('ot/ajax_ot_jam/')?>",            
+      "type": "GET",
+      "data": {
+        tgl2 : ttanggal,
+        cat: "3_14jam"
       }
-    })
+    }
+  })
 }
 
 
@@ -1110,21 +1137,21 @@ function limaenam_jam() {
   var ttanggal = $("#tgls").val();
 
   tabel7 = $('#56jam').DataTable({
-      "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
-      "processing": true,
-      "serverSide": true,
-      "searching": true,
-      "bLengthChange": true,
-      "order": [],
-      "ajax": {
-        "url": "<?php echo base_url('ot/ajax_ot_jam/')?>",            
-        "type": "GET",
-        "data": {
-          tgl2 : ttanggal,
-          cat: "56jam"
-        }
+    "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+    "processing": true,
+    "serverSide": true,
+    "searching": true,
+    "bLengthChange": true,
+    "order": [],
+    "ajax": {
+      "url": "<?php echo base_url('ot/ajax_ot_jam/')?>",            
+      "type": "GET",
+      "data": {
+        tgl2 : ttanggal,
+        cat: "56jam"
       }
-    })
+    }
+  })
 }
 
 </script>
