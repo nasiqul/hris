@@ -1247,7 +1247,10 @@ class Ot extends CI_Controller {
 	public function presentase_g()
 	{
 		$tgl = $_POST['date2'];
-		$list = $this->over_model->get_presentase($tgl);
+		$n1 = date('Y-m', strtotime("01-".$tgl));
+		$n2 = date('Y-m-d', strtotime("01-".$tgl));
+
+		$list = $this->over_model->get_presentase($n1,$n2);
 		$data = array();
 		foreach ($list as $key) {
 			$row = array();

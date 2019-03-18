@@ -1344,7 +1344,7 @@ GROUP BY over_time_member.id_ot
         return $query->result();
 }
 
-    public function get_presentase($tgl)
+    public function get_presentase($n1,$n2)
     {
         $q = "select mon, kode, sum(budget) as budget, sum(aktual) as aktual from
 (
@@ -1363,14 +1363,14 @@ select mon, c.kode, c.id_cc, karyawan*budget as budget, aktual from
             ) as a
             on a.fy = b.fiskal
             group by mon, costCenter
-            having mon = '2019-02'
+            having mon = '".$n1."'
     ) as b 
     left join master_cc on master_cc.id_cc = b.costCenter
     GROUP BY mon, kode, master_cc.id_cc
     ) as c
     left join
     (
-    select sum(budget) as budget, sum(aktual) as aktual, kode, master_cc.id_cc from cost_center_budget left join master_cc on master_cc.id_cc = cost_center_budget.id_cc where cost_center_budget.period = '2019-02-01' group by kode, master_cc.id_cc
+    select sum(budget) as budget, sum(aktual) as aktual, kode, master_cc.id_cc from cost_center_budget left join master_cc on master_cc.id_cc = cost_center_budget.id_cc where cost_center_budget.period = '".$n2."' group by kode, master_cc.id_cc
     ) as d
     on d.kode = c.kode and d.id_cc = c.id_cc
     ) as e

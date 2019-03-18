@@ -35,7 +35,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                    <div class="col-md-3 pull-right">
                                         <form action="" method="post" id="rati2">
                                              <label>Month : </label>
-                                             <input type="text" class="form-control text-muted datepicker" placeholder="Select Month" id="bulan" onchange="postTgl()" name="date2">
+                                             <input type="text" class="form-control text-muted datepicker" placeholder="Select Month" id="bulan" onchange="postTgl(); progress_bar()" name="date2">
                                         </form>
                                    </div>
                                    <div class="col-md-12">
@@ -107,7 +107,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
      function progressData()
      {
-          alert(prod2);
           var direct = ((ofc2/ofc)*100).toFixed(2) + '%';
           $('#progress_bar_prod').html(direct);
           $('#progress_bar_prod').css('width', (ofc2/ofc)*100 + '%');
@@ -221,7 +220,6 @@ function postTgl() {
    url: url,
    data: $("#bulan").serialize(),
    success: function(data) {
-     progress_bar();
      progressData();
      var data = $.parseJSON(data);
 
