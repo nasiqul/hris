@@ -1005,7 +1005,7 @@ function date_change() {
         data: per_minggu
       },
       {
-        name: 'OT>3 & >14 Jam',
+        name: 'OT>3 & >14 JAM',
         color: '#f90031',
         shadow: {
           color: '#f90031',
