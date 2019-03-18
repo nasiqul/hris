@@ -22,7 +22,7 @@ class Over_cari_chart2 extends CI_Model {
 
     private function _get_over_cari($tgl, $cat)
     {
-        $this->db->select('date_format(over.tanggal, "%m-%Y") as month_name, karyawan.nik, karyawan.namaKaryawan, dp.nama as departemen, sc.nama as section, karyawan.kode, avg(over.jam) as avg');
+        $this->db->select('date_format(over.tanggal, "%m-%Y") as month_name, karyawan.nik, karyawan.namaKaryawan, dp.nama as departemen, sc.nama as section, karyawan.kode, ROUND(avg(over.jam),1) as avg');
         $this->db->from('over');
         $this->db->join('karyawan','karyawan.nik = over.nik', 'left');
         $this->db->join('posisi p','p.nik = karyawan.nik');
@@ -95,7 +95,7 @@ class Over_cari_chart2 extends CI_Model {
 
     private function _get_over_cari_14($tgl, $cat)
     {
-        $this->db->select('b.month_name, karyawan.nik, karyawan.namaKaryawan, dp.nama as departemen, sc.nama as section, karyawan.kode, avg(b.jam) as avg');
+        $this->db->select('b.month_name, karyawan.nik, karyawan.namaKaryawan, dp.nama as departemen, sc.nama as section, karyawan.kode, ROUND(avg(b.jam),1) as avg');
         $this->db->from('(
             select date_format(over.tanggal, "%m-%Y") as month_name, week(over.tanggal) as week_name, karyawan.nik, karyawan.kode, sum(over.jam) as jam from over
             left join karyawan on karyawan.nik = over.nik 
@@ -172,7 +172,7 @@ class Over_cari_chart2 extends CI_Model {
 
     private function _get_over_cari_3_14($tgl, $cat)
     {
-        $this->db->select('u.month_name as month_name, karyawan.nik, karyawan.namaKaryawan, dp.nama as departemen, sc.nama as section, karyawan.kode, l.avg');
+        $this->db->select('u.month_name as month_name, karyawan.nik, karyawan.namaKaryawan, dp.nama as departemen, sc.nama as section, karyawan.kode, ROUND(l.jml,1) as avg');
         $this->db->from('
             (
                 select date_format(over.tanggal, "%m-%Y") as month_name, over.nik, karyawan.namaKaryawan, karyawan.kode, sum(over.jam) as sum from over 
@@ -259,7 +259,7 @@ class Over_cari_chart2 extends CI_Model {
 
     private function _get_over_cari_56($tgl, $cat)
     {
-        $this->db->select('month_name, d.jam as avg, karyawan.nik, karyawan.namaKaryawan, dp.nama as departemen, sc.nama as section, karyawan.kode');
+        $this->db->select('month_name, ROUND(d.jam,1) as avg, karyawan.nik, karyawan.namaKaryawan, dp.nama as departemen, sc.nama as section, karyawan.kode');
         $this->db->from('(
         select date_format(over.tanggal, "%m-%Y") as month_name, sum(over.jam) as jam, k.nik, k.kode from over
         join karyawan k on k.nik = over.nik
@@ -274,7 +274,7 @@ class Over_cari_chart2 extends CI_Model {
         $this->db->join('section sc','sc.id = p.id_sec');
         $this->db->where('karyawan.kode',$cat);
         $this->db->group_by(array("karyawan.kode", "karyawan.nik"));
-        $this->db->having("d.jam > 56");
+        $this->db->having("avg > 56");
 
         $i = 0;
 
@@ -337,7 +337,7 @@ class Over_cari_chart2 extends CI_Model {
 
     private function _get_over_cari_t($tgl)
     {
-        $this->db->select('date_format(over.tanggal, "%m-%Y") as month_name, karyawan.nik, karyawan.namaKaryawan, dp.nama as departemen, sc.nama as section, karyawan.kode, avg(over.jam) as avg');
+        $this->db->select('date_format(over.tanggal, "%m-%Y") as month_name, karyawan.nik, karyawan.namaKaryawan, dp.nama as departemen, sc.nama as section, karyawan.kode, ROUND(avg(over.jam),1) as avg');
         $this->db->from('over');
         $this->db->join('karyawan','karyawan.nik = over.nik', 'left');
         $this->db->join('posisi p','p.nik = karyawan.nik');
@@ -409,7 +409,7 @@ class Over_cari_chart2 extends CI_Model {
 
     private function _get_over_cari_14_t($tgl)
     {
-        $this->db->select('b.month_name, karyawan.nik, karyawan.namaKaryawan, dp.nama as departemen, sc.nama as section, karyawan.kode, avg(b.jam) as avg');
+        $this->db->select('b.month_name, karyawan.nik, karyawan.namaKaryawan, dp.nama as departemen, sc.nama as section, karyawan.kode, ROUND(avg(b.jam),1) as avg');
         $this->db->from('(
                 select date_format(over.tanggal, "%m-%Y") as month_name, week(over.tanggal) as week_name, karyawan.nik, karyawan.kode, sum(over.jam) as jam from over
                 left join karyawan on karyawan.nik = over.nik 
@@ -485,7 +485,7 @@ class Over_cari_chart2 extends CI_Model {
 
     private function _get_over_cari_3_14_t($tgl)
     {
-        $this->db->select('u.month_name as month_name, karyawan.nik, karyawan.namaKaryawan, dp.nama as departemen, sc.nama as section, karyawan.kode, l.avg');
+        $this->db->select('u.month_name as month_name, karyawan.nik, karyawan.namaKaryawan, dp.nama as departemen, sc.nama as section, karyawan.kode, ROUND(l.avg,1)');
         $this->db->from('
             (
                 select date_format(over.tanggal, "%m-%Y") as month_name, over.nik, karyawan.namaKaryawan, karyawan.kode, sum(over.jam) as sum from over 
@@ -571,7 +571,7 @@ class Over_cari_chart2 extends CI_Model {
 
     private function _get_over_cari_56_t($tgl)
     {
-        $this->db->select('month_name, d.jam as avg, karyawan.nik, karyawan.namaKaryawan, dp.nama as departemen, sc.nama as section, karyawan.kode');
+        $this->db->select('month_name, ROUND(d.jam,1) as avg, karyawan.nik, karyawan.namaKaryawan, dp.nama as departemen, sc.nama as section, karyawan.kode');
         $this->db->from('(
         select date_format(over.tanggal, "%m-%Y") as month_name, sum(over.jam) as jam, k.nik, k.kode from over
         join karyawan k on k.nik = over.nik
@@ -585,7 +585,7 @@ class Over_cari_chart2 extends CI_Model {
         $this->db->join('departemen dp','dp.id = p.id_dep');
         $this->db->join('section sc','sc.id = p.id_sec');
         $this->db->group_by(array("karyawan.kode", "karyawan.nik"));
-        $this->db->having("d.jam > 56");
+        $this->db->having("avg > 56");
 
         $i = 0;
 
