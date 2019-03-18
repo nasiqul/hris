@@ -41,6 +41,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <div class="col-md-12">
           <div class="box box-solid">
             <div class="box-body">
+              <a class="btn btn-warning btn-md pull-right" id="exportid" href="">Export</a>
+              <input onchange="exporta();" type="text" name="tgl" id="tgl" class="form-control datepicker pull-right" style="width: 20%"><br>&nbsp;
+              
               <table id="example1" class="table table-responsive table-striped">
                 <thead>
                   <tr>
@@ -155,6 +158,19 @@ scratch. This page gets rid of all links and provides the needed markup only.
         }
       });
     }
+
+    function exporta() {
+       var tgl = $("#tgl").val();
+     var url = "<?php echo base_url('ot/exportexcelhr/'); ?>"+tgl;
+     // alert(tgl)
+      $("#exportid").prop("href", url)
+    }
+
+     $('.datepicker').datepicker({
+      autoclose: true,
+      format: "yyyy-mm-dd"
+    });
+
 
   </script>
 

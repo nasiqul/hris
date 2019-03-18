@@ -87,6 +87,12 @@ class Home extends CI_Controller {
         $this->load->view("budget_graph",$data);
     }
 
+    public function chart_ot_report()
+    {
+        $data['menu'] = 'ovrR2';
+        $this->load->view("graph_report",$data);
+    }
+
     public function budget_chart_mp()
     {
         $data['menu'] = 'ovrG';
@@ -183,6 +189,14 @@ class Home extends CI_Controller {
     {
         $data['menu'] = 'ovrR2';
         $this->load->view("overtime_report2",$data);
+    }
+
+    public function detailSPL($nik,$tgl)
+    {
+        $data['menu'] = 'ovrR2';
+        $data['nik'] = $nik;
+        $data['tgl'] = $tgl;
+        $this->load->view("graph_report",$data);
     }
 
     public function karyawan_graph()
@@ -649,9 +663,9 @@ public function ajax_presensi_shift()
       }
   }
   else
-     $result[] = json_decode ("{}");
+   $result[] = json_decode ("{}");
 
- echo json_encode($result);
+echo json_encode($result);
 }
 
 public function ajax_emp_keluarga()
@@ -1188,4 +1202,5 @@ public function ajax_budget_g()
             //output to json format
     echo json_encode($output);
 }
+
 }

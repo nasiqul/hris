@@ -118,7 +118,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                <a href="<?php echo base_url('home/createXLS("19030008")') ?>" class="btn btn-warning">Export to Excel</a>
                 <button class="btn btn-primary" onclick="tombol_print()"><i class="fa fa-print"></i> Print</button>
               </div>
             </div>
@@ -162,12 +161,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- ./wrapper -->
   <script>
     $(document).ready(function() {
-      konfirm();
+      //konfirm();
       buattable();
     });
 
     function gantitanggal() {
-     konfirm();
+     //konfirm();
      buattable();
    }
 

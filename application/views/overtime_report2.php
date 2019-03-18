@@ -9,12 +9,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <?php if (! $this->session->userdata('nik')) { redirect('home/overtime_user'); }?>
 
 <style type="text/css">
-#info {
-  text-decoration: underline;
-}
-#info:hover {
-  text-decoration:none;
-}
+  #info {
+    text-decoration: underline;
+  }
+  #info:hover {
+    text-decoration:none;
+  }
 </style>
 
 <body class="hold-transition skin-purple sidebar-mini">

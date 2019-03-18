@@ -13,6 +13,7 @@
 <!-- Bootstrap 3.3.7 -->
 <!-- ./wrapper -->
 <script src="<?php echo base_url()?>app/dist/js/highcharts.js"></script>
+<script src="<?php echo base_url()?>app/dist/js/data.js"></script>
 <script src="<?php echo base_url()?>app/dist/js/exporting.js"></script>
 <script src="<?php echo base_url()?>app/dist/js/export-data.js"></script>
 

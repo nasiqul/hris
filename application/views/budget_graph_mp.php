@@ -6,8 +6,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <html>
 <!-- HEADER -->
 <?php require_once(APPPATH.'views/header/head.php'); ?>
-<script src="https://code.highcharts.com/highcharts.js"></script>
-<script src="https://code.highcharts.com/modules/data.js"></script>
 <body class="hold-transition skin-purple sidebar-mini">
   <div class="wrapper">
 
@@ -90,7 +88,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
       text: 'Budget Total / MP '+$("#tglx").text()
     },
     yAxis: {
-     type: 'logarithmic',
      allowDecimals: false,
      title: {
       text: 'Jam'

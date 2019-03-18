@@ -671,7 +671,7 @@ class Over_model extends CI_Model {
         $this->db->join("posisi p","p.nik = k.nik");
         $this->db->join("departemen d","p.id_dep = d.id");
         $this->db->where("k.nik",$nik);
-        $this->db->where("p.id_dep",$dep);
+        // $this->db->where("p.id_dep",$dep);
         $query = $this->db->get();
         return $query->num_rows();
     }
@@ -810,6 +810,94 @@ public function getGA($tgl)
     $this->db->where("o.tanggal = STR_TO_DATE('".$tgl."', '%d-%m-%Y')");
     $this->db->group_by("o.tanggal");
 
+    $query = $this->db->get();
+    return $query->result();
+}
+
+public function getGA2($tgl)
+{
+    $this->db->select("tanggal,  
+        (SELECT IFNULL(SUM(ext_food), 0) from over_time_member 
+        JOIN over_time ON over_time.id = over_time_member.id_ot
+        JOIN master_lembur ON over_time_member.id_jam = master_lembur.id 
+        WHERE shift = 1 AND over_time.tanggal = STR_TO_DATE('".$tgl."', '%d-%m-%Y')) as makan1 ,
+
+        (SELECT IFNULL(SUM(ext_food), 0) from over_time_member 
+        JOIN over_time ON over_time.id = over_time_member.id_ot
+        JOIN master_lembur ON over_time_member.id_jam = master_lembur.id 
+        WHERE shift = 2 AND over_time.tanggal = STR_TO_DATE('".$tgl."', '%d-%m-%Y')) as makan2 , 
+
+        (SELECT IFNULL(SUM(ext_food), 0) from over_time_member 
+        JOIN over_time ON over_time.id = over_time_member.id_ot
+        JOIN master_lembur ON over_time_member.id_jam = master_lembur.id 
+        WHERE shift = 3 AND over_time.tanggal = STR_TO_DATE('".$tgl."', '%d-%m-%Y')) as makan3");
+    $this->db->from("over_time o");
+    $this->db->join("over_time_member om","o.id = om.id_ot");
+    $this->db->where("o.tanggal = STR_TO_DATE('".$tgl."', '%d-%m-%Y')");
+    $this->db->group_by("o.tanggal");
+
+    $query = $this->db->get();
+    return $query->result();
+}
+
+public function makan1db($tgl,$id)
+{
+    $this->db->select("*");
+    $this->db->from("(
+        SELECT a.nik,k.namaKaryawan,dept.nama as dept,dev.nama as dev,sec.nama as sec,sub.nama as sub,gr.nama as gruop1 from over_time_member as a
+        JOIN over_time ON over_time.id = a.id_ot
+        JOIN master_lembur ON a.id_jam = master_lembur.id 
+        left join karyawan as k on a.nik = k.nik
+        LEFT JOIN posisi as p on a.nik = p.nik
+        left join departemen as dept on p.id_dep = dept.id
+        left join devisi as dev on p.id_devisi = dev.id
+        LEFT JOIN section as sec on p.id_sec = sec.id
+        LEFT JOIN sub_section as sub on p.id_sub_sec = sub.id
+        LEFT JOIN group1    as gr on p.id_group = gr.id         
+        WHERE master_lembur.shift = ".$id." AND over_time.tanggal = STR_TO_DATE('".$tgl."', '%d-%m-%Y')  and a.makan ='1'
+    ) a");
+
+    $query = $this->db->get();
+    return $query->result();
+}
+
+public function extrafood2($tgl,$id)
+{
+    $this->db->select("*");
+    $this->db->from("(
+        SELECT a.nik,k.namaKaryawan,dept.nama as dept,dev.nama as dev,sec.nama as sec,sub.nama as sub,gr.nama as gruop1 from over_time_member as a
+        JOIN over_time ON over_time.id = a.id_ot
+        JOIN master_lembur ON a.id_jam = master_lembur.id 
+        left join karyawan as k on a.nik = k.nik
+        LEFT JOIN posisi as p on a.nik = p.nik
+        left join departemen as dept on p.id_dep = dept.id
+        left join devisi as dev on p.id_devisi = dev.id
+        LEFT JOIN section as sec on p.id_sec = sec.id
+        LEFT JOIN sub_section as sub on p.id_sub_sec = sub.id
+        LEFT JOIN group1    as gr on p.id_group = gr.id         
+        WHERE master_lembur.shift = ".$id." AND over_time.tanggal = STR_TO_DATE('".$tgl."', '%d-%m-%Y')  and a.ext_food ='1'
+    ) a");
+
+    $query = $this->db->get();
+    return $query->result();
+}
+
+public function transdb($id,$tgl,$dari,$sampai)
+{
+    $this->db->select("*");
+    $this->db->from("(
+       SELECT a.nik,k.namaKaryawan,dept.nama as dept,dev.nama as dev,sec.nama as sec,sub.nama as sub,gr.nama as gruop1 from over_time_member as a
+       JOIN over_time ON over_time.id = a.id_ot
+       JOIN master_lembur ON a.id_jam = master_lembur.id 
+       left join karyawan as k on a.nik = k.nik
+       LEFT JOIN posisi as p on a.nik = p.nik
+       left join departemen as dept on p.id_dep = dept.id
+       left join devisi as dev on p.id_devisi = dev.id
+       LEFT JOIN section as sec on p.id_sec = sec.id
+       LEFT JOIN sub_section as sub on p.id_sub_sec = sub.id
+       LEFT JOIN group1    as gr on p.id_group = gr.id              
+       where dari='".$dari."' and sampai='".$sampai."' and transport='".$id."' 
+       and over_time.tanggal = STR_TO_DATE('".$tgl."', '%d-%m-%Y'))a");
     $query = $this->db->get();
     return $query->result();
 }
@@ -1136,69 +1224,120 @@ public function get_o_data($tgl)
     return $query->result();
 }
 
-public function get_cc5()
+public function get_cc5($tgl)
 {
     $q = "  
-            select c.mon, c.tanggal, c.departemen, coalesce(d.total_jam, 0) as jam from
-            (
-            select a.mon, a.tanggal, b.departemen from
-            (
-            select distinct date_format(over.tanggal, '%m-%Y') as mon, over.tanggal 
-            from over 
-            where date_format(over.tanggal, '%m-%Y') = '02-2019'
-            ) as a
-            left join
-            (
-            select distinct '02-2019' as mon, departemen from master_cc
-            ) as b on b.mon = date_format(a.tanggal, '%m-%Y')
-            ) as c
-            left join
-            (
-            select '02-2019' as mon, tanggal, departemen, round(sum(jam),1) as total_jam from over
-            left join karyawan on karyawan.nik = over.nik
-            left join master_cc on master_cc.id_cc = karyawan.costCenter
-            where DATE_FORMAT(tanggal, '%m-%Y') = '02-2019'
-            GROUP BY mon, tanggal, departemen
-            ) as d on c.mon = d.mon and c.departemen = d.departemen and c.tanggal = d.tanggal";
-    $query = $this->db->query($q);
-    return $query->result();
+    select c.mon, c.tanggal, c.departemen, coalesce(d.total_jam, 0) as jam from
+    (
+    select a.mon, a.tanggal, b.departemen from
+    (
+    select distinct date_format(over.tanggal, '%m-%Y') as mon, over.tanggal 
+    from over 
+    where date_format(over.tanggal, '%m-%Y') = '".$tgl."'
+    ) as a
+    left join
+    (
+    select distinct '".$tgl."' as mon, departemen from master_cc
+    ) as b on b.mon = date_format(a.tanggal, '%m-%Y')
+    ) as c
+    left join
+    (
+    select '".$tgl."' as mon, tanggal, departemen, round(sum(jam),1) as total_jam from over
+    left join karyawan on karyawan.nik = over.nik
+    left join master_cc on master_cc.id_cc = karyawan.costCenter
+    where DATE_FORMAT(tanggal, '%m-%Y') = '".$tgl."'
+    GROUP BY mon, tanggal, departemen
+) as d on c.mon = d.mon and c.departemen = d.departemen and c.tanggal = d.tanggal";
+$query = $this->db->query($q);
+return $query->result();
 }
 
 public function get_data_ot_month()
 {
     $q = "
-            select c.mon, (budget*jml_kar) budget_tot, (act*jml_kar) act_tot, (fr*jml_kar) forecast_tot, c.bagian from
-            (
-            SELECT mon, SUM(budget) as budget , SUM(aktual) act, SUM(forecast) as fr, bagian from
-            (
-            SELECT date_format(period, '%Y-%m') as mon, master_cc.id_cc, budget, aktual, forecast, IF(kode = '0fc','OFFICE','PRODUCTION') as bagian from master_cc
-            LEFT JOIN cost_center_budget ON master_cc.id_cc = cost_center_budget.id_cc
-            LEFT join karyawan on karyawan.costCenter = cost_center_budget.id_cc
-            GROUP BY date_format(period, '%Y-%m'), id_cc
-            ) as b
-            group by bagian, mon
-            ) as c
-            left join
-            (
-            select mon, bagian, count(if(if(date_format(a.tanggalMasuk, '%Y-%m') < mon, 1, 0 )-if(date_format(a.tanggalKeluar, '%Y-%m') < mon, 1, 0 ) = 0, null, 1)) as jml_kar from
-            (
-            select distinct fiskal, date_format(tanggal, '%Y-%m') as mon
-            from kalender_fy where fiskal = '195'
-            ) as b
-            left join
-            (
-            select '195' as fy, karyawan.kode, tanggalKeluar, tanggalMasuk, nik, IF(kode = '0fc','OFFICE','PRODUCTION') as bagian
-            from karyawan
-            ) as a
-            on a.fy = b.fiskal
-            group by mon, bagian
-            ) as d on c.mon = d.mon and c.bagian = d.bagian
+    select c.mon, (budget*jml_kar) budget_tot, (act*jml_kar) act_tot, (fr*jml_kar) forecast_tot, c.bagian from
+    (
+    SELECT mon, SUM(budget) as budget , SUM(aktual) act, SUM(forecast) as fr, bagian from
+    (
+    SELECT date_format(period, '%Y-%m') as mon, master_cc.id_cc, budget, aktual, forecast, IF(kode = '0fc','OFFICE','PRODUCTION') as bagian from master_cc
+    LEFT JOIN cost_center_budget ON master_cc.id_cc = cost_center_budget.id_cc
+    LEFT join karyawan on karyawan.costCenter = cost_center_budget.id_cc
+    GROUP BY date_format(period, '%Y-%m'), id_cc
+    ) as b
+    group by bagian, mon
+    ) as c
+    left join
+    (
+    select mon, bagian, count(if(if(date_format(a.tanggalMasuk, '%Y-%m') < mon, 1, 0 )-if(date_format(a.tanggalKeluar, '%Y-%m') < mon, 1, 0 ) = 0, null, 1)) as jml_kar from
+    (
+    select distinct fiskal, date_format(tanggal, '%Y-%m') as mon
+    from kalender_fy where fiskal = '195'
+    ) as b
+    left join
+    (
+    select '195' as fy, karyawan.kode, tanggalKeluar, tanggalMasuk, nik, IF(kode = '0fc','OFFICE','PRODUCTION') as bagian
+    from karyawan
+    ) as a
+    on a.fy = b.fiskal
+    group by mon, bagian
+    ) as d on c.mon = d.mon and c.bagian = d.bagian
 
-            group by mon, c.bagian
+    group by mon, c.bagian
 
-";
+    ";
     $query = $this->db->query($q);
     return $query->result();
+}
+
+public function get_jam_by_nik($nik,$tgl)
+{
+    $this->db->select('date_format(tanggal, "%d-%m-%Y") as tgl, sum(jam) as jam, over.nik, namaKaryawan');
+    $this->db->from('over');
+    $this->db->join('karyawan','karyawan.nik = over.nik');
+    $this->db->where('over.nik',$nik);
+    $this->db->where('jam <> 0');
+    $this->db->where('date_format(tanggal, "%m-%Y") = "'.$tgl.'"');
+    $q =  $this->db->get();
+    return $q->result();
+}
+
+public function exportdata($id)
+{
+    $this->db->select("id,id_ot,nik,dari,sampai, jam, transport, makan,ext_food,jam_aktual, final, satuan");
+    $this->db->from("over_time_member");
+    $this->db->where("id_ot = '".$id."'");
+
+        $query = $this->db->get();
+        return $query->result();
+}
+
+public function exportdatahr($id)
+{
+    $this->db->select("*");
+    $this->db->from("(
+select
+over_time_member.id_ot,
+over_time_member.nik,
+over_time.tanggal,
+karyawan.namaKaryawan,
+over_time_member.dari,
+over_time_member.sampai,
+over_time_member.jam,
+over_time_member.transport,
+over_time_member.makan,
+over_time_member.ext_food,
+over_time_member.final
+FROM over_time_member
+LEFT JOIN over_time
+ON over_time_member.id_ot = over_time.id
+LEFT JOIN karyawan
+ON over_time_member.nik = karyawan.nik
+WHERE over_time.tanggal = '".$id."'
+GROUP BY over_time_member.id_ot
+) a");
+
+        $query = $this->db->get();
+        return $query->result();
 }
 
 }

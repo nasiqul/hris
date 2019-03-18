@@ -163,7 +163,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <thead>
                   <tr>
                     <th>
-
+                      <b id="totalsemua">Total</b>
                     </th>
                     <th>
                     </th>
@@ -225,6 +225,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   </div>
   <!-- ./wrapper -->
   <script type="text/javascript">
+    var nomorali = 0;
     var idDoc;
 
     var no = 1;
@@ -253,6 +254,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     //nik on enter
     $('#nikF').bind("enterKey",function(e){
       appendRow();
+       ali();
     });
     $('#nikF').keydown(function(e){
       if(e.keyCode == 13 || e.which == 9)
@@ -340,7 +342,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               "<option value='-' "+t1+">-</option><option value='B' "+t2+">B</option><option value='P' "+t3+">P</option></select></div>"+
               "<div class='col-md-1'><input type='checkbox' id='makan"+no+"' "+cekM+"></div>"+
               "<div class='col-md-1'><input type='checkbox' id='exfood"+no+"' "+cekFd+"></div>"+
-              "<div class='col-md-1'><button class='btn btn-danger btn-xs' id='delete"+no+"' onclick='deleteRow(this)'><i class='fa fa-minus'></i></button></div>"+
+              "<div class='col-md-1'><button class='btn btn-danger btn-xs' id='delete"+no+"' onclick='deleteRow(this); ali()'><i class='fa fa-minus'></i></button></div>"+
               "<input type='hidden' id='idJam"+no+"'></div>");
 
             $("#peserta").append(newdiv1);
@@ -363,6 +365,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
             openSuccessGritter();
 
             no+=1;
+            nomorali+=1;
+            $('#totalsemua').text("Total : "+nomorali);
           }
         });
 
@@ -372,6 +376,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     }
 
     function deleteRow(elem) {
+      
 
       var ids = $(elem).parent('div').parent('div').attr('id');
 
@@ -392,8 +397,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
       jQuery("#makan"+newid).attr("id","makan"+oldid);
       jQuery("#exfood"+newid).attr("id","exfood"+oldid);
       jQuery("#delete"+newid).attr("id","delete"+oldid);
+      jQuery("#nomorauto"+newid).attr("id","nomorauto"+oldid);
 
       no-=1;
+      nomorali-=1;
+      $('#totalsemua').text("Total : "+nomorali);
+      
 
       var z = no - 1;
 
@@ -410,11 +419,17 @@ scratch. This page gets rid of all links and provides the needed markup only.
         jQuery("#makan"+newid).attr("id","makan"+oldid);
         jQuery("#exfood"+newid).attr("id","exfood"+oldid);
         jQuery("#delete"+newid).attr("id","delete"+oldid);
-
+        jQuery("#nomorauto"+newid).attr("id","nomorauto"+oldid);
+        // var a = $('#nomorauto'+newid).text();
+        // $("#nomorauto"+newid).text(a);
       }
 
     }
 
+    function ali() {
+      var aa = nomorali;
+      // alert(aa);
+    }
 
 
     function showSec() {
