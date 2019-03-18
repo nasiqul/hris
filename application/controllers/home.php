@@ -40,9 +40,15 @@ class Home extends CI_Controller {
             $data['report2'] = $this->home_model->report2();
             $data['report3'] = $this->home_model->report3();
         }
-                // $data['laporan'] = $this->home_model->laporan();
-        $data['menu'] = 'home';
-        $this->load->view('report', $data);
+        
+        if ($this->session->userdata("nik")) {
+            $data['menu'] = 'home';
+            $this->load->view('report', $data);
+        }
+        else {
+            redirect('home/overtime_user');
+        }
+        
         
     }
 
@@ -552,9 +558,9 @@ public function ajax_presensi_shift()
       }
   }
   else
-   $result[] = json_decode ("{}");
+     $result[] = json_decode ("{}");
 
-echo json_encode($result);
+ echo json_encode($result);
 }
 
 public function ajax_emp_keluarga()
