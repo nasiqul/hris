@@ -1259,7 +1259,9 @@ public function get_data_ot_month()
     (
     SELECT mon, SUM(budget) as budget , SUM(aktual) act, SUM(forecast) as fr, bagian from
     (
-    SELECT date_format(period, '%Y-%m') as mon, master_cc.id_cc, budget, aktual, forecast, IF(kode = '0fc','OFFICE','PRODUCTION') as bagian from master_cc
+    SELECT date_format(period, '%Y-%m') as mon, master_cc.id_cc, budget, aktual, forecast, 
+        IF(costCenter LIKE '1%' ,'PL',
+        IF(costCenter LIKE '2%','OFFICE','PRODUKSI')) as bagian from master_cc
     LEFT JOIN cost_center_budget ON master_cc.id_cc = cost_center_budget.id_cc
     LEFT join karyawan on karyawan.costCenter = cost_center_budget.id_cc
     GROUP BY date_format(period, '%Y-%m'), id_cc
@@ -1275,7 +1277,9 @@ public function get_data_ot_month()
     ) as b
     left join
     (
-    select '195' as fy, karyawan.kode, tanggalKeluar, tanggalMasuk, nik, IF(kode = '0fc','OFFICE','PRODUCTION') as bagian
+    select '195' as fy, karyawan.kode, tanggalKeluar, tanggalMasuk, nik, 
+        IF(costCenter LIKE '1%' ,'PL',
+        IF(costCenter LIKE '2%','OFFICE','PRODUKSI')) as bagian
     from karyawan
     ) as a
     on a.fy = b.fiskal
@@ -1339,6 +1343,46 @@ GROUP BY over_time_member.id_ot
         $query = $this->db->get();
         return $query->result();
 }
+
+    public function get_presentase($tgl)
+    {
+        $q = "select mon, kode, sum(budget) as budget, sum(aktual) as aktual from
+(
+select mon, c.kode, c.id_cc, karyawan*budget as budget, aktual from
+(
+    select mon, master_cc.id_cc, kode, sum(tot_karyawan) as karyawan from (
+            select mon, costCenter, count(if(if(date_format(a.tanggalMasuk, '%Y-%m') < mon, 1, 0 ) - if(date_format(a.tanggalKeluar, '%Y-%m') < mon, 1, 0 ) = 0, null, 1)) as tot_karyawan from
+            (
+            select distinct fiskal, date_format(tanggal, '%Y-%m') as mon
+            from kalender_fy
+            ) as b
+            join
+            (
+                select '195' as fy, karyawan.kode, tanggalKeluar, tanggalMasuk, nik, costCenter
+                from karyawan
+            ) as a
+            on a.fy = b.fiskal
+            group by mon, costCenter
+            having mon = '2019-02'
+    ) as b 
+    left join master_cc on master_cc.id_cc = b.costCenter
+    GROUP BY mon, kode, master_cc.id_cc
+    ) as c
+    left join
+    (
+    select sum(budget) as budget, sum(aktual) as aktual, kode, master_cc.id_cc from cost_center_budget left join master_cc on master_cc.id_cc = cost_center_budget.id_cc where cost_center_budget.period = '2019-02-01' group by kode, master_cc.id_cc
+    ) as d
+    on d.kode = c.kode and d.id_cc = c.id_cc
+    ) as e
+    group by mon, kode
+    
+
+
+";
+        $query = $this->db->query($q);
+
+        return $query->result();
+    }
 
 }
 ?>

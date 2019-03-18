@@ -1244,6 +1244,24 @@ class Ot extends CI_Controller {
 		echo json_encode($data);
 	}
 
+	public function presentase_g()
+	{
+		$tgl = $_POST['date2'];
+		$list = $this->over_model->get_presentase($tgl);
+		$data = array();
+		foreach ($list as $key) {
+			$row = array();
+			$row["budget"] = (int) $key->budget;
+			$row["aktual"] = (int) $key->aktual;
+			$row["kode"] = $key->kode;
+
+			$data[] = $row;
+		}
+
+            //output to json format
+		echo json_encode($data);
+	}
+
 	public function exportexcel($id){
 
 		// $tgl = $_POST['tgl'];

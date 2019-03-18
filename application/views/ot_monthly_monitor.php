@@ -55,10 +55,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
           $.getJSON('<?php echo base_url("ot/ajax_mountly/")?>', function(data) {
 
                var xCategories = [];
+               var seriesPLBudget = [];
                var seriesProdBudget = [];
                var seriesOfcBudget = [];
+
                var seriesProdForecast = [];
                var seriesOfcForecast = [];
+               var seriesPLForecast = [];
                var i, cat;
 
                var intVal = function ( i ) {
@@ -76,17 +79,25 @@ scratch. This page gets rid of all links and provides the needed markup only.
                }
 
                for(i=0; i<data.length; i++){
-                    if(data[i][4] == 'PRODUCTION'){
+                    if(data[i][4] == 'PRODUKSI'){
                          seriesProdBudget.push(data[i][1]);
                     }
                     if(data[i][4] == 'OFFICE'){
                          seriesOfcBudget.push(data[i][1]);
                     }
-                    if(data[i][4] == 'PRODUCTION'){
+
+                    if(data[i][4] == 'PL'){
+                         seriesPLBudget.push(data[i][1]);
+                    }
+
+                    if(data[i][4] == 'PRODUKSI'){
                          seriesProdForecast.push(data[i][3]);
                     }
                     if(data[i][4] == 'OFFICE'){
                          seriesOfcForecast.push(data[i][3]);
+                    }
+                    if(data[i][4] == 'PL'){
+                         seriesPLForecast.push(data[i][1]);
                     }
                }
 
@@ -132,14 +143,20 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     series: [ 
                     {
                          type: 'column',
-                         name: 'Budget-Office',
+                         name: 'Budget-Direct',
                          data: seriesOfcBudget,
                          stack: 'BUDGET'
                     }, 
                     {
                          type: 'column',
-                         name: 'Buget-Production',
+                         name: 'Buget-Indirect',
                          data: seriesProdBudget,
+                         stack: 'BUDGET'
+                    },
+                    {
+                         type: 'column',
+                         name: 'Budget-PL',
+                         data: seriesPLBudget,
                          stack: 'BUDGET'
                     }, 
                     {
@@ -152,6 +169,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                          type: 'column',
                          name: 'Forecast-Production',
                          data: seriesProdForecast,
+                         stack: 'FORECAST'
+                    },
+                    {
+                         type: 'column',
+                         name: 'Forecast-PL',
+                         data: seriesPLForecast,
                          stack: 'FORECAST'
                     },
                     {
