@@ -144,7 +144,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
       $('#container').highcharts({
         chart: {
-          type: 'line'
+          type: 'spline'
         },
         title: {
           text: 'YEAR'
@@ -229,7 +229,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                     $('#container').highcharts({
                       chart: {
-                        type: 'line'
+                        type: 'spline'
                       },
                       title: {
                         text: 'YEAR '+$("#tahun").val()
