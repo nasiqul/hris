@@ -121,7 +121,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <div class="modal-content">
                 <div class="modal-header">
                   <h4 style="float: right;" id="modal-title"></h4>
-                  <h4 class="modal-title"><b>PT. YAMAHA MUSICAL PRODUCT INDONESIA</b></h4>
+                  <h4 class="modal-title"><b>Total Makan</b><b id="sifMakan"></b></h4>
                 </div>
                 <div class="modal-body">
                   <div class="row">
@@ -158,7 +158,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <div class="modal-content">
                 <div class="modal-header">
                   <h4 style="float: right;" id="modal-title"></h4>
-                  <h4 class="modal-title"><b>PT. YAMAHA MUSICAL PRODUCT INDONESIA</b></h4>
+                  <h4 class="modal-title"><b>Total Transport</b><b id="sifTrans"></b></h4>
                 </div>
                 <div class="modal-body">
                   <div class="row">
@@ -195,7 +195,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <div class="modal-content">
                 <div class="modal-header">
                   <h4 style="float: right;" id="modal-title"></h4>
-                  <h4 class="modal-title"><b>PT. YAMAHA MUSICAL PRODUCT INDONESIA</b></h4>
+                  <h4 class="modal-title"><b>Total Extra Food</b><b id="sifEfood"></b></h4>
                 </div>
                 <div class="modal-body">
                   <div class="row">

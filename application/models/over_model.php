@@ -1384,5 +1384,46 @@ select mon, c.kode, c.id_cc, karyawan*budget as budget, aktual from
         return $query->result();
     }
 
+    // public function ot_summary_m()
+    // {
+    //     $q = "select mon,p.id_cc, name, karyawan, aktual, round((aktual/karyawan),2) as avg, coalesce(min_final, 0) as min_final, coalesce(max_final, 0) as max_final from (
+
+    //     select mon, master_cc.id_cc, kode, name, sum(tot_karyawan) as karyawan from (
+    //         select mon, costCenter, count(if(if(date_format(a.tanggalMasuk, '%Y-%m') < mon, 1, 0 ) - if(date_format(a.      tanggalKeluar, '%Y-%m') < mon, 1, 0 ) = 0, null, 1)) as tot_karyawan from
+    //         (
+    //         select distinct fiskal, date_format(tanggal, '%Y-%m') as mon
+    //         from kalender_fy
+    //         ) as b
+    //         join
+    //         (
+    //             select '195' as fy, karyawan.kode, tanggalKeluar, tanggalMasuk, nik, costCenter
+    //             from karyawan
+    //         ) as a
+    //         on a.fy = b.fiskal
+    //         group by mon, costCenter
+    //         having mon = '2019-03'
+    // ) as b 
+    // left join master_cc on master_cc.id_cc = b.costCenter
+    // GROUP BY mon, kode, master_cc.id_cc
+    //     ) as p
+        
+    //     left join (
+    //     select id_cc, aktual, budget from cost_center_budget where period = '2019-03-01'
+    //     ) as n on p.id_cc = n.id_cc
+        
+    //     left join (
+    //     select costCenter, min(final) as min_final, max(final) as max_final from over_time_member om
+    //     left join over_time o on om.id_ot = o.id
+    //     left join karyawan k on k.nik = om.nik
+    //     where DATE_FORMAT(tanggal,'%Y-%m') = '2019-03' and final > 0
+    //     group by costCenter
+    //     ) as m on m.costCenter = n.id_cc
+        
+    //     ";
+    //     $query = $this->db->query($q);
+
+    //     return $query->result();
+    // }
+
 }
 ?>

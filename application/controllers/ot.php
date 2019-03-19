@@ -1203,7 +1203,42 @@ class Ot extends CI_Controller {
 
 	public function ajax_summary()
 	{
-		
+		if (isset($_POST['tgl'])) {
+			$tgl1 = date('Y-m',strtotime('01-'.$_POST['tgl']));
+			$tgl2 = date('Y-m-d',strtotime('01-'.$_POST['tgl']));
+		}
+		else{
+			$tgl1 = date('Y-m');
+			$tgl2 = $tgl1.'-01';
+		}
+
+		$list = $this->ot_summary->ot_summary_m($tgl1,$tgl2);
+		$tot = $this->ot_summary->count_all($tgl1,$tgl2);
+		$filter = $this->ot_summary->count_filtered($tgl1,$tgl2);
+
+		$data = array();
+
+		foreach ($list as $key2) {
+			$row = array();
+			$row[] = $key2->mon; 
+			$row[] = $key2->name;
+			$row[] = (float) $key2->aktual;
+			$row[] = $key2->karyawan;
+			$row[] = (float) $key2->avg;
+			$row[] = (float) $key2->min_final;
+			$row[] = (float) $key2->max_final;
+
+			$data[] = $row;
+		}
+
+		$output = array(
+			"draw" => $_POST['draw'],
+			"recordsFiltered" => $filter,
+			"recordsTotal" => $tot,
+			"data" => $data,
+		);
+            //output to json format
+		echo json_encode($output);
 	}
 
 	public function ajax_mountly()

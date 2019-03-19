@@ -32,7 +32,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                          <div class="box box-solid">
                               <div class="box-body">
-                                   <input type="text" class="form-control" id="select" placeholder="Fiscal">
+                                   <!-- <input type="text" class="form-control" id="select" placeholder="Fiscal" value="195"> -->
                                    <div id="container"></div>
                               </div>
                          </div>   
@@ -143,13 +143,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     series: [ 
                     {
                          type: 'column',
-                         name: 'Budget-Direct',
+                         name: 'Budget-Indirect',
                          data: seriesOfcBudget,
                          stack: 'BUDGET'
                     }, 
                     {
                          type: 'column',
-                         name: 'Buget-Indirect',
+                         name: 'Buget-Direct',
                          data: seriesProdBudget,
                          stack: 'BUDGET'
                     },
@@ -161,13 +161,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     }, 
                     {
                          type: 'column',
-                         name: 'Forecast-Office',
+                         name: 'Forecast-Indirect',
                          data: seriesOfcForecast,
                          stack: 'FORECAST'
                     },
                     {
                          type: 'column',
-                         name: 'Forecast-Production',
+                         name: 'Forecast-Direct',
                          data: seriesProdForecast,
                          stack: 'FORECAST'
                     },

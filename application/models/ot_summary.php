@@ -2,9 +2,9 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Ot_summary extends CI_Model {
-	var $column_order = array('tanggal_tanya','nik_penanya','pertanyaan','jawaban','nik_penjawab','tanggal_jawab'); //set column field database for datatable orderable
-    var $column_search = array('tanggal_tanya','nik_penanya','pertanyaan','jawaban','nik_penjawab','tanggal_jawab'); //set column field database for datatable searchable 
-    var $order = array('tanggal_tanya' => 'desc'); // default order 
+	var $column_order = array('mon','name','karyawan','aktual','avg','min_final','max_final'); //set column field database for datatable orderable
+    var $column_search = array('mon','name','karyawan','aktual','round((aktual/karyawan),2)','min_final','max_final'); //set column field database for datatable searchable 
+    var $order = array('mon' => 'desc'); // default order 
 
     public function __construct()
     {
@@ -12,19 +12,54 @@ class Ot_summary extends CI_Model {
         $this->load->database();
     }
 
-    public function get_data_ot_s()
+    public function ot_summary_m($tgl1,$tgl2)
     {
-        $this->_get_data_ot_s();
+        $this->_get_data_summary($tgl1,$tgl2);
         if($_POST['length'] != -1)
             $this->db->limit($_POST['length'], $_POST['start']);
         $query = $this->db->get();
         return $query->result();
     }
 
-    private function _get_data_ot_s()
+    private function _get_data_summary($tgl1,$tgl2)
     {
+        $this->db->select("mon, p.id_cc, name, karyawan, aktual, round((aktual/karyawan),2) as avg, coalesce(min_final, 0) as min_final, coalesce(max_final, 0) as max_final");
 
-        $this->db->from('tanya_jawab');
+        $this->db->from("
+            (
+
+        select mon, master_cc.id_cc, kode, name, sum(tot_karyawan) as karyawan from (
+            select mon, costCenter, sum(if(if(date_format(a.tanggalMasuk, '%Y-%m') < mon, 1, 0 ) - if(date_format(a.tanggalKeluar, '%Y-%m') < mon, 1, 0 ) = 0, 0, 1)) as tot_karyawan from
+            (
+            select distinct fiskal, date_format(tanggal, '%Y-%m') as mon
+            from kalender_fy
+            ) as b
+            join
+            (
+                select '195' as fy, karyawan.kode, tanggalKeluar, tanggalMasuk, nik, costCenter
+                from karyawan
+            ) as a
+            on a.fy = b.fiskal
+            group by mon, costCenter
+            having mon = '".$tgl1."'
+    ) as b 
+    left join master_cc on master_cc.id_cc = b.costCenter
+    GROUP BY mon, kode, master_cc.id_cc
+        ) as p
+            ");
+
+        $this->db->join("(
+        select id_cc, aktual, budget from cost_center_budget where period = '".$tgl2."'
+        ) as n","p.id_cc = n.id_cc",'left');
+        $this->db->join("
+            (
+        select costCenter, min(final) as min_final, max(final) as max_final from over_time_member om
+        left join over_time o on om.id_ot = o.id
+        left join karyawan k on k.nik = om.nik
+        where DATE_FORMAT(tanggal,'%Y-%m') = '".$tgl1."' and final > 0
+        group by costCenter
+        ) as m
+        ","m.costCenter = n.id_cc","left");
 
         $i = 0;
 
@@ -60,16 +95,16 @@ class Ot_summary extends CI_Model {
         }
     }
 
-    function count_filtered()
+    function count_filtered($tgl1,$tgl2)
     {
-        $this->_get_data_ot_s();
+        $this->_get_data_summary($tgl1,$tgl2);
         $query = $this->db->get();
         return $query->num_rows();
     }
 
-    public function count_all()
+    public function count_all($tgl1,$tgl2)
     {
-        $this->_get_data_ot_s();
+        $this->_get_data_summary($tgl1,$tgl2);
         return $this->db->count_all_results();
     }
 }

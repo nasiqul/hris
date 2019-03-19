@@ -29,14 +29,20 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <!-- Main content -->
       <section class="content container-fluid">
         <div class="col-md-12">
-
           <div class="box box-solid">
             <div class="box-body">
+              <div class="row">
+                <div class="col-md-4">
+                  <label>Period : </label>
+                  <input type="text" class="form-control text-muted datepicker" placeholder="Select Month" id="bulan" onchange="postTgl();" name="tgl">
+                </div>
+              </div>
+              <br>
               <table id="example1" class="table table-responsive table-striped">
                 <thead>
                   <tr>
                     <th>Period</th>
-                    <th>Departemen</th>
+                    <th>CC Name</th>
                     <th>Overtime Total <br> (A)</th>
                     <th>Emp. Total <br> (B)</th>
                     <th>OT (AVG) <br> (A/B)</th>
@@ -64,7 +70,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- ./wrapper -->
   <script>
     $(document).ready(function() {
-      $('#example1').DataTable({
+      var tabel1 = $('#example1').DataTable({
         "lengthMenu"    : [[10, 25, 50, -1], [10, 25, 50, "All"]],
         "processing"    : true,
         "serverSide"    : true,
@@ -75,6 +81,32 @@ scratch. This page gets rid of all links and provides the needed markup only.
         }
       })
     })
+
+    function postTgl() {
+      var tabel1 = $('#example1').DataTable();
+      var tgl = $('#bulan').val();
+      tabel1.destroy();
+      tabel1 = $('#example1').DataTable({
+        "lengthMenu"    : [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        "processing"    : true,
+        "serverSide"    : true,
+        'order'         : [],
+        "ajax": {
+          "url": "<?php echo base_url('ot/ajax_summary')?>",            
+          "type": "POST",
+          data: {
+            tgl:tgl
+          }
+        }
+      })
+    }
+
+    $('.datepicker').datepicker({
+      autoclose: true,
+      viewMode: "months", 
+      minViewMode: "months",
+      format: "mm-yyyy"
+    });
   </script>
 
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
