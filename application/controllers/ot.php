@@ -1147,7 +1147,7 @@ class Ot extends CI_Controller {
 
 		foreach ($list2 as $key2) {
 			$row = array();
-			$row[] = $key2->tanggal; 
+			$row[] = date('d',strtotime($key2->tanggal)); 
 			$row[] = $key2->departemen;
 			$row[] = (float) $key2->jam;
 
