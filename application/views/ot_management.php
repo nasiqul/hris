@@ -76,20 +76,32 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <div class="box-body">
               <div class="row">
                 <div class="col-md-12">
+
                   <div class="pull-right">
                     Tahun : 
                     <input type="text" name="tahun" id="tahun" class="form-control" onchange="postTahun()">
                   </div>
                   <div class="pull-right" style="margin-right: 20px">
-                    Section : 
+
+                    Section :
+
                     <select name="section" class="form-control" id="section" onchange="postTahun()">
                       <?php foreach ($section as $key) { ?>
                         <option value="<?php echo $key->id_cc ?>"><?php echo $key->name ?></option>
                       <?php } ?>
                     </select>
+
+
                   </div>
+                  <div id="load" class="overlay" style="display: none;">
+                        <i class="fa fa-refresh fa-spin"></i>
+                      </div>
                 </div>
-                <div id="container" style ="width: 95%;margin: 0 auto"></div>
+
+                <div id="container" style ="width: 95%;margin: 0 auto">
+                  
+                </div>
+
               </div>
             </div>
           </div>
@@ -180,6 +192,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 
     function postTahun() {
+      $('#load').css('display','block')
       var tahun = $("#tahun").val();
       var section = $("#section").val();
 
@@ -260,7 +273,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                       },
                       series: s
                     });
-
+                    $('#load').css('display','none')
                   }
                 });
     }

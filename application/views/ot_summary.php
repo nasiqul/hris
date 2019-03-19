@@ -38,7 +38,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </div>
               </div>
               <br>
-              <table id="example1" class="table table-responsive table-striped">
+              <table id="example1" class="table table-responsive table-striped" style="width: 100%">
                 <thead>
                   <tr>
                     <th>Period</th>

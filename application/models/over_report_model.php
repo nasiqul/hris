@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Over_report_model extends CI_Model {
 
     var $column_order = array('period','k.nik','k.namaKaryawan','bagian','total_jam','satuan'); //set column field database for datatable orderable
-    var $column_search = array('DATE_FORMAT(o.tanggal, "%M %Y")','k.nik','k.namaKaryawan','dp.nama'); //set column field database for datatable searchable 
+    var $column_search = array('k.nik','k.namaKaryawan','dp.nama','k.kode'); //set column field database for datatable searchable 
     var $order = array('period' => 'asc'); // default order 
 
     public function __construct()
@@ -25,7 +25,7 @@ class Over_report_model extends CI_Model {
 
     private function _get_datatables_query()
     {
-        $this->db->select('DATE_FORMAT(o.tanggal, "%M %Y") as period, k.nik, k.namaKaryawan,  concat(dp.nama,"-",IF(sc.nama,sc.nama,""),"/", k.kode) as bagian, sum(final) as total_jam, sum(satuan) as satuan');
+        $this->db->select('DATE_FORMAT(o.tanggal, "%M %Y") as period, k.nik, k.namaKaryawan, concat(dp.nama,"-",IF(sc.nama,sc.nama,""),"/", k.kode) as bagian, sum(final) as total_jam, sum(satuan) as satuan');
         $this->db->from("over_time o");
         $this->db->join("over_time_member om","o.id = om.id_ot");
         $this->db->join("karyawan k","om.nik = k.nik");

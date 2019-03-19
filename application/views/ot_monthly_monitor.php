@@ -121,11 +121,25 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                var accBudget = [];
                var accForecast = [];
+               cumulativeBudget = [0];
+               cumulativeForecast = [0];
 
                for(i=0; i<groupedObjects.length; i++){
                     accBudget.push(groupedObjects[i][1]);
                     accForecast.push(groupedObjects[i][3]);
                }
+
+               accBudget.forEach(function(elementToAdd, index) {
+                    var newElement = cumulativeBudget[index] + elementToAdd;
+                    cumulativeBudget.push(newElement);
+               });
+               cumulativeBudget.shift();
+
+               accForecast.forEach(function(elementToAdd, index) {
+                    var newElement = cumulativeForecast[index] + elementToAdd;
+                    cumulativeForecast.push(newElement);
+               });
+               cumulativeForecast.shift();
 
                $('#container').highcharts({
                     title: {
@@ -180,7 +194,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     {
                          type: 'line',
                          name: 'BUDGET',
-                         data: accBudget,
+                         data: cumulativeBudget,
                          marker: {
                               lineWidth: 2,
                               lineColor: Highcharts.getOptions().colors[3],
@@ -190,7 +204,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     {
                          type: 'line',
                          name: 'FORECAST',
-                         data: accForecast,
+                         data: cumulativeForecast,
                          marker: {
                               lineWidth: 2,
                               lineColor: Highcharts.getOptions().colors[3],

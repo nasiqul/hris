@@ -1,10 +1,9 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Over_cari_report_model_2 extends CI_Model {
-	var $column_order = array('tanggal','jam'); //set column field database for datatable orderable
-    var $column_search = array('tanggal'); //set column field database for datatable searchable 
-    var $order = array('tanggal' => 'asc'); // default order 
+class Over_detail_mControl extends CI_Model {
+	var $column_order = array('tanggal_tanya','nik_penanya','pertanyaan','jawaban','nik_penjawab','tanggal_jawab'); //set column field database for datatable orderable
+    var $column_search = array('tanggal_tanya','nik_penanya','pertanyaan','jawaban','nik_penjawab','tanggal_jawab'); //set column field database for datatable searchable 
 
     public function __construct()
     {
@@ -12,28 +11,31 @@ class Over_cari_report_model_2 extends CI_Model {
         $this->load->database();
     }
 
-    public function get_data_report_cari_2($tgl, $nik)
+    public function get_data_chart_detail($kode,$tgl)
     {
-        $this->_get_report_cari_2($tgl, $nik);
+        $this->_get_data_chart_detail($kode,$tgl);
         if($_GET['length'] != -1)
             $this->db->limit($_GET['length'], $_GET['start']);
-        $query = $this->db->get();
+        $query = $this->db->get();  
         return $query->result();
     }
 
-    private function _get_report_cari_2($tgl, $nik)
+    private function _get_data_chart_detail($kode,$tgl)
     {
-        $this->db->select('date_format(tanggal, "%d-%m-%Y") as tgl, round(jam,1) as jam');
-        $this->db->from('over');
-        $this->db->where('nik',$nik);
-        $this->db->where('jam <> 0');
-        $this->db->where('date_format(tanggal, "%m-%Y") = "'.$tgl.'"');
+        $this->db->select("d.tanggal, d.nik, d.namaKaryawan, d.name, presensi.masuk, presensi.keluar, jam");
+        $this->db->from("(
+            select o.nik,tanggal, jam, karyawan.namaKaryawan, karyawan.kode, costCenter, name from over o
+            left join karyawan on o.nik = karyawan.nik
+            left join master_cc on master_cc.id_cc = karyawan.costCenter
+            where tanggal = '".$tgl."' and master_cc.departemen = '".$kode."' and jam <> 0
+        ) d ");
+        $this->db->join('presensi','(presensi.tanggal = d.tanggal) and (presensi.nik = d.nik)','left');
 
         $i = 0;
 
         foreach ($this->column_search as $item) // loop column 
         {
-            if($_GET['search']['value']) // if datatable send GET for search
+            if($_GET['search']['value']) // if datatable send POST for search
             {
 
                 if($i===0) // first loop
@@ -63,16 +65,16 @@ class Over_cari_report_model_2 extends CI_Model {
         }
     }
 
-    function count_filtered_2($tgl, $nik)
+    function count_filtered($kode,$tgl)
     {
-        $this->_get_report_cari_2($tgl, $nik);
+        $this->_get_data_chart_detail($kode,$tgl);
         $query = $this->db->get();
         return $query->num_rows();
     }
 
-    public function count_all_2($tgl, $nik)
+    public function count_all($kode,$tgl)
     {
-        $this->_get_report_cari_2($tgl, $nik);
+        $this->_get_data_chart_detail($kode,$tgl);
         return $this->db->count_all_results();
     }
 }

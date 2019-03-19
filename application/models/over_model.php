@@ -1164,7 +1164,7 @@ public function chart_dep2($tgl)
 
 public function nik_by_cc($sec)
 {
-    $q = "select nik, namaKaryawan, 'target' target from karyawan
+    $q = "select nik, namaKaryawan, 'Max-OT' target from karyawan
     where costCenter = ".$sec."
     ORDER BY nik ASC";
     $query = $this->db->query($q);
@@ -1295,12 +1295,13 @@ public function get_data_ot_month()
 
 public function get_jam_by_nik($nik,$tgl)
 {
-    $this->db->select('date_format(tanggal, "%d-%m-%Y") as tgl, sum(jam) as jam, over.nik, namaKaryawan');
+    $this->db->select('date_format(tanggal, "%d-%m-%Y") as tgl, round(sum(jam),1) as jam, over.nik, namaKaryawan');
     $this->db->from('over');
     $this->db->join('karyawan','karyawan.nik = over.nik');
     $this->db->where('over.nik',$nik);
     $this->db->where('jam <> 0');
-    $this->db->where('date_format(tanggal, "%m-%Y") = "'.$tgl.'"');
+    $this->db->where('date_format(tanggal, "%Y") = "'.$tgl.'"');
+    $this->db->group_by('DATE_FORMAT(tanggal,"%m-%Y")');
     $q =  $this->db->get();
     return $q->result();
 }

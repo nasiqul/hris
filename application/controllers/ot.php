@@ -14,6 +14,7 @@ class Ot extends CI_Controller {
 		$this->load->model('cari_over_dep');
 		$this->load->model('over_cari_chart2');
 		$this->load->model('ot_summary');
+		$this->load->model('over_detail_mControl');
 		$this->load->library('ciqrcode');
 		$this->load->helper('file');
 		//$this->load->library(array('PHPExcel','PHPExcel/IOFactory'));
@@ -429,7 +430,7 @@ class Ot extends CI_Controller {
 				// $row[] = "<button class='btn btn-primary btn-xs' onclick='
 				// detail2(\"".$key->nik."\",\"".$key->period."\",\"".$key->namaKaryawan."\")'>Detail</button>";
 
-				$row[] = "<a href='".base_url('home/detailSPL/'.$key->nik."/".$key->period)."'> Detail </a>";
+				$row[] = "<a class='btn btn-primary btn-sm' href='".base_url('home/detailSPL/'.$key->nik."/".$key->period)."'> Detail </a>";
 
 				$data[] = $row;
 			}
@@ -610,7 +611,7 @@ class Ot extends CI_Controller {
 	{
 		$nik = $_GET['nik'];
 		$tgl = $_GET['period'];
-		$time = strtotime($tgl);
+		$time = strtotime('01 '.$tgl);
 
 		$newformat = date('m-Y',$time);
 
@@ -630,9 +631,9 @@ class Ot extends CI_Controller {
 			}
 
 		}
-			else {
+		else {
 
-			}
+		}
 
             //output to json format
 		$output = array(
@@ -712,8 +713,8 @@ class Ot extends CI_Controller {
 				$row = array();
 				$row[] = $key->nik;
 				$row[] = $key->namaKaryawan;
-				$row[] = $key->dept;
 				$row[] = $key->dev;
+				$row[] = $key->dept;
 				$row[] = $key->sec;
 				$row[] = $key->sub;
 				$row[] = $key->gruop1;
@@ -743,8 +744,8 @@ class Ot extends CI_Controller {
 				$row = array();
 				$row[] = $key->nik;
 				$row[] = $key->namaKaryawan;
-				$row[] = $key->dept;
 				$row[] = $key->dev;
+				$row[] = $key->dept;
 				$row[] = $key->sec;
 				$row[] = $key->sub;
 				$row[] = $key->gruop1;
@@ -776,8 +777,8 @@ class Ot extends CI_Controller {
 				$row = array();
 				$row[] = $key->nik;
 				$row[] = $key->namaKaryawan;
-				$row[] = $key->dept;
 				$row[] = $key->dev;
+				$row[] = $key->dept;
 				$row[] = $key->sec;
 				$row[] = $key->sub;
 				$row[] = $key->gruop1;
@@ -1116,6 +1117,7 @@ class Ot extends CI_Controller {
 
 			$data2["data"] =  $row2;
 			$data3["data"] =  $d;
+			$data3["dashStyle"] =  'Dash';
 
 			array_push($data, $data2);
 			array_push($data, $data3);
@@ -1127,20 +1129,20 @@ class Ot extends CI_Controller {
 
 	public function overtime_chart_per_dep()
 	{
-		 if (isset($_POST['date2'])) {
+		if (isset($_POST['date2'])) {
             //$n = date('m-Y', strtotime($_POST['date2']));
-            $tgl = $_POST['date2'];
-        }
-        else {
-            $tgl = date('m-Y');
-        }
+			$tgl = $_POST['date2'];
+		}
+		else {
+			$tgl = date('m-Y');
+		}
 		// $list = $this->over_model->get_tgl();
 		$list2 = $this->over_model->get_cc5($tgl);
 		// $data = array();
 		$data2 = array();
 
 		// foreach ($list as $key) {
-			
+
 		// 	array_push($data, $key->tanggal);
 
 		// }
@@ -1268,7 +1270,7 @@ class Ot extends CI_Controller {
 		foreach ($list as $key) {
 			$row = array();
 			$row[] = $key->nik;
-			$row[] = $key->tgl;
+			$row[] = date('F Y',strtotime($key->tgl));
 			$row[] = (float) $key->jam;
 			$row[] = $key->namaKaryawan;
 
@@ -1300,6 +1302,41 @@ class Ot extends CI_Controller {
 		echo json_encode($data);
 	}
 
+	public function ajax_ot_monthly_c()
+	{
+		$kode = $_GET['kode'];
+		$tgl = date('Y-m-d',strtotime($_GET['tgl']));
+
+		$list = $this->over_detail_mControl->get_data_chart_detail($kode,$tgl);
+		$tot = $this->over_detail_mControl->count_all($kode,$tgl);
+		$filter = $this->over_detail_mControl->count_filtered($kode,$tgl);
+		$data = array();
+		$no = 1;
+		foreach ($list as $key) {
+			$row = array();
+			$row[] = $no;
+			$row[] = $key->tanggal;
+			$row[] = $key->nik;
+			$row[] = $key->namaKaryawan;
+			$row[] = $key->name;
+			$row[] = $key->masuk;
+			$row[] = $key->keluar;
+			$row[] = $key->jam;
+
+			$data[] = $row;
+			$no++;
+		}
+
+		$output = array(
+			"draw" => $_GET['draw'],
+			"recordsFiltered" => $filter,
+			"recordsTotal" => $tot,
+			"data" => $data,
+		);
+            //output to json format
+		echo json_encode($output);
+	}
+
 	public function exportexcel($id){
 
 		// $tgl = $_POST['tgl'];
@@ -1312,11 +1349,11 @@ class Ot extends CI_Controller {
 
 		// Settingan awal fil excel
 		$excel->getProperties()->setCreator('MIRAI')
-							   ->setLastModifiedBy('MIRAI')
-							   ->setTitle("Data MIRAI")
-							   ->setSubject("MIRAI")
-							   ->setDescription("Laporan MIRAI")
-							   ->setKeywords("Data Lembur");
+		->setLastModifiedBy('MIRAI')
+		->setTitle("Data MIRAI")
+		->setSubject("MIRAI")
+		->setDescription("Laporan MIRAI")
+		->setKeywords("Data Lembur");
 
 		// Buat sebuah variabel untuk menampung pengaturan style dari header tabel
 		$style_col = array(
@@ -1448,11 +1485,11 @@ class Ot extends CI_Controller {
 
 		// Settingan awal fil excel
 		$excel->getProperties()->setCreator('MIRAI')
-							   ->setLastModifiedBy('MIRAI')
-							   ->setTitle("Data MIRAI")
-							   ->setSubject("MIRAI")
-							   ->setDescription("Laporan MIRAI")
-							   ->setKeywords("Data Lembur");
+		->setLastModifiedBy('MIRAI')
+		->setTitle("Data MIRAI")
+		->setSubject("MIRAI")
+		->setDescription("Laporan MIRAI")
+		->setKeywords("Data Lembur");
 
 		// Buat sebuah variabel untuk menampung pengaturan style dari header tabel
 		$style_col = array(

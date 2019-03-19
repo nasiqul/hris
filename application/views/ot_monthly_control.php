@@ -63,11 +63,49 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     </div>   
                </div>
 
-          </section>
-          <!-- /.content -->
-     </div>
-     <!-- /.content-wrapper -->
-     <!-- /.control-sidebar -->
+               <div class="modal fade" id="myModal">
+                    <div class="modal-dialog modal-lg">
+                       <div class="modal-content">
+                          <div class="modal-header">
+                             <h4 style="float: right;" id="modal-title"></h4>
+                             <h4 class="modal-title"><b>PT. YAMAHA MUSICAL PRODUCT INDONESIA</b></h4>
+                        </div>
+                        <div class="modal-body">
+                             <div class="row">
+                                <div class="col-md-12">
+                                   <table class="table table-striped table-responsive" style="width: 100%" id="example2">
+                                      <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Tanggal</th>
+                                            <th>NIK</th>
+                                            <th>Nama</th>
+                                            <th>Bagian</th>
+                                            <th>Checkin</th>
+                                            <th>Checkout</th>
+                                            <th>Jam Lembur <br> (Jam)</th>
+                                            <!-- <th>Aktual Lembur <br> (Jam)</th> -->
+                                       </tr>
+                                  </thead>
+                                  <tbody></tbody>
+                             </table>
+                        </div>
+                   </div>
+              </div>
+              <div class="modal-footer">
+                   <button type="button" class="btn btn-danger pull-right" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+              </div>
+         </div>
+         <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+</section>
+<!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+<!-- /.control-sidebar -->
 <!-- Add the sidebar's background. This div must be placed
      immediately after the control sidebar -->
      <div class="control-sidebar-bg"></div>
@@ -281,10 +319,18 @@ scratch. This page gets rid of all links and provides the needed markup only.
                          column: {
                               stacking: 'normal',
                               minPointLength: 5
+                         },
+                         series: {
+                           cursor: 'pointer',
+                           events: {
+                               click: function (event) {
+                                   details(this.name,event.point.category, title);
+                              }
                          }
-                    },
-                    series: seriesData
-               });
+                    }
+               },
+               series: seriesData
+          });
           });
 });
 
@@ -299,6 +345,7 @@ function postTgl() {
      progressData();
      progress_bar()
      var data = $.parseJSON(data);
+     var title = $("[name=date2]").val()
 
      var xCategories = [];
      var seriesData = [];
@@ -334,77 +381,86 @@ function postTgl() {
      }
 
      var grphDates = new Array();
-               var groupedObjects = new Array();
-               $.each(data, function (ix, obj) {
-                    var existingObj;
-                    if ($.inArray(obj[0], grphDates) >= 0) {
-                         var index = groupedObjects.map(function(o, i) { 
-                              if(o[0] == obj[0])return i;
-                         }).filter(isFinite);
+     var groupedObjects = new Array();
+     $.each(data, function (ix, obj) {
+          var existingObj;
+          if ($.inArray(obj[0], grphDates) >= 0) {
+               var index = groupedObjects.map(function(o, i) { 
+                    if(o[0] == obj[0])return i;
+               }).filter(isFinite);
 
-                         groupedObjects[index][2] += obj[2];
-                    } else {
-                         groupedObjects.push(obj);
-                         grphDates.push(obj[0]);
-                    }
-               });
+               groupedObjects[index][2] += obj[2];
+          } else {
+               groupedObjects.push(obj);
+               grphDates.push(obj[0]);
+          }
+     });
 
-               cumulativeData = [0];
+     cumulativeData = [0];
 
-               accData = [];
-               for(i=0; i<groupedObjects.length; i++){
-                    accData.push(groupedObjects[i][2]);
-               }
+     accData = [];
+     for(i=0; i<groupedObjects.length; i++){
+          accData.push(groupedObjects[i][2]);
+     }
 
-               accData.forEach(function(elementToAdd, index) {
-                    var newElement = cumulativeData[index] + elementToAdd;
-                    cumulativeData.push(newElement);
-               });
-               cumulativeData.shift();
+     accData.forEach(function(elementToAdd, index) {
+          var newElement = cumulativeData[index] + elementToAdd;
+          cumulativeData.push(newElement);
+     });
+     cumulativeData.shift();
 
                // alert(cumulativeData);
 
 
                seriesData.push({type: 'line', name: 'Cumulative Overtime', data: cumulativeData})
 
-     Highcharts.chart('container8', {
-          chart: {
-               type: 'column'
-          },
-          title: {
-               text: $("[name=date2]").val()
-          },
-          xAxis: {
-               categories: xCategories
-          },
-          yAxis: {
-               title: {
-                    text: 'Total Jam'
-               },
-               stackLabels: {
-                    enabled: true,
-                    style: {
-                         fontWeight: 'bold',
-                         color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+               Highcharts.chart('container8', {
+                    chart: {
+                         type: 'column'
+                    },
+                    title: {
+                         text: title
+                    },
+                    xAxis: {
+                         categories: xCategories
+                    },
+                    yAxis: {
+                         title: {
+                              text: 'Total Jam'
+                         },
+                         stackLabels: {
+                              enabled: true,
+                              style: {
+                                   fontWeight: 'bold',
+                                   color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+                              }
+                         }
+                    },
+                    tooltip: {
+                         headerFormat: '<b>{point.x}</b><br/>',
+                         pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+                    },
+                    plotOptions: {
+                         column: {
+                              stacking: 'normal',
+                              minPointLength: 5
+                         },
+                         series: {
+                           cursor: 'pointer',
+                           events: {
+                               click: function (event) {
+                                   details(this.name,event.point.category, title);
+                                   // alert(this.name + ' clicked ' + event.point.category + title);
+                              }
+                         }
                     }
-               }
-          },
-          tooltip: {
-               headerFormat: '<b>{point.x}</b><br/>',
-               pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
-          },
-          plotOptions: {
-               column: {
-                    stacking: 'normal',
-                    minPointLength: 5
-               }
-          },
-          series: seriesData
+               },
+               series: seriesData
+          });
+
+
+          }
      });
-
-
-}
-});
 }
 
 $('.datepicker').datepicker({
@@ -413,6 +469,34 @@ $('.datepicker').datepicker({
      viewMode: "months", 
      minViewMode: "months"
 });
+
+function details(kode, tgl, blnthn) {
+     table2 = $('#example2').DataTable();
+     table2.destroy();
+      
+      var tanggal = tgl+"-"+blnthn;
+
+      $("#myModal").modal('show');
+      table2 = $('#example2').DataTable({
+        "lengthMenu"    : [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        "processing"    : true,
+        "serverSide"    : true,
+        "searching": false,
+        "bPaginate": false,
+        "bLengthChange": false,
+        "bFilter": false,
+        "bInfo": false,
+        'order'         : [],
+        "ajax": {
+          "url": "<?php echo base_url('ot/ajax_ot_monthly_c')?>",
+          "type": "GET",
+          "data" : {
+            kode : kode,
+            tgl : tanggal,
+       }
+  }
+})
+ }
 
 
 </script>

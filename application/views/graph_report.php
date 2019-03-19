@@ -30,11 +30,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
                <section class="content container-fluid">
                     <div class="col-md-12">
 
-                         <div class="box box-solid">
+                         <div class="box box-primary box-solid">
+                          <div class="box-header">
+                            <div class="box-title">
+                              <span id="nama1"></span>
+                             [<?php echo $nik;?>] 
+                          </div>
+                          </div>
                               <div class="box-body">
                                    <div id="container"></div>
-                                   <?php echo $nik;?>
-                                   <?php $period = date('m-Y',strtotime('01 '.urldecode($tgl))); ?>
+                                   <?php $period = date('Y',strtotime('01 '.urldecode($tgl))); ?>
                               </div>
                          </div>   
                     </div>
@@ -60,7 +65,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                             </tr>
                                        </thead>
                                        <tbody></tbody>
-                                       <tfoot style="background-color: blue">
+                                       <tfoot style="background-color: rgb(149,206,255)">
                                          <th>Total</th>
                                          <th></th>
                                     </tfoot>
@@ -117,6 +122,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                }
 
                nama = data[0][3];
+               $("#nama1").text(nama);
                nik = data[0][0];
                tgl = data[0][1];
 
@@ -140,7 +146,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                          type: 'column'
                     },
                     title: {
-                         text: 'Bulan'
+                         text: '2019'
                     },
                     xAxis: {
                          categories: cat
@@ -170,7 +176,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             cursor: 'pointer',
                             events: {
                              click: function (event) {
-                              detail2();
+                              detail2(event.point.category);
                          }
                     }
                }
@@ -186,10 +192,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
      });
 
 
-     function detail2() {
+     function detail2(tgl2) {
       $('#nik').text(nik);
       $('#nama').text(nama);
-      $('#bulan').text(tgl);
+      $('#bulan').text(tgl2);
 
       table2 = $('#example2').DataTable();
       table2.destroy();
@@ -210,7 +216,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           "type": "GET",
           "data" : {
             nik : nik,
-            period : tgl,
+            period : tgl2,
        }
   },
   "columnDefs" : [
@@ -231,7 +237,7 @@ var api = this.api();
 var totalPlan = api.column(1).data().reduce(function (a, b) {
      return intVal(a)+intVal(b);
 }, 0)
-$(api.column(1).footer()).html(totalPlan.toLocaleString());
+$(api.column(1).footer()).html(totalPlan.toFixed(0).toLocaleString());
 }
 });
  }

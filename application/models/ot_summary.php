@@ -23,7 +23,7 @@ class Ot_summary extends CI_Model {
 
     private function _get_data_summary($tgl1,$tgl2)
     {
-        $this->db->select("mon, p.id_cc, name, karyawan, aktual, round((aktual/karyawan),2) as avg, coalesce(min_final, 0) as min_final, coalesce(max_final, 0) as max_final");
+        $this->db->select("mon, p.id_cc, name, karyawan, aktual, round((aktual/karyawan),2) as avg, coalesce(min, 0) as min_final, coalesce(max, 0) as max_final");
 
         $this->db->from("
             (
@@ -53,11 +53,14 @@ class Ot_summary extends CI_Model {
         ) as n","p.id_cc = n.id_cc",'left');
         $this->db->join("
             (
-        select costCenter, min(final) as min_final, max(final) as max_final from over_time_member om
-        left join over_time o on om.id_ot = o.id
-        left join karyawan k on k.nik = om.nik
-        where DATE_FORMAT(tanggal,'%Y-%m') = '".$tgl1."' and final > 0
-        group by costCenter
+        select tanggal, costCenter, max(tot) as max, min(tot) as min from (
+                    select om.nik, sum(final) as tot, costCenter, namaKaryawan, tanggal from over_time_member om
+                    left join over_time on over_time.id = om.id_ot
+                    left join karyawan on karyawan.nik = om.nik
+                    where DATE_FORMAT(tanggal,'%Y-%m') = '".$tgl1."'
+                    GROUP BY om.nik
+                ) as d 
+                GROUP BY costCenter
         ) as m
         ","m.costCenter = n.id_cc","left");
 

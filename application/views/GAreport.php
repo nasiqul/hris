@@ -53,19 +53,19 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <div class="col-sm-2">
                     <table class="table table-bordered table-striped text-center" id="shf1">
                       <tr><th>Shift 1</th></tr>
-                      <tr><td id='makan1' onclick="makan(1)">0</td></tr>
+                      <tr><td id='makan1' onclick="makan(1,'Shift 1')">0</td></tr>
                     </table>
                   </div>
                   <div class="col-sm-2">
                     <table class="table table-bordered table-striped text-center" id="shf1">
                       <tr><th>Shift 2</th></tr>
-                      <tr><td id='makan2' onclick="makan(2)">0</td></tr>
+                      <tr><td id='makan2' onclick="makan(2,'Shift 2')">0</td></tr>
                     </table>
                   </div>
                   <div class="col-sm-2">
                     <table class="table table-bordered table-striped text-center" id="shf1">
                       <tr><th>Shift 3</th></tr>
-                      <tr><td id='makan3' onclick="makan(3)">0</td></tr>
+                      <tr><td id='makan3' onclick="makan(3,'Shift 3')">0</td></tr>
                     </table>
                   </div>
                 </div>
@@ -76,19 +76,19 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <div class="col-sm-2">
                     <table class="table table-bordered table-striped text-center" id="shf1">
                       <tr><th>Shift 1</th></tr>
-                      <tr><td id='extmakan1' onclick="extmakan(1)">0</td></tr>
+                      <tr><td id='extmakan1' onclick="extmakan(1, 'Shift 1')">0</td></tr>
                     </table>
                   </div>
                   <div class="col-sm-2">
                     <table class="table table-bordered table-striped text-center" id="shf1">
                       <tr><th>Shift 2</th></tr>
-                      <tr><td id='extmakan2' onclick="extmakan(2)">0</td></tr>
+                      <tr><td id='extmakan2' onclick="extmakan(2, 'Shift 2')">0</td></tr>
                     </table>
                   </div>
                   <div class="col-sm-2">
                     <table class="table table-bordered table-striped text-center" id="shf1">
                       <tr><th>Shift 3</th></tr>
-                      <tr><td id='extmakan3' onclick="extmakan(3)">0</td></tr>
+                      <tr><td id='extmakan3' onclick="extmakan(3, 'Shift 3')">0</td></tr>
                     </table>
                   </div>
                 </div>
@@ -121,7 +121,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <div class="modal-content">
                 <div class="modal-header">
                   <h4 style="float: right;" id="modal-title"></h4>
-                  <h4 class="modal-title"><b>Total Makan</b><b id="sifMakan"></b></h4>
+                  <h4 class="modal-title"><b>Total Makan</b> <b id="sifMakan"></b></h4>
                 </div>
                 <div class="modal-body">
                   <div class="row">
@@ -131,9 +131,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
                           <tr> 
                             <th>No</th>                           
                             <th>NIK</th>
-                            <th>Nama karyawan</th>
-                            <th>Departemen</th>
+                            <th>Nama karyawan</th>                            
                             <th>Devisi</th>
+                            <th>Departemen</th>
                             <th>Section</th>
                             <th>Sub Section</th>
                             <th>Group</th>
@@ -158,7 +158,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <div class="modal-content">
                 <div class="modal-header">
                   <h4 style="float: right;" id="modal-title"></h4>
-                  <h4 class="modal-title"><b>Total Transport</b><b id="sifTrans"></b></h4>
+                  <h4 class="modal-title"><b>Total Transport</b> <b id="sifTrans"></b></h4>
                 </div>
                 <div class="modal-body">
                   <div class="row">
@@ -166,11 +166,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
                       <table id="example2" class="table table-striped table-bordered" style="width: 100%;">
                         <thead>
                           <tr> 
-                            <th>No</th>                           
+                           <th>No</th>                           
                             <th>NIK</th>
-                            <th>Nama karyawan</th>
-                            <th>Departemen</th>
+                            <th>Nama karyawan</th>                            
                             <th>Devisi</th>
+                            <th>Departemen</th>
                             <th>Section</th>
                             <th>Sub Section</th>
                             <th>Group</th>
@@ -195,7 +195,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <div class="modal-content">
                 <div class="modal-header">
                   <h4 style="float: right;" id="modal-title"></h4>
-                  <h4 class="modal-title"><b>Total Extra Food</b><b id="sifEfood"></b></h4>
+                  <h4 class="modal-title"><b>Total Extra Food</b> <b id="sifEfood"></b></h4>
                 </div>
                 <div class="modal-body">
                   <div class="row">
@@ -205,9 +205,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
                           <tr> 
                             <th>No</th>                           
                             <th>NIK</th>
-                            <th>Nama karyawan</th>
-                            <th>Departemen</th>
+                            <th>Nama karyawan</th>                            
                             <th>Devisi</th>
+                            <th>Departemen</th>
                             <th>Section</th>
                             <th>Sub Section</th>
                             <th>Group</th>
@@ -247,7 +247,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
       });
     });
 
-function makan(id) {
+function makan(id,shift) {
+  $('#sifMakan').text(shift);  
   $('#myModal').modal('show');
       var no = 1;
       var tanggal = $("#datepicker").val();
@@ -280,7 +281,8 @@ function makan(id) {
 }
 
 
-function extmakan(id) {
+function extmakan(id,shift) {
+  $('#sifEfood').text(shift);
   $('#myModal3').modal('show');
       var no = 1;
       var tanggal = $("#datepicker").val();
@@ -340,7 +342,9 @@ function extrafood() {
           })
 }
 
-function trans(dari,sampai,id) {
+function trans(dari,sampai,id,kode) {
+$('#sifTrans').text(kode);
+  
   $('#myModal2').modal('show');
   // alert(id);
       var no = 1;
@@ -413,7 +417,7 @@ function trans(dari,sampai,id) {
               $.each(data2, function(i, item) {
                 var newdiv1 = $( "<tr id='hello"+no+"'>"+
                   "<th scope='row' width='30%'>"+item[1]+" - "+item[2]+"</th>"+
-                  "<td onclick='trans(\""+item[1]+"\",\""+item[2]+"\",\"b\")'>"+item[3]+"</td><td onclick='trans(\""+item[1]+"\",\""+item[2]+"\",\"p\")'>"+item[4]+"</td>"+
+                  "<td onclick='trans(\""+item[1]+"\",\""+item[2]+"\",\"b\",\"Bangil\")'>"+item[3]+"</td><td onclick='trans(\""+item[1]+"\",\""+item[2]+"\",\"p\",\"Pasuruan\")'>"+item[4]+"</td>"+
                   "</tr>");
 
                 no+=1;
