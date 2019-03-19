@@ -35,22 +35,22 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                    <div class="col-md-3 pull-right">
                                         <form action="" method="post" id="rati2">
                                              <label>Month : </label>
-                                             <input type="text" class="form-control text-muted datepicker" placeholder="Select Month" id="bulan" onchange="postTgl(); progress_bar()" name="date2">
+                                             <input type="text" class="form-control text-muted datepicker" placeholder="Select Month" id="bulan" onchange="postTgl(); progress_bar()" name="date2" value="<?php echo date('m-Y')?>">
                                         </form>
                                    </div>
                                    <div class="col-md-12">
-                                       Production
+                                       Direct (Production) <b id="persendirect2"></b> <b id="persendirect"></b> 
                                        <div class="progress" style="margin: 0 auto">
                                         <div class="progress-bar progress-bar-green progress-bar-striped active" id="progress_bar_prod" ></div>
                                    </div>
                                    <CENTER> <span class="progress-number" id="progress_number_delivery" style="font-weight:bold;"></span></CENTER>
-                                   Office
+                                   Indirect (PC, LOG, PCH, QA, CHM, STD, PE, MTC, MIS)   <b id="persenindirect2" ></b> <b id="persenindirect"></b>
 
                                    <div class="progress" style="margin: 0 auto">
                                         <div class="progress-bar progress-bar-yellow progress-bar-striped active" id="progress_bar_ofc"></div>
                                    </div>
 
-                                   Pl
+                                   Pl (Admin, Driver, Security)  <b id="persenpl2" ></b> <b id="persenpl"></b> 
 
                                    <div class="progress" style="margin: 0 auto">
                                         <div class="progress-bar progress-bar-blue progress-bar-striped active" id="progress_bar_pl"></div>
@@ -84,53 +84,94 @@ scratch. This page gets rid of all links and provides the needed markup only.
      var pl2 = 0;
      $(document).ready(function() {
           progress_bar();
-    })
+          progressData();
+     })
 
      function progress_bar()
      {
           $.ajax({
-          url:'<?php echo base_url("ot/presentase_g")?>',
-          type:"post",
-          data: $("#bulan").serialize(),
-          success: function(data){
-               var s = $.parseJSON(data);
-               ofc = s[0].budget;
-               prod = s[1].budget;
-               pl = s[2].budget;
+               url:'<?php echo base_url("ot/presentase_g")?>',
+               type:"post",
+               data: $("#bulan").serialize(),
+               success: function(data){
+                    var s = $.parseJSON(data);
+                    ofc = s[0].budget;
+                    prod = s[1].budget;
+                    pl = s[2].budget;
 
-               ofc2 = s[0].aktual;
-               prod2 = s[1].aktual;
-               pl2 = s[2].aktual;
-          }
-     });
+                    ofc2 = s[0].aktual;
+                    prod2 = s[1].aktual;
+                    pl2 = s[2].aktual;
+
+                    progressData();
+               }
+          });
      }
 
      function progressData()
      {
-          var direct = ((ofc2/ofc)*100).toFixed(2) + '%';
-          $('#progress_bar_prod').html(direct);
-          $('#progress_bar_prod').css('width', (ofc2/ofc)*100 + '%');
-          $('#progress_bar_prod').css('color', 'WHITE');
-          $('#progress_bar_prod').css('font-weight', 'bold');
-          $('#progress_bar_prod').css('font-size', '12pt');
-          $('#progress_bar_prod').css('line-height', '20px');
-
-          var indirect = ((prod2/prod)*100).toFixed(2) + '%';
-          $('#progress_bar_ofc').html(indirect);
-          $('#progress_bar_ofc').css('width', (prod2/prod)*100 + '%');
-          $('#progress_bar_ofc').css('color', 'WHITE');
-          $('#progress_bar_ofc').css('font-weight', 'bold');
-          $('#progress_bar_ofc').css('font-size', '12pt');
-          $('#progress_bar_ofc').css('line-height', '20px');
+          if (ofc != 0){
 
 
-          var plData = ((pl2/pl)*100).toFixed(2) + '%';
-          $('#progress_bar_pl').html(plData);
-          $('#progress_bar_pl').css('width', (pl2/pl)*100 + '%');
-          $('#progress_bar_pl').css('color', 'WHITE');
-          $('#progress_bar_pl').css('font-weight', 'bold');
-          $('#progress_bar_pl').css('font-size', '12pt');
-          $('#progress_bar_pl').css('line-height', '20px');
+               var direct = ((ofc2/ofc)*100).toFixed(2) + '%';
+               if( ((ofc2/ofc)*100).toFixed(0) > 100){
+                    $('#progress_bar_prod').removeClass('progress-bar-green').addClass('progress-bar-red');
+               }
+               $('#persendirect').html("( "+direct+" )");
+               $('#persendirect2').html(ofc2+" / "+ofc+" Hours");
+               $('#progress_bar_prod').html(direct);
+               $('#progress_bar_prod').css('width', (ofc2/ofc)*100 + '%');
+               $('#progress_bar_prod').css('color', 'WHITE');
+               $('#progress_bar_prod').css('font-weight', 'bold');
+               $('#progress_bar_prod').css('font-size', '12pt');
+               $('#progress_bar_prod').css('line-height', '20px');
+
+               var indirect = ((prod2/prod)*100).toFixed(2) + '%';
+               if( ((prod2/prod)*100).toFixed(0) > 100){
+                    $('#progress_bar_ofc').removeClass('progress-bar-yellow').addClass('progress-bar-red');
+               }
+               $('#persenindirect').html("( "+indirect+" )");
+               $('#persenindirect2').html(prod2+" / "+prod+" Hours");
+               $('#progress_bar_ofc').html(indirect);
+               $('#progress_bar_ofc').css('width', (prod2/prod)*100 + '%');
+               $('#progress_bar_ofc').css('color', 'WHITE');
+               $('#progress_bar_ofc').css('font-weight', 'bold');
+               $('#progress_bar_ofc').css('font-size', '12pt');
+               $('#progress_bar_ofc').css('line-height', '20px');
+
+
+               var plData = ((pl2/pl)*100).toFixed(2) + '%';
+
+               if( ((pl2/pl)*100).toFixed(0) > 100){
+                    $('#progress_bar_pl').removeClass('progress-bar-blue').addClass('progress-bar-red');
+               }
+               $('#persenpl').html("( "+plData+" )");
+               $('#persenpl2').html(pl2+" / "+pl+" Hours");
+               $('#progress_bar_pl').html(plData);
+               $('#progress_bar_pl').css('width', (pl2/pl)*100 + '%');
+               $('#progress_bar_pl').css('color', 'WHITE');
+               $('#progress_bar_pl').css('font-weight', 'bold');
+               $('#progress_bar_pl').css('font-size', '12pt');
+               $('#progress_bar_pl').css('line-height', '20px');
+          }
+          else{             
+
+               $('#progress_bar_pl').css('width', '0%');
+               $('#progress_bar_pl').html("0 %");
+               $('#persenpl').html("( 0 % )");
+               $('#persenpl2').html("0 / 0 Hours");
+
+               $('#progress_bar_ofc').css('width', '0%');
+               $('#progress_bar_ofc').html("0 %");
+               $('#persenindirect').html("( 0 % )");
+               $('#persenindirect2').html("0 / 0 Hours");
+
+               $('#progress_bar_prod').css('width','0%');
+               $('#progress_bar_prod').html("0 %");
+               $('#persendirect').html("( 0 % )");
+               $('#persendirect2').html("0 / 0 Hours");
+
+          }
      }
 
      $(function () {
@@ -175,12 +216,47 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     }
                }
 
+
+               var grphDates = new Array();
+               var groupedObjects = new Array();
+               $.each(data, function (ix, obj) {
+                    var existingObj;
+                    if ($.inArray(obj[0], grphDates) >= 0) {
+                         var index = groupedObjects.map(function(o, i) { 
+                              if(o[0] == obj[0])return i;
+                         }).filter(isFinite);
+
+                         groupedObjects[index][2] += obj[2];
+                    } else {
+                         groupedObjects.push(obj);
+                         grphDates.push(obj[0]);
+                    }
+               });
+
+               cumulativeData = [0];
+
+               accData = [];
+               for(i=0; i<groupedObjects.length; i++){
+                    accData.push(groupedObjects[i][2]);
+               }
+
+               accData.forEach(function(elementToAdd, index) {
+                    var newElement = cumulativeData[index] + elementToAdd;
+                    cumulativeData.push(newElement);
+               });
+               cumulativeData.shift();
+
+               // alert(cumulativeData);
+
+
+               seriesData.push({type: 'line', name: 'Cumulative Overtime', data: cumulativeData})
+
                Highcharts.chart('container8', {
                     chart: {
                          type: 'column'
                     },
                     title: {
-                         text: 'Bulan'
+                         text: $("[name=date2]").val()
                     },
                     xAxis: {
                          categories: xCategories
@@ -210,7 +286,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     series: seriesData
                });
           });
-     });
+});
 
 
 function postTgl() {
@@ -221,6 +297,7 @@ function postTgl() {
    data: $("#bulan").serialize(),
    success: function(data) {
      progressData();
+     progress_bar()
      var data = $.parseJSON(data);
 
      var xCategories = [];
@@ -256,12 +333,46 @@ function postTgl() {
           }
      }
 
+     var grphDates = new Array();
+               var groupedObjects = new Array();
+               $.each(data, function (ix, obj) {
+                    var existingObj;
+                    if ($.inArray(obj[0], grphDates) >= 0) {
+                         var index = groupedObjects.map(function(o, i) { 
+                              if(o[0] == obj[0])return i;
+                         }).filter(isFinite);
+
+                         groupedObjects[index][2] += obj[2];
+                    } else {
+                         groupedObjects.push(obj);
+                         grphDates.push(obj[0]);
+                    }
+               });
+
+               cumulativeData = [0];
+
+               accData = [];
+               for(i=0; i<groupedObjects.length; i++){
+                    accData.push(groupedObjects[i][2]);
+               }
+
+               accData.forEach(function(elementToAdd, index) {
+                    var newElement = cumulativeData[index] + elementToAdd;
+                    cumulativeData.push(newElement);
+               });
+               cumulativeData.shift();
+
+               // alert(cumulativeData);
+
+
+               seriesData.push({type: 'line', name: 'Cumulative Overtime', data: cumulativeData})
+
      Highcharts.chart('container8', {
           chart: {
                type: 'column'
           },
           title: {
-               text: 'Bulan'
+               text: $("[name=date2]").val()
           },
           xAxis: {
                categories: xCategories
