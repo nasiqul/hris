@@ -141,6 +141,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     //---------CHART---------------
 
     $(function () {
+      $('#load').css('display','block');
       var tahun = $("#tahun").val();
       var section = $("#section").val();
 
@@ -189,6 +190,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                       },
                       series: s
                     });
+                    $('#load').css('display','none');
                   }
                 });
     });
@@ -196,7 +198,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 
     function postTahun() {
-      $('#load').css('display','block')
+      $('#load').css('display','block');
       var tahun = $("#tahun").val();
       var section = $("#section").val();
 
@@ -245,7 +247,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                       },
                       series: s
                     });
-                    $('#load').css('display','none')
+                    $('#load').css('display','none');
                   }
                 });
     }
