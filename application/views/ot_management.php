@@ -79,7 +79,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                   <div class="pull-right">
                     Tahun : 
-                    <input type="text" name="tahun" id="tahun" class="form-control" onchange="postTahun()">
+                    <input type="text" name="tahun" id="tahun" class="form-control" onchange="postTahun()" value="<?php echo date('Y') ?>">
                   </div>
                   <div class="pull-right" style="margin-right: 20px">
 
@@ -94,12 +94,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                   </div>
                   <div id="load" class="overlay" style="display: none;">
-                        <i class="fa fa-refresh fa-spin"></i>
-                      </div>
+                    <i class="fa fa-refresh fa-spin"></i>
+                  </div>
                 </div>
 
                 <div id="container" style ="width: 95%;margin: 0 auto">
-                  
+
                 </div>
 
               </div>
@@ -141,52 +141,56 @@ scratch. This page gets rid of all links and provides the needed markup only.
     //---------CHART---------------
 
     $(function () {
-      // var processed_json = new Array();
-      // var tahun = $("#tahun").val();
-      // var section = $("#section").val();
-      // $.getJSON('<?php // echo base_url("ot/ajax_ot_manaj/")?>'+tahun+'/'+section, function(data) {
+      var tahun = $("#tahun").val();
+      var section = $("#section").val();
 
-      //   for (i = 0; i < data.length; i++){
-      //     processed_json.push(data[i].name, data[i].data);
+      var url = "<?php echo base_url('ot/ajax_ot_manaj/') ?>"+tahun+"/"+section+"";
+      $.ajax({
+        type: "POST",
+        url: url,
+        success: function(data) {
+          var s = $.parseJSON(data);
+          var processed_json = new Array();
+          var seriesData = [];
+          var nama;
+                    // Populate series
 
-      //     if (data[i].name == null) {
-      //       notif.style.display = "block";
-      //     }
-      //   }
 
-      $('#container').highcharts({
-        chart: {
-          type: 'spline'
-        },
-        title: {
-          text: 'YEAR'
-        },
-        xAxis: {
-          categories: []
-        },
-        yAxis: {
-          title: {
-            text: 'Total Jam'
-          }
-        },
-        legend: {
-          enabled: false
-        },
-        plotOptions: {
-          line: {
-            dataLabels: {
-              enabled: false
-            },
-            enableMouseTracking: true
-          },
-          series: {
-            marker: {
-              enabled: false
-            }
-          }
-        },
-        series: []
-      });
+                    $('#container').highcharts({
+                      chart: {
+                        type: 'spline'
+                      },
+                      title: {
+                        text: 'YEAR '+$("#tahun").val()
+                      },
+                      xAxis: {
+                        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+                      },
+                      yAxis: {
+                        title: {
+                          text: 'Total Jam'
+                        }
+                      },
+                      legend: {
+                        enabled: false
+                      },
+                      plotOptions: {
+                        line: {
+                          dataLabels: {
+                            enabled: false
+                          },
+                          enableMouseTracking: true
+                        },
+                        series: {
+                          marker: {
+                            enabled: false
+                          }
+                        }
+                      },
+                      series: s
+                    });
+                  }
+                });
     });
     // })
 
@@ -207,38 +211,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
           var nama;
                     // Populate series
 
-                    // for(i = 0; i < data.length; i++){
-                    //   if(seriesData){
-                    //     var currSeries = seriesData.filter(function(seriesObject){ return seriesObject.name == data[i].hpl;});
-                    //     if(currSeries.length === 0){
-                    //       seriesData[seriesData.length] = currSeries = {name: data[i].hpl, data: []};
-                    //     } else {
-                    //       currSeries = currSeries[0];
-                    //     }
-                    //     var index = currSeries.data.length;
-                    //     currSeries.data[index] = data[i].actual;
-                    //   } else {
-                    //     seriesData[0] = {name: data[i].hpl, data: [data[i].actual]}
-                    //   }
-
-                    //   seriesData[i] = {name: data[i].hpl, data: [data[i].actual]}
-                    // }
-
-
-                    // for (i = 0; i < s.length; i++){
-
-                    //   processed_json.push(s[i].name);
-
-                    //   for (z = 0; z < s[i].data.length; z++) {
-
-                    //   }
-                    //   processed_json.push([{"name":s[i].name}]);
-
-                    //   if (s[i].name == null) 
-                    //     notif.style.display = "block";
-                    //   else
-                    //     notif.style.display = "none";
-                    // }
 
                     $('#container').highcharts({
                       chart: {
