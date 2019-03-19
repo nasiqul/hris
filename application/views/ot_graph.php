@@ -37,13 +37,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                          <div class="nav-tabs-custom">
                               <ul class="nav nav-tabs">
-                                   <li><a href="#tab_1" data-toggle="tab">
+                                   <!-- <li><a href="#tab_1" data-toggle="tab">
                                         By Bagian <br> <span class="text-purple">部門別</span></a>
                                    </li>
 
                                    <li><a href="#tab_2" data-toggle="tab">
                                         By Date <br> <span class="text-purple">日付別</span></a>
-                                   </li>
+                                   </li> -->
 
 <!-- <li><a href="#tab_3" data-toggle="tab">
 By Dep <br> <span class="text-purple">???</span></a>
@@ -107,69 +107,6 @@ By Dep <br> <span class="text-purple">???</span></a>
                </div>
           </div>
           <div id = "container4" style ="width: 90%;margin: 0 auto"></div>
-          <br>
-          <table class="table table-bordered table-hover table-striped">
-               <tr>
-                    <th></th>
-                    <th>Hari Kerja</th>
-                    <th>Total Lembur</th>
-                    <th>total karyawan</th>
-                    <th>Karyawan Non-Aktif</th>
-                    <th>Karyawan Aktif</th>
-                    <th>Jam ketidakhadiran</th>
-                    <th>jam Kerja Total</th>
-                    <th>(%) Presentase Kehadiran</th>
-               </tr>
-               <?php $no = 0; $no2 = 0; foreach ($prs as $key) { ?>
-
-                    <tr>
-                         <th><?php echo date('F',strtotime($key->tanggal)) ?></th>
-                         <td><?php echo $key->hari_kerja ?></td>
-                         <td><?php echo $key->total_lembur ?></td>
-                         <td>
-                              <?php 
-                              $no += $key->total_keluar;
-                              $tot = $key->tot - $no;
-                              echo $tot;
-                              ?>
-                         </td>
-                         <td><?php echo $key->total_keluar ?></td>
-                         <td><?php echo $key->totalMasuk ?></td>
-                         <td><?php echo $key->jam_ketidakhadiran ?></td>
-                         <td>
-                              <?php 
-                              $jm_kerja = ($key->hari_kerja*$tot*8) + $key->total_lembur;
-                              echo $jm_kerja;
-                              ?>
-                         </td>
-                         <td>
-                              <?php 
-                              $prsn = ROUND(($jm_kerja - $key->jam_ketidakhadiran) / $jm_kerja * 100, 3);
-                              echo $prsn." %";
-                              ?>
-                         </td>
-                    </tr>
-
-               <?php } ?>
-
-          </table>
-
-          <table class="table">
-               <tr>
-                    <th>bulan</th>
-                    <th>aktif</th>
-                    <th>non-aktif</th>
-                    <th>Total Karyawan</th>
-               </tr>
-               <?php foreach ($prs2 as $key2) { ?>
-                    <tr>
-                         <td><?php echo $key2->periode ?></td>
-                         <td><?php echo $key2->aktif ?></td>
-                         <td><?php echo $key2->non_aktif ?></td>
-                         <td><?php echo $key2->total_karyawan ?></td>
-                    </tr>
-               <?php } ?>
-          </table>
      </div>
      <div class="tab-pane" id="tab_5">
           <p class="3_jam2"></p>
@@ -409,152 +346,154 @@ By Dep <br> <span class="text-purple">???</span></a>
 
      });
 
-     $(function () {
-          var processed_json = new Array();
-          $.getJSON('<?php echo base_url("ot/ajax_ot_graph/")?>', function(data) {
 
-               for (i = 0; i < data.length; i++){
-                    processed_json.push([data[i].name, data[i].y]);
+     // ------------------ CHART 1 ------------------------
+     // $(function () {
+     //      var processed_json = new Array();
+     //      $.getJSON('<?php // echo base_url("ot/ajax_ot_graph/")?>', function(data) {
 
-                    if (data[i].name == null) {
-                         notif.style.display = "block";
-                    }
-               }
+     //           for (i = 0; i < data.length; i++){
+     //                processed_json.push([data[i].name, data[i].y]);
 
-               $('#container').highcharts({
-                    chart: {
-                         type: 'column'
-                    },
-                    title: {
-                         text: data[0].tgl
-                    },
-                    xAxis: {
-                         type: 'category'
-                    },
-                    yAxis: {
-                         title: {
-                              text: 'Jumlah Lembur (Jam)'
-                         }
+     //                if (data[i].name == null) {
+     //                     notif.style.display = "block";
+     //                }
+     //           }
 
-                    },
-                    legend: {
-                         enabled: false
-                    },
-                    plotOptions: {
-                         series: {
-                              cursor: 'pointer',
-                              point: {
-                                   events: {
-                                        click: function () {
-                                             TampilModal(data[0].tgl,this.name);
-                                        }
-                                   }
-                              },
-                              borderWidth: 0,
-                              dataLabels: {
-                                   enabled: true,
-                                   format: '{point.y}'
-                              }
-                         }
-                    },
-                    credits: {
-                         enabled: false
-                    },
+     //           $('#container').highcharts({
+     //                chart: {
+     //                     type: 'column'
+     //                },
+     //                title: {
+     //                     text: data[0].tgl
+     //                },
+     //                xAxis: {
+     //                     type: 'category'
+     //                },
+     //                yAxis: {
+     //                     title: {
+     //                          text: 'Jumlah Lembur (Jam)'
+     //                     }
 
-                    tooltip: {
-                         headerFormat: '',
-                         pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b> <br/>'
-                    },
+     //                },
+     //                legend: {
+     //                     enabled: false
+     //                },
+     //                plotOptions: {
+     //                     series: {
+     //                          cursor: 'pointer',
+     //                          point: {
+     //                               events: {
+     //                                    click: function () {
+     //                                         TampilModal(data[0].tgl,this.name);
+     //                                    }
+     //                               }
+     //                          },
+     //                          borderWidth: 0,
+     //                          dataLabels: {
+     //                               enabled: true,
+     //                               format: '{point.y}'
+     //                          }
+     //                     }
+     //                },
+     //                credits: {
+     //                     enabled: false
+     //                },
 
-                    "series": [
-                    {
-                         "name": "By Shift",
-                         "colorByPoint": true,
-                         "data": processed_json
-                    }
-                    ]
-               })
-          })
-     });
+     //                tooltip: {
+     //                     headerFormat: '',
+     //                     pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b> <br/>'
+     //                },
+
+     //                "series": [
+     //                {
+     //                     "name": "By Shift",
+     //                     "colorByPoint": true,
+     //                     "data": processed_json
+     //                }
+     //                ]
+     //           })
+     //      })
+     // });
 
 
-     function PostMonth(){
-          var url = "<?php echo base_url('ot/ajax_ot_graph') ?>";
-          $.ajax({
-               type: "POST",
-               url: url,
-               data: $("#rati").serialize(),
-               success: function(data) {
-                    var s = $.parseJSON(data);
-                    var processed_json = new Array();
-// Populate series
-for (i = 0; i < s.length; i++){
-     processed_json.push([s[i].name, s[i].y]);
+//      function PostMonth(){
+//           var url = "<?php //echo base_url('ot/ajax_ot_graph') ?>";
+//           $.ajax({
+//                type: "POST",
+//                url: url,
+//                data: $("#rati").serialize(),
+//                success: function(data) {
+//                     var s = $.parseJSON(data);
+//                     var processed_json = new Array();
+// // Populate series
+// for (i = 0; i < s.length; i++){
+//      processed_json.push([s[i].name, s[i].y]);
 
-     if (s[i].name == null) 
-          notif.style.display = "block";
-     else
-          notif.style.display = "none";
-}
+//      if (s[i].name == null) 
+//           notif.style.display = "block";
+//      else
+//           notif.style.display = "none";
+// }
 
-$('#container').highcharts({
-     chart: {
-          type: 'column'
-     },
-     title: {
-          text: s[0].tgl
-     },
-     xAxis: {
-          type: 'category'
-     },
-     yAxis: {
-          title: {
-               text: 'Jumlah Lembur (Jam)'
-          }
-     },
-     legend: {
-          enabled: false
-     },
-     plotOptions: {
-          series: {
-               cursor: 'pointer',
-               point: {
-                    events: {
-                         click: function () {
-                              TampilModal(s[0].tgl, this.name);
-// alert(s[0].tgl);
-}
-}
-},
-borderWidth: 0,
-dataLabels: {
-     enabled: true,
-     format: '{point.y}'
-}
-}
-},
-credits: {
-     enabled: false
-},
+// $('#container').highcharts({
+//      chart: {
+//           type: 'column'
+//      },
+//      title: {
+//           text: s[0].tgl
+//      },
+//      xAxis: {
+//           type: 'category'
+//      },
+//      yAxis: {
+//           title: {
+//                text: 'Jumlah Lembur (Jam)'
+//           }
+//      },
+//      legend: {
+//           enabled: false
+//      },
+//      plotOptions: {
+//           series: {
+//                cursor: 'pointer',
+//                point: {
+//                     events: {
+//                          click: function () {
+//                               TampilModal(s[0].tgl, this.name);
+// // alert(s[0].tgl);
+// }
+// }
+// },
+// borderWidth: 0,
+// dataLabels: {
+//      enabled: true,
+//      format: '{point.y}'
+// }
+// }
+// },
+// credits: {
+//      enabled: false
+// },
 
-tooltip: {
-     headerFormat: '',
-     pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b> <br/>'
-},
+// tooltip: {
+//      headerFormat: '',
+//      pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b> <br/>'
+// },
 
-"series": [
-{
-     "name": "By Absent",
-     "colorByPoint": true,
-     "data": processed_json
-}
-]
-})
+// "series": [
+// {
+//      "name": "By Absent",
+//      "colorByPoint": true,
+//      "data": processed_json
+// }
+// ]
+// })
 
-}
-});
+// }
+// });
 
-     }
+//      }
 
      function TampilModal(tgl, by) {
           tabel = $('#example2').DataTable();
@@ -602,78 +541,78 @@ tooltip: {
 
      }
 
-// LINE CHART
-$(function () {
-     var ttanggal2 = $("#tgls2").val();
+// ------------------ CHART 2 ------------------------
+// $(function () {
+//      var ttanggal2 = $("#tgls2").val();
 
-     $.getJSON('<?php echo base_url("home/ajax_dep_over/")?>'+ttanggal2, function(data) {
+//      $.getJSON('<?php // echo base_url("home/ajax_dep_over/")?>'+ttanggal2, function(data) {
 
-          var processed_json2 = new Array();
+//           var processed_json2 = new Array();
 
-          for (i = 0; i < data.length; i++){
-               processed_json2.push([data[i].name, parseFloat(data[i].y)]);
+//           for (i = 0; i < data.length; i++){
+//                processed_json2.push([data[i].name, parseFloat(data[i].y)]);
 
-          }
+//           }
 
-          if (data[0].name == null) {
-               notif.style.display = "block";
-          }
+//           if (data[0].name == null) {
+//                notif.style.display = "block";
+//           }
 
-          $('#container2').highcharts({
-               chart: {
-                    type: 'column'
-               },
-               title: {
-                    text: data[0].tgl
-               },
-               xAxis: {
-                    type: 'category'
-               },
-               yAxis: {
-                    title: {
-                         text: 'Jumlah Lembur (Jam)'
-                    }
+//           $('#container2').highcharts({
+//                chart: {
+//                     type: 'column'
+//                },
+//                title: {
+//                     text: data[0].tgl
+//                },
+//                xAxis: {
+//                     type: 'category'
+//                },
+//                yAxis: {
+//                     title: {
+//                          text: 'Jumlah Lembur (Jam)'
+//                     }
 
-               },
-               legend: {
-                    enabled: false
-               },
-               plotOptions: {
-                    series: {
-                         cursor: 'pointer',
-                         point: {
-                              events: {
-                                   click: function () {
-                                        TampilKaryawan(data[0].tgl,this.name);
-                                   }
-                              }
-                         },
-                         borderWidth: 0,
-                         dataLabels: {
-                              enabled: true,
-                              format: '{point.y}'
-                         }
-                    }
-               },
-               credits: {
-                    enabled: false
-               },
+//                },
+//                legend: {
+//                     enabled: false
+//                },
+//                plotOptions: {
+//                     series: {
+//                          cursor: 'pointer',
+//                          point: {
+//                               events: {
+//                                    click: function () {
+//                                         TampilKaryawan(data[0].tgl,this.name);
+//                                    }
+//                               }
+//                          },
+//                          borderWidth: 0,
+//                          dataLabels: {
+//                               enabled: true,
+//                               format: '{point.y}'
+//                          }
+//                     }
+//                },
+//                credits: {
+//                     enabled: false
+//                },
 
-               tooltip: {
-                    headerFormat: '',
-                    pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b> <br/>'
-               },
+//                tooltip: {
+//                     headerFormat: '',
+//                     pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b> <br/>'
+//                },
 
-               "series": [
-               {
-                    "name": "By Bagian",
-                    "colorByPoint": true,
-                    "data": processed_json2
-               }
-               ]
-          })
-     })
-})
+//                "series": [
+//                {
+//                     "name": "By Bagian",
+//                     "colorByPoint": true,
+//                     "data": processed_json2
+//                }
+//                ]
+//           })
+//      })
+// })
 
 
 $(function () {

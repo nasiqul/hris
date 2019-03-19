@@ -2,8 +2,8 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Ot_summary extends CI_Model {
-	var $column_order = array('mon','name','karyawan','aktual','avg','min_final','max_final'); //set column field database for datatable orderable
-    var $column_search = array('mon','name','karyawan','aktual','round((aktual/karyawan),2)','min_final','max_final'); //set column field database for datatable searchable 
+	var $column_order = array('mon','name','karyawan','aktual','avg','min','max'); //set column field database for datatable orderable
+    var $column_search = array('mon','name','karyawan','aktual'); //set column field database for datatable searchable 
     var $order = array('mon' => 'desc'); // default order 
 
     public function __construct()

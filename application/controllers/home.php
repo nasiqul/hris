@@ -130,6 +130,14 @@ class Home extends CI_Controller {
         $this->load->view("ot_monthly_monitor", $data);
     }
 
+    public function emp_tot()
+    {
+        $data['prs'] = $this->over_model->get_p_data();
+        $data['prs2'] = $this->over_model->tes1();
+        $data['menu'] = 'ovrG';
+        $this->load->view('tabel1',$data);
+    }
+
     public function monthlyC()
     {
         $data['menu'] = 'ovrMoC';
@@ -154,8 +162,6 @@ class Home extends CI_Controller {
     public function ot_graph()
     {
         $data['menu'] = 'ovrG';
-        $data['prs'] = $this->over_model->get_p_data();
-        $data['prs2'] = $this->over_model->tes1();
 
         $d = date('n');
         $data3 = array();
