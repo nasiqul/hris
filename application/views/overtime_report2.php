@@ -30,8 +30,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <!-- Content Header (Page header) -->
       <section class="content-header">
         <h1>
-          Overtime Report
-          <span class="text-purple">残業報告</span>
+          Employee Monthly Overtime
+          <span class="text-purple">社員番号別残業管理</span>
         </h1>
       </section>
 

@@ -53,14 +53,15 @@ class Ot_summary extends CI_Model {
         ) as n","p.id_cc = n.id_cc",'left');
         $this->db->join("
             (
-        select tanggal, costCenter, max(tot) as max, min(tot) as min from (
-                    select om.nik, sum(final) as tot, costCenter, namaKaryawan, tanggal from over_time_member om
-                    left join over_time on over_time.id = om.id_ot
-                    left join karyawan on karyawan.nik = om.nik
-                    where DATE_FORMAT(tanggal,'%Y-%m') = '".$tgl1."'
-                    GROUP BY om.nik
-                ) as d 
-                GROUP BY costCenter
+        select d.costCenter, min(d.total) as min, max(d.total) as max from
+                    (
+                    select karyawan.nik, coalesce(sum(final), 0) as total, karyawan.costCenter from karyawan 
+                    left join over_time_member on over_time_member.nik = karyawan.nik
+                    left join over_time on over_time.id = over_time_member.id_ot
+                    where DATE_FORMAT(over_time.tanggal, '%Y-%m') = '".$tgl1."' or over_time.tanggal is null
+                    GROUP BY karyawan.nik, karyawan.costCenter
+                    ) as d
+                    group by d.costCenter
         ) as m
         ","m.costCenter = n.id_cc","left");
 

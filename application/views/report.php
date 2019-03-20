@@ -20,8 +20,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <!-- Content Header (Page header) -->
       <section class="content-header">
         <h1>
-          Attendance Rate
-          <span class="text-purple">出勤率</span>
+          Daily Attendance Control
+          <span class="text-purple">日常勤怠管理</span>
         </h1>
       </section>
 

@@ -57,11 +57,11 @@
                 <li class="<?php if($menu == 'ovrG') echo 'active'?>"><a href="<?php echo base_url('home/ot_graph'); ?>"><i class="fa fa-bar-chart"></i> Graph</a></li>
                 <li><a href="<?php echo base_url('home/budget_chart'); ?>"> <i class="fa fa-bar-chart"></i> Budget Total</a></li>
                 <li><a href="<?php echo base_url('home/budget_chart_mp'); ?>"> <i class="fa fa-bar-chart"></i> Budget Total / MP</a></li>
-                <li class="<?php if($menu == 'ovrMoC') echo 'active'?>"><a href="<?php echo base_url('home/monthlyC'); ?>"><i class="fa fa-bar-chart"></i> Monthly Overtime Control</a></li>
-                <li class="<?php if($menu == 'ovrMon') echo 'active'?>"><a href="<?php echo base_url('home/monthlyMon'); ?>"><i class="fa fa-bar-chart"></i> Monthly Monitor</a></li>
+                <li class="<?php if($menu == 'ovrMoC') echo 'active'?>"><a href="<?php echo base_url('home/monthlyC'); ?>"><i class="fa fa-bar-chart"></i>Monthly Overtime Control</a></li>
+                <li class="<?php if($menu == 'ovrMon') echo 'active'?>"><a href="<?php echo base_url('home/monthlyMon'); ?>"><i class="fa fa-bar-chart"></i>Overtime Monthly Monitor</a></li>
                 <li class="<?php if($menu == 'OT-m') echo 'active'?>"><a href="<?php echo base_url('home/ot_m'); ?>"><i class="fa fa-bar-chart"></i>Management Section</a></li>
                 <li class="<?php if($menu == 'ovrR') echo 'active'?>"><a href="<?php echo base_url('home/ot_report'); ?>"><i class="fa fa-book"></i> Report</a></li>
-                <li class="<?php if($menu == 'ovrR2') echo 'active'?>"><a href="<?php echo base_url('home/ot_report2'); ?>"><i class="fa fa-book"></i> Employee Monthly OT</a></li>
+                <li class="<?php if($menu == 'ovrR2') echo 'active'?>"><a href="<?php echo base_url('home/ot_report2'); ?>"><i class="fa fa-book"></i>OT Management By NIK</a></li>
                 <li class="<?php if($menu == 'ovrMo') echo 'active'?>"><a href="<?php echo base_url('home/monthly'); ?>"><i class="fa fa-book"></i> Monthly Summary</a></li>
                 <li class="<?php if($menu == 'cc') echo 'active'?>"><a href="<?php echo base_url('budget'); ?>"><i class="fa fa-cc"></i>Cost - Center Budget</a></li>
                 <li class="<?php if($menu == 'GAreport') echo 'active'?>"><a href="<?php echo base_url('home/report_GA'); ?>"><i class="fa fa-cubes"></i>GA - Report</a></li>
@@ -84,10 +84,10 @@
           </li> -->
         <?php } else if(isset($i)) { ?>
           <li class="header">Manpower Overtime</li>
-          <li class="<?php if($menu == 'ovrMoC') echo 'active'?>"><a href="<?php echo base_url('management'); ?>"><i class="fa fa-bar-chart"></i> Monthly Overtime Control</a></li>
-          <li class="<?php if($menu == 'ovrMon') echo 'active'?>"><a href="<?php echo base_url('management/monthlyMon'); ?>"><i class="fa fa-bar-chart"></i> Monthly Monitor</a></li>
+          <li class="<?php if($menu == 'ovrMoC') echo 'active'?>"><a href="<?php echo base_url('management'); ?>"><i class="fa fa-bar-chart"></i>Monthly Overtime Control</a></li>
+          <li class="<?php if($menu == 'ovrMon') echo 'active'?>"><a href="<?php echo base_url('management/monthlyMon'); ?>"><i class="fa fa-bar-chart"></i>Overtime Monthly Monitor</a></li>
           <li class="<?php if($menu == 'OT-m') echo 'active'?>"><a href="<?php echo base_url('management/ot_m'); ?>"><i class="fa fa-bar-chart"></i>Management Section</a></li>
-          <li class="<?php if($menu == 'ovrR2') echo 'active'?>"><a href="<?php echo base_url('management/ot_report2'); ?>"><i class="fa fa-book"></i> Employee Monthly OT</a></li>
+          <li class="<?php if($menu == 'ovrR2') echo 'active'?>"><a href="<?php echo base_url('management/ot_report2'); ?>"><i class="fa fa-book"></i>OT Management By NIK</a></li>
           <li class="<?php if($menu == 'ovrMo') echo 'active'?>"><a href="<?php echo base_url('management/monthly'); ?>"><i class="fa fa-book"></i> Monthly Summary</a></li>
 
         <?php } else if(isset($z)) { ?>

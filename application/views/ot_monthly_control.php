@@ -20,8 +20,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                <!-- Content Header (Page header) -->
                <section class="content-header">
                     <h1>
-                         Monthly Overtime Control 
-                         <span class="text-purple">???</span>
+                         Monthly Overtime Control
+                         <span class="text-purple">月次残業管理</span>
                     </h1>
                </section>
 
