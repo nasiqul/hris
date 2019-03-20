@@ -41,11 +41,12 @@ class Home extends CI_Controller {
             $data['report2'] = $this->home_model->report2_2();
         }
         
-        if (! $this->session->userdata('nik')) { 
-            redirect('home/overtime_form'); 
-        } else {
+        if ($this->session->userdata('nik') || $this->session->userdata('bulan')) { 
             $data['menu'] = 'home';
             $this->load->view('report', $data);
+            
+        } else {
+            redirect('home/overtime_form'); 
         }
     }
 

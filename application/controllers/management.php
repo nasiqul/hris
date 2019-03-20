@@ -14,13 +14,6 @@ class Management extends CI_Controller {
 	public function index()
 	{
 		$data['i'] = 'ok';
-		$data['menu'] = 'home';
-		$this->load->view('overtime_form2', $data);
-	}
-
-	public function monthlyC()
-	{
-		$data['i'] = 'ok';
 		$data['menu'] = 'ovrMoC';
 		$this->load->view('ot_monthly_control', $data);
 	}

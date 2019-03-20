@@ -981,8 +981,6 @@ public function chart()
     GROUP BY kode
     ) t on t.kode = kode.nama
     GROUP by kode.nama
-
-
     ";
     $query = $this->db->query($q);
     return $query->result();
