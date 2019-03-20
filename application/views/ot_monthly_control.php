@@ -286,7 +286,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
                // alert(cumulativeData);
 
 
-               seriesData.push({type: 'line', name: 'Cumulative Overtime', data: cumulativeData})
+               seriesData.push({type: 'line', name: 'Cumulative Overtime', data: cumulativeData});
+
+               Highcharts.setOptions({
+                colors: ['#058DC7', '#50B432', '#ED561B', '#DDDF00', '#24CBE5', '#64E572', '#FF9655', '#FFF263', '#6AF9C4', '#303133', '#db2929','#d1cccc','#9a3dd3','#236330']});
+
 
                Highcharts.chart('container8', {
                     chart: {

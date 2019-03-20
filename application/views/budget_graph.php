@@ -81,6 +81,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
     data: {
       table: 'datatable'
     },
+    plotOptions: {
+      series: {
+        minPointLength: 3
+      }
+    },
     chart: {
       type: 'column'
     },

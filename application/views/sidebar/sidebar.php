@@ -46,7 +46,7 @@
               <li class="<?php if($menu == 'abs') echo 'active'?>"><a href="<?php echo base_url('home/absen'); ?>"><i class="fa fa-edit"></i> <span>Absence Data</span></a>
               </ul>
             </li>
-            <li class="treeview <?php if($menu == 'ovr' || $menu == 'ovrR' || $menu == 'cc' || $menu == 'GAreport' || $menu == 'ovrG' || $menu == 'ovrR2' || $menu == 'OT-m' || $menu == 'ovrMo' || $menu == 'ovrMoC' || $menu == 'ovrMon') echo 'active'?>">
+            <li class="treeview <?php if($menu == 'ovr' || $menu == 'ovrR' || $menu == 'cc' || $menu == 'GAreport' || $menu == 'ovrG' || $menu == 'ovrR2' || $menu == 'OT-m' || $menu == 'ovrMo' || $menu == 'ovrMoC' || $menu == 'ovrMon' || $menu == 'Btot' || $menu == 'Btot2') echo 'active'?>">
               <a href="#"><i class="fa fa-line-chart"></i> <span>Overtime</span>
                 <span class="pull-right-container">
                   <i class="fa fa-angle-left pull-right"></i>
@@ -55,8 +55,8 @@
               <ul class="treeview-menu">
                 <li class="<?php if($menu == 'ovr') echo 'active'?>"><a href="<?php echo base_url('home/ot'); ?>"><i class="fa fa-male"></i> <span>Overtime Data</span></a></li>
                 <li class="<?php if($menu == 'ovrG') echo 'active'?>"><a href="<?php echo base_url('home/ot_graph'); ?>"><i class="fa fa-bar-chart"></i> Graph</a></li>
-                <li><a href="<?php echo base_url('home/budget_chart'); ?>"> <i class="fa fa-bar-chart"></i> Budget Total</a></li>
-                <li><a href="<?php echo base_url('home/budget_chart_mp'); ?>"> <i class="fa fa-bar-chart"></i> Budget Total / MP</a></li>
+                <li class="<?php if($menu == 'Btot') echo 'active'?>"><a href="<?php echo base_url('home/budget_chart'); ?>"> <i class="fa fa-bar-chart"></i> Budget Total</a></li>
+                <li class="<?php if($menu == 'Btot2') echo 'active'?>"><a href="<?php echo base_url('home/budget_chart_mp'); ?>"> <i class="fa fa-bar-chart"></i> Budget Total / MP</a></li>
                 <li class="<?php if($menu == 'ovrMoC') echo 'active'?>"><a href="<?php echo base_url('home/monthlyC'); ?>"><i class="fa fa-bar-chart"></i>Monthly Overtime Control</a></li>
                 <li class="<?php if($menu == 'ovrMon') echo 'active'?>"><a href="<?php echo base_url('home/monthlyMon'); ?>"><i class="fa fa-bar-chart"></i>Overtime Monthly Monitor</a></li>
                 <li class="<?php if($menu == 'OT-m') echo 'active'?>"><a href="<?php echo base_url('home/ot_m'); ?>"><i class="fa fa-bar-chart"></i>OT Management By Section</a></li>

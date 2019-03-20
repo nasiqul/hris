@@ -85,6 +85,7 @@ class Home extends CI_Controller {
             $tgl = date('Y-m')."-01";
         }
         $data['cc'] = $this->budget_model->get_chart_data($tgl);
+        $data['menu'] = 'Btot';
         $this->load->view("budget_graph",$data);
     }
 
@@ -105,6 +106,7 @@ class Home extends CI_Controller {
             $tgl = date('Y-m')."-01";
         }
         $data['cc2'] = $this->budget_model->get_chart_data_mp($tgl);
+        $data['menu'] = 'Btot2';
         $this->load->view("budget_graph_mp",$data);
     }
 
