@@ -41,7 +41,7 @@ class Home extends CI_Controller {
             $data['report2'] = $this->home_model->report2_2();
         }
         
-        if ($this->session->userdata('nik') || $this->session->userdata('bulan')) { 
+        if ($this->session->userdata('nik')) { 
             $data['menu'] = 'home';
             $this->load->view('report', $data);
             

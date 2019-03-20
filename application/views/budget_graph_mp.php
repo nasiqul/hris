@@ -90,7 +90,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
       text: 'Budget Total / MP '+$("#tglx").text()
     },
     yAxis: {
-     type: 'logarithmic',
      allowDecimals: false,
      title: {
       text: 'Jam'

@@ -90,6 +90,29 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <!-- Custom Tabs -->
           <div class="nav-tabs-custom">
             <ul class="nav nav-tabs">
+              <?php if (!isset($chart)) { ?>
+                <li class="active">
+                  <a href="#tab_1" data-toggle="tab">By Status Kerja
+                    <br><span class="text-purple">ステータス別</span>
+                  </a></li>
+                <li>
+                    <a href="#tab_2" data-toggle="tab">By Gender 
+                      <br> <span class="text-purple">性別</span>
+                    </a></li>
+                <li>
+                      <a href="#tab_3" data-toggle="tab">By Grade 
+                        <br><span class="text-purple">グレード別</span>
+                      </a></li>
+                      <li>
+                        <a href="#tab_4" data-toggle="tab">By Department 
+                          <br><span class="text-purple">課別</span>
+                        </a></li>
+                        <li>
+                          <a href="#tab_5" data-toggle="tab">By Jabatan  
+                            <br><span class="text-purple">役職別</span>
+                          </a></li>
+
+              <?php } else { ?>
               <?php if ($chart == 'status'): ?>
                 <li class="active">
                   <a href="#tab_1" data-toggle="tab">By Status Kerja
@@ -121,10 +144,28 @@ scratch. This page gets rid of all links and provides the needed markup only.
                           </a></li>
 
                         <?php endif ?>
+                      <?php } ?>
 
 
                       </ul>
                       <div class="tab-content">
+                        <?php if (!isset($chart)) { ?>
+                          <div class="tab-pane active" id="tab_1">
+                            <div id = "container" style = "width: 850px; margin: 0 auto"></div>
+                          </div>
+                          <div class="tab-pane active" id="tab_2">
+                            <div id = "container2" style = "width: 750px; margin: 0 auto"></div>
+                          </div>
+                          <div class="tab-pane active" id="tab_3">
+                            <div id = "container3" style = "width: 850px; margin: 0 auto"></div>
+                          </div>
+                          <div class="tab-pane active" id="tab_4">
+                            <div id = "container4" style = "width: 850px; margin: 0 auto"></div>
+                          </div>
+                          <div class="tab-pane active" id="tab_5">
+                            <div id = "container5" style = "width: 850px; margin: 0 auto"></div>
+                          </div>
+                        <?php } else { ?>
                         <?php if ($chart == 'status'): ?>
                           <div class="tab-pane active" id="tab_1">
                             <div id = "container" style = "width: 850px; margin: 0 auto"></div>
@@ -152,6 +193,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             <div id = "container5" style = "width: 850px; margin: 0 auto"></div>
                           </div>
                         <?php endif ?>
+                      <?php } ?>
                         
                         <!-- /.tab-pane -->
 
