@@ -125,25 +125,35 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                       </ul>
                       <div class="tab-content">
-                        <div class="tab-pane active" id="tab_1">
-                          <div id = "container" style = "width: 850px; margin: 0 auto"></div>
-                        </div>
+                        <?php if ($chart == 'status'): ?>
+                          <div class="tab-pane active" id="tab_1">
+                            <div id = "container" style = "width: 850px; margin: 0 auto"></div>
+                          </div>
+                        <?php endif ?>
+                        
                         <!-- /.tab-pane -->
-                        <div class="tab-pane" id="tab_2">
-                          <div id = "container2" style = "width: 750px; margin: 0 auto"></div>
-                        </div>
+                        <?php if ($chart == 'gender'): ?>
+                          <div class="tab-pane active" id="tab_2">
+                            <div id = "container2" style = "width: 750px; margin: 0 auto"></div>
+                          </div>
+                        <?php endif ?>
+                        <?php if ($chart == 'grade'): ?>
+                          <div class="tab-pane active" id="tab_3">
+                            <div id = "container3" style = "width: 850px; margin: 0 auto"></div>
+                          </div>
+                        <?php endif ?>
+                        <?php if ($chart == 'dept'): ?>
+                          <div class="tab-pane active" id="tab_4">
+                            <div id = "container4" style = "width: 850px; margin: 0 auto"></div>
+                          </div>
+                        <?php endif ?>
+                        <?php if ($chart == 'jabatan'): ?>
+                          <div class="tab-pane active" id="tab_5">
+                            <div id = "container5" style = "width: 850px; margin: 0 auto"></div>
+                          </div>
+                        <?php endif ?>
+                        
                         <!-- /.tab-pane -->
-                        <div class="tab-pane" id="tab_3">
-                          <div id = "container3" style = "width: 850px; margin: 0 auto"></div>
-                        </div>
-
-                        <div class="tab-pane" id="tab_4">
-                          <div id = "container4" style = "width: 850px; margin: 0 auto"></div>
-                        </div>
-
-                        <div class="tab-pane" id="tab_5">
-                          <div id = "container5" style = "width: 850px; margin: 0 auto"></div>
-                        </div>
 
                         <!-- /.tab-pane -->
                       </div>

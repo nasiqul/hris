@@ -68,7 +68,7 @@ class Management_mp extends CI_Controller {
 		
 		$data['menu'] = 'home';
 		$data['z'] = 'ok';
-		$this->load->view('report', $data);
+		$this->load->view('report_manaj', $data);
 	}
 
 
