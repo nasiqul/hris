@@ -151,8 +151,13 @@ class Karyawan_form extends CI_Controller {
 		$this->load->library('upload',$config);
 		if($this->upload->do_upload("foto")){
 			$data = array('upload_data' => $this->upload->data());
+			$image = $data['upload_data']['file_name']; 
+		}
+		else {
+			$image = '';
+		}
 
-			$nik = $_POST['nik'];
+		$nik = $_POST['nik'];
 			$nama = $_POST['nama'];
 			$tmptL = $_POST['tmptL'];
 			$tglL = $_POST['tglL'];
@@ -178,11 +183,9 @@ class Karyawan_form extends CI_Controller {
 			$no_rek = $_POST['no_rek'];
 			$npwp = $_POST['npwp'];
 			$jp = $_POST['jp'];
-			$image = $data['upload_data']['file_name']; 
 
 			$result= $this->karyawan_model->tambah($image, $nik, $nama, $tmptL, $tglL, $jk, $ktp, $alamat, $statusK, $dev, $dep, $sec, $subsec, $group, $grade, $jab, $kode, $statusKar, $pin, $tglM, $cs, $hp, $bpjstk, $bpjskes, $no_rek, $npwp, $jp);
 			echo json_decode($result);
-		}
 
 	}
 

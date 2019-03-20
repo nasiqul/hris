@@ -1337,7 +1337,6 @@ ON over_time_member.id_ot = over_time.id
 LEFT JOIN karyawan
 ON over_time_member.nik = karyawan.nik
 WHERE over_time.tanggal = '".$id."'
-GROUP BY over_time_member.id_ot
 ) a");
 
         $query = $this->db->get();

@@ -433,9 +433,6 @@ class Home extends CI_Controller {
                 $row[] = '';
             else
                 $row[] = $key->masuk;
-            if ($key->keluar == 0) 
-                $row[] = '';
-            else
                 $row[] = $key->keluar;
             $row[] = $key->shift;
 
