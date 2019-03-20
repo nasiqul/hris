@@ -6,7 +6,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <html>
 <!-- HEADER -->
 <?php require_once(APPPATH.'views/header/head.php'); ?>
-<?php if (! $this->session->userdata('nik')) { redirect('home/overtime_user'); }?>
+
 
 <body class="hold-transition skin-purple sidebar-mini">
      <div class="wrapper">
@@ -143,75 +143,85 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                $('#container').highcharts({
                     title: {
-                         text: 'YEAR'
+                         text: '2019'
                     },
                     xAxis: {
                          categories: xCategories
                     },
-                    plotOptions: {
-                         column: {
-                              stacking: 'normal',
-                              minPointLength: 20
-                         }
-                    },
-                    series: [ 
-                    {
-                         type: 'column',
-                         name: 'Budget-Indirect',
-                         data: seriesOfcBudget,
-                         stack: 'BUDGET'
-                    }, 
-                    {
-                         type: 'column',
-                         name: 'Buget-Direct',
-                         data: seriesProdBudget,
-                         stack: 'BUDGET'
-                    },
-                    {
-                         type: 'column',
-                         name: 'Budget-PL',
-                         data: seriesPLBudget,
-                         stack: 'BUDGET'
-                    }, 
-                    {
-                         type: 'column',
-                         name: 'Forecast-Indirect',
-                         data: seriesOfcForecast,
-                         stack: 'FORECAST'
-                    },
-                    {
-                         type: 'column',
-                         name: 'Forecast-Direct',
-                         data: seriesProdForecast,
-                         stack: 'FORECAST'
-                    },
-                    {
-                         type: 'column',
-                         name: 'Forecast-PL',
-                         data: seriesPLForecast,
-                         stack: 'FORECAST'
-                    },
-                    {
-                         type: 'line',
-                         name: 'BUDGET',
-                         data: cumulativeBudget,
-                         marker: {
-                              lineWidth: 2,
-                              lineColor: Highcharts.getOptions().colors[3],
-                              fillColor: 'BLUE    '
-                         }
-                    },
-                    {
-                         type: 'line',
-                         name: 'FORECAST',
-                         data: cumulativeForecast,
-                         marker: {
-                              lineWidth: 2,
-                              lineColor: Highcharts.getOptions().colors[3],
-                              fillColor: 'RED'
-                         }
-                    }]
-               })
+                    yAxis: {
+                        title: {
+                            enabled: true,
+                            text: 'Total Jam',
+                            style: {
+                             fontWeight: 'normal',
+                             fontSize: 15
+                        }
+                   }     
+              },
+              plotOptions: {
+               column: {
+                    stacking: 'normal',
+                    minPointLength: 20
+               }
+          },
+          series: [ 
+          {
+               type: 'column',
+               name: 'Budget-Indirect',
+               data: seriesOfcBudget,
+               stack: 'BUDGET'
+          }, 
+          {
+               type: 'column',
+               name: 'Buget-Direct',
+               data: seriesProdBudget,
+               stack: 'BUDGET'
+          },
+          {
+               type: 'column',
+               name: 'Budget-PL',
+               data: seriesPLBudget,
+               stack: 'BUDGET'
+          }, 
+          {
+               type: 'column',
+               name: 'Forecast-Indirect',
+               data: seriesOfcForecast,
+               stack: 'FORECAST'
+          },
+          {
+               type: 'column',
+               name: 'Forecast-Direct',
+               data: seriesProdForecast,
+               stack: 'FORECAST'
+          },
+          {
+               type: 'column',
+               name: 'Forecast-PL',
+               data: seriesPLForecast,
+               stack: 'FORECAST'
+          },
+          {
+               type: 'line',
+               name: 'BUDGET',
+               data: cumulativeBudget,
+               marker: {
+                    lineWidth: 2,
+                    lineColor: Highcharts.getOptions().colors[3],
+                    fillColor: 'BLUE    '
+               }
+          },
+          {
+               type: 'line',
+               name: 'FORECAST',
+               data: cumulativeForecast,
+               marker: {
+                    lineWidth: 2,
+                    lineColor: Highcharts.getOptions().colors[3],
+                    fillColor: 'RED'
+               }
+          }]
+     })
           })
 })
 

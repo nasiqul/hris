@@ -6,7 +6,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <html>
 <!-- HEADER -->
 <?php require_once(APPPATH.'views/header/head.php'); ?>
-<?php if (! $this->session->userdata('nik')) { redirect('home/overtime_user'); }?>
 
 <body class="hold-transition skin-purple sidebar-mini">
      <div class="wrapper">
@@ -50,7 +49,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         <div class="progress-bar progress-bar-yellow progress-bar-striped active" id="progress_bar_ofc"></div>
                                    </div>
 
-                                   Pl (Admin, Driver, Security)  <b id="persenpl2" ></b> <b id="persenpl"></b> 
+                                   Pl (ACC, HR, GA, Canteen, Driver, Security)  <b id="persenpl2" ></b> <b id="persenpl"></b> 
 
                                    <div class="progress" style="margin: 0 auto">
                                         <div class="progress-bar progress-bar-blue progress-bar-striped active" id="progress_bar_pl"></div>
@@ -301,8 +300,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     },
                     yAxis: {
                          title: {
-                              text: 'Total Jam'
-                         },
+                            text: 'Total Jam',
+                            style: {
+                             fontWeight: 'normal',
+                             fontSize: 15
+                        }
+                      },
                          stackLabels: {
                               enabled: true,
                               style: {
@@ -426,8 +429,11 @@ function postTgl() {
                     },
                     yAxis: {
                          title: {
-                              text: 'Total Jam'
-                         },
+                            text: 'Total Jam',
+                            style: {
+                             fontWeight: 'bold'
+                        }
+                      },
                          stackLabels: {
                               enabled: true,
                               style: {
