@@ -117,7 +117,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         "serverSide"    : true,
         'order'         : [],
         "ajax": {
-          "url": "<?php echo base_url('management/ajax_ot_report_d')?>",
+          "url": "<?php echo base_url('ot/ajax_ot_report_d')?>",
           "type": "GET"
         }
       });

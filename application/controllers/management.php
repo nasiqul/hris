@@ -7,8 +7,8 @@ class Management extends CI_Controller {
 		$this->load->model('home_model');
 		$this->load->model('absensi_model');
 		$this->load->model('karyawan_model');
-		$this->load->model('cari_model');
-		$this->load->model('user_model');
+		$this->load->model('over_report_model');
+		$this->load->model('budget_model');
 	}
 
 	public function index()
@@ -29,6 +29,7 @@ class Management extends CI_Controller {
 	{
 		$data['i'] = 'ok';
 		$data['menu'] = 'OT-m';
+		$data['section'] = $this->budget_model->get_name_cc();
 		$this->load->view('ot_management', $data);
 	}
 
@@ -44,6 +45,54 @@ class Management extends CI_Controller {
 		$data['i'] = 'ok';
 		$data['menu'] = 'ovrMo';
 		$this->load->view('ot_summary', $data);
+	}
+
+	public function detailSPL2($nik,$tgl)
+    {
+        $data['menu'] = 'ovrR2';
+        $data['nik'] = $nik;
+        $data['tgl'] = $tgl;
+        $data['i'] = 'ok';
+        $this->load->view("graph_report",$data);
+    }
+
+
+    public function ajax_ot_report_d()
+	{
+		$list = $this->over_report_model->get_ot_report2();
+
+		$tot = $this->over_report_model->count_all2();
+		$filter = $this->over_report_model->count_filtered2();
+
+		$data = array();
+		if(!empty($list)) {
+			foreach ($list as $key) {
+				$row = array();
+				$row[] = $key->period;
+				$row[] = $key->nik;
+				$row[] = $key->namaKaryawan;
+				$row[] = $key->bagian;
+				$row[] = $key->total_jam;
+				// $row[] = "<button class='btn btn-primary btn-xs' onclick='
+				// detail2(\"".$key->nik."\",\"".$key->period."\",\"".$key->namaKaryawan."\")'>Detail</button>";
+
+				$row[] = "<a class='btn btn-primary btn-sm' href='".base_url('management/detailSPL2/'.$key->nik."/".$key->period)."'> Detail </a>";
+
+				$data[] = $row;
+			}
+
+		}else
+		$data[] = json_decode("{}");
+
+            //output to json format
+		$output = array(
+			"draw" => $_GET['draw'],
+			"recordsFiltered" => $filter,
+			"recordsTotal" => $tot,
+			"data" => $data,
+		);
+            //output to json format
+		echo json_encode($output);
 	}
 
 }
