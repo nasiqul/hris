@@ -83,7 +83,7 @@
             </ul>
           </li> -->
         <?php } else if(isset($i)) { ?>
-          <li class="header">Overtime</li>
+          <li class="header">Manpower Overtime</li>
           <li class="<?php if($menu == 'ovrMoC') echo 'active'?>"><a href="<?php echo base_url('management'); ?>"><i class="fa fa-bar-chart"></i> Monthly Overtime Control</a></li>
           <li class="<?php if($menu == 'ovrMon') echo 'active'?>"><a href="<?php echo base_url('management/monthlyMon'); ?>"><i class="fa fa-bar-chart"></i> Monthly Monitor</a></li>
           <li class="<?php if($menu == 'OT-m') echo 'active'?>"><a href="<?php echo base_url('management/ot_m'); ?>"><i class="fa fa-bar-chart"></i>Management Section</a></li>
@@ -92,7 +92,13 @@
 
         <?php } else if(isset($z)) { ?>
           <li class="header">ManPower Information</li>
-          <li class="<?php if($menu == 'home') echo 'active'?>"><a href="<?php echo base_url('management_mp/'); ?>"><i class="fa fa-bar-chart"></i> Presence by Month</a></li>
+          <li class="<?php if($menu == 'empG1') echo 'active'?>"><a href="<?php echo base_url('management_mp/'); ?>"><i class="fa fa-bar-chart"></i>Manpower By Status Kerja</a></li>
+          <li class="<?php if($menu == 'empG2') echo 'active'?>"><a href="<?php echo base_url('management_mp/karyawan_graph_gender'); ?>"><i class="fa fa-bar-chart"></i>Manpower By Gender</a></li>
+          <li class="<?php if($menu == 'empG3') echo 'active'?>"><a href="<?php echo base_url('management_mp/karyawan_graph_grade'); ?>"><i class="fa fa-bar-chart"></i>Manpower By Grade</a></li>
+          <li class="<?php if($menu == 'empG4') echo 'active'?>"><a href="<?php echo base_url('management_mp/karyawan_graph_dept'); ?>"><i class="fa fa-bar-chart"></i>Manpower By Departemen</a></li>
+          <li class="<?php if($menu == 'empG5') echo 'active'?>"><a href="<?php echo base_url('management_mp/karyawan_graph_jabatan'); ?>"><i class="fa fa-bar-chart"></i>Manpower By Jabatan</a></li>
+          <li class="header">Attendance Information</li>
+          <li class="<?php if($menu == 'home') echo 'active'?>"><a href="<?php echo base_url('management_mp/attendance'); ?>"><i class="fa fa-bar-chart"></i> Presence by Month</a></li>
           <li class="<?php if($menu == 'prG') echo 'active'?>"><a href="<?php echo base_url('management_mp/presensi'); ?>"><i class="fa fa-bar-chart"></i> Presence</a></li>
           <li class="<?php if($menu == 'absG') echo 'active'?>"><a href="<?php echo base_url('management_mp/absen'); ?>"><i class="fa fa-bar-chart"></i> Absence</a></li>
 

@@ -934,7 +934,7 @@ public function chart()
     (
     select b.month_name, b.kode, count(b.nik) as 14_jam from 
     (
-    select date_format(over_time.tanggal, '%m-%Y') as month_name, week(over_time.tanggal) as week_name, karyawan.nik, karyawan.kode, sum(over_time_member.      final) as jam from over_time_member right join over_time on over_time.id = over_time_member.id_ot left join karyawan on karyawan.nik = over_time_member         .nik 
+    select date_format(over_time.tanggal, '%m-%Y') as month_name, week(over_time.tanggal) as week_name, karyawan.nik, karyawan.kode, sum(over_time_member.final) as jam from over_time_member right join over_time on over_time.id = over_time_member.id_ot left join karyawan on karyawan.nik = over_time_member         .nik 
     where over_time.hari = 'N' AND MONTH(over_time.tanggal) = MONTH('".$tgl."') AND YEAR(over_time.tanggal) = YEAR('".$tgl."')
     group by date_format(over_time.tanggal, '%m-%Y'), week(over_time.tanggal), karyawan.kode, karyawan.nik having jam > 14
     ) as b GROUP BY b.kode

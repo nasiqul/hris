@@ -823,7 +823,7 @@ class Ot extends CI_Controller {
 		$data = array();
 
 		foreach ($list as $key) {
-			$time = strtotime('10-'.$key->month_name);
+			$time = strtotime('01-'.$key->month_name);
 
 			$newformat = date('F-Y',$time);
 

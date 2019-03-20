@@ -90,26 +90,38 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <!-- Custom Tabs -->
           <div class="nav-tabs-custom">
             <ul class="nav nav-tabs">
-              <li class="active">
-                <a href="#tab_1" data-toggle="tab">By Status Kerja
-                  <br><span class="text-purple">ステータス別</span>
-                </a></li>
-                <li>
-                  <a href="#tab_2" data-toggle="tab">By Gender 
-                    <br> <span class="text-purple">性別</span>
+              <?php if ($chart == 'status'): ?>
+                <li class="active">
+                  <a href="#tab_1" data-toggle="tab">By Status Kerja
+                    <br><span class="text-purple">ステータス別</span>
                   </a></li>
-                  <li>
-                    <a href="#tab_3" data-toggle="tab">By Grade 
-                      <br><span class="text-purple">グレード別</span>
+                <?php endif ?>
+                <?php if ($chart == 'gender'): ?>
+                  <li class="active">
+                    <a href="#tab_2" data-toggle="tab">By Gender 
+                      <br> <span class="text-purple">性別</span>
                     </a></li>
-                    <li>
-                      <a href="#tab_4" data-toggle="tab">By Department 
-                        <br><span class="text-purple">課別</span>
+                  <?php endif ?>
+                  <?php if ($chart == 'grade'): ?>
+                    <li class="active">
+                      <a href="#tab_3" data-toggle="tab">By Grade 
+                        <br><span class="text-purple">グレード別</span>
                       </a></li>
-                      <li>
-                        <a href="#tab_5" data-toggle="tab">By Jabatan  
-                          <br><span class="text-purple">役職別</span>
+                    <?php endif ?>
+                    <?php if ($chart == 'dept'): ?>
+                      <li class="active">
+                        <a href="#tab_4" data-toggle="tab">By Department 
+                          <br><span class="text-purple">課別</span>
                         </a></li>
+                      <?php endif ?>
+                      <?php if ($chart == 'jabatan'): ?>
+                        <li class="active">
+                          <a href="#tab_5" data-toggle="tab">By Jabatan  
+                            <br><span class="text-purple">役職別</span>
+                          </a></li>
+
+                        <?php endif ?>
+
 
                       </ul>
                       <div class="tab-content">
