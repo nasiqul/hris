@@ -22,7 +22,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                <section class="content-header">
                     <h1>
                          Employee Monthly Overtime 
-                         <span class="text-purple">???</span>
+                         <span class="text-purple">社員別月次残業まとめ</span>
                     </h1>
                </section>
 
