@@ -1245,7 +1245,8 @@ public function get_cc5($tgl)
     left join master_cc on master_cc.id_cc = karyawan.costCenter
     where DATE_FORMAT(tanggal, '%m-%Y') = '".$tgl."'
     GROUP BY mon, tanggal, departemen
-) as d on c.mon = d.mon and c.departemen = d.departemen and c.tanggal = d.tanggal";
+) as d on c.mon = d.mon and c.departemen = d.departemen and c.tanggal = d.tanggal
+order by c.tanggal asc";
 $query = $this->db->query($q);
 return $query->result();
 }
