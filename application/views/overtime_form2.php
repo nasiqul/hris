@@ -92,12 +92,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   </div>
 
                   <div class="col-md-12">
-                    <p>Bagian :</p>
-                      <select name="dep" class="form-control" id="dep" onchange='showSec()'>
-                        <option value="" disabled selected>Select Departemen</option>
+                    <b>Bagian :</b> <b id="namadept2"> </b>
+                      <select name="dep" class="form-control" id="dep" onchange='showSec();namadept()'>
+                        <option value="" disabled selected>Select Section</option>
                         <?php 
                         foreach ($dep as $key) {
-                          echo "<option value='".$key->id."'>".$key->nama."</option>";
+                          echo "<option value='".$key->id."' name='".$key->id_departemen."'>".$key->nama."</option>";
                         }
                         ?>
                       </select>
@@ -105,13 +105,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                   <div class="col-md-12">
                       <select name="sec" class="form-control" id="sec" onchange='showSubSec()'>
-                        <option value="" disabled selected>Select Section</option>
+                        <option value="" disabled selected>Select Sub Section</option>
                       </select>
                   </div>
 
                   <div class="col-md-12">
                       <select name="subsec" class="form-control" id="subsec">
-                        <option value="" disabled selected>Select Sub Section</option>
+                        <option value="" disabled selected>Select Group</option>
                       </select>
                   </div>
 
@@ -249,6 +249,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
     var txtJam = document.getElementById('txtJam');
 
     $(document).ready(function() {
+
+  $(document).ready(function()
+   {
+     $('#submit').onlclick(function()
+     {
+        $(this).attr('disabled',true);
+        return false;
+     });
+    });
 
       $('#datepicker').datepicker({
         autoclose: true,
@@ -391,6 +400,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
       var ids = $(elem).parent('div').parent('div').attr('id');
 
       var oldid = ids;
+      nomorali-=1;
+      if (nomorali ==0){
+        arrNik = [];
+      }
 
       no-=1;
       
@@ -412,8 +425,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
       jQuery("#delete"+newid).attr("id","delete"+oldid);
       jQuery("#nomorauto"+newid).attr("id","nomorauto"+oldid);
 
-      console.log(no);
-      nomorali-=1;
+      // console.log(no);
+
       $('#totalsemua').text("Total : "+nomorali);
       
 
@@ -443,7 +456,24 @@ scratch. This page gets rid of all links and provides the needed markup only.
       var aa = nomorali;
       // alert(aa);
     }
+    
 
+    function namadept() {
+      var id = $('#dep').find('option:selected').attr("name");
+      //alert(id);
+      $.ajax({
+        type: 'POST',
+        url: '<?php echo base_url("home/ajax_over_namadept") ?>',
+        data: {
+          'id': id
+        },
+        success: function (data) {
+           // alert(data)
+           var s = $.parseJSON(data)
+           $('#namadept2').text(s +" - Departemen");
+          }
+        });
+    }
 
     function showSec() {
       var id = $('#dep').find(':selected')[0].value;

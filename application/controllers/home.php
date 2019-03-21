@@ -822,6 +822,25 @@ public function ajax_jabatan()
 }
 
 
+public function ajax_over_namadept()
+{
+    $id = $_POST['id'];
+    $list = $this->karyawan_model->getNamadept($id);
+    $data = array();
+
+   
+    if ($list) {
+        foreach ($list as $key) {
+            $row = array();            
+            $row[] = $key->nama;
+            array_push($data, $row);
+        }
+    }
+
+            //output to json format
+    echo json_encode($data);
+}
+
 public function ajax_over_section()
 {
     $id = $_POST['id'];
@@ -830,7 +849,7 @@ public function ajax_over_section()
 
     $row1 = array();
     $row1[] = "";
-    $row1[] = "Select Section";
+    $row1[] = "Select Sub Section";
 
     $data[] = $row1;
     if ($list) {
@@ -856,7 +875,7 @@ public function ajax_over_subsection()
 
     $row1 = array();
     $row1[] = "";
-    $row1[] = "Select Sub Section";
+    $row1[] = "Select Group";
 
     $data[] = $row1;
     if ($list) {

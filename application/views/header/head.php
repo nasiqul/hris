@@ -37,6 +37,7 @@
    <script src="<?php echo base_url()?>app/bower_components/jquery/dist/jquery.js"></script>
    <script src="<?php echo base_url()?>app/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
    <script src="<?php echo base_url()?>app/plugins/timepicker/bootstrap-timepicker.min.js"></script>
+   <script src="<?php echo base_url()?>app/dist/js/jquery.validate.min.js"></script>
    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>

@@ -75,7 +75,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <div class="col-md-8">
                       <p>: <c id="hari"></c></p>
                       <p>: <c id="tgl"></c></p>
-                      <p>: <c id="dep"></c> - <c id="sec"></c></p>
+                      <p>: <c id="sec"></c> - <c id="subsec"></c> - <c id="group"></c></p>
                     </div>
                   </div>
                   <div class="col-md-6">
@@ -226,8 +226,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
       $("#hari").text(s[0][1]);
       $("#tgl").text(s[0][2]);
-      $("#dep").text(s[0][3]);
-      $("#sec").text(s[0][4]);
+      $("#sec").text(s[0][3]);
+      $("#subsec").text(s[0][4]);
+      $("#group").text(s[0][7]);
       $("#kep").val(s[0][5]);
       $("#cat").val(s[0][6]);
 

@@ -165,11 +165,31 @@ class Karyawan_form extends CI_Controller {
 			$ktp = $_POST['ktp'];
 			$alamat = $_POST['alamat'];
 			$statusK = $_POST['statusK'];
-			$dev = $_POST['devisi'];
-			$dep = $_POST['departemen'];
-			$sec = $_POST['section'];
-			$subsec = $_POST['subsection'];
-			$group = $_POST['group'];
+			if(isset($_POST['devisi'])) 
+				$dev = $_POST['devisi'];
+			else 
+				$dev = '';
+
+			if(isset($_POST['departemen'])) 
+				$dep = $_POST['departemen'];
+			else 
+				$dep = '';
+
+			if(isset($_POST['section'])) 
+				$sec = $_POST['section'];
+			else 
+				$sec = '';
+
+			if(isset($_POST['subsection'])) 
+				$subsec = $_POST['subsection'];
+			else 
+				$subsec = '';
+
+			if(isset($_POST['group'])) 
+				$group = $_POST['group'];
+			else 
+				$group = '';
+
 			$grade = $_POST['grade'];			
 			$jab = $_POST['jabatan'];
 			$kode = $_POST['kode'];

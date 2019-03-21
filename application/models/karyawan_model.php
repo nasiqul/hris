@@ -245,7 +245,20 @@ class Karyawan_model extends CI_Model {
 
     public function getSection($id_dep)
     {
-        $q = "SELECT * from section where id_departemen = ".$id_dep."";
+        $q = "SELECT * from sub_section where id_sec = ".$id_dep."";
+        $query = $this->db->query($q);
+
+        if($query->num_rows() > 0){
+            foreach($query->result() as $data){
+                $hasil[] = $data;
+            }
+            return $hasil;
+        }    
+    }
+
+    public function getNamadept($id_dep)
+    {
+        $q = "select b.nama from section as a LEFT JOIN departemen as b on a.id_departemen = b.id where a.id_departemen=".$id_dep." limit 1";
         $query = $this->db->query($q);
 
         if($query->num_rows() > 0){
@@ -258,7 +271,7 @@ class Karyawan_model extends CI_Model {
 
     public function get_sub_sec($id_sec)
     {
-        $q = "SELECT * from sub_section where id_sec = ".$id_sec."";
+        $q = "SELECT * from group1 where id_sub = ".$id_sec."";
         $query = $this->db->query($q);
 
         if($query->num_rows() > 0){
@@ -469,7 +482,7 @@ class Karyawan_model extends CI_Model {
             SELECT nik from karyawan
             WHERE tanggalKeluar >= '2019-01-01'
             AND tanggalKeluar < '".$bulan."'
-            )");
+        )");
         $this->db->where("tanggalMasuk < '2019-03-01'");
 
         $i = 0;

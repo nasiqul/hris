@@ -138,7 +138,7 @@ table tr th {
 			<tr>
 				<td width="10%" style="padding: 5px 0  5px 20px">Bagian</td>
 				<td width="2%">:</td>
-				<td width="25%"><?php echo $list[0]->departemen ?> - <?php echo $list[0]->section ?></td>
+				<td width="25%"><?php echo $list[0]->section ?> - <?php echo $list[0]->sub_sec ?> - <?php echo $list[0]->grup ?></td>
 			</tr>
 		</table>
 		<table width="100%" style="margin-top: 10px" id="anggota"  align="center" border="1">

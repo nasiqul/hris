@@ -176,10 +176,11 @@ class Ot extends CI_Controller {
 			$row[] = $key->id_over;
 			$row[] = date("l",strtotime($key->tanggal));
 			$row[] = date("d-m-Y",strtotime($key->tanggal));
-			$row[] = $key->departemen;
 			$row[] = $key->section;
+			$row[] = $key->sub_sec;
 			$row[] = $key->keperluan;
 			$row[] = $key->catatan;
+			$row[] = $key->grup;
 
 			$data[] = $row;
 		}

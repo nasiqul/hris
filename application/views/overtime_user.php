@@ -8,12 +8,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <?php require_once(APPPATH.'views/header/head.php'); ?>
 
 <style type="text/css">
-#info {
-  text-decoration: underline;
-}
-#info:hover {
-  text-decoration:none;
-}
+  #info {
+    text-decoration: underline;
+  }
+  #info:hover {
+    text-decoration:none;
+  }
 </style>
 
 <body class="hold-transition skin-purple sidebar-mini">
@@ -77,62 +77,62 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <div class="col-md-8">
                       <p>: <c id="hari"></c></p>
                       <p>: <c id="tgl"></c></p>
-                      <p>: <c id="dep"></c> - <c id="sec"></c></p>
+                      <p>: <c id="sec"></c> - <c id="subsec"></c> - <c id="group"></p>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <p>Keperluan : </p>
+                      <input type="text" class="form-control" readonly id="kep" style="height:70px;">
+                    </div>
+
+                    <div class="col-md-12">
+                      <br>
+                      <table class="table table-hover" id="example2" style="width: 100%;">
+                        <thead>
+                          <tr>
+                            <th>No</th>
+                            <th>NIK</th>
+                            <th>Nama</th>
+                            <th>Dari</th>
+                            <th>Sampai</th>
+                            <th>Jam</th>
+                            <th>Trans</th>
+                            <th>Makan</th>
+                            <th>E.Food</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                        <tfoot>
+                          <tr>
+                            <td colspan="4"><b>B = Bangil, P = Pasuruan</b></td>
+                            <td><c class="pull-right">Total :</c></td>
+                            <td class="text-center"></td>
+                            <td>Jam</td>
+                          </tr>
+                        </tfoot>
+                      </table>
+                      <p>Catatan :</p>
+                      <input type="text" class="form-control" readonly id="cat" style="height:70px;">
                     </div>
                   </div>
-                  <div class="col-md-6">
-                    <p>Keperluan : </p>
-                    <input type="text" class="form-control" readonly id="kep" style="height:70px;">
-                  </div>
-
-                  <div class="col-md-12">
-                    <br>
-                    <table class="table table-hover" id="example2" style="width: 100%;">
-                      <thead>
-                        <tr>
-                          <th>No</th>
-                          <th>NIK</th>
-                          <th>Nama</th>
-                          <th>Dari</th>
-                          <th>Sampai</th>
-                          <th>Jam</th>
-                          <th>Trans</th>
-                          <th>Makan</th>
-                          <th>E.Food</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-
-                      </tbody>
-                      <tfoot>
-                        <tr>
-                          <td colspan="4"><b>B = Bangil, P = Pasuruan</b></td>
-                          <td><c class="pull-right">Total :</c></td>
-                          <td class="text-center"></td>
-                          <td>Jam</td>
-                        </tr>
-                      </tfoot>
-                    </table>
-                    <p>Catatan :</p>
-                    <input type="text" class="form-control" readonly id="cat" style="height:70px;">
-                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                  <a id="exportid" href="<?php echo base_url('ot/createXLS/19030008') ?>" class="btn btn-warning">Export to Excel</a>
+                  <button class="btn btn-primary" onclick="tombol_print()"><i class="fa fa-print"></i> Print</button>
                 </div>
               </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                <a id="exportid" href="<?php echo base_url('ot/createXLS/19030008') ?>" class="btn btn-warning">Export to Excel</a>
-                <button class="btn btn-primary" onclick="tombol_print()"><i class="fa fa-print"></i> Print</button>
-              </div>
+              <!-- /.modal-content -->
             </div>
-            <!-- /.modal-content -->
+            <!-- /.modal-dialog -->
           </div>
-          <!-- /.modal-dialog -->
-        </div>
-      </section>
-      <!-- /.content -->
-    </div>
-    <!-- /.content-wrapper -->
-    <!-- /.control-sidebar -->
+        </section>
+        <!-- /.content -->
+      </div>
+      <!-- /.content-wrapper -->
+      <!-- /.control-sidebar -->
   <!-- Add the sidebar's background. This div must be placed
     immediately after the control sidebar -->
     <div class="control-sidebar-bg"></div>
@@ -173,8 +173,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
           
           $("#hari").text(s[0][1]);
           $("#tgl").text(s[0][2]);
-          $("#dep").text(s[0][3]);
-          $("#sec").text(s[0][4]);
+          $("#sec").text(s[0][3]);
+          $("#subsec").text(s[0][4]);
+          $("#group").text(s[0][7]);
           $("#kep").val(s[0][5]);
           $("#cat").val(s[0][6]);
 
@@ -239,18 +240,18 @@ scratch. This page gets rid of all links and provides the needed markup only.
     }
 
     function exporta($id) {
-    var id = $id;      
-     var url = "<?php echo base_url('ot/exportexcel/'); ?>"+id;
+      var id = $id;      
+      var url = "<?php echo base_url('ot/exportexcel/'); ?>"+id;
      // alert(url)
-      $("#exportid").prop("href", url)
-    }
+     $("#exportid").prop("href", url)
+   }
 
-    $('.datepicker').datepicker({
-      autoclose: true,
-      format: "dd-mm-yyyy"
-    });
+   $('.datepicker').datepicker({
+    autoclose: true,
+    format: "dd-mm-yyyy"
+  });
 
-  </script>
+</script>
 
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the

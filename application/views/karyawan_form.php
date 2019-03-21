@@ -43,12 +43,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <div class="col-md-6">
                       <div class="form-group">
                         <label for="nik">NIK</label>
-                        <input type="text" name="nik" id="nik" class="form-control">
+                        <input type="text" name="nik" id="nik" class="form-control" required>
                       </div>
 
                       <div class="form-group">
                         <label for="nama">Nama</label>
-                        <input type="text" name="nama" id="nama" class="form-control">
+                        <input type="text" name="nama" id="nama" class="form-control" required>
                       </div>
 
                       <div class="row">
@@ -71,7 +71,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <div class="form-group">
                           <div class="col-md-6">
                             <div class="radio">
-                              <label><input type="radio" name="jk" id="laki" value="L">Laki - laki</label>
+                              <label><input type="radio" name="jk" id="laki" value="L" checked>Laki - laki</label>
                             </div>
                           </div>
                           <div class="col-md-6">
@@ -169,7 +169,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                       <div class="form-group">
                         <label for="grade">Grade</label>
-                        <select id="grade" class="form-control" name="grade">
+                        <select id="grade" class="form-control" name="grade" required>
                           <option value="" disabled selected>Select Kode Grade</option>
                           <?php 
                           foreach ($grade as $key) {
@@ -181,7 +181,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                       <div class="form-group">
                         <label for="jabatan">Jabatan</label>
-                        <select id="jabatan" class="form-control" name="jabatan">
+                        <select id="jabatan" class="form-control" name="jabatan" required>
                           <?php 
                           foreach ($jabatan as $key) {
                             echo "<option value='".$key->id."'>".$key->jabatan."</option>";
@@ -232,12 +232,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <div class="col-md-6">
                       <div class="form-group">
                         <label for="tglM">Tanggal Masuk</label>
-                        <input type="text" id="tglM" class="form-control" placeholder="Select date" name="tglM">
+                        <input type="text" id="tglM" class="form-control" placeholder="Select date" name="tglM" required>
                       </div>
 
                       <div class="form-group">
                         <label for="cs">Cost Center</label>
-                        <input type="text" id="cs" class="form-control" name="cs">
+                        <input type="text" id="cs" class="form-control" name="cs" required>
                       </div>
                     </div>
                     <div class="col-md-12">
@@ -305,6 +305,20 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- ./wrapper -->
   <script>
     $(document).ready(function(){
+      $('#frm-mhs').validate({
+        rules: {
+          nik : {
+            digits: true,
+            minlength:10,
+            maxlength:10
+          },
+          cs: {
+            digits: true,
+            minlength:10,
+            maxlength:10
+          }
+        }
+      });
       $('#submit').submit(function(e){
         e.preventDefault(); 
         $.ajax({
@@ -538,43 +552,43 @@ scratch. This page gets rid of all links and provides the needed markup only.
   // });
   //   }
 
-    $('#tglL').datepicker({
-      autoclose: true,
-      format: 'dd-mm-yyyy',
-    })
+  $('#tglL').datepicker({
+    autoclose: true,
+    format: 'dd-mm-yyyy',
+  })
 
-    $('#tglM').datepicker({
-      autoclose: true,
-      format: 'dd-mm-yyyy',
-    })
+  $('#tglM').datepicker({
+    autoclose: true,
+    format: 'dd-mm-yyyy',
+  })
 
-    function openSuccessGritter(){
-      jQuery.gritter.add({
-        title: "Success",
-        text: "Input Success",
-        class_name: 'growl-success',
-        image: '<?php echo base_url()?>app/img/icon.png',
-        sticky: false,
-        time: '2000'
-      });
-    }
-
-    $('#grade').select2({
-      placeholder: 'Select a month'
+  function openSuccessGritter(){
+    jQuery.gritter.add({
+      title: "Success",
+      text: "Input Success",
+      class_name: 'growl-success',
+      image: '<?php echo base_url()?>app/img/icon.png',
+      sticky: false,
+      time: '2000'
     });
+  }
 
-    $('#jabatan').select2({
-      placeholder: 'Select a month'
-    });
+  $('#grade').select2({
+    placeholder: 'Select a month'
+  });
 
-    $('#kode').select2({
-      placeholder: 'Select a month'
-    });
+  $('#jabatan').select2({
+    placeholder: 'Select a month'
+  });
 
-    $('#statusK').select2({
-      placeholder: 'Select a month'
-    });
-  </script>
+  $('#kode').select2({
+    placeholder: 'Select a month'
+  });
+
+  $('#statusK').select2({
+    placeholder: 'Select a month'
+  });
+</script>
 
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the
