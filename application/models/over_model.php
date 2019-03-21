@@ -669,7 +669,7 @@ class Over_model extends CI_Model {
         $this->db->select("k.nik");
         $this->db->from('karyawan k');
         $this->db->join("posisi p","p.nik = k.nik");
-        $this->db->join("departemen d","p.id_dep = d.id");
+        // $this->db->join("departemen d","p.id_dep = d.id");
         $this->db->like("k.nik",$nik);
         // $this->db->where("p.id_dep",$dep);
         $query = $this->db->get();

@@ -206,7 +206,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               </table>
             </div>
             <div id="peserta">
-              <div class='col-md-12' style='margin-bottom: 5px' id='0'>
+              <!-- <div class='col-md-12' style='margin-bottom: 5px' id='0'>
               <div class='col-md-2'><input type='text' id='nik0' class='form-control' readonly></div>
               <div class='col-md-3'><p id='nama0'></p></div>
               <div class='col-md-2' id='sJam0' name='jam0'><select id='jamL0' class='form-control'></select></div><div class='col-md-1'><p id='jam0'></p></div>
@@ -215,7 +215,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <div class='col-md-1'><input type='checkbox' id='makan0'></div>
               <div class='col-md-1'><input type='checkbox' id='exfood0'></div>
               <div class='col-md-1'><button class='btn btn-danger btn-xs' id='delete0'><i class='fa fa-minus'></i></button></div>
-              <input type='hidden' id='idJam0'></div>
+              <input type='hidden' id='idJam0'></div> -->
 
             </div>
           </div>
