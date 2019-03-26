@@ -1395,9 +1395,9 @@ public function get_presentase($n1,$n2)
     ) as d
     on d.kode = c.kode and d.id_cc = c.id_cc
     ) as e
+    where kode IS NOT NULL
     group by mon, kode
     
-
 
     ";
     $query = $this->db->query($q);
