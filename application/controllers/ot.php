@@ -564,8 +564,9 @@ class Ot extends CI_Controller {
 				if ($key->status != '0') 
 					$row[] = "<button class='btn btn-primary btn-xs' onclick='detail_spl(".$key->id."); exporta(".$key->id.")'>Detail</button>";
 				else
-					$row[] = "<button class='btn btn-primary btn-xs' onclick='detail_spl(".$key->id."); exporta(".$key->id.")'>Detail</button> &nbsp;
-				<button class='btn btn-danger btn-xs' onclick='modal_open(".$key->id.");'><i class='fa fa-trash'></i></button>";
+					$row[] = "<button class='btn btn-primary btn-xs' onclick='detail_spl(".$key->id."); exporta(".$key->id.")'>Detail</button>";
+
+				// <button class='btn btn-danger btn-xs' onclick='modal_open(".$key->id.");'><i class='fa fa-trash'></i></button>
 				
 
 				$data[] = $row;
