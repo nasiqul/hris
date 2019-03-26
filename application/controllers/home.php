@@ -159,7 +159,7 @@ class Home extends CI_Controller {
         $data['dep'] = $this->over_model->get_dep();
         $data['id_doc'] = $this->over_model->get_id_doc();
         $data['menu'] = 'ovr';
-        $this->load->view("overtime_form2",$data);
+        $this->load->view("overtime_form3",$data);
     }
 
     public function ot_graph()
@@ -257,6 +257,7 @@ class Home extends CI_Controller {
 
     public function overtime_user()
     {
+        $data['dep'] = $this->over_model->get_dep();
         $data['menu'] = 'ovrU';
         $this->load->view('overtime_user',$data);
     }
@@ -285,7 +286,7 @@ class Home extends CI_Controller {
             $this->session->set_userdata($newdata);
         }
         $data['menu'] = 'ovr';
-        $this->load->view('overtime',$data);
+        $this->load->view('overtime2',$data);
     }
 
     public function presensi()
@@ -334,7 +335,7 @@ class Home extends CI_Controller {
             $shift = $this->session->userdata('shift');
 
             $list = $this->cari_model->get_data_presensi_cari($tgl, $nik, $nama, $shift);
-            $tot = $this->cari_model->count_all();
+            $tot = $this->cari_model->count_all($tgl, $nik, $nama, $shift);
             $filter = $this->cari_model->count_filtered($tgl, $nik, $nama, $shift);
         }
         else {
@@ -349,11 +350,11 @@ class Home extends CI_Controller {
             $row[] = date('j M Y', strtotime($key->tanggal));
             $row[] = $key->nik;
             $row[] = $key->namaKaryawan;
-            if ($key->masuk == 0) 
+            if ($key->masuk == '') 
                 $row[] = '';
             else
                 $row[] = $key->masuk;
-            if ($key->keluar == 0) 
+            if ($key->keluar == '') 
                 $row[] = '';
             else
                 $row[] = $key->keluar;
@@ -422,6 +423,8 @@ class Home extends CI_Controller {
         $shift = $_POST['shift'];
 
         $list = $this->cari_model->get_data_presensi_cari($tgl, $nik, $nama, $shift);
+        $tot = $this->cari_model->count_all($tgl, $nik, $nama, $shift);
+        $filter = $this->cari_model->count_filtered($tgl, $nik, $nama, $shift);
 
         $data = array();
         foreach ($list as $key) {
@@ -429,10 +432,13 @@ class Home extends CI_Controller {
             $row[] = date('j M Y', strtotime($key->tanggal));
             $row[] = $key->nik;
             $row[] = $key->namaKaryawan;
-            if ($key->masuk == 0) 
+            if ($key->masuk == '') 
                 $row[] = '';
             else
                 $row[] = $key->masuk;
+            if ($key->keluar == '') 
+                $row[] = '';
+            else
                 $row[] = $key->keluar;
             $row[] = $key->shift;
 
@@ -441,6 +447,8 @@ class Home extends CI_Controller {
 
         $output = array(
             "draw" => $_POST['draw'],
+            "recordsTotal" => $tot,
+            "recordsFiltered" => $filter,
             "data" => $data,
         );
             //output to json format
@@ -1091,6 +1099,7 @@ public function ajax_emp_by_nik_coba($id)
         $row[] = $key->grup;
         $row[] = $key->kode;
         $row[] = $key->gdid;
+        $row[] = $key->atasan;
 
         $data[] = $row;
     }

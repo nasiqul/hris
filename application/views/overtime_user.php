@@ -38,6 +38,67 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <section class="content container-fluid">
 
         <div class="col-md-12">
+          <!-- general form elements -->
+          <div class="box box-primary">
+            <div class="box-header with-border">
+              <h3 class="box-title"><i class="fa fa-search"></i> <span>Search Filter</span></h3>
+            </div>
+            <!-- /.box-header -->
+            <!-- form start -->
+            <form action="<?php echo base_url('home/presensi'); ?>" method="POST">
+              <div class="box-body">
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="inputTanggal"><i class="fa fa-calendar"></i> <span>Date</span></label>
+                    <input type="text" name="tanggal" id="tanggal" class="form-control datepicker" placeholder="Select date">
+                  </div>
+                </div>
+
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="inputNik"><i class="fa fa-id-badge"></i>  <span>Section</span><!--  <b id="namadept2"> </b> --></label>
+                    <select name="dep" class="form-control" id="dep1" onchange='showSec();namadept()'>
+                      <option value="" disabled selected>Select Section</option>
+                      <?php 
+                      foreach ($dep as $key) {
+                        echo "<option value='".$key->id."' name='".$key->id_departemen."'>".$key->nama."</option>";
+                      }
+                      ?>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label for="inputNama"><i class="fa fa-user"></i> <span>Sub Section</span></label>
+                    <select name="sec" class="form-control" id="sec1" onchange='showSubSec()'>
+                      <option value="" disabled selected>Select Sub Section</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="col-md-2">
+                  <div class="form-group">
+                    <label for="inputShift"><i class="fa fa-briefcase "></i> <span>Group</span></label>
+                    <select name="subsec" class="form-control" id="subsec1">
+                      <option value="" disabled selected>Select Group</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <!-- /.box-body -->
+              <div class="box-footer">
+                <a class="btn btn-primary" onclick="tanggal()"><i class="fa fa-search"></i> <span>Search</span></a>
+                <a class="btn btn-warning" id="reset" href="<?php echo base_url('home/session_destroy') ?>" ><i class="fa fa-refresh"></i> Reset</a>
+
+              </div>
+            </form>
+          </div>
+          <!-- /.box -->
+
+        </div> 
+
+        <div class="col-md-12">
           <div class="box box-solid">
             <div class="box-body">
               <a class="btn btn-success" href="<?php echo base_url('home/overtime_form') ?>"> <i class="fa fa-plus"></i> New Entry</a>
@@ -128,6 +189,22 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </div>
             <!-- /.modal-dialog -->
           </div>
+
+          <div class="modal fade" id="myModal2">
+            <div class="modal-dialog modal-sm">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h3 class="modal-title">Yakin hapus "<b id="id2"></b>" ?</h3>
+                </div>
+                <div class="modal-footer">
+                  <button class="btn btn-danger pull-left" onclick="hapus()"><i class="fa fa-trash"></i> Hapus</button>
+                  <button type="button" class="btn btn-default pull-right" data-dismiss="modal"><i class="fa fa-mail-forward"></i> Tidak</button>
+                </div>
+              </div>
+              <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+          </div>
         </section>
         <!-- /.content -->
       </div>
@@ -142,18 +219,25 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <script>
     var table;
     $(document).ready(function() {
+     tabel2 = $('#example1').DataTable();
+     tabel2.destroy();
 
-      table = $('#example1').DataTable({
-        "lengthMenu"    : [[10, 25, 50, -1], [10, 25, 50, "All"]],
-        "processing"    : true,
-        "serverSide"    : true,
-        'order'         : [],
-        "ajax": {
-          "url": "<?php echo base_url('ot/ajax_ot_user')?>",
-          "type": "GET"
+     tabel2 = $('#example1').DataTable({
+      "lengthMenu"    : [[10, 25, 50, -1], [10, 25, 50, "All"]],
+      "processing"    : true,
+      "serverSide"    : true,
+      'order'         : [],
+      "ajax": {
+        "url": "<?php echo base_url('ot/ajax_ot_user')?>",
+        "type": "GET",
+        "data" : { 
+          sub:'asd',
+          subsec:'asd',
+          group:'asd'
         }
-      });
-    })
+      }
+    });
+   })
 
     function detail_spl(id) {
       tabel = $('#example2').DataTable();
@@ -246,12 +330,167 @@ scratch. This page gets rid of all links and provides the needed markup only.
      $("#exportid").prop("href", url)
    }
 
+   function tanggal() {
+     tabel2 = $('#example1').DataTable();
+     tabel2.destroy();
+     var tanggal = $('#tanggal').val();
+     var sub = $('#dep1').find(':selected')[0].value;
+     var subsec = $('#sec1').find(':selected')[0].value;
+     var group = $('#subsec1').find(':selected')[0].value;
+
+     tabel2 = $('#example1').DataTable({
+      "lengthMenu"    : [[10, 25, 50, -1], [10, 25, 50, "All"]],
+      "processing"    : true,
+      "serverSide"    : true,
+      'order'         : [],
+      "ajax": {
+        "url": "<?php echo base_url('ot/ajax_ot_user')?>",
+        "type": "GET",
+        'data' : { tanggal : tanggal,
+          sub:sub,
+          subsec:subsec,
+          group:group
+        }
+      }
+    });
+
+
+   }
+
    $('.datepicker').datepicker({
     autoclose: true,
-    format: "dd-mm-yyyy"
+    format: "yyyy-mm-dd"
   });
 
-</script>
+   function namadept() {
+    var id = $('#dep1').find('option:selected').attr("name");
+      //alert(id);
+      $.ajax({
+        type: 'POST',
+        url: '<?php echo base_url("home/ajax_over_namadept") ?>',
+        data: {
+          'id': id
+        },
+        success: function (data) {
+           // alert(data)
+           var s = $.parseJSON(data)
+           $('#namadept2').text(s +" - Departemen");
+         }
+       });
+    }
+
+    function showSec() {
+      var id = $('#dep1').find(':selected')[0].value;
+
+      $.ajax({
+        type: 'POST',
+        url: '<?php echo base_url("home/ajax_over_section") ?>',
+        data: {
+          'id': id
+        },
+        success: function (data) {
+            // the next thing you want to do 
+            var $section = $('#sec1');
+
+            $section.empty();
+
+            var s = $.parseJSON(data);
+
+            $section.append('<option value="" disabled selected>'+ s[0][1] +'</option>');
+
+            for (var i = 1; i <= s.length; i++) {
+              $section.append('<option id=' + s[i][0] + ' value=' + s[i][0] + '>' + s[i][1] + '</option>');
+            }
+            
+            //manually trigger a change event for the contry so that the change handler will get triggered
+            $section.change();
+          }
+        });
+    }
+
+    function showSubSec() {
+      var id = $('#sec1').find(':selected')[0].value;
+
+      $.ajax({
+        type: 'POST',
+        url: '<?php echo base_url("home/ajax_over_subsection") ?>',
+        data: {
+          'id': id
+        },
+        success: function (data) {
+            // the next thing you want to do 
+            var $subsec = $('#subsec1');
+
+            $subsec.empty();
+
+            var s = $.parseJSON(data);
+
+            $subsec.append('<option value="" disabled selected>'+ s[0][1] +'</option>');
+
+            for (var i = 1; i <= s.length; i++) {
+              $subsec.append('<option id=' + s[i][0] + ' value=' + s[i][0] + '>' + s[i][1] + '</option>');
+            }
+            
+            //manually trigger a change event for the contry so that the change handler will get triggered
+            $subsec.change();
+          }
+        });
+    }
+
+
+    function modal_open(id) {
+      $('#myModal2').modal({backdrop: 'static', keyboard: false});
+      $('#id2').text(id);
+    }
+
+    function hapus() {
+      var id = $('#id2').text();
+
+      $.ajax({
+        type: 'POST',
+        url: '<?php echo base_url("ot/delete_ot") ?>',
+        data: {
+          'id': id
+        },
+        success: function (data) {
+          openDeleteGritter(id);
+          $('#myModal2').modal('hide');
+
+          tabel2 = $('#example1').DataTable();
+          tabel2.destroy();
+
+          tabel2 = $('#example1').DataTable({
+            "lengthMenu"    : [[10, 25, 50, -1], [10, 25, 50, "All"]],
+            "processing"    : true,
+            "serverSide"    : true,
+            'order'         : [],
+            "ajax": {
+              "url": "<?php echo base_url('ot/ajax_ot_user')?>",
+              "type": "GET",
+              "data" : { 
+                sub:'asd',
+                subsec:'asd',
+                group:'asd'
+              }
+            }
+          });
+        }
+      });
+    }
+
+
+    function openDeleteGritter(id){
+      jQuery.gritter.add({
+        title: "Berhasil",
+        text: "Hapus data "+id+" berhasil",
+        class_name: 'growl-danger',
+        image: '<?php echo base_url()?>app/img/close.png',
+        sticky: false,
+        time: '2000'
+      });
+    }
+
+  </script>
 
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the

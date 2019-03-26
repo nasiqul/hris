@@ -177,9 +177,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
         tgl:tgl
       },
       success: function() {
-          buattable();
-        }
-      });
+        buattable();
+      }
+    });
   }
 
   function buattable() {
@@ -193,7 +193,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     "bInfo": false,
     'order'         : [],
     "ajax": {
-      "url": "<?php echo base_url('ot/ajax_ot')?>",
+      "url": "<?php echo base_url('ot/ajax_ot2')?>",
       "data":{
         tgl:tgl
       } ,      

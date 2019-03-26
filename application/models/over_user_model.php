@@ -12,9 +12,9 @@ class Over_user_model extends CI_Model {
     	$this->load->database();
     }
 
-    public function get_ot_user()
+    public function get_ot_user($tgl,$sub,$subsec,$group)
     {
-    	$this->_get_datatables_query();
+    	$this->_get_datatables_query($tgl,$sub,$subsec,$group);
     	if($_GET['length'] != -1){
     		$this->db->limit($_GET['length'], $_GET['start']);
     	}
@@ -22,10 +22,22 @@ class Over_user_model extends CI_Model {
     	return $query->result();
     }
 
-    private function _get_datatables_query()
+    private function _get_datatables_query($tgl,$sub,$subsec,$group)
     {
-    	$this->db->select("id, DATE_FORMAT(tanggal, '%a, %d %b %Y') as tanggal");
+    	$this->db->select("over_time.id, DATE_FORMAT(tanggal, '%a, %d %b %Y') as tanggal, over_time_member.status");
     	$this->db->from("over_time");
+        $this->db->join("over_time_member",'over_time_member.id_ot = over_time.id','left');
+        $this->db->where("tanggal = '".$tgl."'");        
+        if ($sub !="asd" && $sub ) {
+            $this->db->where("departemen = '".$sub."'");
+        }
+        if ($subsec != "asd" && $subsec) {
+            $this->db->where("section = '".$subsec."'");
+        }
+        if ($group != "asd" && $group) {
+            $this->db->where("sub_sec = '".$group."'");
+        }
+        $this->db->group_by('over_time.id');
 
         $i = 0;
 
@@ -62,16 +74,16 @@ class Over_user_model extends CI_Model {
     }
 
 
-    function count_filtered()
+    function count_filtered($tgl,$sub,$subsec,$group)
     {
-        $this->_get_datatables_query();
+        $this->_get_datatables_query($tgl,$sub,$subsec,$group);
         $query = $this->db->get();
         return $query->num_rows();
     }
 
-    public function count_all()
+    public function count_all($tgl,$sub,$subsec,$group)
     {
-        $this->db->from('over_time');
+        $this->_get_datatables_query($tgl,$sub,$subsec,$group);
         return $this->db->count_all_results();
     }
 }

@@ -21,7 +21,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <section class="content-header">
         <h1>
           Employee Data
-          <span class="text-purple">従業員データ</span>
+          <span class="text-purple">従業員データ </span><span>( &Sigma;</span>
+          <span id="total2"></span>
         </h1>
       </section>
 
@@ -90,6 +91,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <!-- Custom Tabs -->
           <div class="nav-tabs-custom">
             <ul class="nav nav-tabs">
+             <span id="total" hidden><?php  $total =0; for ($i=0; $i < (int) sizeof($status); $i++) { 
+                              $total += json_encode($result2[$i]['y']) ;
+                            } 
+                              echo  $total;
+                             ?></span>
               <?php if (!isset($chart)) { ?>
                 <li class="active">
                   <a href="#tab_1" data-toggle="tab">By Status Kerja
@@ -152,6 +158,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <?php if (!isset($chart)) { ?>
                           <div class="tab-pane active" id="tab_1">
                             <div id = "container" style = "width: 850px; margin: 0 auto"></div>
+                            
                           </div>
                           <div class="tab-pane active" id="tab_2">
                             <div id = "container2" style = "width: 750px; margin: 0 auto"></div>
@@ -259,6 +266,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
     //---------CHART---------------
 
     $(function () {
+      var tot = $('#total').text();
+      $('#total2').text(parseInt(tot).toLocaleString()+" )");
       $('#container').highcharts({
         chart: {
           type: 'column'

@@ -9,9 +9,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <?php if (! $this->session->userdata('nik')) { redirect('home/overtime_user'); }?>
 
 <style type="text/css">
-#trs th, #shf1 th, #shf2 th, #shf3 th {
-  background-color: #ddd;
-}
+  #trs th, #shf1 th, #shf2 th, #shf3 th {
+    background-color: #ddd;
+  }
 }
 </style>
 
@@ -37,6 +37,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <section class="content container-fluid">
 
         <div class="col-md-12">
+
           <div class="box box-solid">
             <div class="box-body">
               <form class="form-horizontal">
@@ -70,8 +71,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   </div>
                 </div>
 
-                  <!-- ali -->
-              <div class="form-group">
+                <!-- ali -->
+                <div class="form-group">
                   <label class="col-sm-2 control-label">Total Extra Food</label>
                   <div class="col-sm-2">
                     <table class="table table-bordered table-striped text-center" id="shf1">
@@ -110,128 +111,128 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   </div>
                 </div>
 
-              
+
               </form>
             </div>
           </div>
         </div>
 
-         <div class="modal fade" id="myModal">
-            <div class="modal-dialog modal-lg">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h4 style="float: right;" id="modal-title"></h4>
-                  <h4 class="modal-title"><b>Total Makan</b> <b id="sifMakan"></b></h4>
-                </div>
-                <div class="modal-body">
-                  <div class="row">
-                    <div class="col-md-12">
-                      <table id="example2" class="table table-striped table-bordered" style="width: 100%;">
-                        <thead>
-                          <tr> 
-                            <th>No</th>                           
-                            <th>NIK</th>
-                            <th>Nama karyawan</th>                            
-                            <th>Devisi</th>
-                            <th>Departemen</th>
-                            <th>Section</th>
-                            <th>Sub Section</th>
-                            <th>Group</th>
-                          </tr>
-                        </thead>
-                        <tbody id="makan1data">
-                        </tbody>
-                      </table>
-                    </div>
+        <div class="modal fade" id="myModal">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 style="float: right;" id="modal-title"></h4>
+                <h4 class="modal-title"><b>Total Makan</b> <b id="sifMakan"></b></h4>
+              </div>
+              <div class="modal-body">
+                <div class="row">
+                  <div class="col-md-12">
+                    <table id="example2" class="table table-striped table-bordered" style="width: 100%;">
+                      <thead>
+                        <tr> 
+                          <th>No</th>                           
+                          <th>NIK</th>
+                          <th>Nama karyawan</th>                            
+                          <th>Devisi</th>
+                          <th>Departemen</th>
+                          <th>Section</th>
+                          <th>Sub Section</th>
+                          <th>Group</th>
+                        </tr>
+                      </thead>
+                      <tbody id="makan1data">
+                      </tbody>
+                    </table>
                   </div>
                 </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-danger pull-right" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-danger pull-right" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+              </div>
+            </div>
+          </div>
+          <!-- /.modal-dialog -->
+        </div>
+
+        <div class="modal fade" id="myModal2">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 style="float: right;" id="modal-title"></h4>
+                <h4 class="modal-title"><b>Total Transport</b> <b id="sifTrans"></b></h4>
+              </div>
+              <div class="modal-body">
+                <div class="row">
+                  <div class="col-md-12">
+                    <table id="example2" class="table table-striped table-bordered" style="width: 100%;">
+                      <thead>
+                        <tr> 
+                         <th>No</th>                           
+                         <th>NIK</th>
+                         <th>Nama karyawan</th>                            
+                         <th>Devisi</th>
+                         <th>Departemen</th>
+                         <th>Section</th>
+                         <th>Sub Section</th>
+                         <th>Group</th>
+                       </tr>
+                     </thead>
+                     <tbody id="trans1data">
+                     </tbody>
+                   </table>
+                 </div>
+               </div>
+             </div>
+             <div class="modal-footer">
+              <button type="button" class="btn btn-danger pull-right" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+            </div>
+          </div>
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+
+      <div class="modal fade" id="myModal3">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 style="float: right;" id="modal-title"></h4>
+              <h4 class="modal-title"><b>Total Extra Food</b> <b id="sifEfood"></b></h4>
+            </div>
+            <div class="modal-body">
+              <div class="row">
+                <div class="col-md-12">
+                  <table id="example2" class="table table-striped table-bordered" style="width: 100%;">
+                    <thead>
+                      <tr> 
+                        <th>No</th>                           
+                        <th>NIK</th>
+                        <th>Nama karyawan</th>                            
+                        <th>Devisi</th>
+                        <th>Departemen</th>
+                        <th>Section</th>
+                        <th>Sub Section</th>
+                        <th>Group</th>
+                      </tr>
+                    </thead>
+                    <tbody id="extmakanfood">
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </div>
-            <!-- /.modal-dialog -->
-          </div>
-
-          <div class="modal fade" id="myModal2">
-            <div class="modal-dialog modal-lg">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h4 style="float: right;" id="modal-title"></h4>
-                  <h4 class="modal-title"><b>Total Transport</b> <b id="sifTrans"></b></h4>
-                </div>
-                <div class="modal-body">
-                  <div class="row">
-                    <div class="col-md-12">
-                      <table id="example2" class="table table-striped table-bordered" style="width: 100%;">
-                        <thead>
-                          <tr> 
-                           <th>No</th>                           
-                            <th>NIK</th>
-                            <th>Nama karyawan</th>                            
-                            <th>Devisi</th>
-                            <th>Departemen</th>
-                            <th>Section</th>
-                            <th>Sub Section</th>
-                            <th>Group</th>
-                          </tr>
-                        </thead>
-                        <tbody id="trans1data">
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-danger pull-right" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
-                </div>
-              </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-danger pull-right" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
             </div>
-            <!-- /.modal-dialog -->
           </div>
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
 
-           <div class="modal fade" id="myModal3">
-            <div class="modal-dialog modal-lg">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h4 style="float: right;" id="modal-title"></h4>
-                  <h4 class="modal-title"><b>Total Extra Food</b> <b id="sifEfood"></b></h4>
-                </div>
-                <div class="modal-body">
-                  <div class="row">
-                    <div class="col-md-12">
-                      <table id="example2" class="table table-striped table-bordered" style="width: 100%;">
-                        <thead>
-                          <tr> 
-                            <th>No</th>                           
-                            <th>NIK</th>
-                            <th>Nama karyawan</th>                            
-                            <th>Devisi</th>
-                            <th>Departemen</th>
-                            <th>Section</th>
-                            <th>Sub Section</th>
-                            <th>Group</th>
-                          </tr>
-                        </thead>
-                        <tbody id="extmakanfood">
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-danger pull-right" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
-                </div>
-              </div>
-            </div>
-            <!-- /.modal-dialog -->
-          </div>
-
-      </section>
-      <!-- /.content -->
-    </div>
-    <!-- /.content-wrapper -->
-    <!-- /.control-sidebar -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+  <!-- /.control-sidebar -->
   <!-- Add the sidebar's background. This div must be placed
     immediately after the control sidebar -->
     <div class="control-sidebar-bg"></div>
@@ -247,85 +248,85 @@ scratch. This page gets rid of all links and provides the needed markup only.
       });
     });
 
-function makan(id,shift) {
-  $('#sifMakan').text(shift);  
-  $('#myModal').modal('show');
+    function makan(id,shift) {
+      $('#sifMakan').text(shift);  
+      $('#myModal').modal('show');
       var no = 1;
       var tanggal = $("#datepicker").val();
       $.ajax({
-            url: "<?php echo base_url('ot/makan1/')?>",
-            type : "POST",
-            data: {
-              tgl:tanggal,
-              id:id
-            },
-            dataType: 'json',
-            success: function(data){
-              $("#makan1data").empty();
-              $.each(data, function(i, item) {
-                if ( item[0] !="-"){
-                var newdiv1 = $( "<tr>"+                  
-                  "<td>"+no+"</td><td>"+item[0]+"</td>"+
-                  "<td>"+item[1]+"</td><td>"+item[2]+"</td>"+
-                  "<td>"+item[3]+"</td><td>"+item[4]+"</td>"+
-                  "<td>"+item[5]+"</td><td>"+item[6]+"</td>"+
-                  "</tr>");
-                no+=1;
+        url: "<?php echo base_url('ot/makan1/')?>",
+        type : "POST",
+        data: {
+          tgl:tanggal,
+          id:id
+        },
+        dataType: 'json',
+        success: function(data){
+          $("#makan1data").empty();
+          $.each(data, function(i, item) {
+            if ( item[0] !="-"){
+              var newdiv1 = $( "<tr>"+                  
+                "<td>"+no+"</td><td>"+item[0]+"</td>"+
+                "<td>"+item[1]+"</td><td>"+item[2]+"</td>"+
+                "<td>"+item[3]+"</td><td>"+item[4]+"</td>"+
+                "<td>"+item[5]+"</td><td>"+item[6]+"</td>"+
+                "</tr>");
+              no+=1;
 
-                $("#makan1data").append(newdiv1);
-              }
-              });
-
+              $("#makan1data").append(newdiv1);
             }
-          })
-}
+          });
+
+        }
+      })
+    }
 
 
-function extmakan(id,shift) {
-  $('#sifEfood').text(shift);
-  $('#myModal3').modal('show');
+    function extmakan(id,shift) {
+      $('#sifEfood').text(shift);
+      $('#myModal3').modal('show');
       var no = 1;
       var tanggal = $("#datepicker").val();
       $.ajax({
-            url: "<?php echo base_url('ot/extrafood1/')?>",
-            type : "POST",
-            data: {
-              tgl:tanggal,
-              id:id
-            },
-            dataType: 'json',
-            success: function(data){
-              $("#extmakanfood").empty();
-              $.each(data, function(i, item) {
-                if ( item[0] !="-"){
-                var newdiv1 = $( "<tr>"+                  
-                  "<td>"+no+"</td><td>"+item[0]+"</td>"+
-                  "<td>"+item[1]+"</td><td>"+item[2]+"</td>"+
-                  "<td>"+item[3]+"</td><td>"+item[4]+"</td>"+
-                  "<td>"+item[5]+"</td><td>"+item[6]+"</td>"+
-                  "</tr>");
-                no+=1;
+        url: "<?php echo base_url('ot/extrafood1/')?>",
+        type : "POST",
+        data: {
+          tgl:tanggal,
+          id:id
+        },
+        dataType: 'json',
+        success: function(data){
+          $("#extmakanfood").empty();
+          $.each(data, function(i, item) {
+            if ( item[0] !="-"){
+              var newdiv1 = $( "<tr>"+                  
+                "<td>"+no+"</td><td>"+item[0]+"</td>"+
+                "<td>"+item[1]+"</td><td>"+item[2]+"</td>"+
+                "<td>"+item[3]+"</td><td>"+item[4]+"</td>"+
+                "<td>"+item[5]+"</td><td>"+item[6]+"</td>"+
+                "</tr>");
+              no+=1;
 
-                $("#extmakanfood").append(newdiv1);
-              }
-              });
-
+              $("#extmakanfood").append(newdiv1);
             }
-          })
-}
+          });
 
-function extrafood() {
-  var no = 1;
+        }
+      })
+    }
+
+    function extrafood() {
+      var no = 1;
       var tanggal = $("#datepicker").val();
       $.ajax({
-            url: "<?php echo base_url('ot/ga_by_tgl_food/')?>",
-            type : "POST",
-            data: {
-              tgl:tanggal
-              
-            },
-            dataType: 'json',
-              success: function(data){
+        url: "<?php echo base_url('ot/ga_by_tgl_food/')?>",
+        type : "POST",
+        data: {
+          tgl:tanggal
+
+        },
+        dataType: 'json',
+        success: function(data){
           //var s2 = $.parseJSON(data);
           // alert(data[0][1]);
           if (data[0][0] != "gagal") {
@@ -338,103 +339,103 @@ function extrafood() {
             $("#extmakan2").text("0");
             $("#extmakan3").text("0"); 
           }
-            }
-          })
-}
+        }
+      })
+    }
 
-function trans(dari,sampai,id,kode) {
-$('#sifTrans').text(kode);
-  
-  $('#myModal2').modal('show');
+    function trans(dari,sampai,id,kode) {
+      $('#sifTrans').text(kode);
+
+      $('#myModal2').modal('show');
   // alert(id);
-      var no = 1;
-      var tanggal = $("#datepicker").val();
-      $.ajax({
-            url: "<?php echo base_url('ot/trans1/')?>",
-            type : "POST",
-            data: {
-              tgl:tanggal,
-              dari:dari,
-              sampai:sampai,
-              id:id
-            },
-            dataType: 'json',
-            success: function(data){
-              
-              $("#trans1data").empty();
-              $.each(data, function(i, item) {
-                if ( item[0] !="-"){
-                var newdiv1 = $( "<tr>"+                  
-                  "<td>"+no+"</td><td>"+item[0]+"</td>"+
-                  "<td>"+item[1]+"</td><td>"+item[2]+"</td>"+
-                  "<td>"+item[3]+"</td><td>"+item[4]+"</td>"+
-                  "<td>"+item[5]+"</td><td>"+item[6]+"</td>"+
-                  "</tr>");
-                no+=1;
+  var no = 1;
+  var tanggal = $("#datepicker").val();
+  $.ajax({
+    url: "<?php echo base_url('ot/trans1/')?>",
+    type : "POST",
+    data: {
+      tgl:tanggal,
+      dari:dari,
+      sampai:sampai,
+      id:id
+    },
+    dataType: 'json',
+    success: function(data){
 
-                $("#trans1data").append(newdiv1);
-                }
-              });
-            }
-          })
+      $("#trans1data").empty();
+      $.each(data, function(i, item) {
+        if ( item[0] !="-"){
+          var newdiv1 = $( "<tr>"+                  
+            "<td>"+no+"</td><td>"+item[0]+"</td>"+
+            "<td>"+item[1]+"</td><td>"+item[2]+"</td>"+
+            "<td>"+item[3]+"</td><td>"+item[4]+"</td>"+
+            "<td>"+item[5]+"</td><td>"+item[6]+"</td>"+
+            "</tr>");
+          no+=1;
+
+          $("#trans1data").append(newdiv1);
+        }
+      });
+    }
+  })
 }
 
 
-    function changeTanggal() {
-      $("#extmakanfood").empty();
-      $("#makan1data").empty();
-      $("#trans1data").empty();
-      var no = 1;
-      var tanggal = $("#datepicker").val();
+function changeTanggal() {
+  $("#extmakanfood").empty();
+  $("#makan1data").empty();
+  $("#trans1data").empty();
+  var no = 1;
+  var tanggal = $("#datepicker").val();
+  $.ajax({
+    url: "<?php echo base_url('ot/ga_by_tgl/')?>",
+    type : "POST",
+    data: {
+      tgl:tanggal
+    },
+    success: function(data){
+      var s = $.parseJSON(data);
+      if (s[0] != "gagal") {
+        $("#makan1").text(s[0][1]);
+        $("#makan2").text(s[0][2]);
+        $("#makan3").text(s[0][3]); 
+      }
+      else {
+        $("#makan1").text("0");
+        $("#makan2").text("0");
+        $("#makan3").text("0"); 
+      }
+
       $.ajax({
-        url: "<?php echo base_url('ot/ga_by_tgl/')?>",
+        url: "<?php echo base_url('ot/ga_by_tgl_trans/')?>",
         type : "POST",
         data: {
           tgl:tanggal
         },
-        success: function(data){
-          var s = $.parseJSON(data);
-          if (s[0] != "gagal") {
-            $("#makan1").text(s[0][1]);
-            $("#makan2").text(s[0][2]);
-            $("#makan3").text(s[0][3]); 
-          }
-          else {
-            $("#makan1").text("0");
-            $("#makan2").text("0");
-            $("#makan3").text("0"); 
-          }
-              
-          $.ajax({
-            url: "<?php echo base_url('ot/ga_by_tgl_trans/')?>",
-            type : "POST",
-            data: {
-              tgl:tanggal
-            },
-            dataType: 'json',
-            success: function(data2){
-              $("#head").empty();
-              $.each(data2, function(i, item) {
-                var newdiv1 = $( "<tr id='hello"+no+"'>"+
-                  "<th scope='row' width='30%'>"+item[1]+" - "+item[2]+"</th>"+
-                  "<td onclick='trans(\""+item[1]+"\",\""+item[2]+"\",\"b\",\"Bangil\")'>"+item[3]+"</td><td onclick='trans(\""+item[1]+"\",\""+item[2]+"\",\"p\",\"Pasuruan\")'>"+item[4]+"</td>"+
-                  "</tr>");
+        dataType: 'json',
+        success: function(data2){
+          $("#head").empty();
+          $.each(data2, function(i, item) {
+            var newdiv1 = $( "<tr id='hello"+no+"'>"+
+              "<th scope='row' width='30%'>"+item[1]+" - "+item[2]+"</th>"+
+              "<td onclick='trans(\""+item[1]+"\",\""+item[2]+"\",\"b\",\"Bangil\")'>"+item[3]+"</td><td onclick='trans(\""+item[1]+"\",\""+item[2]+"\",\"p\",\"Pasuruan\")'>"+item[4]+"</td>"+
+              "</tr>");
 
-                no+=1;
-                $("#head").append(newdiv1);
+            no+=1;
+            $("#head").append(newdiv1);
 
-              });
-
-              
-            }
           });
 
-            }
-          })
-        }
 
-    
-  </script>
+        }
+      });
+
+    }
+  })
+}
+
+
+</script>
 
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the

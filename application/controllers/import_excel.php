@@ -6,10 +6,11 @@ class import_excel extends CI_Controller {
 		parent::__construct();
 		$this->load->helper('file');
 		$this->load->library(array('PHPExcel','PHPExcel/IOFactory'));
-	}
+        $this->load->model('export_model');
+    }
 
-	public function upload(){
-		$fileName = time().$_FILES['file']['name'];
+    public function upload(){
+      $fileName = time().$_FILES['file']['name'];
 
         $config['upload_path'] = './app/excel/'; //buat folder dengan nama assets di root folder
         $config['file_name'] = $fileName;
@@ -59,12 +60,76 @@ class import_excel extends CI_Controller {
                 //sesuaikan nama dengan nama tabel
 
                 $query = "CALL import_excel(".$rowData[0][0].",'".$newformat."',".$rowData[0][2].")";
-            	$this->db->query($query);
-            	delete_files($config['upload_path']);
+                $this->db->query($query);
+                delete_files($config['upload_path']);
 
             }
             redirect('budget');
+        }    
+
+        public function upload3()
+        { 
+            $file = rand(1000, 100000) . "-" . $_FILES['file']['name'];
+            $file_loc = $_FILES['file']['tmp_name'];
+            $file_size = $_FILES['file']['size'];
+            $file_type = $_FILES['file']['type'];
+            $folder = "./app/excel/";
+            $location = $_FILES['file'];
+
+
+        $new_size = $file_size / 1024; // new file size in KB
+        $new_file_name = strtolower($file);
+        $final_file = str_replace(' ', '-', $new_file_name); // make file name in lower case
+
+        if (move_uploaded_file($file_loc, $folder . $final_file)) {
+
+            //Prepare upload data
+            $upload_data = Array(
+                'file'  => $final_file,
+                'type'  => $file_type,
+                'size'  => $new_size
+            );
+            //Insert into tbl_uploads
+            // $this->db->insert('daily_data2', $upload_data);
+
+            $handle = fopen("C:/xampp/htdocs/myhris/app/excel/$file", "r");
+
+            if ($handle) {
+                while (($line = fgets($handle)) !== false) {
+
+                    $lineArr = explode("\t", "$line");
+                    // instead assigning one by onb use php list -> http://php.net/manual/en/function.list.php
+                    list($pin, $nik, $tgl , $masuk, $keluar, $shift) = $lineArr;
+
+                    $shift2 = trim(preg_replace('/\s\s+/', ' ', $shift));
+
+                    $daily_data = Array(
+                        'tgl'    => date('m/d/Y' , strtotime($tgl)) ,
+                        'nik' => $nik,
+                        'masuk'       => $masuk,
+                        'keluar'       => $keluar,
+                        'shift'       => $shift2,
+                        'hari'       => date('w' , strtotime($tgl)),
+                    );
+
+                    //Insert data
+                    $this->export_model->export_presensi($daily_data);
+                }
+                fclose($handle);
+                $path2 = "C:/xampp/htdocs/myhris/app/excel/$file";
+                unlink($path2) or die("Couldn't delete file");
+            }
+        } else {
+                //Alert error
+            $this->alert('error while uploading file');
         }
+
     }
 
-    ?>
+    protected function alert($text) {
+        return "<script> alert('".$text."'); </script>";
+    }
+
+}
+
+?>

@@ -24,7 +24,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <h1>
           Presence data
           <span class="text-purple">出勤データ</span>
-        </h1>
+        </h1>      
       </section>
 
       <!-- Main content -->
@@ -76,48 +76,74 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <div class="box-footer">
                 <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i> <span>Search</span></button>
                 <a class="btn btn-warning" id="reset" href="<?php echo base_url('home/session_destroy') ?>" ><i class="fa fa-refresh"></i> Reset</a>
-
+                <button class="btn btn-success btn-sm pull-right" type="button" id="import" data-toggle="modal" data-target="#myModal"><i class="fa fa-arrow-down"></i> import presensi</button>
               </div>
             </form>
           </div>
+
           <!-- /.box -->
 
         </div> 
         <div class="col-md-12">
           <div class="box box-solid">
             <div class="box-body">
-              <table id="example1" class="table table-responsive table-striped">
-                <thead>
-                  <th>Date</th>
-                  <th>NIK</th>
-                  <th>Name</th>
-                  <th>Arrive</th>
-                  <th>Leave</th>
-                  <th>Shift</th>
-                </thead>        
-                <tbody>
-                </tbody>
-                <tfoot>
-                  <tr>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                  </tr>
-                </tfoot>
-              </table>
-            </div>
+            <table id="example1" class="table table-responsive table-striped">
+              <thead>
+                <th>Date</th>
+                <th>NIK</th>
+                <th>Name</th>
+                <th>Arrive</th>
+                <th>Leave</th>
+                <th>Shift</th>
+              </thead>        
+              <tbody>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                </tr>
+              </tfoot>
+            </table>
           </div>
-        </div>   
+        </div>
+      </div>   
 
-      </section>
-      <!-- /.content -->
+      <div class="modal fade" id="myModal">
+        <div class="modal-dialog modal-sm">
+          <form method="post" action="<?php echo base_url('import_excel/upload3'); ?>" enctype="multipart/form-data" class="pull-right">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 style="float: right;" id="modal-title"></h4>
+                <h4 class="modal-title"><b>Import Presensi</b> <b id="sifMakan"></b></h4>
+              </div>
+              <div class="modal-body">
+                <div class="row">
+                  <div class="col-md-12">
+                    <input type="file" name="file">
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <input type="submit" name="submit" value="Import" class="btn btn-success btn-sm pull-right">
+                <button type="button" class="btn btn-danger btn-sm pull-left" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
 
-    </div>
-    <!-- /.content-wrapper -->
-    <!-- /.control-sidebar -->
+    </section>
+    <!-- /.content -->
+
+  </div>
+  <!-- /.content-wrapper -->
+  <!-- /.control-sidebar -->
   <!-- Add the sidebar's background. This div must be placed
     immediately after the control sidebar -->
     <div class="control-sidebar-bg"></div>

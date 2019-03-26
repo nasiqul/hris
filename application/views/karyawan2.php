@@ -150,6 +150,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                                 <p class="text-muted">Jabatan</p>
                                 <p id="jabatan"></p>
+
+                                <p class="text-muted">Leader</p>
+                                <p id="atasan"></p>
+                                
                               </div>
                             </div>
                           </div>
@@ -251,6 +255,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     var jabatan = [];
     var grade = [];
     var id_grd;
+    var atasan = [];
 
     $(document).ready(function() {
       $('#example1').DataTable({
@@ -318,6 +323,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             $("#group").text(data[i][32]);
             $("#kode").text(data[i][8]);
             $("#grade").text("[ "+data[i][12]+" ] "+data[i][13]+"");
+             $("#atasan").text(data[i][35]);
             // $("#namaGrade").text();
             $("#jabatan").text(data[i][14]);
             $("#statKaryawan").text(data[i][11]);
@@ -674,10 +680,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
     for (var i = 0; i < grade.length; i++) {
       list8.push(i);
 
-      if (grade2 == grade[i][0])
-        options8.push('<option value="'+grade[i][0]+'" selected>[ '+grade[i][1]+' ] '+grade[i][2]+'</option>');
+      if (grade2 == grade[i][1])
+        options8.push('<option value="'+grade[i][1]+','+grade[i][2]+'" selected>[ '+grade[i][1]+' ] '+grade[i][2]+'</option>');
       else
-        options8.push('<option value="'+grade[i][0]+'">[ '+grade[i][1]+' ] '+grade[i][2]+'</option>');
+        options8.push('<option value="'+grade[i][1]+','+grade[i][2]+'">[ '+grade[i][1]+' ] '+grade[i][2]+'</option>');
     }
 
     $('#grade').text('').append($('<select id="SelectGrade" class="form-control"></select>'));
@@ -696,9 +702,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
       list9.push(i);
 
       if (jabatan2 == jabatan[i][1])
-        options9.push('<option value="'+jabatan[i][0]+'" selected>'+jabatan[i][1]+'</option>');
+        options9.push('<option value="'+jabatan[i][1]+'" selected>'+jabatan[i][1]+'</option>');
       else
-        options9.push('<option value="'+jabatan[i][0]+'">'+jabatan[i][1]+'</option>');
+        options9.push('<option value="'+jabatan[i][1]+'">'+jabatan[i][1]+'</option>');
     }
 
     $('#jabatan').text('').append($('<select id="SelectJabatan" class="form-control"></select>'));
@@ -723,6 +729,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
     var pin2 = $('#pin').text();
     $('#pin').text('').append($('<input />',
+    {
+      'value' : pin2, 
+      'type' : 'text', 
+      'class' : 'form-control', 
+      'id' : 'txtpin'}
+      ));
+
+     var atasan2 = $('#atasan').text();
+    $('#atasan').text('').append($('<input />',
     {
       'value' : pin2, 
       'type' : 'text', 

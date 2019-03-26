@@ -71,7 +71,7 @@ class Karyawan_model extends CI_Model {
 
     private function _get_datatables_query2()
     {
-        $this->db->select("k.nik, k.namaKaryawan, dv.nama as namadev, dp.nama as namadep, k.tanggalMasuk, k.statusKaryawan, k.status");
+        $this->db->select("k.nik, k.namaKaryawan, dv.nama as namadev, dp.nama as namadep, k.tanggalMasuk, k.statusKaryawan, k.status, k.atasan");
         $this->db->from('karyawan k');
         $this->db->join('posisi p','k.nik = p.nik', 'left');
         $this->db->join('devisi dv','p.id_devisi = dv.id', 'left');
@@ -138,7 +138,7 @@ class Karyawan_model extends CI_Model {
 
     public function get_data_karyawan_by_nik2($nik)
     {
-        $this->db->select("pin, k.nik, costCenter, foto, namaKaryawan, d.nama as dev, dp.nama as dep, IFNULL(sc.nama,'-') as sec, tanggalMasuk, jk, statusKaryawan, jb.jabatan, statusKeluarga, tanggalLahir, tempatLahir, alamat, hp, ktp, rekening, bpjstk, jp, bpjskes, npwp, status, p.id_devisi, p.id_dep, p.id_sec, p.id_sub_sec, IFNULL(sub_sec.nama,'-') as sub_sec2, IFNULL(gr.nama,'-') as grup, kd.id as kode, k.kode, gd.kode_grade as grade, gd.nama_grade as nama_grade, k.namaGrade as gdid");
+        $this->db->select("pin, k.nik, costCenter, foto, namaKaryawan, d.nama as dev, dp.nama as dep, IFNULL(sc.nama,'-') as sec,  tanggalMasuk, jk, statusKaryawan, jb.jabatan, statusKeluarga, tanggalLahir, tempatLahir, alamat, hp, ktp, rekening, bpjstk, jp, bpjskes, npwp, status, p.id_devisi, p.id_dep, p.id_sec, p.id_sub_sec, IFNULL(sub_sec.nama,'-') as sub_sec2, IFNULL(gr.nama,'-') as grup, kd.id as kode, k.kode, gd.kode_grade as grade, gd.nama_grade as nama_grade, k.grade as gdid, k.atasan");
         $this->db->from('karyawan k');
         $this->db->join('posisi p', 'p.nik = k.nik', 'left');
         $this->db->join('devisi d', 'p.id_devisi = d.id', 'left');
@@ -147,8 +147,8 @@ class Karyawan_model extends CI_Model {
         $this->db->join('sub_section sub_sec', 'p.id_sub_sec = sub_sec.id', 'left');
         $this->db->join('group1 gr', 'p.id_group = gr.id', 'left');
         $this->db->join('kode kd', 'kd.id = k.kode', 'left');
-        $this->db->join('grade gd', 'gd.id = k.namaGrade', 'left');
-        $this->db->join('jabatan jb', 'jb.id = k.jabatan', 'left');
+        $this->db->join('grade gd', 'gd.kode_grade = k.grade', 'left');
+        $this->db->join('jabatan jb', 'jb.jabatan = k.jabatan', 'left');
         $this->db->where('k.nik',$nik);
         $query = $this->db->get();
         return $query->result();
@@ -410,7 +410,7 @@ class Karyawan_model extends CI_Model {
     }  
 
 
-    public function tambah($foto, $nik, $nama, $tmptL, $tglL, $jk, $ktp, $alamat, $statusK, $dev, $dep, $sec, $subsec, $group, $grade, $jab, $kode, $statusKar, $pin, $tglM, $cs, $hp, $bpjstk, $bpjskes, $no_rek, $npwp, $jp){
+    public function tambah($foto, $nik, $nama, $tmptL, $tglL, $jk, $ktp, $alamat, $statusK, $dev, $dep, $sec, $subsec, $group, $grade, $jab, $kode, $statusKar, $pin, $tglM, $cs, $hp, $bpjstk, $bpjskes, $no_rek, $npwp, $jp, $lead, $ngrade){
 
         $this->db->set('pin', $pin);
         $this->db->set('nik', $nik);
@@ -421,7 +421,8 @@ class Karyawan_model extends CI_Model {
         $this->db->set('tanggalMasuk', date('Y/m/d', strtotime($tglM)));
         $this->db->set('jk', $jk);
         $this->db->set('statusKaryawan', $statusKar);
-        $this->db->set('namaGrade', $grade);
+        $this->db->set('grade', $grade);
+        $this->db->set('namaGrade', $ngrade);
         $this->db->set('jabatan', $jab);
         $this->db->set('statusKeluarga', $statusK);
         $this->db->set('tempatLahir', $tmptL);
@@ -434,6 +435,7 @@ class Karyawan_model extends CI_Model {
         $this->db->set('jp', $jp);
         $this->db->set('bpjskes', $bpjskes);
         $this->db->set('npwp', $npwp);
+        $this->db->set('atasan', $lead);
         $this->db->set('status', 'Aktif');
 
         $this->db->insert('karyawan');

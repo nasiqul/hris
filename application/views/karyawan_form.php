@@ -8,6 +8,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <?php require_once(APPPATH.'views/header/head.php'); ?>
 <?php if (! $this->session->userdata('nik')) { redirect('home/overtime_user'); }?>
 
+<style type="text/css">
+input.error, input select.error {
+  background-color: red;
+}
+</style>
+
 <body class="hold-transition skin-purple sidebar-mini">
   <div class="wrapper">
 
@@ -173,7 +179,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                           <option value="" disabled selected>Select Kode Grade</option>
                           <?php 
                           foreach ($grade as $key) {
-                            echo "<option value='".$key->id."'>[ ".$key->kode_grade." ] ".$key->nama_grade."</option>";
+                            echo "<option value='".$key->kode_grade.",".$key->nama_grade."'>[ ".$key->kode_grade." ] ".$key->nama_grade."</option>";
                           }
                           ?>
                         </select>
@@ -184,7 +190,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <select id="jabatan" class="form-control" name="jabatan" required>
                           <?php 
                           foreach ($jabatan as $key) {
-                            echo "<option value='".$key->id."'>".$key->jabatan."</option>";
+                            echo "<option value='".$key->jabatan."'>".$key->jabatan."</option>";
                           }
                           ?>
                         </select>
@@ -200,6 +206,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
                           }
                           ?>
                         </select>
+                      </div>
+
+                      <div class="form-group">
+                        <label for="leader">Leader NIK</label>
+                        <input type="text" name="leader" id="leader" class="form-control" required>
                       </div>
 
                     </div>
@@ -310,12 +321,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
           nik : {
             digits: true,
             minlength:10,
-            maxlength:10
+            maxlength:10,
+            required: true
           },
           cs: {
             digits: true,
             minlength:10,
-            maxlength:10
+            maxlength:10,
+            required: true
           }
         }
       });
@@ -574,19 +587,19 @@ scratch. This page gets rid of all links and provides the needed markup only.
   }
 
   $('#grade').select2({
-    placeholder: 'Select a month'
+    placeholder: 'Select Grade'
   });
 
   $('#jabatan').select2({
-    placeholder: 'Select a month'
+    placeholder: 'Select Jabatan'
   });
 
   $('#kode').select2({
-    placeholder: 'Select a month'
+    placeholder: 'Select Kode'
   });
 
   $('#statusK').select2({
-    placeholder: 'Select a month'
+    placeholder: 'Select Status Keluarga'
   });
 </script>
 

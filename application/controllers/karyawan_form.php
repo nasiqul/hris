@@ -190,7 +190,9 @@ class Karyawan_form extends CI_Controller {
 			else 
 				$group = '';
 
-			$grade = $_POST['grade'];			
+			$g = explode(",",$_POST['grade']);
+			$grade = $g[0];
+			$ngrade = $g[1];
 			$jab = $_POST['jabatan'];
 			$kode = $_POST['kode'];
 			$statusKar = $_POST['statusKar'];
@@ -203,8 +205,9 @@ class Karyawan_form extends CI_Controller {
 			$no_rek = $_POST['no_rek'];
 			$npwp = $_POST['npwp'];
 			$jp = $_POST['jp'];
+			$lead = $_POST['leader'];
 
-			$result= $this->karyawan_model->tambah($image, $nik, $nama, $tmptL, $tglL, $jk, $ktp, $alamat, $statusK, $dev, $dep, $sec, $subsec, $group, $grade, $jab, $kode, $statusKar, $pin, $tglM, $cs, $hp, $bpjstk, $bpjskes, $no_rek, $npwp, $jp);
+			$result= $this->karyawan_model->tambah($image, $nik, $nama, $tmptL, $tglL, $jk, $ktp, $alamat, $statusK, $dev, $dep, $sec, $subsec, $group, $grade, $jab, $kode, $statusKar, $pin, $tglM, $cs, $hp, $bpjstk, $bpjskes, $no_rek, $npwp, $jp, $lead, $ngrade);
 			echo json_decode($result);
 
 	}
@@ -267,7 +270,9 @@ class Karyawan_form extends CI_Controller {
 		$subsect = $_POST['subsect'];
 		$group = $_POST['group'];
 		$kode = $_POST['kode'];
-		$grade = $_POST['grade'];
+		$g = explode(",",$_POST['grade']);
+		$grade = $g[0];
+		$ngrade = $g[1];
 		$jabatan = $_POST['jabatan'];
 
 		//---- employement --------------
@@ -311,7 +316,8 @@ class Karyawan_form extends CI_Controller {
 
 			// DEVISI
 			'kode' => $kode,
-			'namaGrade' => $grade,
+			'grade' => $grade,
+			'namaGrade' => $ngrade,
 			'jabatan' => $jabatan
 			
 		);

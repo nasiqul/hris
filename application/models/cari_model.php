@@ -27,7 +27,7 @@ class Cari_model extends CI_Model {
 
         $this->db->select('karyawan.nik, karyawan.namaKaryawan, presensi.tanggal, presensi.masuk, presensi.keluar, presensi.shift');
         $this->db->from('presensi');
-        $this->db->join('karyawan','karyawan.nik = presensi.nik');
+        $this->db->join('karyawan','karyawan.nik = presensi.nik', 'left');
 
         $this->db->where('presensi.shift !=','0');
 
@@ -90,9 +90,9 @@ class Cari_model extends CI_Model {
         return $query->num_rows();
     }
 
-    public function count_all()
+    public function count_all($tgl, $nik, $nama, $shift)
     {
-        $this->db->from('presensi');
+        $this->_get_presensi_cari($tgl, $nik, $nama, $shift);
         return $this->db->count_all_results();
     }
 }

@@ -20,7 +20,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <!-- Content Header (Page header) -->
       <section class="content-header">
         <h1>
-          Overtime Form
+          Overtime Form ALI
           <small>Optional description</small>
         </h1>
       </section>
@@ -159,20 +159,20 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <input type="hidden" name="nodoc2" id="nodoc2" value="<?php echo $dt; echo $nod ?>">
             <div class="box-body">
               <div class="col-md-12">
-                <table class="table">
+                <table class="table" border="0">
                   <thead>
-                    <tr>
-                      <th>
+                    <tr>                    
+                      <th > 
                         <b id="totalsemua">Total</b>
                       </th>
-                      <th>
+                      <th></th>
+                      <th>Dari
+                        <input type="text" name="dari" id="dari" class="form-control timepicker" onchange="dari()">
                       </th>
-                      <th colspan="2" name="jam0">
-                        <select class="form-control" id="jamF2" onchange="hitungJam(this.id,$(this).parent().attr('name'));gantiJam();">
-                          <option value="" disabled selected>Select Jam</option>
-                        </select>
+                      <th  name="jam0">Sampai
+                        <input type="text" name="sampai" id="sampai" class="form-control timepicker" onchange="sampai()">
                       </th>
-                      <th><p id="jam0">0</p></th>
+                      <th><p id="jam0">0</p> <p id="jamfix">0</p></th>
                       <th>
                         <select class='form-control' id='transF' name="trans" onchange="gantiTrans()">
                           <option value='-'>-</option>
@@ -243,30 +243,37 @@ scratch. This page gets rid of all links and provides the needed markup only.
     var shift3 = 1;
     arrNik = [];
 
-    var jam = document.getElementById('jam0');
+    // var jam = document.getElementById('jam0');
     var trans = document.getElementById('tranF');
     var nikS = document.getElementById('nikF');
     var txtJam = document.getElementById('txtJam');
 
-    $(document).ready(function() {
+    
 
-     $('#datepicker').datepicker({
+    $(document).ready(function()
+    {
+     $('#submit').onclick(function()
+     {
+      $(this).attr('disabled',true);
+      return false;
+    });
+   });
+
+    $('#datepicker').datepicker({
       autoclose: true,
       format: "dd-mm-yyyy"
     });
 
-     $('.timepicker').timepicker({
+    $('.timepicker').timepicker({
       showInputs: false,
       showMeridian: false
     });
-   });
 
     //nik on enter
     $('#nikF').bind("enterKey",function(e){
       appendRow();
       ali();
     });
-
     $('#nikF').keydown(function(e){
       if(e.keyCode == 13 || e.which == 9)
       {
@@ -281,7 +288,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         return false;
       }
 
-      var j = jam.innerHTML;
+      // var j = jam.innerHTML;
       var n = nikS.value;
       var dep = $("#dep").val();
 
@@ -348,8 +355,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
             var newdiv1 = $( "<div class='col-md-12' style='margin-bottom: 5px' id='"+no+"'>"+
               "<div class='col-md-2'><input type='text' id='nik"+no+"' value='"+nik+"' class='form-control' readonly></div>"+
-              "<div class='col-md-3'><p id='nama"+no+"'>"+nama+"</p></div>"+
-              "<div class='col-md-2' id='sJam"+no+"' name='jam"+no+"'><select id='jamL"+no+"' class='form-control' onchange='changeJams("+no+")'></select></div><div class='col-md-1'><p id='jam"+no+"'>"+j+"</p></div>"+
+              "<div class='col-md-2'><p id='nama"+no+"'>"+nama+"</p></div><div class='col-md-2'><input class='form-control timepicker' id='dari"+no+"' name='dari"+no+"' onchange='dariid("+no+")'></input></div>"+
+              "<div class='col-md-2'><input class='form-control timepicker' id='sampai"+no+"' name='sampai"+no+"' onchange='sampaiid("+no+")'></input></div><div class='col-md-1'><p id='jam"+no+"'></p></div>"+
               "<div class='col-md-1'><select class='form-control' id='trans"+no+"'>"+
               "<option value='-' "+t1+">-</option><option value='B' "+t2+">B</option><option value='P' "+t3+">P</option></select></div>"+
               "<div class='col-md-1'><input type='checkbox' id='makan"+no+"' "+cekM+"></div>"+
@@ -357,18 +364,26 @@ scratch. This page gets rid of all links and provides the needed markup only.
               "<div class='col-md-1'><button class='btn btn-danger btn-xs' id='delete"+no+"' onclick='deleteRow(this); ali()'><i class='fa fa-minus'></i></button></div>"+
               "<input type='hidden' id='idJam"+no+"'></div>");
 
-            $("#peserta").append(newdiv1);
+            $("#peserta").append(newdiv1).find('.timepicker').timepicker({
+              showInputs: false,
+              showMeridian: false,
+            });
 
-            var $options = $("#jamF2 > option").clone();
-            $('#jamL'+no).append($options);
-            var idB = $('#jamF2').find(':selected')[0].value;
-            $('#jamL'+no).val(idB);
+            // var $options = $("#jamF2 > option").clone();
+            // $('#jamL'+no).append($options);
+            // var idB = $('#jamF2').find(':selected')[0].value;
+            var sampai = $('#sampai').val();
+            var dari = $('#dari').val();
+            var jam = $('#jam0').text();
+            $('#jam'+no).text(jam);
+            $('#sampai'+no).val(sampai);
+            $('#dari'+no).val(dari);
 
-            var jamZ = $("#jam0").text();
+            // var jamZ = $("#jam0").text();
 
-            var selects = $("#jamF2").find(':selected')[0].id;
+            // var selects = $("#jamF2").find(':selected')[0].id;
 
-            $('#idJam'+no).val(selects);
+            // $('#idJam'+no).val(selects);
 
             $('#nomor').val(no);
 
@@ -397,11 +412,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
         arrNik = [];
       }
 
-      no-=1;
-      
       var removed = arrNik.splice(parseInt(ids) - 1,1);
       console.log(arrNik);
-
       $(elem).parent('div').parent('div').remove();
 
       var newid = parseInt(ids) + 1;
@@ -421,11 +433,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
       $('#totalsemua').text("Total : "+nomorali);
       
-
+      no-=1;
       var z = no - 1;
 
       for (var i =  ids; i <= z; i++) { 
-        var newid = parseInt  + 1;
+        var newid = parseInt(i)  + 1;
         var oldid = newid - 1;
         jQuery("#"+newid).attr("id",oldid);
         jQuery("#nik"+newid).attr("id","nik"+oldid);
@@ -602,9 +614,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
               var nik1 = document.getElementById('nik'+i).value;
 
-              var jamD = $("#jamL"+i+" option:selected").text();
-
-              var jm = jamD.split(' - ');
+              var sampai = $('#sampai'+i).val();
+              var dari = $('#dari'+i).val();
 
               var jamS = $("#jam"+i).text();
 
@@ -629,8 +640,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 data: {
                   'nodoc2': idDoc,
                   'nik': nik1,
-                  'dari': jm[0],
-                  'sampai': jm[1],
+                  'dari': dari,
+                  'sampai': sampai,
                   'jam': jamS,
                   'trans': transS,
                   'makan': makanS,
@@ -846,6 +857,222 @@ function getHari() {
   });
 }
 
+function dari()
+{
+  var sampai1 = $('#sampai').val();
+  var dari1 = $('#dari').val();
+
+  jam = sampai1.split(":")[0] - dari1.split(":")[0];
+  menit = sampai1.split(":")[1] - dari1.split(":")[1];
+
+  if (sampai1 <= "12:00" && dari1 >= "13:00"){
+    a=1;
+  }else{
+    a=0;
+  }
+
+  menit = menit.toString().length<2?'0'+menit:menit;
+  if (menit<0){
+    jam--;
+    menit = 60 + menit;        
+  }
+
+  jam = jam.toString().length<2?'0'+jam:jam;
+  if( jam < 0){
+    ab = jam + 24;
+  }else
+  {
+    ab = jam;
+  }
+ //  if (menit.toString() > 0)
+ //  {
+
+ //    $('#jam0').text(ab-a+"."+(menit/60).toString().split(".")[1]);
+ //  }    
+ //  else{
+ //   $('#jam0').text(ab-a+"."+(menit/60));
+ // }
+
+ $('#jam0').text(ab-a+"."+menit);
+
+ var jam = $('#jam0').text();
+ var dari = $('#dari').val();
+ for (var i = 1; i < no; i++) {
+  $('#dari'+i).val(dari);
+  $('#jam'+i).text(jam);
+}      
+
+}
+
+function sampai()
+{
+  var sampai1 = $('#sampai').val();
+  var dari1 = $('#dari').val();
+  var tgl = $('#datepicker').val();
+  var shift = $("#shiftF").find(':selected')[0].value;
+
+
+  jam = sampai1.split(":")[0] - dari1.split(":")[0];
+  menit = sampai1.split(":")[1] - dari1.split(":")[1];
+
+  if (sampai1 <= "12:00" && dari1 >= "13:00"){
+    a=1;
+  }else{
+    a=0;
+  }
+
+  menit = menit.toString().length<2?'0'+menit:menit;
+  if (menit<0){
+    jam--;
+    menit = 60 + menit;        
+  }
+
+  jam = jam.toString().length<2?'0'+jam:jam;
+  if( jam < 0){
+    ab = jam + 24;
+  }else
+  {
+    ab = jam;
+  }
+ //  if (menit.toString() > 0)
+ //  {
+
+ //    $('#jam0').text(ab-a+"."+(menit/60).toString().split(".")[1]);
+ //  }else{
+ //   $('#jam0').text(ab-a+"."+(menit/60));
+ // }
+
+ $('#jam0').text(ab-a+"."+menit);
+
+
+ $.ajax({
+  type: 'GET',
+  url: '<?php echo base_url("ot/get_break") ?>',
+  data: {
+    'tgl': tgl,
+    'dari': dari1,
+    'sampai': sampai1,
+    'shift': shift
+  },
+  success: function (data) {
+
+    var jam = $.parseJSON(data);
+    var istirahat = jam[0][0];
+    var jam2 = $('#jam0').text();
+
+    if (istirahat.split(":")[1].toString() > 0)
+  {
+
+     asd = (istirahat.split(":")[1]/60).toString().split(".")[1];
+  }else{
+  asd = istirahat.split(":")[1]/60;
+ }
+
+    jamok = jam2.split(".")[0] - istirahat.split(":")[0];
+  menitok = jam2.split(".")[1] - asd;
+
+  menitok = menitok.toString().length<2?'0'+menitok:menitok;
+  if (menitok<0){
+    jamok--;
+    menitok = 60 + menitok;        
+  }
+
+  // alert(asd);
+
+  jamok = jamok.toString().length<2?'0'+jamok:jamok;
+
+      $('#jamfix').text(jamok+"."+menitok);
+    var sampai = $('#sampai').val();
+    for (var i = 1; i < no; i++) {
+      $('#sampai'+i).val(sampai);
+      $('#jam'+i).text(jam2);
+    }
+  }
+});
+
+}
+
+function dariid(id)
+{
+  var id = id;
+  var sampai1 = $('#sampai'+id).val();
+  var dari1 = $('#dari'+id).val();
+
+  jam = sampai1.split(":")[0] - dari1.split(":")[0];
+  menit = sampai1.split(":")[1] - dari1.split(":")[1];
+
+  if (sampai1 <= "12:00" && dari1 >= "13:00"){
+    a=1;
+  }else{
+    a=0;
+  }
+
+  menit = menit.toString().length<2?'0'+menit:menit;
+  if (menit<0){
+    jam--;
+    menit = 60 + menit;        
+  }
+
+  jam = jam.toString().length<2?'0'+jam:jam;
+  if( jam < 0){
+    ab = jam + 24;
+  }else
+  {
+    ab = jam;
+  }
+  if (menit.toString() > 0)
+  {
+
+    $('#jam'+id).text(ab-a+"."+(menit/60).toString().split(".")[1]);
+  }    
+  else{
+   $('#jam'+id).text(ab-a+"."+(menit/60));
+ }
+
+
+
+
+}
+
+function sampaiid(id)
+{
+  var sampai1 = $('#sampai'+id).val();
+  var dari1 = $('#dari'+id).val();
+
+  jam = sampai1.split(":")[0] - dari1.split(":")[0];
+  menit = sampai1.split(":")[1] - dari1.split(":")[1];
+
+  if (sampai1 <= "12:00" && dari1 >= "13:00"){
+    a=1;
+  }else{
+    a=0;
+  }
+
+  menit = menit.toString().length<2?'0'+menit:menit;
+  if (menit<0){
+    jam--;
+    menit = 60 + menit;        
+  }
+
+  jam = jam.toString().length<2?'0'+jam:jam;
+  if( jam < 0){
+    ab = jam + 24;
+  }else
+  {
+    ab = jam;
+  }
+  if (menit.toString() > 0)
+  {
+
+    $('#jam'+id).text(ab-a+"."+(menit/60).toString().split(".")[1]);
+  }else{
+   $('#jam'+id).text(ab-a+"."+(menit/60));
+ }
+
+
+
+}
+
 function changeJams(id) {
   var hasilJam = $("#jamL"+id).find('option:selected').attr("name");
   var selects = $("#jamL"+id).find(':selected')[0].id;
@@ -859,6 +1086,8 @@ function changeJams(id) {
 $('input[type="checkbox"].minimal').iCheck({
   checkboxClass: 'icheckbox_minimal-purple'
 })
+
+
 </script>
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the

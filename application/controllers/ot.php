@@ -13,6 +13,7 @@ class Ot extends CI_Controller {
 		$this->load->model('over_cari_chart');
 		$this->load->model('cari_over_dep');
 		$this->load->model('over_cari_chart2');
+		$this->load->model('over_model_new');
 		$this->load->model('ot_summary');
 		$this->load->model('over_detail_mControl');
 		$this->load->library('ciqrcode');
@@ -63,10 +64,14 @@ class Ot extends CI_Controller {
 
 	public function ajax_ot()
 	{
-		if(isset($_GET["tgl"])){
+		if(isset($_GET["tgl"]) && $_GET['tgl']){
 			$list = $this->over_model->get_data_ot(date("Y-m-d",strtotime($_GET["tgl"])));
+			$tot = $this->over_model->count_all2(date("Y-m-d",strtotime($_GET["tgl"])));
+			$filter = $this->over_model->count_filtered2(date("Y-m-d",strtotime($_GET["tgl"])));
 		}else{
-			$list = $this->over_model->get_data_ot_defaeult();	
+			$list = $this->over_model->get_data_ot(date("Y-m-d"));	
+			$tot = $this->over_model->count_all2(date("Y-m-d"));
+			$filter = $this->over_model->count_filtered2(date("Y-m-d"));
 		}
 		
 
@@ -104,6 +109,64 @@ class Ot extends CI_Controller {
 
 		$output = array(
 			"draw" => $_GET['draw'],
+			"recordsFiltered" => $filter,
+			"recordsTotal" => $tot,
+			"data" => $data
+		);
+            //output to json format
+		echo json_encode($output);
+	}
+
+	// OT NEW
+	public function ajax_ot2()
+	{
+		if(isset($_GET["tgl"]) && $_GET['tgl']){
+			$list = $this->over_model_new->get_data_ot(date("Y-m-d",strtotime($_GET["tgl"])));
+			$tot = $this->over_model_new->count_all2(date("Y-m-d",strtotime($_GET["tgl"])));
+			$filter = $this->over_model_new->count_filtered2(date("Y-m-d",strtotime($_GET["tgl"])));
+		}else{
+			$list = $this->over_model_new->get_data_ot(date("Y-m-d"));	
+			$tot = $this->over_model_new->count_all2(date("Y-m-d"));
+			$filter = $this->over_model_new->count_filtered2(date("Y-m-d"));
+		}
+		
+
+		$data = array();
+		foreach ($list as $key) {
+			$row = array();
+			$tg = date("d-m-Y",strtotime($key->tanggal));
+			$row[] = $key->id;
+			$row[] = $tg;
+			$row[] = $key->nik;
+			$row[] = $key->namaKaryawan;
+			$row[] = $key->masuk;
+			$row[] = $key->keluar;
+			$row[] = $key->jam_plan;
+
+			if ($key->aktual > $key->jam_plan && $key->final == 0 && $key->status == 0)
+				$row[] = "<button class='btn btn-danger btn-xs' id=d".$key->nik.$key->id." onclick='applyJam(".$key->id.",\"".$key->nik."\",".$key->jam_plan.",\"".$tg."\")'><i class='fa fa-close'></i></button>  &nbsp <b>"
+			.$key->aktual."</b> 
+			&nbsp<button class='btn btn-success btn-xs' id=c".$key->nik.$key->id." onclick='applyJam(".$key->id.",\"".$key->nik."\",".$key->aktual.",\"".$tg."\")'><i class='fa fa-check'></i></button>";
+			else
+				$row[] = $key->aktual;
+			$row[] = $key->diff;
+			$row[] = "<p id='f".$key->nik.$key->id."'>".$key->final2."<p>";
+
+			if ($key->status == 0) {
+				$row[] = "<button class='btn btn-primary btn-xs' onclick='detail_spl(".$key->id.")'>Detail</button>
+				<button class='btn btn-success btn-xs' id='conf".$key->nik.$key->id."' onclick='modalOpen(\"".$key->nik."\",".$key->final2.",\"".$tg."\",\"".$key->id."\")'><i class='fa fa-thumbs-up'></i> OK</button>";
+			}
+			else {
+				$row[] = "<button class='btn btn-primary btn-xs' onclick='detail_spl(".$key->id.")'>Detail</button>";
+			}
+
+			$data[] = $row;
+		}
+
+		$output = array(
+			"draw" => $_GET['draw'],
+			"recordsFiltered" => $filter,
+			"recordsTotal" => $tot,
 			"data" => $data
 		);
             //output to json format
@@ -112,7 +175,6 @@ class Ot extends CI_Controller {
 
 	public function updatedataover()
 	{
-
 		if($_GET["tgl"] != ""){
 			$list = $this->over_model->caobaaa(date("Y-m-d",strtotime($_GET["tgl"])) );
 		}else{
@@ -125,11 +187,18 @@ class Ot extends CI_Controller {
 			$budget = 0;
 			
 
-			if ($key->diff =="0") {				
+			if ($key->diff == "0" && $key->jml == "1") {				
 				$where = array(
 					'nik' => $key->nik,
 					'id_ot' =>$key->id
 				);
+
+				$nik = $key->nik;
+				$tgl = $key->tanggal;
+				$hari = $key->hari;
+				$jam = $key->final;
+
+				$this->over_model->change_over($nik, $tgl, $hari, $jam);
 
 				$this->over_model->update_data_over($where,'over_time_member');
 				$this->over_model->update_data_final($where,'over_time_member',$key->final2);
@@ -156,9 +225,6 @@ class Ot extends CI_Controller {
 					}
 
 				}
-				
-
-
 			}
 
 			echo json_encode($budget);
@@ -362,6 +428,8 @@ class Ot extends CI_Controller {
 
 		$cc = $this->over_model->get_cc($nik, $jml, $tgl, $id);
 
+		$this->over_model->change_over($nik, $tgl, $jml);
+
 		$this->over_model->tambah_aktual($cc[0]->costCenter, $jml, $tgl);
 
 	}
@@ -469,10 +537,22 @@ class Ot extends CI_Controller {
 
 	public function ajax_ot_user()
 	{
-		$list = $this->over_user_model->get_ot_user();
+		if (isset($_GET['tanggal'])) {
+			$tgl = $_GET['tanggal'];
+			
+		} else {
+			$tgl = date('Y-m-d');
 
-		$tot = $this->over_user_model->count_all();
-		$filter = $this->over_user_model->count_filtered();
+		}
+
+		$sub = $_GET['sub'];
+		$subsec = $_GET['subsec'];
+		$group = $_GET['group'];
+
+		$list = $this->over_user_model->get_ot_user($tgl,$sub,$subsec,$group);
+
+		$tot = $this->over_user_model->count_all($tgl,$sub,$subsec,$group);
+		$filter = $this->over_user_model->count_filtered($tgl,$sub,$subsec,$group);
 		$data = array();
 		if(!empty($list)) {
 			$no = 1;
@@ -481,7 +561,12 @@ class Ot extends CI_Controller {
 				$row[] = $no;
 				$row[] = $key->id;
 				$row[] = $key->tanggal;
-				$row[] = "<button class='btn btn-primary btn-xs' onclick='detail_spl(".$key->id."); exporta(".$key->id.")'>Detail</button>";
+				if ($key->status != '0') 
+					$row[] = "<button class='btn btn-primary btn-xs' onclick='detail_spl(".$key->id."); exporta(".$key->id.")'>Detail</button>";
+				else
+					$row[] = "<button class='btn btn-primary btn-xs' onclick='detail_spl(".$key->id."); exporta(".$key->id.")'>Detail</button> &nbsp;
+				<button class='btn btn-danger btn-xs' onclick='modal_open(".$key->id.");'><i class='fa fa-trash'></i></button>";
+				
 
 				$data[] = $row;
 
@@ -1336,6 +1421,31 @@ class Ot extends CI_Controller {
 		);
             //output to json format
 		echo json_encode($output);
+	}
+
+	public function delete_ot()
+	{
+		$id_ot = $_POST['id'];
+		$this->over_model->hapus($id_ot);
+	}
+
+	public function get_break()
+	{
+		$hari = date('w',strtotime($_GET['tgl']));
+		$dari = $_GET['dari'];
+		$sampai = $_GET['sampai'];
+		$shift = $_GET['shift'];
+
+		$list = $this->over_model->get_break($hari, $dari, $sampai, $shift);
+
+		foreach ($list as $key) {
+			$row = array();
+			$row[] = $key->istirahat;
+
+			$data[] = $row;
+		}
+
+		echo json_encode($data);
 	}
 
 	public function exportexcel($id){
