@@ -90,7 +90,7 @@ class Budget_model extends CI_Model {
         LEFT JOIN cost_center_budget as a on a.id_cc = c.costCenter
         LEFT JOIN master_cc as b on a.id_cc = b.id_cc        
         where a.period = '".$tgl."'
-        GROUP BY c.costCenter";ssss
+        GROUP BY c.costCenter";
         $query = $this->db->query($q);
         return $query->result();
     }
