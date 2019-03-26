@@ -1367,10 +1367,12 @@ public function exportdatahr($id)
 
 public function get_presentase($n1,$n2)
 {
-    $q = "select mon, kode, sum(budget) as budget, sum(aktual) as aktual from
-    (
-    select mon, c.kode, c.id_cc, karyawan*budget as budget, aktual from
-    (
+    $q = "      
+select mon, kode, sum(budget_tot) as budget_tot2, aktual from
+(
+    
+select mon, c.id_cc, c.kode, karyawan, budget, karyawan * budget as budget_tot, aktual from 
+(
     select mon, master_cc.id_cc, kode, sum(tot_karyawan) as karyawan from (
     select mon, costCenter, count(if(if(date_format(a.tanggalMasuk, '%Y-%m') < mon, 1, 0 ) - if(date_format(a.tanggalKeluar, '%Y-%m') < mon, 1, 0 ) = 0, null, 1)) as tot_karyawan from
     (
@@ -1387,16 +1389,27 @@ public function get_presentase($n1,$n2)
     having mon = '".$n1."'
     ) as b 
     left join master_cc on master_cc.id_cc = b.costCenter
+        where master_cc.id_cc IS NOT NULL
     GROUP BY mon, kode, master_cc.id_cc
-    ) as c
-    left join
-    (
-    select sum(budget) as budget, sum(aktual) as aktual, kode, master_cc.id_cc from cost_center_budget left join master_cc on master_cc.id_cc = cost_center_budget.id_cc where cost_center_budget.period = '".$n2."' group by kode, master_cc.id_cc
-    ) as d
-    on d.kode = c.kode and d.id_cc = c.id_cc
-    ) as e
-    where kode IS NOT NULL
-    group by mon, kode
+        
+    ) as b
+    
+    left join (
+        select cost_center_budget.id_cc, cost_center_budget.period, cost_center_budget.budget, master_cc.kode from cost_center_budget
+        left join master_cc on  master_cc.id_cc = cost_center_budget.id_cc
+        where date_format(period, '%Y-%m') = '".$n1."'
+    ) as c on c.id_cc = b.id_cc
+    
+    left join (
+        select over.nik, over.tanggal, over.jam, karyawan.costCenter, sum(jam) as aktual from over
+        left join karyawan on karyawan.nik = over.nik
+        where date_format(tanggal, '%Y-%m') = '".$n1."'
+        and karyawan.costCenter IS NOT NULL
+        group by costCenter
+    ) as r on r.costCenter = b.id_cc
+    
+    ) as m
+    GROUP BY m.kode
     
 
     ";

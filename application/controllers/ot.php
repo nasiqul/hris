@@ -1378,7 +1378,7 @@ class Ot extends CI_Controller {
 		$data = array();
 		foreach ($list as $key) {
 			$row = array();
-			$row["budget"] = (int) $key->budget;
+			$row["budget"] = (int) $key->budget_tot2;
 			$row["aktual"] = (int) $key->aktual;
 			$row["kode"] = $key->kode;
 
