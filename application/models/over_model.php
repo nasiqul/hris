@@ -1368,7 +1368,7 @@ public function exportdatahr($id)
 public function get_presentase($n1,$n2)
 {
     $q = "      
-select mon, kode, sum(budget_tot) as budget_tot2, aktual from
+select mon, kode, sum(budget_tot) as budget_tot2, sum(aktual) as aktual from
 (
     
 select mon, c.id_cc, c.kode, karyawan, budget, karyawan * budget as budget_tot, aktual from 
