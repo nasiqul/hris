@@ -118,6 +118,7 @@ class import_excel extends CI_Controller {
                 fclose($handle);
                 $path2 = "C:/xampp/htdocs/myhris/app/excel/$file";
                 unlink($path2) or die("Couldn't delete file");
+                redirect('home/presensi');
             }
         } else {
                 //Alert error

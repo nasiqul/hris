@@ -22,16 +22,6 @@ class Over_model extends CI_Model {
         return $query->result();
     }
 
-    public function get_data_ot($tgl)
-    {
-        $this->_get_datatables_query($tgl);
-        if($_GET['length'] != -1)
-            $this->db->limit($_GET['length'], $_GET['start']);
-        $query = $this->db->get();
-        return $query->result();
-    }
-
-    
     public function caobaaa_default()
     {
         $this->db->select("tanggal, nik,nama,masuk,keluar,id,shift,status,jam,final,id_jam,jam_lembur, IFNULL(aktual, 0) as aktual, IFNULL(diff, 0) as diff, IFNULL(final2, 0) as final2");
@@ -107,6 +97,16 @@ class Over_model extends CI_Model {
         return $query->result();
 
     }
+
+    public function get_data_ot($tgl)
+    {
+        $this->_get_datatables_query($tgl);
+        if($_GET['length'] != -1)
+            $this->db->limit($_GET['length'], $_GET['start']);
+        $query = $this->db->get();
+        return $query->result();
+    }
+
 
     public function caobaaa($tgl)
     {
@@ -1431,8 +1431,7 @@ public function hapus($id)
 
 public function change_over($nik, $tgl, $jam)
 {
-    $tgl2 = date('Y-m-d',strtotime($tgl));
-    $qcekTgl = "SELECT * FROM kalender where tanggal = '".$tgl2."'";
+    $qcekTgl = "SELECT * FROM kalender where tanggal = '".$tgl."'";
     $cekTgl = $this->db->query($qcekTgl);
 
     if($cekTgl->num_rows() > 0) {
@@ -1441,6 +1440,7 @@ public function change_over($nik, $tgl, $jam)
     else {
         $hari = 'N';
     }
+
     $this->db->query('CALL masukDataOverSPLAktual ("'.$nik.'","'.$tgl.'","'.$hari.'","'.$jam.'")');
 }
 

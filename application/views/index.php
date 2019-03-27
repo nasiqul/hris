@@ -76,7 +76,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <div class="box-footer">
                 <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i> <span>Search</span></button>
                 <a class="btn btn-warning" id="reset" href="<?php echo base_url('home/session_destroy') ?>" ><i class="fa fa-refresh"></i> Reset</a>
-                <button class="btn btn-success btn-sm pull-right" type="button" id="import" data-toggle="modal" data-target="#myModal"><i class="fa fa-arrow-down"></i> import presensi</button>
+                <button class="btn btn-success btn-sm pull-right" type="button" id="import" onclick="openModal()"><i class="fa fa-arrow-down"></i> import presensi</button>
               </div>
             </form>
           </div>
@@ -179,6 +179,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
         } );
       } );
     })
+
+    function openModal() {
+      $('#myModal').modal({backdrop: 'static', keyboard: false});
+    }
 
     $('#datepicker').datepicker({
       autoclose: true,

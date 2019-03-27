@@ -286,7 +286,7 @@ class Home extends CI_Controller {
             $this->session->set_userdata($newdata);
         }
         $data['menu'] = 'ovr';
-        $this->load->view('overtime',$data);
+        $this->load->view('overtime2',$data);
     }
 
     public function presensi()

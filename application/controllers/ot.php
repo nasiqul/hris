@@ -143,22 +143,17 @@ class Ot extends CI_Controller {
 			$row[] = $key->keluar;
 			$row[] = $key->jam_plan;
 
-			if ($key->aktual > $key->jam_plan && $key->final == 0 && $key->status == 0)
+			if ($key->aktual > $key->jam_plan)
 				$row[] = "<button class='btn btn-danger btn-xs' id=d".$key->nik.$key->id." onclick='applyJam(".$key->id.",\"".$key->nik."\",".$key->jam_plan.",\"".$tg."\")'><i class='fa fa-close'></i></button>  &nbsp <b>"
 			.$key->aktual."</b> 
 			&nbsp<button class='btn btn-success btn-xs' id=c".$key->nik.$key->id." onclick='applyJam(".$key->id.",\"".$key->nik."\",".$key->aktual.",\"".$tg."\")'><i class='fa fa-check'></i></button>";
 			else
 				$row[] = $key->aktual;
 			$row[] = $key->diff;
-			$row[] = "<p id='f".$key->nik.$key->id."'>".$key->final2."<p>";
+			$row[] = "<p id='f".$key->nik.$key->id."'>".$key->final."<p>";
 
-			if ($key->status == 0) {
-				$row[] = "<button class='btn btn-primary btn-xs' onclick='detail_spl(".$key->id.")'>Detail</button>
-				<button class='btn btn-success btn-xs' id='conf".$key->nik.$key->id."' onclick='modalOpen(\"".$key->nik."\",".$key->final2.",\"".$tg."\",\"".$key->id."\")'><i class='fa fa-thumbs-up'></i> OK</button>";
-			}
-			else {
-				$row[] = "<button class='btn btn-primary btn-xs' onclick='detail_spl(".$key->id.")'>Detail</button>";
-			}
+			$row[] = "<button class='btn btn-primary btn-xs' onclick='detail_spl(".$key->id.")'>Detail</button>
+			<button class='btn btn-success btn-xs' id='conf".$key->nik.$key->id."' onclick='modalOpen(\"".$key->nik."\",".$key->final.",\"".$tg."\",\"".$key->id."\")'><i class='fa fa-thumbs-up'></i> OK</button>";
 
 			$data[] = $row;
 		}
@@ -176,58 +171,64 @@ class Ot extends CI_Controller {
 	public function updatedataover()
 	{
 		if($_GET["tgl"] != ""){
-			$list = $this->over_model->caobaaa(date("Y-m-d",strtotime($_GET["tgl"])) );
-		}else{
-			$list = $this->over_model->caobaaa_default();
+			$list = $this->over_model_new->tabel_konfirmasi(date("Y-m-d",strtotime($_GET["tgl"])) );
 		}
 		
 		$data = array();
 		foreach ($list as $key) {
 			$cost = 0;	
 			$budget = 0;
-			
+			if ($key->jml_nik == "1") {
 
-			if ($key->diff == "0" && $key->jml == "1") {				
-				$where = array(
-					'nik' => $key->nik,
-					'id_ot' =>$key->id
-				);
+				if ($key->diff == "0") {				
 
-				$nik = $key->nik;
-				$tgl = $key->tanggal;
-				$hari = $key->hari;
-				$jam = $key->final;
-
-				$this->over_model->change_over($nik, $tgl, $hari, $jam);
-
-				$this->over_model->update_data_over($where,'over_time_member');
-				$this->over_model->update_data_final($where,'over_time_member',$key->final2);
-
-				$nikkar = "";
-				$nikkar = $this->db->query("SELECT costCenter FROM karyawan WHERE NIK='".$key->nik."'");
-				
-				foreach ($nikkar->result() as $row) //Iterate through results
-				{
-					$cost=$row->costCenter;
-					$aktual = "";
-					$aktual = $this->db->query("SELECT aktual FROM cost_center_budget WHERE id_cc='".$cost."'");
-					foreach ($aktual->result() as $row) //Iterate through results
-					{
-						$budget=$row->aktual;
-						$total =  (float) $budget + (float) $key->final2;
-						$tgl = date('Y-m',strtotime($key->tanggal))."-01";
-
-						$where2 = array(
-							'id_cc' => $cost,
-							'period' => $tgl
+					if ($key->jam_plan != "0") {
+						$where = array(
+							'nik' => $key->nik,
+							'id_ot' =>$key->id
 						);
-						$this->over_model->update_data_budget($where2,'cost_center_budget',$total);
+
+						$jam = $key->jam_plan;
+
+						$this->over_model->update_data_over($where,'over_time_member');
+						$this->over_model->update_data_final($where,'over_time_member',$key->final2);
+
+					}
+					else {
+						$jam = "0";
 					}
 
+					$nik = $key->nik;
+					$tgl = $key->tanggal;
+
+					$this->over_model->change_over($nik, $tgl, $jam);
+
+					$nikkar = "";
+					$nikkar = $this->db->query("SELECT costCenter FROM karyawan WHERE NIK='".$key->nik."'");
+					
+					foreach ($nikkar->result() as $row) //Iterate through results
+					{
+						$cost = $row->costCenter;
+						$aktual = "";
+						$aktual = $this->db->query("SELECT aktual FROM cost_center_budget WHERE id_cc='".$cost."' and DATE_FORMAT(period,'%Y-%m') =  DATE_FORMAT('".$key->tanggal."','%Y-%m')");
+						foreach ($aktual->result() as $row) //Iterate through results
+						{
+							$act = $row->aktual;
+							$total =  (float) $act + (float) $key->final2;
+							$tgl = date('Y-m',strtotime($key->tanggal))."-01";
+
+							$where2 = array(
+								'id_cc' => $cost,
+								'period' => $tgl
+							);
+							$this->over_model->update_data_budget($where2,'cost_center_budget',$total);
+						}
+
+					}
 				}
 			}
 
-			echo json_encode($budget);
+			// echo json_encode($s);
 		}
 
 	}
@@ -425,10 +426,11 @@ class Ot extends CI_Controller {
 		$tgl = $_POST['tgl'];
 		$jml = $_POST['tot'];
 		$id = $_POST['id'];
+		$tgl2 = date('Y-m-d',strtotime($tgl));
 
 		$cc = $this->over_model->get_cc($nik, $jml, $tgl, $id);
 
-		$this->over_model->change_over($nik, $tgl, $jml);
+		$this->over_model->change_over($nik, $tgl2, $jml);
 
 		$this->over_model->tambah_aktual($cc[0]->costCenter, $jml, $tgl);
 

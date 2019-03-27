@@ -25,17 +25,25 @@ class Over_model_new extends CI_Model {
 
     private function _get_datatables_query($tgl)
     {
-        $this->db->select("IFNULL(d.id,'-') as id, over.tanggal, over.nik, karyawan.namaKaryawan, presensi.masuk, presensi.keluar, over.jam as aktual, IFNULL(d.jam,0) as jam_plan, IFNULL((over.jam - d.jam),0) as diff, IF(final = 0 OR final IS NULL, d.jam, 0) as final2, final, d.status");
-        $this->db->from("over");
-        $this->db->join('(
-            select over_time_member.id_ot, over_time.id, tanggal, nik, jam, final, over_time_member.status from over_time
-            left join over_time_member on over_time_member.id_ot = over_time.id
-        ) d','d.tanggal = over.tanggal and d.nik = over.nik','left');
-        $this->db->join("karyawan","karyawan.nik = over.nik","left");
-        $this->db->join("presensi","presensi.nik = over.nik","left");
-        $this->db->join("presensi p2","p2.tanggal = over.tanggal","left");
-        $this->db->where("over.tanggal = '".$tgl."'");
-        $this->db->group_by(array("over.tanggal", "over.nik", "d.id_ot"));
+        $this->db->select("over_time.id, over_time.tanggal, om.nik, karyawan.namaKaryawan, p.masuk, p.keluar, over_time.hari, om.jam as jam_plan, IFNULL(p2.jam,0) as aktual, (IFNULL(p2.jam,0) - om.jam) as diff, IF(om.final = 0, om.jam, om.final) as final");
+        $this->db->from("(
+            select tanggal, id, hari from over_time
+            where tanggal = '".$tgl."'
+        ) over_time");
+        $this->db->join('over_time_member om','om.id_ot = over_time.id');
+        $this->db->join("(
+            select nik, tanggal, masuk, keluar from presensi
+            where tanggal = '".$tgl."'
+        ) p",'p.nik = om.nik','left');
+        $this->db->join("karyawan","karyawan.nik = om.nik","left");
+        $this->db->join("(
+            select tanggal, nik, jam, status from over where tanggal = '".$tgl."'
+        ) d","d.tanggal = over_time.tanggal","left");
+        $this->db->join("(
+            select tanggal, nik, jam, status from over where tanggal = '".$tgl."'
+        ) p2","p2.nik = om.nik","left");
+        $this->db->where("om.status","0");
+        $this->db->group_by(array("tanggal", "nik", "id_ot"));
 
 
         $i = 0;
@@ -238,14 +246,6 @@ class Over_model_new extends CI_Model {
         return $query->result();
     }
 
-    public function costCenter($id)
-    {
-        $this->db->select("costCenter, COUNT(nik) as jml");
-        $this->db->from("karyawan");
-        $this->db->where("costCenter", $id);
-        $query = $this->db->get();
-        return $query->result();
-    }
 
     private function _get_datatables_query2($id)
     {
@@ -290,102 +290,28 @@ class Over_model_new extends CI_Model {
         }
     }
 
-    public function get_id_doc()
+    public function tabel_konfirmasi($tgl)
     {
-        $this->db->select("id");
-        $this->db->where("YEAR(tanggal) = YEAR(CURRENT_DATE())");
-        $this->db->where("MONTH(tanggal) = MONTH(CURRENT_DATE())");
-        $this->db->from("over_time");
-        $this->db->order_by('id','DESC');
+        $q = "select *, COUNT(nik) as jml_nik from
+        (
+        select IFNULL(d.id,'-') as id, over.tanggal, over.nik, over.jam as aktual, IFNULL(d.jam,0) as jam_plan, IFNULL((over.jam - d.jam),0) as diff, IF(final = 0 OR final IS NULL, d.jam, 0) as final2, final, d.status from over
+        left join (
+        select over_time_member.id_ot, over_time.id, tanggal, nik, jam, final, over_time_member.status from over_time
+        left join over_time_member on over_time_member.id_ot = over_time.id
+        ) d on d.tanggal = over.tanggal and d.nik = over.nik
+        left join karyawan on karyawan.nik = over.nik
+        left join presensi on presensi.nik = over.nik
+        left join presensi p2 on p2.tanggal = over.tanggal
+        where over.tanggal = '".$tgl."' and presensi.tanggal = '".$tgl."'
+        group by over.nik, id_ot
+        ) as m 
+        GROUP BY nik
+        ";
 
-        $query = $this->db->get();
-        return $query->result();
-    }
-
-    public function by_bagian(){
-        $q = "SELECT nama, section, tanggal, SUM(om.jam) AS jml from over_time o 
-        JOIN over_time_member om ON o.id = om.id_ot
-        LEFT JOIN departemen d ON o.departemen = d.id
-        where MONTH(o.tanggal) = MONTH(CURRENT_DATE()) GROUP BY o.departemen ORDER BY jml DESC";
         $query = $this->db->query($q);
-
-        if($query->num_rows() > 0){
-            foreach($query->result() as $data){
-                $hasil[] = $data;
-            }
-            return $hasil;
-        }
-    }
-
-    public function by_bagian_cari($tgl){
-        $q = "SELECT nama, section, tanggal, SUM(om.jam) AS jml from over_time o 
-        LEFT JOIN departemen d ON o.departemen = d.id
-        JOIN over_time_member om ON o.id = om.id_ot
-        where MONTH(o.tanggal) = MONTH( STR_TO_DATE('".$tgl."', '%d-%m-%Y')) GROUP BY o.departemen ORDER BY jml DESC";
-        $query = $this->db->query($q);
-
-        if($query->num_rows() > 0){
-            foreach($query->result() as $data){
-                $hasil[] = $data;
-            }
-            return $hasil;
-        }
-    }
-
-
-    public function get_over_by_bagian($tgl, $dep)
-    {
-        $this->_get_datatables_query3($tgl, $dep);
-        if($_POST['length'] != -1)
-            $this->db->limit($_POST['length'], $_POST['start']);
-        $query = $this->db->get();
         return $query->result();
-    }
-
-    private function _get_datatables_query3($tgl, $dep)
-    {
-        $this->db->select("nama, tanggal, k.namaKaryawan, om.jam, o.keperluan");
-        $this->db->from('over_time o');
-        $this->db->join("departemen d","o.departemen = d.id", 'LEFT');
-        $this->db->join("over_time_member om","o.id = om.id_ot");
-        $this->db->join("karyawan k","om.nik = k.nik");
-        $this->db->where("d.nama",$dep);
-        $this->db->where("MONTH(o.tanggal) = MONTH(STR_TO_DATE('".$tgl."', '%d-%m-%Y'))");
-
-
-        $i = 0;
-
-        foreach ($this->column_search as $item) // loop column 
-        {
-            if($_POST['search']['value']) // if datatable send POST for search
-            {
-
-                if($i===0) // first loop
-                {
-                    $this->db->group_start(); // open bracket. query Where with OR clause better with bracket. because maybe can combine with other WHERE with AND.
-                    $this->db->like($item, $_POST['search']['value']);
-                }
-                else
-                {
-                    $this->db->or_like($item, $_POST['search']['value']);
-                }
-
-                if(count($this->column_search) - 1 == $i) //last loop
-                    $this->db->group_end(); //close bracket
-                }
-                $i++;
-            }
-
-        if(isset($_POST['order'])) // here order processing
-        {
-            $this->db->order_by($this->column_order[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
-        } 
-        else if(isset($this->order))
-        {
-            $order = $this->order;
-            $this->db->order_by(key($order), $order[key($order)]);
-        }
     }
 
 }
+
 ?>
