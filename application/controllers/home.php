@@ -499,7 +499,7 @@ public function ajax_absensi()
         $absen = $this->session->userdata('shift2');
 
         $list = $this->cari_absen_model->get_data_absensi_cari($tgl, $nik, $nama, $absen);
-        $tot = $this->cari_absen_model->count_all();
+        $tot = $this->cari_absen_model->count_all($tgl, $nik, $nama, $absen);
         $filter = $this->cari_absen_model->count_filtered($tgl, $nik, $nama, $absen);
     }
     else {
@@ -539,6 +539,8 @@ public function ajax_absensi_cari_g()
     $absen = $_POST['absensi'];
 
     $list = $this->cari_absen_model->get_data_absensi_cari($tgl, $nik, $nama, $absen);
+    $tot = $this->cari_absen_model->count_all($tgl, $nik, $nama, $absen);
+    $filter = $this->cari_absen_model->count_filtered($tgl, $nik, $nama, $absen);
 
     $data = array();
     foreach ($list as $key) {
@@ -555,6 +557,8 @@ public function ajax_absensi_cari_g()
     $output = array(
         "draw" => $_POST['draw'],
         "data" => $data,
+        "recordsTotal" => $tot,
+        "recordsFiltered" => $filter,
     );
             //output to json format
     echo json_encode($output);
@@ -677,9 +681,9 @@ public function ajax_presensi_shift()
       }
   }
   else
-   $result[] = json_decode ("{}");
+     $result[] = json_decode ("{}");
 
-echo json_encode($result);
+ echo json_encode($result);
 }
 
 public function ajax_emp_keluarga()
@@ -836,7 +840,7 @@ public function ajax_over_namadept()
     $list = $this->karyawan_model->getNamadept($id);
     $data = array();
 
-   
+    
     if ($list) {
         foreach ($list as $key) {
             $row = array();            

@@ -582,6 +582,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
       openDangerGritter();
       return false;
     }
+
+    if ($('#4group3s').is(':checked')) {
+      var group4 = "4G";
+    } else {
+      var group4 = "";
+    }
     var nodoc = document.getElementById('no_doc').value;
     var tgl = document.getElementById('datepicker').value;
     var dep = document.getElementById('dep').value;
@@ -613,7 +619,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
             'sec': sec,
             'kep': kep,
             'cat': cat,
-            'subsec' : subsec
+            'subsec' : subsec,
+            'hari' : hari,
+            'grup' : group4
           },
           success: function(data){
 
@@ -858,8 +866,13 @@ function getHari() {
     success: function (data) {
       // the next thing you want to do 
       var s = $.parseJSON(data);
-      hari = s;
-      console.log(hari);
+      if (s == "JN" || s == "N") {
+        hari = "N";
+      }
+      else {
+        hari = "L";
+      }
+      console.log("hari = "+hari);
 
       showJam();
     }
@@ -1150,7 +1163,7 @@ function secondsTimeSpanToHMS(s) {
   {
     var sampai1 = $('#sampai'+id).val();
     var dari1 = $('#dari'+id).val();
-var sampaipost ="";
+    var sampaipost ="";
     var daripost ="";
     if (sampai1.split(":")[0]=="0") {
       sampaipost = "24:"+sampai1.split(":")[0];
@@ -1229,25 +1242,25 @@ var sampaipost ="";
 
         $('#jamfix'+id).text(jamsatuanfix2);
         var sampai = $('#sampai').val();
-       
+
       }
     });
 
- }
+  }
 
- function changeJams(id) {
-  var hasilJam = $("#jamL"+id).find('option:selected').attr("name");
-  var selects = $("#jamL"+id).find(':selected')[0].id;
-  var jamZ = $("#jam0").text();
+  function changeJams(id) {
+    var hasilJam = $("#jamL"+id).find('option:selected').attr("name");
+    var selects = $("#jamL"+id).find(':selected')[0].id;
+    var jamZ = $("#jam0").text();
 
-  $("#jam"+id).text(hasilJam);
-  $('#idJam'+id).val(selects);
+    $("#jam"+id).text(hasilJam);
+    $('#idJam'+id).val(selects);
 
-}
+  }
 
-$('input[type="checkbox"].minimal').iCheck({
-  checkboxClass: 'icheckbox_minimal-purple'
-})
+  $('input[type="checkbox"].minimal').iCheck({
+    checkboxClass: 'icheckbox_minimal-purple'
+  })
 
 
 </script>

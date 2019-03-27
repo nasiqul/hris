@@ -9,12 +9,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <?php if (! $this->session->userdata('nik')) { redirect('home/overtime_user'); }?>
 
 <style type="text/css">
-#info {
-  text-decoration: underline;
-}
-#info:hover {
-  text-decoration:none;
-}
+  #info {
+    text-decoration: underline;
+  }
+  #info:hover {
+    text-decoration:none;
+  }
 </style>
 
 <body class="hold-transition skin-purple sidebar-mini">
@@ -128,7 +128,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <div class="col-md-12">
                     <table class="table table-striped">
                       <tr>
-                        <th colspan="4" class="text-center"><i class="fa fa-bullhorn"></i> Keterangan</th>
+                        <th colspan="4" class="text-center" bgcolor="#605ca8" style="color: white"><i class="fa fa-bullhorn"></i> Keterangan</th>
                       </tr>
                       <tr>
                         <td>CT</td>
@@ -165,6 +165,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <td>: Cuti Pasca-Lahir</td>
                         <td>DL</td>
                         <td>: Dinas Luar</td>
+                      </tr>
+                      <tr bgcolor="#6cadc9">
+                        <td>T</td>
+                        <td>: Terlambat</td>
+                        <td>PC</td>
+                        <td>: Pulang Cepat</td>
                       </tr>
                     </table>
                   </div>

@@ -29,8 +29,11 @@ class Cari_absen_model extends CI_Model {
         $this->db->join('karyawan','karyawan.nik = presensi.nik');
         $this->db->where('presensi.shift REGEXP','^[a-zA-Z]+$');
         $this->db->where('presensi.shift !=','0');
+        $this->db->where('presensi.shift !=','OFF');
+        $this->db->where('presensi.shift !=','X');
 
-       if ($tgl) {
+
+        if ($tgl) {
             $this->db->where("DATE_FORMAT(tanggal, '%d/%m/%Y') =",$tgl);
         }
 
@@ -88,11 +91,9 @@ class Cari_absen_model extends CI_Model {
         return $query->num_rows();
     }
 
-    public function count_all()
+    public function count_all($tgl, $nik, $nama, $shift)
     {
-        $this->db->from('presensi');
-        $this->db->where('presensi.shift REGEXP','^[a-zA-Z]+$');
-        $this->db->where('presensi.shift !=','0');
+        $this->_get_absensi_cari($tgl, $nik, $nama, $shift);
         return $this->db->count_all_results();
     }
 }

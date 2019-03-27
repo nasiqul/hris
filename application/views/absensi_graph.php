@@ -46,7 +46,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <br>
                 <table class="table table-striped">
                   <tr>
-                    <th colspan="4" class="text-center"><i class="fa fa-bullhorn"></i> Keterangan</th>
+                    <th bgcolor="#605ca8" colspan="4" class="text-center" style="color: white"><i class="fa fa-bullhorn"></i> Keterangan</th>
                   </tr>
                   <tr>
                     <td>CT</td>
@@ -83,6 +83,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <td>: Cuti Pasca-Lahir</td>
                     <td>DL</td>
                     <td>: Dinas Luar</td>
+                  </tr>
+                  <tr bgcolor="#6cadc9">
+                    <td>T</td>
+                    <td>: Terlambat</td>
+                    <td>PC</td>
+                    <td>: Pulang Cepat</td>
                   </tr>
                 </table>
               </div>

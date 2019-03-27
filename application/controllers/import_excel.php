@@ -92,7 +92,7 @@ class import_excel extends CI_Controller {
             //Insert into tbl_uploads
             // $this->db->insert('daily_data2', $upload_data);
 
-            $handle = fopen("C:/xampp/htdocs/myhris/app/excel/$file", "r");
+            $handle = fopen(base_url()."app/excel/$file", "r");
 
             if ($handle) {
                 while (($line = fgets($handle)) !== false) {
