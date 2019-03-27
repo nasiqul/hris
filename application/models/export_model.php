@@ -40,6 +40,14 @@ class Export_model extends CI_Model {
 				$time2 = new DateTime(date('Y-m-d H:i:s' ,strtotime('2019-01-01 '.$data2['keluar'])));	
 			}
 
+			$haric = date('w' ,strtotime($data2['tgl']));
+
+			$quer = 'select IFNULL(sum(TIME_TO_SEC(duration)),0) as istirahat from breaktime where day =  "'.$haric.'" and breaktime.start >= "'.$data2['masuk'].'" and breaktime.end <= "'.$data2['keluar'].'"';
+			$query8 = $this->db->query($quer);
+
+			foreach($query8->result() as $data3){
+				$istirahat = $data3->istirahat;
+			}
 
 			$interval2 = $time1->diff($time2);
 			$s2 = $interval2->format('%H:%i:%s');
@@ -51,10 +59,7 @@ class Export_model extends CI_Model {
 
 			$jam = $time_seconds2;
 
-			if ($jam > 7200) 
-				$d = $jam - 1800;
-			else
-				$d = $jam;
+			$d = $jam - (int) $istirahat;
 
 		}		
 		else

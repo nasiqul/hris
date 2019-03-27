@@ -125,12 +125,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                   <p>Catatan :</p>
                   <input type="text" name="cat" placeholder="Catatan" class="form-control" id="cat">
-                  <p>asd</p>
                 </div>
               </form>
               <div class="col-md-12">
                 <hr>
                 <button id="reset" class="btn btn-success" onclick="reset()"><i class="fa fa-plus"></i> New </button>
+                <p class="pull-right"><b>Hari : </b><span id="textHari"> - </span></p>
               </div>
             </div>
           </div>
@@ -188,7 +188,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                       </th>
                       <th>
                         <div class="checkbox">
-                          <label><input type='checkbox' id='exfoodF' name=exFood></label>
+                          <label><input type='checkbox' id='exfoodF' name="exFood"></label>
                         </div>
                       </th>
                     </tr>
@@ -254,7 +254,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     $(document).ready(function()
     {
 
-   });
+    });
 
     $('#datepicker').datepicker({
       autoclose: true,
@@ -735,27 +735,40 @@ scratch. This page gets rid of all links and provides the needed markup only.
     var idShift = $('#shiftF').find(':selected')[0].value;
     var isChecked2 = $('#4group3s').is(':checked');
 
-    if (idShift == 3 || isChecked2) {
+    if (idShift == 3 && isChecked2) {
       var isChecked = $('#libur').is(':checked');
       $('#libur2').css('display','block');
       if(isChecked)
       {
-        if (hari == "JN")
-          var hari2 = "JL";
+        if (hari == "N")
+          var hari2 = "L";
         else
           var hari2 = "L";
       }
       else
-        var hari2 = hari;
-
-      console.log(hari2);
+        var hari2 = "N";
+    } 
+    else if (idShift == 3 || isChecked2) {
+      var isChecked = $('#libur').is(':checked');
+      $('#libur2').css('display','block');
+      if(isChecked)
+      {
+        if (hari == "N")
+          var hari2 = "L";
+        else
+          var hari2 = "L";
+      }
+      else
+        var hari2 = "N";
     }
 
     else {
       $('#libur2').css('display','none');
-      var hari2 = hari;
-    }
+      var hari2 = "N";
 
+    }
+    $("#textHari").text(hari2);
+    console.log(hari2);
 
     $.ajax({
       type: 'POST',
@@ -865,11 +878,14 @@ function getHari() {
       var s = $.parseJSON(data);
       if (s == "JN" || s == "N") {
         hari = "N";
+        hari3 = "Normal";
       }
       else {
         hari = "L";
+        hari3 = "Libur";
       }
       console.log("hari = "+hari);
+      $("#textHari").text(hari3);
 
       showJam();
     }

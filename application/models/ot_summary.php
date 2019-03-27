@@ -12,16 +12,16 @@ class Ot_summary extends CI_Model {
         $this->load->database();
     }
 
-    public function ot_summary_m($tgl1,$tgl2)
+    public function ot_summary_m($tgl1)
     {
-        $this->_get_data_summary($tgl1,$tgl2);
+        $this->_get_data_summary($tgl1);
         if($_POST['length'] != -1)
             $this->db->limit($_POST['length'], $_POST['start']);
         $query = $this->db->get();
         return $query->result();
     }
 
-    private function _get_data_summary($tgl1,$tgl2)
+    private function _get_data_summary($tgl1)
     {
         $this->db->select("mon, p.id_cc, name, karyawan, aktual, round((aktual/karyawan),1) as avg, coalesce(min, 0) as min_final, coalesce(max, 0) as max_final");
 
@@ -41,7 +41,7 @@ class Ot_summary extends CI_Model {
             ) as a
             on a.fy = b.fiskal
             group by mon, costCenter
-            having mon = '2019-03'
+            having mon = '".$tgl1."'
     ) as b 
     left join master_cc on master_cc.id_cc = b.costCenter
     GROUP BY mon, kode, master_cc.id_cc
@@ -52,7 +52,7 @@ class Ot_summary extends CI_Model {
 --              INI
         select tanggal, costCenter, ROUND(sum(jam),1) as aktual from over
                 left join karyawan on karyawan.nik = over.nik
-                where DATE_FORMAT(tanggal,'%Y-%m') = '2019-03'
+                where DATE_FORMAT(tanggal,'%Y-%m') = '".$tgl1."'
                 group by costCenter
         ) as n","p.id_cc = n.costCenter",'left');
         $this->db->join("
@@ -62,7 +62,7 @@ class Ot_summary extends CI_Model {
                          from (
                          SELECT * from (
                          select nik, round(sum(jam),1) as jam from over 
-                         where DATE_FORMAT(tanggal,'%Y-%m') = '2019-03'
+                         where DATE_FORMAT(tanggal,'%Y-%m') = '".$tgl1."'
                          GROUP BY nik
                          union
                          select nik, 0 jam from karyawan
@@ -109,16 +109,16 @@ class Ot_summary extends CI_Model {
         }
     }
 
-    function count_filtered($tgl1,$tgl2)
+    function count_filtered($tgl1)
     {
-        $this->_get_data_summary($tgl1,$tgl2);
+        $this->_get_data_summary($tgl1);
         $query = $this->db->get();
         return $query->num_rows();
     }
 
-    public function count_all($tgl1,$tgl2)
+    public function count_all($tgl1)
     {
-        $this->_get_data_summary($tgl1,$tgl2);
+        $this->_get_data_summary($tgl1);
         return $this->db->count_all_results();
     }
 }

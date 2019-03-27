@@ -1293,16 +1293,14 @@ class Ot extends CI_Controller {
 	{
 		if (isset($_POST['tgl'])) {
 			$tgl1 = date('Y-m',strtotime('01-'.$_POST['tgl']));
-			$tgl2 = date('Y-m-d',strtotime('01-'.$_POST['tgl']));
 		}
 		else{
 			$tgl1 = date('Y-m');
-			$tgl2 = $tgl1.'-01';
 		}
 
-		$list = $this->ot_summary->ot_summary_m($tgl1,$tgl2);
-		$tot = $this->ot_summary->count_all($tgl1,$tgl2);
-		$filter = $this->ot_summary->count_filtered($tgl1,$tgl2);
+		$list = $this->ot_summary->ot_summary_m($tgl1);
+		$tot = $this->ot_summary->count_all($tgl1);
+		$filter = $this->ot_summary->count_filtered($tgl1);
 
 		$data = array();
 

@@ -117,7 +117,7 @@ class import_excel extends CI_Controller {
                 }
                 fclose($handle);
                 $path2 = base_url()."/app/excel/$file";
-                unlink($path2) or die("Couldn't delete file");
+                // unlink($path2) or die("Couldn't delete file");
                 redirect('home/presensi');
             }
         } else {
