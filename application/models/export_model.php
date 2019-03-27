@@ -143,9 +143,9 @@ class Export_model extends CI_Model {
 
 		}
 
-		//$jam_lembur = ceil($d/1800)*1800;
+		$jam_lembur = ceil($d/1800)*1800;
 
-		$query = "CALL masukData2 ('','".$data2['nik']."','".$data2['tgl']."', '".$data2['masuk']."','".$data2['keluar']."','".$data2['shift']."', '".$hari."' ,'".$d."')";
+		$query = "CALL masukData2 ('','".$data2['nik']."','".$data2['tgl']."', '".$data2['masuk']."','".$data2['keluar']."','".$data2['shift']."', '".$hari."' ,'".$jam_lembur."')";
 		$result = $this->db->query($query);
 
 		if($result){
