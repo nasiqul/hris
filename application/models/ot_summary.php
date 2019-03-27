@@ -49,8 +49,11 @@ class Ot_summary extends CI_Model {
             ");
 
         $this->db->join("(
-        select id_cc, aktual, budget from cost_center_budget where period = '".$tgl2."'
-        ) as n","p.id_cc = n.id_cc",'left');
+        select tanggal, costCenter, ROUND(sum(jam),2) as aktual from over
+                left join karyawan on karyawan.nik = over.nik
+                where DATE_FORMAT(tanggal,'%Y-%m') = '".$tgl1."'
+                group by costCenter
+        ) as n","p.id_cc = n.costCenter",'left');
         $this->db->join("
             (
         select d.costCenter, min(d.total) as min, max(d.total) as max from
@@ -63,7 +66,7 @@ class Ot_summary extends CI_Model {
                     ) as d
                     group by d.costCenter
         ) as m
-        ","m.costCenter = n.id_cc","left");
+        ","m.costCenter = n.costCenter","left");
 
         $i = 0;
 

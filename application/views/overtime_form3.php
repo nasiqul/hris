@@ -125,6 +125,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                   <p>Catatan :</p>
                   <input type="text" name="cat" placeholder="Catatan" class="form-control" id="cat">
+                  <p>asd</p>
                 </div>
               </form>
               <div class="col-md-12">
@@ -252,11 +253,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
     $(document).ready(function()
     {
-     $('#submit').onclick(function()
-     {
-      $(this).attr('disabled',true);
-      return false;
-    });
+
    });
 
     $('#datepicker').datepicker({
