@@ -23,7 +23,7 @@ class Ot_summary extends CI_Model {
 
     private function _get_data_summary($tgl1,$tgl2)
     {
-        $this->db->select("mon, p.id_cc, name, karyawan, aktual, round((aktual/karyawan),2) as avg, coalesce(min, 0) as min_final, coalesce(max, 0) as max_final");
+        $this->db->select("mon, p.id_cc, name, karyawan, aktual, round((aktual/karyawan),1) as avg, coalesce(min, 0) as min_final, coalesce(max, 0) as max_final");
 
         $this->db->from("
             (
@@ -41,7 +41,7 @@ class Ot_summary extends CI_Model {
             ) as a
             on a.fy = b.fiskal
             group by mon, costCenter
-            having mon = '".$tgl1."'
+            having mon = '2019-03'
     ) as b 
     left join master_cc on master_cc.id_cc = b.costCenter
     GROUP BY mon, kode, master_cc.id_cc
@@ -49,22 +49,29 @@ class Ot_summary extends CI_Model {
             ");
 
         $this->db->join("(
-        select tanggal, costCenter, ROUND(sum(jam),2) as aktual from over
+--              INI
+        select tanggal, costCenter, ROUND(sum(jam),1) as aktual from over
                 left join karyawan on karyawan.nik = over.nik
-                where DATE_FORMAT(tanggal,'%Y-%m') = '".$tgl1."'
+                where DATE_FORMAT(tanggal,'%Y-%m') = '2019-03'
                 group by costCenter
         ) as n","p.id_cc = n.costCenter",'left');
         $this->db->join("
-            (
-        select d.costCenter, min(d.total) as min, max(d.total) as max from
-                    (
-                    select karyawan.nik, coalesce(sum(final), 0) as total, karyawan.costCenter from karyawan 
-                    left join over_time_member on over_time_member.nik = karyawan.nik
-                    left join over_time on over_time.id = over_time_member.id_ot
-                    where DATE_FORMAT(over_time.tanggal, '%Y-%m') = '".$tgl1."' or over_time.tanggal is null
-                    GROUP BY karyawan.nik, karyawan.costCenter
-                    ) as d
-                    group by d.costCenter
+           (
+        select costCenter, max(jam) as max, min(jam) as min from (
+                    select s.*, karyawan.costCenter
+                         from (
+                         SELECT * from (
+                         select nik, round(sum(jam),1) as jam from over 
+                         where DATE_FORMAT(tanggal,'%Y-%m') = '2019-03'
+                         GROUP BY nik
+                         union
+                         select nik, 0 jam from karyawan
+                         ) a
+                        GROUP BY a.nik
+                        ) s
+                        left join karyawan on karyawan.nik = s.nik
+                ) as d 
+                GROUP BY costCenter
         ) as m
         ","m.costCenter = n.costCenter","left");
 
