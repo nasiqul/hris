@@ -92,7 +92,7 @@ class import_excel extends CI_Controller {
             //Insert into tbl_uploads
             // $this->db->insert('daily_data2', $upload_data);
 
-            $handle = fopen(base_url()."app/excel/$file", "r");
+            $handle = fopen(echo base_url()."app/excel/$file", "r");
 
             if ($handle) {
                 while (($line = fgets($handle)) !== false) {
@@ -116,7 +116,7 @@ class import_excel extends CI_Controller {
                     $this->export_model->export_presensi($daily_data);
                 }
                 fclose($handle);
-                $path2 = "C:/xampp/htdocs/myhris/app/excel/$file";
+                $path2 = base_url()."/app/excel/$file";
                 unlink($path2) or die("Couldn't delete file");
                 redirect('home/presensi');
             }
