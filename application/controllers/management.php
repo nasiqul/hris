@@ -15,6 +15,7 @@ class Management extends CI_Controller {
 	{
 		$data['i'] = 'ok';
 		$data['menu'] = 'ovrMoC';
+		$data['section'] = $this->budget_model->get_name_cc2();
 		$this->load->view('ot_monthly_control', $data);
 	}
 
