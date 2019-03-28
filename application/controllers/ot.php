@@ -1215,23 +1215,24 @@ class Ot extends CI_Controller {
 
 	public function overtime_chart_per_dep()
 	{
-		if (isset($_POST['date2'])) {
+		if (isset($_POST['bulan'])) {
             //$n = date('m-Y', strtotime($_POST['date2']));
-			$tgl = $_POST['date2'];
+			$tgl = $_POST['bulan'];
 		}
 		else {
 			$tgl = date('m-Y');
 		}
-		// $list = $this->over_model->get_tgl();
-		$list2 = $this->over_model->get_cc5($tgl);
-		// $data = array();
+
+		if (isset($_POST['bagian'])) {
+            //$n = date('m-Y', strtotime($_POST['date2']));
+			$cc = $_POST['bagian'];
+		}
+		else {
+			$cc = "0";
+		}		
+
+		$list2 = $this->over_model->get_cc5($tgl,$cc);
 		$data2 = array();
-
-		// foreach ($list as $key) {
-
-		// 	array_push($data, $key->tanggal);
-
-		// }
 
 		foreach ($list2 as $key2) {
 			$row = array();
@@ -1241,8 +1242,6 @@ class Ot extends CI_Controller {
 
 			$data2[] = $row;
 		}
-
-		//array_push($data, $data2);
 
             //output to json format
 		echo json_encode($data2);
@@ -1367,11 +1366,11 @@ class Ot extends CI_Controller {
 
 	public function presentase_g()
 	{
-		$tgl = $_POST['date2'];
+		$tgl = $_POST['bulan'];
+		$bagian = $_POST['bagian'];
 		$n1 = date('Y-m', strtotime("01-".$tgl));
-		$n2 = date('Y-m-d', strtotime("01-".$tgl));
 
-		$list = $this->over_model->get_presentase($n1,$n2);
+		$list = $this->over_model->get_presentase($n1,$bagian);
 		$data = array();
 		foreach ($list as $key) {
 			$row = array();

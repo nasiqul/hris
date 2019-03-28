@@ -107,7 +107,7 @@ class Export_model extends CI_Model {
 					$time_masuk = $jam_masuk;
 
 				$time3 = new DateTime(date('Y-m-d H:i:s' ,strtotime('2019-01-01 '.$time_masuk)));
-				$time4 = new DateTime(date('Y-m-d H:i:s' ,strtotime('2019-01-01 '.$data2['keluar'])));
+				$time4 = new DateTime(date('Y-m-d H:i:s' ,strtotime('2019-01-02 '.$data2['keluar'])));
 			}
 			else {
 				//HITUNG JAM AWAL

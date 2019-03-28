@@ -144,6 +144,7 @@ class Home extends CI_Controller {
     public function monthlyC()
     {
         $data['menu'] = 'ovrMoC';
+        $data['section'] = $this->budget_model->get_name_cc2();
         $this->load->view("ot_monthly_control", $data);
     }
 

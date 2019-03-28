@@ -485,7 +485,7 @@ class Over_cari_chart2 extends CI_Model {
 
     private function _get_over_cari_3_14_t($tgl)
     {
-        $this->db->select('u.month_name as month_name, karyawan.nik, karyawan.namaKaryawan, dp.nama as departemen, sc.nama as section, karyawan.kode, ROUND(l.avg,1)');
+        $this->db->select('u.month_name as month_name, karyawan.nik, karyawan.namaKaryawan, dp.nama as departemen, sc.nama as section, karyawan.kode, ROUND(l.avg,1) as avg');
         $this->db->from('
             (
                 select date_format(over.tanggal, "%m-%Y") as month_name, over.nik, karyawan.namaKaryawan, karyawan.kode, sum(over.jam) as sum from over 

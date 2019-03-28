@@ -99,7 +99,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <div class="col-md-12">
           <div class="box box-solid">
             <div class="box-body">
-              <table id="example1" class="table table-responsive table-striped">
+              <table id="example1" class="table table-responsive table-striped" width="100%">
                 <thead>
                   <tr>
                     <th>Date</th>

@@ -238,6 +238,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <script type="text/javascript">
     var nomorali = 0;
     var idDoc;
+    var sec = 0;
 
     var no = 1;
     var hari = 'N';
@@ -517,6 +518,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
     function showSubSec() {
       var id = $('#sec').find(':selected')[0].value;
 
+      if (id == 7) {
+        $('#libur2').css('display','block');
+        sec = 7;
+      }
+      else {
+        $('#libur2').css('display','none');
+        sec = 0;
+      }
+
       $.ajax({
         type: 'POST',
         url: '<?php echo base_url("home/ajax_over_subsection") ?>',
@@ -748,7 +758,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       else
         var hari2 = "N";
     } 
-    else if (idShift == 3 || isChecked2) {
+    else if (idShift == 3 || isChecked2 || sec == 7) {
       var isChecked = $('#libur').is(':checked');
       $('#libur2').css('display','block');
       if(isChecked)

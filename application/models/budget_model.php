@@ -97,7 +97,14 @@ class Budget_model extends CI_Model {
 
     public function get_name_cc()
     {
-        $q = "select id_cc, name from master_cc order by name ASC";
+        $q = "select id_cc, name, departemen from master_cc order by name ASC";
+        $query = $this->db->query($q);
+        return $query->result();
+    }
+
+    public function get_name_cc2()
+    {
+        $q = "select id_cc, name, departemen from master_cc group by departemen order by name ASC";
         $query = $this->db->query($q);
         return $query->result();
     }

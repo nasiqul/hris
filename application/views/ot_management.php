@@ -83,7 +83,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   </div>
                   <div class="pull-right" style="margin-right: 20px">
 
-                    Section :
+                    Bagian :
 
                     <select name="section" class="form-control" id="section" onchange="postTahun()">
                       <?php foreach ($section as $key) { ?>
