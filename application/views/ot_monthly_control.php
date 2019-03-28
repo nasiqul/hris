@@ -183,7 +183,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 function progressData()
 {
   
-  if (ofc2 != 0) {
+  if (ofc != 0) {
    var direct = ((ofc2/ofc)*100).toFixed(2) + '%';
    if( ((ofc2/ofc)*100).toFixed(0) > 100){
     $('#progress_bar_prod').removeClass('progress-bar-green').addClass('progress-bar-red');
@@ -205,7 +205,7 @@ else{
 }
 
 
-if (prod2 != 0)
+if (prod != 0)
 {
   var indirect = ((prod2/prod)*100).toFixed(2) + '%';
   if( ((prod2/prod)*100).toFixed(0) > 100){
@@ -227,7 +227,7 @@ else {
  $('#persendirect2').html("0 / 0 Hours");
 }
 
-if (pl2 != 0)
+if (pl != 0)
 {
   var plData = ((pl2/pl)*100).toFixed(2) + '%';
 
@@ -272,62 +272,80 @@ $(function () {
     i : 0;
   };
 
-  for(i = 0; i < data.length; i++){
-    cat = data[i][0];
+  for(i = 0; i < data[0].length; i++){
+    cat = data[0][i][0];
     if(xCategories.indexOf(cat) === -1){
      xCategories[xCategories.length] = cat;
    }
  }
 
- for(i = 0; i < data.length; i++){
+ for(i = 0; i < data[0].length; i++){
   if(seriesData){
-   var currSeries = seriesData.filter(function(seriesObject){ return seriesObject.name == data[i][1];});
+   var currSeries = seriesData.filter(function(seriesObject){ return seriesObject.name == data[0][i][1];});
    if(currSeries.length === 0){
-    seriesData[seriesData.length] = currSeries = {name: data[i][1], data: []};
+    seriesData[seriesData.length] = currSeries = {name: data[0][i][1], data: []};
   } else {
     currSeries = currSeries[0];
   }
   var index = currSeries.data.length;
-  currSeries.data[index] = data[i][2];
+  currSeries.data[index] = data[0][i][2];
 } else {
- seriesData[0] = {name: data[i][1], data: [intVal(data[i][2])]}
+ seriesData[0] = {name: data[0][i][1], data: [intVal(data[0][i][2])]}
 }
 }
+   
+    var grphDates = new Array();
+    var groupedObjects = new Array();
+    $.each(data[0], function (ix, obj) {
+      var existingObj;
+      if ($.inArray(obj[0], grphDates) >= 0) {
+       var index = groupedObjects.map(function(o, i) { 
+        if(o[0] == obj[0])return i;
+      }).filter(isFinite);
+
+       groupedObjects[index][2] += obj[2];
+     } else {
+       groupedObjects.push(obj);
+       grphDates.push(obj[0]);
+     }
+    });
+
+    cumulativeData = [0];
+
+    accData = [];
+    for(i=0; i<groupedObjects.length; i++){
+      accData.push(groupedObjects[i][2]);
+    }
+
+    accData.forEach(function(elementToAdd, index) {
+      var newElement = cumulativeData[index] + elementToAdd;
+      cumulativeData.push(newElement);
+    });
+    cumulativeData.shift();
+
+    var d =  data[1][0][0];
+    var res = d.split("-");
+
+        cumulativeData2 = [0];
+        accData2 = [];
+        for(i=0; i < xCategories.length; i++){
+          accData2.push(data[1][0][2]);
+        }
 
 
-var grphDates = new Array();
-var groupedObjects = new Array();
-$.each(data, function (ix, obj) {
-  var existingObj;
-  if ($.inArray(obj[0], grphDates) >= 0) {
-   var index = groupedObjects.map(function(o, i) { 
-    if(o[0] == obj[0])return i;
-  }).filter(isFinite);
+        accData2.forEach(function(elementToAdd2, index) {
+          var newElement2 = cumulativeData2[index] + elementToAdd2;
+          cumulativeData2.push(newElement2);
+        });
 
-   groupedObjects[index][2] += obj[2];
- } else {
-   groupedObjects.push(obj);
-   grphDates.push(obj[0]);
- }
-});
-
-cumulativeData = [0];
-
-accData = [];
-for(i=0; i<groupedObjects.length; i++){
-  accData.push(groupedObjects[i][2]);
-}
-
-accData.forEach(function(elementToAdd, index) {
-  var newElement = cumulativeData[index] + elementToAdd;
-  cumulativeData.push(newElement);
-});
-cumulativeData.shift();
-
-               // alert(cumulativeData);
+        cumulativeData2.shift();
+        for (var i = 0; i <= cumulativeData2.length; i++) {
+         // alert(cumulativeData2[i]+" ");
+        }
 
 
-               seriesData.push({type: 'line', name: 'Cumulative Overtime', data: cumulativeData});
+               seriesData.push({type: 'line', name: 'Cumulative Budget', data: cumulativeData2});
+               seriesData.push({type: 'line', name: 'Cumulative Actual', data: cumulativeData});
 
                Highcharts.setOptions({
                 colors: ['#058DC7', '#50B432', '#ED561B', '#DDDF00', '#24CBE5', '#64E572', '#FF9655', '#FFF263', '#6AF9C4', '#303133', '#db2929','#d1cccc','#9a3dd3','#236330']});
@@ -411,31 +429,31 @@ function postTgl() {
     i : 0;
   };
 
-  for(i = 0; i < data.length; i++){
-    cat = data[i][0];
+  for(i = 0; i < data[0].length; i++){
+    cat = data[0][i][0];
     if(xCategories.indexOf(cat) === -1){
      xCategories[xCategories.length] = cat;
    }
  }
 
- for(i = 0; i < data.length; i++){
+ for(i = 0; i < data[0].length; i++){
   if(seriesData){
-   var currSeries = seriesData.filter(function(seriesObject){ return seriesObject.name == data[i][1];});
+   var currSeries = seriesData.filter(function(seriesObject){ return seriesObject.name == data[0][i][1];});
    if(currSeries.length === 0){
-    seriesData[seriesData.length] = currSeries = {name: data[i][1], data: []};
+    seriesData[seriesData.length] = currSeries = {name: data[0][i][1], data: []};
   } else {
     currSeries = currSeries[0];
   }
   var index = currSeries.data.length;
-  currSeries.data[index] = data[i][2];
+  currSeries.data[index] = data[0][i][2];
 } else {
- seriesData[0] = {name: data[i][1], data: [intVal(data[i][2])]}
+ seriesData[0] = {name: data[0][i][1], data: [intVal(data[0][i][2])]}
 }
 }
 
 var grphDates = new Array();
 var groupedObjects = new Array();
-$.each(data, function (ix, obj) {
+$.each(data[0], function (ix, obj) {
   var existingObj;
   if ($.inArray(obj[0], grphDates) >= 0) {
    var index = groupedObjects.map(function(o, i) { 
@@ -462,7 +480,28 @@ accData.forEach(function(elementToAdd, index) {
 });
 cumulativeData.shift();
 
-               // alert(cumulativeData);
+    var d =  data[1][0][0];
+    var res = d.split("-");
+
+        cumulativeData2 = [0];
+        accData2 = [];
+        for(i=0; i < xCategories.length; i++){
+          accData2.push(data[1][0][2]);
+        }
+
+
+        accData2.forEach(function(elementToAdd2, index) {
+          var newElement2 = cumulativeData2[index] + elementToAdd2;
+          cumulativeData2.push(newElement2);
+        });
+
+        cumulativeData2.shift();
+        for (var i = 0; i <= cumulativeData2.length; i++) {
+         // alert(cumulativeData2[i]+" ");
+        }
+
+
+               seriesData.push({type: 'line', name: 'Cumulative Budget', data: cumulativeData2});
 
 
                seriesData.push({type: 'line', name: 'Cumulative Overtime', data: cumulativeData})

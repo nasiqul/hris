@@ -1218,9 +1218,11 @@ class Ot extends CI_Controller {
 		if (isset($_POST['bulan'])) {
             //$n = date('m-Y', strtotime($_POST['date2']));
 			$tgl = $_POST['bulan'];
+			$tgl2 = date('Y-m',strtotime("01-".$_POST['bulan']));
 		}
 		else {
 			$tgl = date('m-Y');
+			$tgl2 = date('Y-m');
 		}
 
 		if (isset($_POST['bagian'])) {
@@ -1229,9 +1231,24 @@ class Ot extends CI_Controller {
 		}
 		else {
 			$cc = "0";
-		}		
+		}
+
+		$data4 = array();
 
 		$list2 = $this->over_model->get_cc5($tgl,$cc);
+		$list3 = $this->over_model->get_budget($tgl2,$cc);
+
+		$data3 = array();
+
+		foreach ($list3 as $key3) {
+			$row2 = array();
+			$row2[] = $key3->period; 
+			$row2[] = $key3->departemen;
+			$row2[] = (float) $key3->budget;
+
+			$data3[] = $row2;
+		}
+
 		$data2 = array();
 
 		foreach ($list2 as $key2) {
@@ -1243,8 +1260,11 @@ class Ot extends CI_Controller {
 			$data2[] = $row;
 		}
 
+		array_push($data4, $data2);
+		array_push($data4, $data3);
+
             //output to json format
-		echo json_encode($data2);
+		echo json_encode($data4);
 
 	}
 
