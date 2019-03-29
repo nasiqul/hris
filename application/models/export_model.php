@@ -91,7 +91,7 @@ class Export_model extends CI_Model {
 			else if ($data2['shift'] == '3') {
 				//HITUNG JAM AWAL
 				$time1 = new DateTime(date('Y-m-d H:i:s' ,strtotime('2019-01-01 '.$data2['masuk'])));
-				$time2 = new DateTime(date('Y-m-d H:i:s' ,strtotime('2019-01-02 '.$jam_masuk)));
+				$time2 = new DateTime(date('Y-m-d H:i:s' ,strtotime('2019-01-01 '.$jam_masuk)));
 
 				$interval = $time1->diff($time2);
 				$s = $interval->format('%H:%i:%s');
@@ -109,7 +109,7 @@ class Export_model extends CI_Model {
 				$time3 = new DateTime(date('Y-m-d H:i:s' ,strtotime('2019-01-01 '.$time_masuk)));
 				$time4 = new DateTime(date('Y-m-d H:i:s' ,strtotime('2019-01-02 '.$data2['keluar'])));
 			}
-			else {
+			else if ($data2['shift'] == '1') {
 				//HITUNG JAM AWAL
 				$time1 = new DateTime(date('Y-m-d H:i:s' ,strtotime('2019-01-01 '.$data2['masuk'])));
 				$time2 = new DateTime(date('Y-m-d H:i:s' ,strtotime('2019-01-01 '.$jam_masuk)));
@@ -131,24 +131,33 @@ class Export_model extends CI_Model {
 				$time4 = new DateTime(date('Y-m-d H:i:s' ,strtotime('2019-01-01 '.$data2['keluar'])));
 			}
 
-			$interval2 = $time3->diff($time4);
-			$s2 = $interval2->format('%H:%i:%s');
-			$str_time2 = preg_replace("/^([\d]{1,2})\:([\d]{2})$/", "00:$1:$2", $s2);
 
-			sscanf($str_time2, "%d:%d:%d", $hours2, $minutes2, $seconds2);
+			if ($data2['shift'] == '1' || $data2['shift'] == '2' || $data2['shift'] == '3') {
+				$interval2 = $time3->diff($time4);
+				$s2 = $interval2->format('%H:%i:%s');
+				$str_time2 = preg_replace("/^([\d]{1,2})\:([\d]{2})$/", "00:$1:$2", $s2);
 
-			$time_seconds2 = $hours2 * 3600 + $minutes2 * 60 + $seconds2;
+				sscanf($str_time2, "%d:%d:%d", $hours2, $minutes2, $seconds2);
 
-			$jam = $time_seconds2 - $jam_kerja;
+				$time_seconds2 = $hours2 * 3600 + $minutes2 * 60 + $seconds2;
 
-			if ($jam > 7200) 
-				$d = $jam - 1800;
-			else
-				$d = $jam;
+				$jam = $time_seconds2 - $jam_kerja;
+
+				if ($jam > 7200) 
+					$d = $jam - 1800;
+				else
+					$d = $jam;
+			}
+			else {
+				$d = 0;
+				$jam_lembur = 0;
+
+			}
 
 		}
-
-		$jam_lembur = ceil($d/1800)*1800;
+		
+		$c = round($d/3600,1);
+        $jam_lembur = round($c*2)/2;
 
 		$query = "CALL masukData2 ('','".$data2['nik']."','".$data2['tgl']."', '".$data2['masuk']."','".$data2['keluar']."','".$data2['shift']."', '".$hari."' ,'".$jam_lembur."')";
 		$result = $this->db->query($query);

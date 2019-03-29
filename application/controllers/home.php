@@ -351,6 +351,7 @@ class Home extends CI_Controller {
             $row[] = date('j M Y', strtotime($key->tanggal));
             $row[] = $key->nik;
             $row[] = $key->namaKaryawan;
+            $row[] = $key->sec." - ".$key->subsec." - ".$key->grup;
             if ($key->masuk == '') 
                 $row[] = '';
             else

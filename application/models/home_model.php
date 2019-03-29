@@ -24,9 +24,13 @@ class Home_model extends CI_Model {
 
     private function _get_datatables_query()
     {
-        $this->db->select('karyawan.nik, karyawan.namaKaryawan, presensi.tanggal, presensi.masuk, presensi.keluar, presensi.shift');
+        $this->db->select('karyawan.nik, karyawan.namaKaryawan, presensi.tanggal, presensi.masuk, presensi.keluar, presensi.shift, sec.nama as sec, ssc.nama as subsec, group1.nama as grup');
         $this->db->from('presensi');
         $this->db->join('karyawan','karyawan.nik = presensi.nik', 'left');
+        $this->db->join('posisi','posisi.nik = karyawan.nik', 'left');
+        $this->db->join('section sec','sec.id = posisi.id_sec', 'left');
+        $this->db->join('sub_section ssc','ssc.id = posisi.id_sub_sec', 'left');
+        $this->db->join('group1','group1.id = posisi.id_group', 'left');
         $this->db->where('date(presensi.tanggal) = CURRENT_DATE()');
         $this->db->where('presensi.shift !=','0');
         $this->db->where('presensi.shift !=','OFF');
@@ -180,7 +184,7 @@ class Home_model extends CI_Model {
     }
 
     public function report1_1(){
-        $q = "SELECT tanggal, COUNT(*) AS jml ,(Select count(nik) from presensi WHERE MONTH(tanggal) = MONTH(CURRENT_DATE()) AND YEAR(tanggal) = YEAR(CURRENT_DATE())) as total from presensi where shift REGEXP '^[1-9]+$' AND MONTH(tanggal) = MONTH(CURRENT_DATE()) AND YEAR(tanggal) = YEAR(CURRENT_DATE()) and tanggal not in (select tanggal from kalender)  group by tanggal";
+        $q = "SELECT tanggal, COUNT(*) AS jml ,(Select count(nik) from presensi WHERE MONTH(tanggal) = MONTH(CURRENT_DATE()) AND YEAR(tanggal) = YEAR(CURRENT_DATE())) as total from presensi where shift  IN (1,2,3,'T','PC','DL') AND MONTH(tanggal) = MONTH(CURRENT_DATE()) AND YEAR(tanggal) = YEAR(CURRENT_DATE()) and tanggal not in (select tanggal from kalender)  group by tanggal";
         $query = $this->db->query($q);
 
         if($query->num_rows() > 0){

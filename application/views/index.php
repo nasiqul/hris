@@ -92,6 +92,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <th>Date</th>
                 <th>NIK</th>
                 <th>Name</th>
+                <th>Bagian</th>
                 <th>Arrive</th>
                 <th>Leave</th>
                 <th>Shift</th>

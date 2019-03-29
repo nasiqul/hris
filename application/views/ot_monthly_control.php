@@ -342,7 +342,12 @@ $(function () {
         for (var i = 0; i <= cumulativeData2.length; i++) {
          // alert(cumulativeData2[i]+" ");
         }
+        const monthNames = ["January", "February", "March", "April", "May", "June",
+              "July", "August", "September", "October", "November", "December"
+            ];
 
+          var dt = "01-"+title;
+           var date = new Date(dt.replace( /(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3"))
 
                seriesData.push({type: 'line', name: 'Cumulative Budget', data: cumulativeData2});
                seriesData.push({type: 'line', name: 'Cumulative Actual', data: cumulativeData});
@@ -356,7 +361,7 @@ $(function () {
                  type: 'column'
                },
                title: {
-                 text: $("[name=date2]").val()
+                 text: monthNames[date.getMonth()]
                },
                xAxis: {
                  categories: xCategories
@@ -500,18 +505,25 @@ cumulativeData.shift();
          // alert(cumulativeData2[i]+" ");
         }
 
+        const monthNames = ["January", "February", "March", "April", "May", "June",
+              "July", "August", "September", "October", "November", "December"
+            ];
+            
+          var dt = "01-"+title;
+           var date = new Date(dt.replace( /(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3"))
+
 
                seriesData.push({type: 'line', name: 'Cumulative Budget', data: cumulativeData2});
 
 
-               seriesData.push({type: 'line', name: 'Cumulative Overtime', data: cumulativeData})
+               seriesData.push({type: 'line', name: 'Cumulative Actual', data: cumulativeData})
 
                Highcharts.chart('container8', {
                 chart: {
                  type: 'column'
                },
                title: {
-                 text: title
+                 text: monthNames[date.getMonth()]
                },
                xAxis: {
                  categories: xCategories

@@ -25,11 +25,16 @@ class Cari_model extends CI_Model {
     private function _get_presensi_cari($tgl, $nik, $nama, $shift)
     {
 
-        $this->db->select('karyawan.nik, karyawan.namaKaryawan, presensi.tanggal, presensi.masuk, presensi.keluar, presensi.shift');
+        $this->db->select('karyawan.nik, karyawan.namaKaryawan, presensi.tanggal, presensi.masuk, presensi.keluar, presensi.shift, sec.nama as sec, ssc.nama as subsec, group1.nama as grup');
         $this->db->from('presensi');
         $this->db->join('karyawan','karyawan.nik = presensi.nik', 'left');
-
+        $this->db->join('posisi','posisi.nik = karyawan.nik', 'left');
+        $this->db->join('section sec','sec.id = posisi.id_sec', 'left');
+        $this->db->join('sub_section ssc','ssc.id = posisi.id_sub_sec', 'left');
+        $this->db->join('group1','group1.id = posisi.id_group', 'left');
         $this->db->where('presensi.shift !=','0');
+        $this->db->where('presensi.shift !=','OFF');
+        $this->db->where('presensi.shift !=','X');
 
         if ($tgl) {
             $this->db->where('DATE_FORMAT(tanggal, "%d/%m/%Y") = ',$tgl);
