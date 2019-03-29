@@ -920,11 +920,10 @@ public function transdb($id,$tgl,$dari,$sampai)
 public function getGA_trans($tgl)
 {
     $this->db->select("*");
-    $this->db->from("(SELECT o.tanggal, ml.jam_awal, ml.jam_akhir, COUNT(if(transport = 'B' , transport, null)) B, COUNT(if(transport = 'P' , transport, null)) P from over_time o 
+    $this->db->from("(SELECT o.tanggal, om.dari, om.sampai, COUNT(if(transport = 'B' , transport, null)) B, COUNT(if(transport = 'P' , transport, null)) P from over_time o 
         JOIN over_time_member om ON o.id = om.id_ot
-        JOIN master_lembur ml ON ml.id = om.id_jam
         WHERE o.tanggal =  STR_TO_DATE('".$tgl."', '%d-%m-%Y')
-        GROUP BY ml.jam_awal, ml.jam_akhir) a");
+        GROUP BY om.dari, om.sampai) a");
     $this->db->where("a.B <> 0");
     $this->db->or_where("a.P <> 0");
     

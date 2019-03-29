@@ -196,7 +196,7 @@ class Home_model extends CI_Model {
     }
 
     public function report2_2(){
-        $q = "SELECT tanggal, COUNT(*) AS jml from presensi where shift NOT REGEXP '^[1-9]+$' AND MONTH(tanggal) = MONTH(CURRENT_DATE()) AND YEAR(tanggal) = YEAR(CURRENT_DATE()) and tanggal not in (select tanggal from kalender)  group by tanggal";
+        $q = "SELECT tanggal, COUNT(*) AS jml from presensi where shift NOT IN (1,2,3,'T','PC','DL') AND MONTH(tanggal) = MONTH(CURRENT_DATE()) AND YEAR(tanggal) = YEAR(CURRENT_DATE()) and tanggal not in (select tanggal from kalender)  group by tanggal";
         $query = $this->db->query($q);
 
         if($query->num_rows() > 0){
