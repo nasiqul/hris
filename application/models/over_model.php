@@ -843,17 +843,14 @@ public function getGA2($tgl)
     $this->db->select("tanggal,  
         (SELECT IFNULL(SUM(ext_food), 0) from over_time_member 
         JOIN over_time ON over_time.id = over_time_member.id_ot
-        JOIN master_lembur ON over_time_member.id_jam = master_lembur.id 
         WHERE shift = 1 AND over_time.tanggal = STR_TO_DATE('".$tgl."', '%d-%m-%Y')) as makan1 ,
 
         (SELECT IFNULL(SUM(ext_food), 0) from over_time_member 
         JOIN over_time ON over_time.id = over_time_member.id_ot
-        JOIN master_lembur ON over_time_member.id_jam = master_lembur.id 
         WHERE shift = 2 AND over_time.tanggal = STR_TO_DATE('".$tgl."', '%d-%m-%Y')) as makan2 , 
 
         (SELECT IFNULL(SUM(ext_food), 0) from over_time_member 
         JOIN over_time ON over_time.id = over_time_member.id_ot
-        JOIN master_lembur ON over_time_member.id_jam = master_lembur.id 
         WHERE shift = 3 AND over_time.tanggal = STR_TO_DATE('".$tgl."', '%d-%m-%Y')) as makan3");
     $this->db->from("over_time o");
     $this->db->join("over_time_member om","o.id = om.id_ot");
@@ -870,7 +867,6 @@ public function makan1db($tgl,$id)
     $this->db->from("(
         SELECT a.nik,k.namaKaryawan,dept.nama as dept,dev.nama as dev,sec.nama as sec,sub.nama as sub,gr.nama as gruop1 from over_time_member as a
         JOIN over_time ON over_time.id = a.id_ot
-        JOIN master_lembur ON a.id_jam = master_lembur.id 
         left join karyawan as k on a.nik = k.nik
         LEFT JOIN posisi as p on a.nik = p.nik
         left join departemen as dept on p.id_dep = dept.id
@@ -878,7 +874,7 @@ public function makan1db($tgl,$id)
         LEFT JOIN section as sec on p.id_sec = sec.id
         LEFT JOIN sub_section as sub on p.id_sub_sec = sub.id
         LEFT JOIN group1    as gr on p.id_group = gr.id         
-        WHERE master_lembur.shift = ".$id." AND over_time.tanggal = STR_TO_DATE('".$tgl."', '%d-%m-%Y') and a.makan ='1'
+        WHERE over_time.shift = ".$id." AND over_time.tanggal = STR_TO_DATE('".$tgl."', '%d-%m-%Y') and a.makan ='1'
     ) a");
 
     $query = $this->db->get();
@@ -891,7 +887,6 @@ public function extrafood2($tgl,$id)
     $this->db->from("(
         SELECT a.nik,k.namaKaryawan,dept.nama as dept,dev.nama as dev,sec.nama as sec,sub.nama as sub,gr.nama as gruop1 from over_time_member as a
         JOIN over_time ON over_time.id = a.id_ot
-        JOIN master_lembur ON a.id_jam = master_lembur.id 
         left join karyawan as k on a.nik = k.nik
         LEFT JOIN posisi as p on a.nik = p.nik
         left join departemen as dept on p.id_dep = dept.id
@@ -899,7 +894,7 @@ public function extrafood2($tgl,$id)
         LEFT JOIN section as sec on p.id_sec = sec.id
         LEFT JOIN sub_section as sub on p.id_sub_sec = sub.id
         LEFT JOIN group1    as gr on p.id_group = gr.id         
-        WHERE master_lembur.shift = ".$id." AND over_time.tanggal = STR_TO_DATE('".$tgl."', '%d-%m-%Y') and a.ext_food ='1'
+        WHERE over_time.shift = ".$id." AND over_time.tanggal = STR_TO_DATE('".$tgl."', '%d-%m-%Y') and a.ext_food ='1'
     ) a");
 
     $query = $this->db->get();
@@ -912,7 +907,6 @@ public function transdb($id,$tgl,$dari,$sampai)
     $this->db->from("(
        SELECT a.nik,k.namaKaryawan,dept.nama as dept,dev.nama as dev,sec.nama as sec,sub.nama as sub,gr.nama as gruop1 from over_time_member as a
        JOIN over_time ON over_time.id = a.id_ot
-       JOIN master_lembur ON a.id_jam = master_lembur.id 
        left join karyawan as k on a.nik = k.nik
        LEFT JOIN posisi as p on a.nik = p.nik
        left join departemen as dept on p.id_dep = dept.id
