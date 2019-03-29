@@ -602,6 +602,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     var subsec = document.getElementById('subsec').value;
     var kep = document.getElementById('kep').value;
     var cat = document.getElementById('cat').value;
+    var shift = $("#shiftF").val();
 
     $.ajax({
       type: 'POST',
@@ -628,7 +629,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
             'cat': cat,
             'subsec' : subsec,
             'hari' : hari,
-            'grup' : group4
+            'grup' : group4,
+            'shift' : shift
           },
           success: function(data){
 

@@ -425,7 +425,7 @@ class Over_model extends CI_Model {
     	return $query->result();
     }
 
-    public function save_master($no_doc, $tgl, $dep, $sec, $subsec, $kep, $cat, $hari, $grup)
+    public function save_master($no_doc, $tgl, $dep, $sec, $subsec, $kep, $cat, $hari, $grup, $shift)
     {
     	$data = array(
     		'id' => $no_doc,
@@ -436,7 +436,8 @@ class Over_model extends CI_Model {
     		'catatan' => $cat,
             'hari' => $hari,
             'sub_sec' => $subsec,
-            'status_shift' => $grup
+            'status_shift' => $grup,
+            'shift' => $shift
         );
 
     	$this->db->insert('over_time', $data);

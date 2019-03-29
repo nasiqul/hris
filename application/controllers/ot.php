@@ -32,6 +32,7 @@ class Ot extends CI_Controller {
 		$subsec = $_POST['subsec'];
 		$grup = $_POST['grup'];
 		$hari = $_POST['hari'];
+		$shift = $_POST['shift'];
 
 		$params['data'] = $no_doc;
 		$params['level'] = 'H';
@@ -39,7 +40,8 @@ class Ot extends CI_Controller {
 		$params['savename'] = 'app/qr_lembur/'.$no_doc.'.png';
 		$this->ciqrcode->generate($params);
 
-		$this->over_model->save_master($no_doc, $tgl, $dep, $sec, $subsec, $kep, $cat, $hari, $grup);
+		$this->over_model->save_master($no_doc, $tgl, $dep, $sec, $subsec, $kep, $cat, $hari, $grup, 
+			$shift);
 	}
 
 	public function ot_member_submit()
