@@ -766,7 +766,7 @@ public function get_data_chart($tgl,$cc,$target)
     JOIN over_time_member om ON o.id = om.id_ot
     JOIN karyawan k ON k.nik = om.nik
     WHERE costCenter = ".$cc." AND
-    MONTH(tanggal) = MONTH(STR_TO_DATE('".$tgl."', '%Y-%m-%d'))
+    DATE_FORMAT(tanggal,'%m-%Y') = DATE_FORMAT(STR_TO_DATE('".$tgl."', '%d-%m-%Y'), '%m-%Y')
     GROUP BY tanggal
     )a
     where a.jam > 0";
@@ -1286,9 +1286,9 @@ public function get_budget($tgl, $cc)
     }
 
     $q = "
-    select period, departemen ,round(sum(budget),2) as budget from 
+    select period, departemen, sum(budget) as budget from 
     (
-    select cost_center_budget.period, master_cc.departemen, sum((cost_center_budget.budget*a.tot_karyawan)/DAY(LAST_DAY(cost_center_budget.period))) as budget from cost_center_budget
+    select cost_center_budget.period, master_cc.departemen, sum((cost_center_budget.budget*a.tot_karyawan)) as budget from cost_center_budget
 
     left join
     (

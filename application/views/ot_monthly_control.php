@@ -323,13 +323,10 @@ $(function () {
     });
     cumulativeData.shift();
 
-    var d =  data[1][0][0];
-    var res = d.split("-");
-
         cumulativeData2 = [0];
         accData2 = [];
         for(i=0; i < xCategories.length; i++){
-          accData2.push(data[1][0][2]);
+          accData2.push(data[1][0][2] / xCategories.length);
         }
 
 
@@ -342,12 +339,15 @@ $(function () {
         for (var i = 0; i <= cumulativeData2.length; i++) {
          // alert(cumulativeData2[i]+" ");
         }
+
+        //Title Name
         const monthNames = ["January", "February", "March", "April", "May", "June",
               "July", "August", "September", "October", "November", "December"
             ];
 
           var dt = "01-"+title;
            var date = new Date(dt.replace( /(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3"))
+          // End Title
 
                seriesData.push({type: 'line', name: 'Cumulative Budget', data: cumulativeData2});
                seriesData.push({type: 'line', name: 'Cumulative Actual', data: cumulativeData});
