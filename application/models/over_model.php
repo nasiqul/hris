@@ -817,17 +817,14 @@ public function getGA($tgl)
     $this->db->select("tanggal,  
         (SELECT IFNULL(SUM(makan), 0) from over_time_member 
         JOIN over_time ON over_time.id = over_time_member.id_ot
-        JOIN master_lembur ON over_time_member.id_jam = master_lembur.id 
         WHERE shift = 1 AND over_time.tanggal = STR_TO_DATE('".$tgl."', '%d-%m-%Y')) as makan1 ,
 
         (SELECT IFNULL(SUM(makan), 0) from over_time_member 
         JOIN over_time ON over_time.id = over_time_member.id_ot
-        JOIN master_lembur ON over_time_member.id_jam = master_lembur.id 
         WHERE shift = 2 AND over_time.tanggal = STR_TO_DATE('".$tgl."', '%d-%m-%Y')) as makan2 , 
 
         (SELECT IFNULL(SUM(makan), 0) from over_time_member 
         JOIN over_time ON over_time.id = over_time_member.id_ot
-        JOIN master_lembur ON over_time_member.id_jam = master_lembur.id 
         WHERE shift = 3 AND over_time.tanggal = STR_TO_DATE('".$tgl."', '%d-%m-%Y')) as makan3");
     $this->db->from("over_time o");
     $this->db->join("over_time_member om","o.id = om.id_ot");
