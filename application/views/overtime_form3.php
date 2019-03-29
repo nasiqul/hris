@@ -334,6 +334,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
             nama = sr[0][1];
             nik = sr[0][0];
+            dariz = $('#dari').val();
+            sampaiz = $('#sampai').val();
 
             if ($('#makanF').is(':checked')) {
               cekM="checked";
@@ -355,8 +357,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
             var newdiv1 = $( "<div class='col-md-12' style='margin-bottom: 5px' id='"+no+"'>"+
               "<div class='col-md-2'><input type='text' id='nik"+no+"' value='"+nik+"' class='form-control' readonly></div>"+
-              "<div class='col-md-3'><p id='nama"+no+"'>"+nama+"</p></div><div class='col-md-1'><input class='form-control timepicker' id='dari"+no+"' name='dari"+no+"' onchange='dariid("+no+")'></input></div>"+
-              "<div class='col-md-1'><input class='form-control timepicker' id='sampai"+no+"'  name='sampai"+no+"' onchange='sampaiid("+no+")'></input></div><div class='col-md-1'><p id='jam"+no+"' hidden></p><p id='jamfix"+no+"'>0</p></div>"+
+              "<div class='col-md-3'><p id='nama"+no+"'>"+nama+"</p></div><div class='col-md-1'><input class='form-control timepicker' value='"+dariz+"'  id='dari"+no+"' name='dari"+no+"' onchange='dariid("+no+")'></input></div>"+
+              "<div class='col-md-1'><input class='form-control timepicker' id='sampai"+no+"'  name='sampai"+no+"' value='"+sampaiz+"' onchange='sampaiid("+no+")'></input></div><div class='col-md-1'><p id='jam"+no+"' hidden></p><p id='jamfix"+no+"'>0</p></div>"+
               "<div class='col-md-1'><select class='form-control' id='trans"+no+"'>"+
               "<option value='-' "+t1+">-</option><option value='B' "+t2+">B</option><option value='P' "+t3+">P</option></select></div>"+
               "<div class='col-md-1'><input type='checkbox' id='makan"+no+"' "+cekM+"></div>"+
