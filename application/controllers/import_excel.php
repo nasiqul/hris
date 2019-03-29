@@ -104,6 +104,7 @@ class import_excel extends CI_Controller {
                     $shift2 = trim(preg_replace('/\s\s+/', ' ', $shift));
 
                     $daily_data = Array(
+                        'pin' => $pin,
                         'tgl'    => date('m/d/Y' , strtotime($tgl)) ,
                         'nik' => $nik,
                         'masuk'       => $masuk,

@@ -488,11 +488,8 @@ cumulativeData.shift();
     var d =  data[1][0][0];
     var res = d.split("-");
 
-        cumulativeData2 = [0];
-        accData2 = [];
-        for(i=0; i < xCategories.length; i++){
-          accData2.push(data[1][0][2]);
-        }
+        cumulativeData2 = [0]; accData2 = []; for(i=0; i < xCategories.length;
+        i++){ accData2.push(Math.round(data[1][0][2] / xCategories.length)); }
 
 
         accData2.forEach(function(elementToAdd2, index) {

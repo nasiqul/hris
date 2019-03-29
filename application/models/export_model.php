@@ -159,7 +159,7 @@ class Export_model extends CI_Model {
 		$c = round($d/3600,1);
         $jam_lembur = round($c*2)/2;
 
-		$query = "CALL masukData2 ('','".$data2['nik']."','".$data2['tgl']."', '".$data2['masuk']."','".$data2['keluar']."','".$data2['shift']."', '".$hari."' ,'".$jam_lembur."')";
+		$query = "CALL masukData2 ('".$data2['pin']."','".$data2['nik']."','".$data2['tgl']."', '".$data2['masuk']."','".$data2['keluar']."','".$data2['shift']."', '".$hari."' ,'".$jam_lembur."')";
 		$result = $this->db->query($query);
 
 		if($result){
