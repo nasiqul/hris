@@ -923,7 +923,7 @@ public function getGA_trans($tgl)
     $this->db->from("(
         SELECT o.tanggal, om.dari, om.sampai, transport, COUNT(if(transport = 'B' , transport, null)) B, COUNT(if(transport = 'P' , transport, null)) P from over_time o 
         left JOIN over_time_member om ON o.id = om.id_ot
-        WHERE o.tanggal = '".$tgl."'
+        WHERE o.tanggal = STR_TO_DATE('".$tgl."', '%d-%m-%Y')
         group by dari, sampai
     ) as b");
     $this->db->where("b.B <> 0");
