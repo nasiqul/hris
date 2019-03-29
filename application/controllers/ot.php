@@ -893,8 +893,8 @@ class Ot extends CI_Controller {
 		foreach ($list as $key) {
 			$row = array();
 			$row[] = $key->tanggal;
-			$row[] = $key->jam_awal;
-			$row[] = $key->jam_akhir;
+			$row[] = $key->dari;
+			$row[] = $key->sampai;
 			$row[] = $key->B;
 			$row[] = $key->P;
 
