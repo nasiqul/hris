@@ -93,7 +93,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                           if ($isi[0]->departemen == $key->id) {
                             echo "<option value='".$key->id."' name='".$key->id_departemen."' selected>".$key->nama."</option>";
                           } else {
-                          echo "<option value='".$key->id."' name='".$key->id_departemen."'>".$key->nama."</option>";
+                            echo "<option value='".$key->id."' name='".$key->id_departemen."'>".$key->nama."</option>";
                           }
                         }
                         ?>
@@ -139,18 +139,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <button id="submit" class="btn btn-primary" onclick="submit1()"><i class="fa fa-pencil"></i> Edit</button>
               </div>
 
-              <div class="col-md-12">
-                <br>
-                <div class="form-group">
-                  <div class="input-group input-group-lg">
-                    <div class="input-group-addon">
-                      <i class="fa fa-barcode"></i>
-                    </div>
-                    <input type="text" class="form-control text-center" placeholder="Scan NIK Barcode here . ." id="nikF">
-                  </div>
-                  <!-- /.input group -->
-                </div>
-              </div>
             </div>
 
             <input type="hidden" name="nodoc2" id="nodoc2" value="<?php echo $isi[0]->id ?>">
@@ -164,10 +152,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
                       </th>
                       <th></th>
                       <th>Dari
-                        <input type="text" name="dari" id="dari" class="form-control timepicker" onchange="dari()">
+                        <input type="text" name="dari" id="dari" class="form-control timepicker" onchange="dari()" value="<?php echo $isi[0]->dari ?>">
                       </th>
                       <th  name="jam0">Sampai
-                        <input type="text" name="sampai" id="sampai" class="form-control timepicker" onchange="sampai()">
+                        <input type="text" name="sampai" id="sampai" class="form-control timepicker" onchange="sampai()" value="<?php echo $isi[0]->sampai ?>">
                       </th>
                       <th><p id="jam0" hidden>0</p> <p id="jamfix">0</p></th>
                       <th>
@@ -203,16 +191,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </table>
               </div>
               <div id="peserta">
-              <!-- <div class='col-md-12' style='margin-bottom: 5px' id='0'>
-              <div class='col-md-2'><input type='text' id='nik0' class='form-control' readonly></div>
-              <div class='col-md-3'><p id='nama0'></p></div>
-              <div class='col-md-2' id='sJam0' name='jam0'><select id='jamL0' class='form-control'></select></div><div class='col-md-1'><p id='jam0'></p></div>
-              <div class='col-md-1'><select class='form-control' id='trans0'>
-              </select></div>
-              <div class='col-md-1'><input type='checkbox' id='makan0'></div>
-              <div class='col-md-1'><input type='checkbox' id='exfood0'></div>
-              <div class='col-md-1'><button class='btn btn-danger btn-xs' id='delete0'><i class='fa fa-minus'></i></button></div>
-              <input type='hidden' id='idJam0'></div> -->
 
             </div>
           </div>
@@ -250,7 +228,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
     $(document).ready(function()
     {
-
+      append();
     });
 
     $('#datepicker').datepicker({
@@ -266,144 +244,195 @@ scratch. This page gets rid of all links and provides the needed markup only.
     });
 
     //nik on enter
-    $('#nikF').bind("enterKey",function(e){
-      appendRow();
-      ali();
-    });
-    $('#nikF').keydown(function(e){
-      if(e.keyCode == 13 || e.which == 9)
-      {
-        $(this).trigger("enterKey");
-        console.log(no);
-      }
-    });
+    // $('#nikF').bind("enterKey",function(e){
+    //   appendRow();
+    //   ali();
+    // });
+    // $('#nikF').keydown(function(e){
+    //   if(e.keyCode == 13 || e.which == 9)
+    //   {
+    //     $(this).trigger("enterKey");
+    //     console.log(no);
+    //   }
+    // });
 
-    function appendRow() {
-      if ($('#no_doc').val() == "" || $('#datepicker').val() == "" || $('#kep').val() == "" || $('#nikF').val() == "" || $('#dep').find(':selected').prop('disabled') == true || $('#sec').find(':selected').prop('disabled') == true || $('#subsec').find(':selected').prop('disabled') == true || $('#shiftF').find(':selected').prop('disabled') == true){
-        openDangerGritter();
-        return false;
-      }
+    // function appendRow() {
+    //   if ($('#no_doc').val() == "" || $('#datepicker').val() == "" || $('#kep').val() == "" || $('#nikF').val() == "" || $('#dep').find(':selected').prop('disabled') == true || $('#sec').find(':selected').prop('disabled') == true || $('#subsec').find(':selected').prop('disabled') == true || $('#shiftF').find(':selected').prop('disabled') == true){
+    //     openDangerGritter();
+    //     return false;
+    //   }
 
-      // var j = jam.innerHTML;
-      var n = nikS.value;
-      var dep = $("#dep").val();
+    //   // var j = jam.innerHTML;
+    //   var n = nikS.value;
+    //   var dep = $("#dep").val();
 
-      for (var z = 0; z < arrNik.length; z++) {
-        if (arrNik[z] == n) {
-          openDanger3Gritter();
-          return false;
-        }
-      }
+    //   for (var z = 0; z < arrNik.length; z++) {
+    //     if (arrNik[z] == n) {
+    //       openDanger3Gritter();
+    //       return false;
+    //     }
+    //   }
 
-      var nama ="";
-      var t1 = "";
-      var t2 = "";
-      var t3 = "";
+    //   var nama ="";
+    //   var t1 = "";
+    //   var t2 = "";
+    //   var t3 = "";
 
-      var cekM = "";
-      var cekFd = "";
+    //   var cekM = "";
+    //   var cekFd = "";
 
-      $.ajax({
-        type: 'POST',
-        url: '<?php echo base_url("ot/cek_nik") ?>',
-        data: {
-          'nik': n,
-          'dep': dep
-        },
-        success: function (data) {
-          if ($.parseJSON(data) == 0) {
-            openDanger2Gritter();
-            return false;
-          }
+    //   $.ajax({
+    //     type: 'POST',
+    //     url: '<?php // echo base_url("ot/cek_nik") ?>',
+    //     data: {
+    //       'nik': n,
+    //       'dep': dep
+    //     },
+    //     success: function (data) {
+    //       if ($.parseJSON(data) == 0) {
+    //         openDanger2Gritter();
+    //         return false;
+    //       }
 
-          arrNik.push(n);
+    //       arrNik.push(n);
 
-          $.ajax({
-            type: 'POST',
-            url: '<?php echo base_url("home/ajax_get_nama") ?>',
-            data: {
-              'nik': n
-            },
-            success: function (data) {
-            // the next thing you want to do 
-            var sr = $.parseJSON(data);
+    //       $.ajax({
+    //         type: 'POST',
+    //         url: '<?php // echo base_url("home/ajax_get_nama") ?>',
+    //         data: {
+    //           'nik': n
+    //         },
+    //         success: function (data) {
+    //         // the next thing you want to do 
+    //         var sr = $.parseJSON(data);
 
-            nama = sr[0][1];
-            nik = sr[0][0];
-            dariz = $('#dari').val();
-            sampaiz = $('#sampai').val();
+    //         nama = sr[0][1];
+    //         nik = sr[0][0];
+    //         dariz = $('#dari').val();
+    //         sampaiz = $('#sampai').val();
 
-            if ($('#makanF').is(':checked')) {
-              cekM="checked";
+    //         if ($('#makanF').is(':checked')) {
+    //           cekM="checked";
+    //         }
+
+    //         if ($('#exfoodF').is(':checked')) {
+    //           cekFd="checked";
+    //         }
+
+    //         if ($('#transF option:selected').text() == '-') {
+    //           t1="selected";
+    //         }
+    //         else if ($('#transF option:selected').text() == 'B') {
+    //           t2="selected";
+    //         }
+    //         else if ($('#transF option:selected').text() == 'P') {
+    //           t3="selected";
+    //         }
+
+    //         var newdiv1 = $( "<div class='col-md-12' style='margin-bottom: 5px' id='"+no+"'>"+
+    //           "<div class='col-md-2'><input type='text' id='nik"+no+"' value='"+nik+"' class='form-control' readonly></div>"+
+    //           "<div class='col-md-3'><p id='nama"+no+"'>"+nama+"</p></div><div class='col-md-1'><input class='form-control timepicker' value='"+dariz+"'  id='dari"+no+"' name='dari"+no+"' onchange='dariid("+no+")'></input></div>"+
+    //           "<div class='col-md-1'><input class='form-control timepicker' id='sampai"+no+"'  name='sampai"+no+"' value='"+sampaiz+"' onchange='sampaiid("+no+")'></input></div><div class='col-md-1'><p id='jam"+no+"' hidden></p><p id='jamfix"+no+"'>0</p></div>"+
+    //           "<div class='col-md-1'><select class='form-control' id='trans"+no+"'>"+
+    //           "<option value='-' "+t1+">-</option><option value='B' "+t2+">B</option><option value='P' "+t3+">P</option></select></div>"+
+    //           "<div class='col-md-1'><input type='checkbox' id='makan"+no+"' "+cekM+"></div>"+
+    //           "<div class='col-md-1'><input type='checkbox' id='exfood"+no+"' "+cekFd+"></div>"+
+    //           "<div class='col-md-1'><button class='btn btn-danger btn-xs' id='delete"+no+"' onclick='deleteRow(this); ali()'><i class='fa fa-minus'></i></button></div>"+
+    //           "<input type='hidden' id='idJam"+no+"'></div>");
+
+    //         $("#peserta").append(newdiv1).find('.timepicker').timepicker({
+    //           showInputs: false,
+    //           showMeridian: false,
+    //           interval: 30,
+
+    //         });
+
+    //         var sampai = $('#sampai').val();
+    //         var dari = $('#dari').val();
+    //         var jam = $('#jam0').text();
+    //         var jamfix = $('#jamfix').val();
+    //         $('#jam'+no).text(jam);
+    //         $('#jamfix'+no).val(jamfix).change();
+    //         $('#sampai'+no).val(sampai).change();
+    //         $('#dari'+no).val(dari);
+
+    //         $('#nomor').val(no);
+
+    //         no+=1;
+    //         nomorali+=1;
+    //         $('#totalsemua').text("Total : "+nomorali);
+    //       }
+    //     });
+
+    //     }
+    //   });
+
+    // }
+
+    function append() {
+      <?php foreach ($isi as $key) { 
+        if ($key->makan == 1)
+              $cekM = 'checked';
+            else 
+              $cekM = '';
+
+            if ($key->ext_food == 1) 
+              $cekExF="checked";
+            else
+              $cekExF='';
+
+            if ($key->transport == '-') {
+              $t1='selected';
+              $t2 = '';
+              $t3 = '';
             }
-
-            if ($('#exfoodF').is(':checked')) {
-              cekFd="checked";
+            else if ($key->transport == 'B') {
+              $t1 = '';
+              $t2='selected';
+              $t3 = '';
             }
-
-            if ($('#transF option:selected').text() == '-') {
-              t1="selected";
+            else if ($key->transport == 'P') {
+              $t1 = '';
+              $t2 = '';
+              $t3='selected';
             }
-            else if ($('#transF option:selected').text() == 'B') {
-              t2="selected";
-            }
-            else if ($('#transF option:selected').text() == 'P') {
-              t3="selected";
-            }
+        ?>
 
-            var newdiv1 = $( "<div class='col-md-12' style='margin-bottom: 5px' id='"+no+"'>"+
-              "<div class='col-md-2'><input type='text' id='nik"+no+"' value='"+nik+"' class='form-control' readonly></div>"+
-              "<div class='col-md-3'><p id='nama"+no+"'>"+nama+"</p></div><div class='col-md-1'><input class='form-control timepicker' value='"+dariz+"'  id='dari"+no+"' name='dari"+no+"' onchange='dariid("+no+")'></input></div>"+
-              "<div class='col-md-1'><input class='form-control timepicker' id='sampai"+no+"'  name='sampai"+no+"' value='"+sampaiz+"' onchange='sampaiid("+no+")'></input></div><div class='col-md-1'><p id='jam"+no+"' hidden></p><p id='jamfix"+no+"'>0</p></div>"+
-              "<div class='col-md-1'><select class='form-control' id='trans"+no+"'>"+
-              "<option value='-' "+t1+">-</option><option value='B' "+t2+">B</option><option value='P' "+t3+">P</option></select></div>"+
-              "<div class='col-md-1'><input type='checkbox' id='makan"+no+"' "+cekM+"></div>"+
-              "<div class='col-md-1'><input type='checkbox' id='exfood"+no+"' "+cekFd+"></div>"+
-              "<div class='col-md-1'><button class='btn btn-danger btn-xs' id='delete"+no+"' onclick='deleteRow(this); ali()'><i class='fa fa-minus'></i></button></div>"+
-              "<input type='hidden' id='idJam"+no+"'></div>");
+        var newdiv1 = $( "<div class='col-md-12' style='margin-bottom: 5px' id='"+no+"'>"+
+        "<div class='col-md-2'><input type='text' id='nik"+no+"' value='<?php echo $key->nik ?>' class='form-control' readonly></div>"+
+        "<div class='col-md-3'><p id='nama"+no+"'><?php echo $key->namaKaryawan ?></p></div><div class='col-md-1'><input class='form-control timepicker' value='<?php echo $key->dari ?>'  id='dari"+no+"' name='dari"+no+"' onchange='dariid("+no+")'></input></div>"+
+        "<div class='col-md-1'><input class='form-control timepicker' id='sampai"+no+"'  name='sampai"+no+"' value='<?php echo $key->sampai ?>' onchange='sampaiid("+no+")'></input></div><div class='col-md-1'><p id='jam"+no+"' hidden></p><p id='jamfix"+no+"'><?php echo $key->jam ?></p></div>"+
+        "<div class='col-md-1'><select class='form-control' id='trans"+no+"'>"+
+        "<option value='-' <?php echo $t1 ?>>-</option><option value='B' <?php echo $t2 ?>>B</option><option value='P' <?php echo $t3 ?>>P</option></select></div>"+
+        "<div class='col-md-1'><input type='checkbox' id='makan"+no+"' <?php echo $cekM ?>></div>"+
+        "<div class='col-md-1'><input type='checkbox' id='exfood"+no+"' <?php echo $cekExF ?>></div>"+
+        "<div class='col-md-1'><button class='btn btn-danger btn-xs' id='delete"+no+"' onclick='deleteRow(this); ali()'><i class='fa fa-minus'></i></button></div>"+
+        "<input type='hidden' id='idJam"+no+"'></div>");
 
-            $("#peserta").append(newdiv1).find('.timepicker').timepicker({
-              showInputs: false,
-              showMeridian: false,
-              interval: 30,
+      $("#peserta").append(newdiv1).find('.timepicker').timepicker({
+        showInputs: false,
+        showMeridian: false,
+        interval: 30,
 
-            });
-
-            // var $options = $("#jamF2 > option").clone();
-            // $('#jamL'+no).append($options);
-            // var idB = $('#jamF2').find(':selected')[0].value;
-            var sampai = $('#sampai').val();
-            var dari = $('#dari').val();
-            var jam = $('#jam0').text();
-            var jamfix = $('#jamfix').val();
-            $('#jam'+no).text(jam);
-            $('#jamfix'+no).val(jamfix).change();
-            $('#sampai'+no).val(sampai).change();
-            $('#dari'+no).val(dari);
-
-
-            // var jamZ = $("#jam0").text();
-
-            // var selects = $("#jamF2").find(':selected')[0].id;
-
-            // $('#idJam'+no).val(selects);
-
-            $('#nomor').val(no);
-
-            $('#nikF').val('');
-
-            openSuccessGritter();
-
-            no+=1;
-            nomorali+=1;
-            $('#totalsemua').text("Total : "+nomorali);
-          }
-        });
-
-        }
       });
 
+      var sampai = $('#sampai').val();
+      var dari = $('#dari').val();
+      var jam = $('#jam0').text();
+      var jamfix = $('#jamfix').val();
+      $('#jam'+no).text(jam);
+      $('#jamfix'+no).val(jamfix).change();
+      $('#sampai'+no).val(sampai).change();
+      $('#dari'+no).val(dari);
+
+      $('#nomor').val(no);
+
+      no+=1;
+      nomorali+=1;
+      $('#totalsemua').text("Total : "+nomorali);
+      <?php } ?>
     }
+
 
     function deleteRow(elem) {
 
@@ -774,7 +803,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
     else {
       $('#libur2').css('display','none');
-      var hari2 = "N";
+      var hari2 = hari;
 
     }
     $("#textHari").text(hari2);
@@ -895,7 +924,6 @@ function getHari() {
         hari3 = "Libur";
       }
       console.log("hari = "+hari);
-      $("#textHari").text(hari3);
 
       showJam();
     }
