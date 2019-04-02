@@ -778,7 +778,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
     else {
       $('#libur2').css('display','none');
-      var hari2 = "N";
+      var hari2 = hari;
 
     }
     $("#textHari").text(hari2);
@@ -899,7 +899,7 @@ function getHari() {
         hari3 = "Libur";
       }
       console.log("hari = "+hari);
-      $("#textHari").text(hari3);
+      
 
       showJam();
     }
