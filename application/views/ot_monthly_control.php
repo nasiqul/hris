@@ -187,7 +187,8 @@ function progressData()
    var direct = ((ofc2/ofc)*100).toFixed(2) + '%';
    if( ((ofc2/ofc)*100).toFixed(0) > 100){
     $('#progress_bar_prod').removeClass('progress-bar-green').addClass('progress-bar-red');
-  }
+  } else
+    $('#progress_bar_prod').removeClass('progress-bar-red').addClass('progress-bar-green');
   $('#persendirect').html("( "+direct+" )");
   $('#persendirect2').html(ofc2+" / "+ofc+" Hours");
   $('#progress_bar_prod').html(direct);
@@ -211,6 +212,8 @@ if (prod != 0)
   if( ((prod2/prod)*100).toFixed(0) > 100){
     $('#progress_bar_ofc').removeClass('progress-bar-yellow').addClass('progress-bar-red');
   }
+  else
+    $('#progress_bar_ofc').removeClass('progress-bar-red').addClass('progress-bar-yellow');
   $('#persenindirect').html("( "+indirect+" )");
   $('#persenindirect2').html(prod2+" / "+prod+" Hours");
   $('#progress_bar_ofc').html(indirect);
@@ -233,7 +236,8 @@ if (pl != 0)
 
   if( ((pl2/pl)*100).toFixed(0) > 100){
     $('#progress_bar_pl').removeClass('progress-bar-blue').addClass('progress-bar-red');
-  }
+  } else
+    $('#progress_bar_pl').removeClass('progress-bar-red').addClass('progress-bar-blue');
   $('#persenpl').html("( "+plData+" )");
   $('#persenpl2').html(pl2+" / "+pl+" Hours");
   $('#progress_bar_pl').html(plData);
@@ -313,7 +317,7 @@ $(function () {
     cumulativeData = [0];
 
     accData = [];
-    for(i=0; i<groupedObjects.length; i++){
+    for(i=0; i < groupedObjects.length; i++){
       accData.push(groupedObjects[i][2]);
     }
 
@@ -488,8 +492,10 @@ cumulativeData.shift();
     var d =  data[1][0][0];
     var res = d.split("-");
 
-        cumulativeData2 = [0]; accData2 = []; for(i=0; i < xCategories.length;
-        i++){ accData2.push(Math.round(data[1][0][2] / xCategories.length)); }
+        cumulativeData2 = [0]; accData2 = [];
+        for(i=0; i < xCategories.length; i++){ 
+          accData2.push(data[1][0][2] / xCategories.length); 
+        }
 
 
         accData2.forEach(function(elementToAdd2, index) {
@@ -541,6 +547,7 @@ cumulativeData.shift();
              }
            },
            tooltip: {
+            valueDecimals: 2, 
              headerFormat: '<b>{point.x}</b><br/>',
              pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
            },

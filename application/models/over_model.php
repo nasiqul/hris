@@ -1070,7 +1070,6 @@ public function chart2($tgl)
     ) t on t.kode = kode.nama
     GROUP by kode.nama
 
-
     ";
     $query = $this->db->query($q);
     return $query->result();
@@ -1276,7 +1275,7 @@ return $query->result();
 }
 
 
-public function get_budget($tgl, $cc)
+public function get_budget($tgl, $cc, $fiskal)
 {
     if ($cc != "0"){
         $where = "where departemen ='".$cc."'";
@@ -1299,7 +1298,7 @@ public function get_budget($tgl, $cc)
     ) as b
     join
     (
-    select '195' as fy, karyawan.kode, tanggalKeluar, tanggalMasuk, nik, costCenter
+    select '".$fiskal."' as fy, karyawan.kode, tanggalKeluar, tanggalMasuk, nik, costCenter
     from karyawan
     ) as a
     on a.fy = b.fiskal
@@ -1317,7 +1316,7 @@ return $query->result();
 
 }
 
-public function get_data_ot_month()
+public function get_data_ot_month($fiskal)
 {
     $q = "
     select c.mon, (budget*jml_kar) budget_tot, (act*jml_kar) act_tot, (fr*jml_kar) forecast_tot, c.bagian from
@@ -1338,11 +1337,11 @@ public function get_data_ot_month()
     select mon, bagian, count(if(if(date_format(a.tanggalMasuk, '%Y-%m') < mon, 1, 0 )-if(date_format(a.tanggalKeluar, '%Y-%m') < mon, 1, 0 ) = 0, null, 1)) as jml_kar from
     (
     select distinct fiskal, date_format(tanggal, '%Y-%m') as mon
-    from kalender_fy where fiskal = '195'
+    from kalender_fy where fiskal = '".$fiskal."'
     ) as b
     left join
     (
-    select '195' as fy, karyawan.kode, tanggalKeluar, tanggalMasuk, nik, 
+    select '".$fiskal."' as fy, karyawan.kode, tanggalKeluar, tanggalMasuk, nik, 
     IF(costCenter LIKE '1%' ,'PL',
     IF(costCenter LIKE '2%','OFFICE','PRODUKSI')) as bagian
     from karyawan
@@ -1409,7 +1408,7 @@ public function exportdatahr($id)
     return $query->result();
 }
 
-public function get_presentase($n1, $bagian)
+public function get_presentase($n1, $bagian,$fiskal)
 {
     if ($bagian == "0") {
         $kode = "kode";
@@ -1438,7 +1437,7 @@ from kalender_fy
 ) as b
 join
 (
-select '195' as fy, karyawan.kode, tanggalKeluar, tanggalMasuk, nik, costCenter
+select '".$fiskal."' as fy, karyawan.kode, tanggalKeluar, tanggalMasuk, nik, costCenter
 from karyawan
 ) as a
 on a.fy = b.fiskal

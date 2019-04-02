@@ -7,6 +7,7 @@ class Ot extends CI_Controller {
 		$this->load->model('over_model');
 		$this->load->model('cari_over');
 		$this->load->model('over_user_model');
+		$this->load->model('home_model');
 		$this->load->model('over_report_model');
 		$this->load->model('over_cari_report_model');
 		$this->load->model('over_cari_report_model_2');
@@ -575,9 +576,7 @@ class Ot extends CI_Controller {
 				$no++;
 			}
 
-		}else
-		$data[] = json_decode("{}");
-
+		}
 
 		$output = array(
 			"draw" => $_GET['draw'],
@@ -1237,8 +1236,10 @@ class Ot extends CI_Controller {
 
 		$data4 = array();
 
+		$fiskal = $this->home_model->getFiskal($tgl2);
+
 		$list2 = $this->over_model->get_cc5($tgl,$cc);
-		$list3 = $this->over_model->get_budget($tgl2,$cc);
+		$list3 = $this->over_model->get_budget($tgl2,$cc,$fiskal[0]->fiskal);
 
 		$data3 = array();
 
@@ -1350,8 +1351,11 @@ class Ot extends CI_Controller {
 
 	public function ajax_mountly()
 	{
-		
-		$list = $this->over_model->get_data_ot_month();
+		$tgl = date("Y-m");
+
+		$fiskal = $this->home_model->getFiskal($tgl);
+
+		$list = $this->over_model->get_data_ot_month($fiskal[0]->fiskal);
 		$data = array();
 
 		foreach ($list as $key2) {
@@ -1392,7 +1396,9 @@ class Ot extends CI_Controller {
 		$bagian = $_POST['bagian'];
 		$n1 = date('Y-m', strtotime("01-".$tgl));
 
-		$list = $this->over_model->get_presentase($n1,$bagian);
+		$fiskal = $this->home_model->getFiskal($n1);
+
+		$list = $this->over_model->get_presentase($n1,$bagian,$fiskal[0]->fiskal);
 		$data = array();
 		foreach ($list as $key) {
 			$row = array();
@@ -1436,6 +1442,55 @@ class Ot extends CI_Controller {
 			"draw" => $_GET['draw'],
 			"recordsFiltered" => $filter,
 			"recordsTotal" => $tot,
+			"data" => $data,
+		);
+            //output to json format
+		echo json_encode($output);
+	}
+
+
+	public function ajax_ot_hr()
+	{
+		if (isset($_GET['tanggal'])) {
+			$tgl = $_GET['tanggal'];
+			
+		} else {
+			$tgl = date('Y-m-d');
+
+		}
+
+		$sub = $_GET['sub'];
+		$subsec = $_GET['subsec'];
+		$group = $_GET['group'];
+
+		$list = $this->over_user_model->get_ot_user($tgl,$sub,$subsec,$group);
+
+		$tot = $this->over_user_model->count_all($tgl,$sub,$subsec,$group);
+		$filter = $this->over_user_model->count_filtered($tgl,$sub,$subsec,$group);
+		$data = array();
+		if(!empty($list)) {
+			$no = 1;
+			foreach ($list as $key) {
+				$row = array();
+				$row[] = $no;
+				$row[] = $key->id;
+				$row[] = $key->tanggal;
+				$row[] = "
+				<a class='btn btn-primary btn-xs' href='".base_url("home/overtime_edit/".$key->id)."'><i class='fa fa-pencil'></i></a> &nbsp;
+				<button class='btn btn-danger btn-xs' onclick='modal_open(".$key->id.");'><i class='fa fa-trash'></i></button>";
+				
+
+				$data[] = $row;
+
+				$no++;
+			}
+
+		}
+
+		$output = array(
+			"draw" => $_GET['draw'],
+			"recordsTotal" => $tot,
+			"recordsFiltered" => $filter,
 			"data" => $data,
 		);
             //output to json format

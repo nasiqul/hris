@@ -15,6 +15,7 @@ class Home extends CI_Controller {
         $this->load->model('karyawan_by_period_model');
         $this->load->model('report_detail_m');
         $this->load->model('over_model');
+        $this->load->model('over_model_new');
         $this->load->model('budget_model');
     }
 
@@ -42,7 +43,8 @@ class Home extends CI_Controller {
         }
         
         if ($this->session->userdata('nik')) { 
-            $data['menu'] = 'home';
+            $data['menu2'] = 'home';
+            $data['menu'] = '';
             $this->load->view('report', $data);
             
         } else {
@@ -63,20 +65,23 @@ class Home extends CI_Controller {
 
             $this->session->set_userdata($newdata);
         }
-        $data['menu'] = 'abs';
+        $data['menu2'] = 'Absence';
+        $data['menu'] = 'Absence Data';
         $this->load->view('absen',$data);
     }
 
     public function absensi_graph()
     {
-        $data['menu'] = 'absG';
+        $data['menu2'] = 'Absence';
+        $data['menu'] = 'Absence Graph';
         $this->load->view("absensi_graph",$data);
     }
     
-//---------------chart
+//--------------- Chart 
     public function budget_chart()
     {
-        $data['menu'] = 'ovrG';
+        $data['menu2'] = 'Overtime';
+        $data['menu'] = "Budget Total";
         if (isset($_POST['tgl2'])) {
             $n = date('Y-m', strtotime($_POST['tgl2']));
             $tgl = $n."-01";
@@ -97,7 +102,8 @@ class Home extends CI_Controller {
 
     public function budget_chart_mp()
     {
-        $data['menu'] = 'ovrG';
+        $data['menu2'] = 'Overtime';
+        $data['menu'] = 'Budget Total / MP';
         if (isset($_POST['tgl2'])) {
             $n = date('Y-m', strtotime($_POST['tgl2']));
             $tgl = $n."-01";
@@ -112,7 +118,8 @@ class Home extends CI_Controller {
 
     public function outSource()
     {
-        $data['menu'] = 'OutS';
+        $data['menu2'] = 'Employee';
+        $data['menu'] = 'Outsource Employee';
         $this->load->view("outsource",$data);
     }
 
@@ -123,18 +130,28 @@ class Home extends CI_Controller {
 
     public function monthly()
     {
-        $data['menu'] = 'ovrMo';
+        $data['menu2'] = 'Overtime';
+        $data['menu'] = 'Monthly Overtime Summary';
         $this->load->view("ot_summary", $data);
     }
 
     public function monthlyMon()
     {
-        $data['menu'] = 'ovrMon';
+        $data['menu2'] = 'Overtime';
+        $data['menu'] = 'Monthly Overtime Monitor';
         $this->load->view("ot_monthly_monitor", $data);
+    }
+
+    public function hr_ot()
+    {
+        $data['menu2'] = 'Overtime';
+        $data['menu'] = 'HR - Overtime';
+        $this->load->view("ot_hr", $data);
     }
 
     public function emp_tot()
     {
+        $data['menu2'] = 'Overtime';
         $data['prs'] = $this->over_model->get_p_data();
         $data['prs2'] = $this->over_model->tes1();
         $data['menu'] = 'ovrG';
@@ -143,14 +160,16 @@ class Home extends CI_Controller {
 
     public function monthlyC()
     {
-        $data['menu'] = 'ovrMoC';
+        $data['menu2'] = 'Overtime';
+        $data['menu'] = 'Monthly Overtime Control';
         $data['section'] = $this->budget_model->get_name_cc2();
         $this->load->view("ot_monthly_control", $data);
     }
 
     public function ot_m()
     {
-        $data['menu'] = 'OT-m';
+        $data['menu2'] = 'Overtime';
+        $data['menu'] = 'OT Management By Section';
         $data['section'] = $this->budget_model->get_name_cc();
         $this->load->view("ot_management",$data);
     }
@@ -159,13 +178,24 @@ class Home extends CI_Controller {
     {
         $data['dep'] = $this->over_model->get_dep();
         $data['id_doc'] = $this->over_model->get_id_doc();
-        $data['menu'] = 'ovr';
+        $data['menu2'] = 'Overtime';
+        $data['menu'] = 'Overtime Data';
         $this->load->view("overtime_form3",$data);
+    }
+
+     public function overtime_edit($id_ot)
+    {
+        $data['dep'] = $this->over_model->get_dep();
+        $data['isi'] = $this->over_model_new->ot_hr($id_ot);
+        $data['menu2'] = 'Overtime';
+        $data['menu'] = 'HR - Overtime';
+        $this->load->view("overtime_edit",$data);
     }
 
     public function ot_graph()
     {
-        $data['menu'] = 'ovrG';
+        $data['menu2'] = 'Overtime';
+        $data['menu'] = 'Overtime Graph';
 
         $d = date('n');
         $data3 = array();
@@ -191,18 +221,21 @@ class Home extends CI_Controller {
 
     public function ot_report()
     {
-        $data['menu'] = 'ovrR';
+        $data['menu2'] = 'Overtime';
+        $data['menu'] = 'Report';
         $this->load->view("overtime_report",$data);
     }
 
     public function ot_report2()
     {
-        $data['menu'] = 'ovrR2';
+        $data['menu2'] = 'Overtime';
+        $data['menu'] = 'OT Management By NIK';
         $this->load->view("overtime_report2",$data);
     }
 
     public function detailSPL($nik,$tgl)
     {
+        $data['menu2'] = 'Overtime';
         $data['menu'] = 'ovrR2';
         $data['nik'] = $nik;
         $data['tgl'] = $tgl;
@@ -216,7 +249,8 @@ class Home extends CI_Controller {
         $data['grade'] = $this->karyawan_model->by_grade();
         $data['kode'] = $this->karyawan_model->by_kode();
         $data['posisi'] = $this->karyawan_model->by_posisi();
-        $data['menu'] = 'empG';
+        $data['menu2'] = 'Employee';
+        $data['menu'] = 'Employee Graph';
         $this->load->view("karyawan_graph", $data);
     }
 
@@ -259,19 +293,22 @@ class Home extends CI_Controller {
     public function overtime_user()
     {
         $data['dep'] = $this->over_model->get_dep();
+        $data['menu2'] = 'ovrU';
         $data['menu'] = 'ovrU';
         $this->load->view('overtime_user',$data);
     }
 
     public function report_GA()
     {
-        $data['menu'] = 'GAreport';
+        $data['menu2'] = 'Overtime';
+        $data['menu'] = 'GA - Report';
         $this->load->view('GAreport',$data);
     }
 
     public function karyawan_2()
     {
-        $data['menu'] = 'emp2';
+        $data['menu2'] = 'Employee';
+        $data['menu'] = 'Employee2';
         $this->load->view('karyawan_2',$data);
     }
 
@@ -286,7 +323,8 @@ class Home extends CI_Controller {
 
             $this->session->set_userdata($newdata);
         }
-        $data['menu'] = 'ovr';
+        $data['menu2'] = 'Overtime';
+        $data['menu'] = 'Overtime Data';
         $this->load->view('overtime2',$data);
     }
 
@@ -303,7 +341,8 @@ class Home extends CI_Controller {
 
             $this->session->set_userdata($newdata);
         }
-        $data['menu'] = 'pr';
+        $data['menu2'] = 'Presence';
+        $data['menu'] = 'Presence Data';
         $this->load->view('index',$data);
     }
 
@@ -312,7 +351,8 @@ class Home extends CI_Controller {
         $data['persentase'] = $this->home_model->by_persentase();
         $data['persentase_tidakMasuk'] = $this->home_model->persentase_tidakMasuk();
         $data['kary'] = $this->karyawan_model->tot();
-        $data['menu'] = 'prG';
+        $data['menu2'] = 'Presence';
+        $data['menu'] = 'Presence Graph';
         $this->load->view("presensi_graph", $data);
     }
 
@@ -1006,6 +1046,7 @@ public function karyawan()
 
         $this->session->set_userdata($newdata);
     }
+    $data['menu2'] = 'Employee';
     $data['menu'] = 'emp';
     $this->load->view("karyawan2", $data);
 }

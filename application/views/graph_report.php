@@ -237,7 +237,7 @@ var api = this.api();
 var totalPlan = api.column(1).data().reduce(function (a, b) {
      return intVal(a)+intVal(b);
 }, 0)
-$(api.column(1).footer()).html(totalPlan.toFixed(0).toLocaleString());
+$(api.column(1).footer()).html(totalPlan.toFixed(1).toLocaleString());
 }
 });
  }

@@ -257,4 +257,23 @@ class Home_model extends CI_Model {
             return $hasil;
         }
     }
+
+    public function getMenu2($sess, $menu)
+    {
+     $q = "SELECT m.nama_menu,m.url, m.parent_menu, m.icon from role as a
+     LEFT JOIN login2 as l on a.user_id = l.id 
+     left join master_menu as m on a.id_menu = m.id_menu
+     where l.username ='".$sess."' and m.parent_menu ='".$menu."'
+     order by m.id_menu";
+
+     $query = $this->db->query($q);
+     return $query->result();
+ }
+
+ public function getFiskal($tgl)
+ {
+    $q = "select fiskal from kalender_fy where DATE_FORMAT(tanggal,'%Y-%m') = '".$tgl."' limit 1";
+     $query = $this->db->query($q);
+     return $query->result();   
+ }
 }

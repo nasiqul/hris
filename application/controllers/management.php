@@ -50,7 +50,8 @@ class Management extends CI_Controller {
 
 	public function detailSPL2($nik,$tgl)
     {
-        $data['menu'] = 'ovrR2';
+    	$data['menu2'] = 'Overtime';
+        $data['menu'] = 'OT Management By NIK';
         $data['nik'] = $nik;
         $data['tgl'] = $tgl;
         $data['i'] = 'ok';

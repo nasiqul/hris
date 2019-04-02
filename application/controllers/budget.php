@@ -9,7 +9,8 @@ class Budget extends CI_Controller {
 
 	public function index()
 	{
-		$data['menu'] = 'cc';
+		$data['menu2'] = "Overtime";
+		$data['menu'] = 'Cost - Center Budget';
 		$this->load->view('budget',$data);
 	}
 

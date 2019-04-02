@@ -27,6 +27,7 @@ class Over_user_model extends CI_Model {
     	$this->db->select("over_time.id, DATE_FORMAT(tanggal, '%a, %d %b %Y') as tanggal, over_time_member.status");
     	$this->db->from("over_time");
         $this->db->join("over_time_member",'over_time_member.id_ot = over_time.id','left');
+        // $this->db->join("section sc",'section.id_ot = over_time.id','left');
         $this->db->where("tanggal = '".$tgl."'");        
         if ($sub !="asd" && $sub ) {
             $this->db->where("departemen = '".$sub."'");
