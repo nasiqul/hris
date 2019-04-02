@@ -89,7 +89,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <!-- /.box-body -->
               <div class="box-footer">
                 <a class="btn btn-primary" onclick="tanggal()"><i class="fa fa-search"></i> <span>Search</span></a>
-                <a class="btn btn-warning" id="reset" onclick="reset()"><i class="fa fa-refresh"></i> Reset</a>
+
 
               </div>
             </form>
@@ -109,7 +109,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <label>No SPL</label>
                 <input id="NoSpl" type="text" class="form-control tags" name="NoSpl">
                 <button class="btn btn-primary btn-sm" onclick="openModal3()">Make</button>
-
               </div>
             </div>
             <br>
@@ -118,8 +117,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <thead>
                 <tr>
                   <th width="5%">No</th>
-                  <th>No. SPL</th>
+                  <th width="20%">No. SPL</th>
                   <th>Tanggal</th>
+                  <th>Bagian</th>
+                  <th width="10%">Jumlah (orang)</th>
                   <th width="10%">Aksi</th>
                 </tr>
               </thead>
@@ -134,71 +135,35 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <div class="modal-dialog modal-lg">
           <div class="modal-content">
             <div class="modal-header">
-              <h4 style="float: right;" id="modal-title"></h4>
               <h4 class="modal-title">PT. YAMAHA MUSICAL PRODUCT INDONESIA</h4>
             </div>
             <div class="modal-body">
               <div class="row">
-                <div class="col-md-6">
-                  <div class="col-md-4">
-                    <p>Hari</p>
-                    <p>Tanggal</p>
-                    <p>Bagian</p>
-                  </div>
-                  <div class="col-md-8">
-                    <p>: <c id="hari"></c></p>
-                    <p>: <c id="tgl"></c></p>
-                    <p>: <c id="sec"></c> - <c id="subsec"></c> - <c id="group"></p>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <p>Keperluan : </p>
-                    <input type="text" class="form-control" readonly id="kep" style="height:70px;">
-                  </div>
-
-                  <div class="col-md-12">
-                    <br>
-                    <table class="table table-hover" id="example2" style="width: 100%;">
-                      <thead>
-                        <tr>
-                          <th>No</th>
-                          <th>NIK</th>
-                          <th>Nama</th>
-                          <th>Dari</th>
-                          <th>Sampai</th>
-                          <th>Jam</th>
-                          <th>Trans</th>
-                          <th>Makan</th>
-                          <th>E.Food</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-
-                      </tbody>
-                      <tfoot>
-                        <tr>
-                          <td colspan="4"><b>B = Bangil, P = Pasuruan</b></td>
-                          <td><c class="pull-right">Total :</c></td>
-                          <td class="text-center"></td>
-                          <td>Jam</td>
-                        </tr>
-                      </tfoot>
-                    </table>
-                    <p>Catatan :</p>
-                    <input type="text" class="form-control" readonly id="cat" style="height:70px;">
-                  </div>
+                <div class="col-md-12">
+                  <table class="table table-responsive" width="100%">
+                    <tr>
+                      <th>No.</th>
+                      <th>ID Overtime</th>
+                      <th>Tanggal</th>
+                      <th>Jumlah (orang)</th>
+                      <th>Jumlah (jam)</th>
+                      <th>Max OT</th>
+                      <th>Aktual</th>
+                      <th>Diff</th>
+                    </tr>
+                    <tr></tr>
+                  </table>
                 </div>
               </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                <a id="exportid" href="<?php echo base_url('ot/createXLS/19030008') ?>" class="btn btn-warning">Export to Excel</a>
-                <button class="btn btn-primary" onclick="tombol_print()"><i class="fa fa-print"></i> Print</button>
-              </div>
             </div>
-            <!-- /.modal-content -->
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+            </div>
           </div>
-          <!-- /.modal-dialog -->
+          <!-- /.modal-content -->
         </div>
+        <!-- /.modal-dialog -->
+      </div>
 
       <div class="modal fade" id="myModal">
         <div class="modal-dialog modal-lg">
@@ -300,25 +265,25 @@ scratch. This page gets rid of all links and provides the needed markup only.
     var table;
     $(document).ready(function() {
       $('.tags').tagsInput({ height: '40px', width : 'auto' });
-     tabel2 = $('#example1').DataTable();
-     tabel2.destroy();
+      tabel2 = $('#example1').DataTable();
+      tabel2.destroy();
 
-     tabel2 = $('#example1').DataTable({
-      "lengthMenu"    : [[10, 25, 50, -1], [10, 25, 50, "All"]],
-      "processing"    : true,
-      "serverSide"    : true,
-      'order'         : [],
-      "ajax": {
-        "url": "<?php echo base_url('ot/ajax_ot_user')?>",
-        "type": "GET",
-        "data" : { 
-          sub:'asd',
-          subsec:'asd',
-          group:'asd'
+      tabel2 = $('#example1').DataTable({
+        "lengthMenu"    : [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        "processing"    : true,
+        "serverSide"    : true,
+        'order'         : [],
+        "ajax": {
+          "url": "<?php echo base_url('ot/ajax_ot_user')?>",
+          "type": "GET",
+          "data" : { 
+            sub:'asd',
+            subsec:'asd',
+            group:'asd'
+          }
         }
-      }
-    });
-   })
+      });
+    })
 
     function make() {
       alert($('#NoSpl').val());

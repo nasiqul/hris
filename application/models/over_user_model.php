@@ -2,7 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Over_user_model extends CI_Model {
-	var $column_order = array('','over_time.id','tanggal'); //set column field database for datatable orderable
+	var $column_order = array('','over_time.id','tanggal','sc.nama','ssc.nama','gr.nama'); //set column field database for datatable orderable
     var $column_search = array('over_time.id','DATE_FORMAT(tanggal, "%a, %d %b %Y")'); //set column field database for datatable searchable 
     var $order = array('over_time.id' => 'asc'); // default order 
 
@@ -24,10 +24,12 @@ class Over_user_model extends CI_Model {
 
     private function _get_datatables_query($tgl,$sub,$subsec,$group)
     {
-    	$this->db->select("over_time.id, DATE_FORMAT(tanggal, '%a, %d %b %Y') as tanggal, over_time_member.status");
+    	$this->db->select("over_time.id, DATE_FORMAT(tanggal, '%a, %d %b %Y') as tanggal, over_time_member.status, sc.nama as section, ssc.nama as subsection, gr.nama as grup, count(nik) as jml");
     	$this->db->from("over_time");
         $this->db->join("over_time_member",'over_time_member.id_ot = over_time.id','left');
-        // $this->db->join("section sc",'section.id_ot = over_time.id','left');
+        $this->db->join("section sc",'sc.id = over_time.departemen','left');
+        $this->db->join("sub_section ssc",'ssc.id = over_time.section','left');
+        $this->db->join("group1 gr",'gr.id = over_time.sub_sec','left');
         $this->db->where("tanggal = '".$tgl."'");        
         if ($sub !="asd" && $sub ) {
             $this->db->where("departemen = '".$sub."'");
