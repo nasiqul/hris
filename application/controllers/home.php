@@ -187,6 +187,12 @@ class Home extends CI_Controller {
     {
         $data['dep'] = $this->over_model->get_dep();
         $data['isi'] = $this->over_model_new->ot_hr($id_ot);
+
+        $isi2 = $this->over_model_new->ot_hr($id_ot);
+
+        $data['sec'] = $this->over_model->get_sub_sec($isi2[0]->departemen);
+        $data['sub_sec'] = $this->over_model->get_grup($isi2[0]->section);
+
         $data['menu2'] = 'Overtime';
         $data['menu'] = 'HR - Overtime';
         $this->load->view("overtime_edit",$data);

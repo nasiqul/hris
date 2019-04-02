@@ -59,7 +59,13 @@ class Ot extends CI_Controller {
 		$idJam = $_POST['id_jam'];	
 
 		$this->over_model->save_member($no_doc, $nik, $dari, $sampai, $jam, $trans, $makan, $exfood, $idJam);
-		
+	}
+
+	public function deleteSPL()
+	{
+		$no_doc = $_POST['nodoc2'];
+
+		$this->over_model->deleteSPL($no_doc);
 	}
 
 	public function ajax_ot()

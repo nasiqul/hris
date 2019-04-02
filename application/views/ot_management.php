@@ -169,30 +169,31 @@ scratch. This page gets rid of all links and provides the needed markup only.
                       },
                       yAxis: {
                         title: {
-                            text: 'Total Jam',
-                            style: {
-                             fontWeight: 'bold',
-                        }
-                      }
-                      },
-                      legend: {
-                        enabled: false
-                      },
-                      plotOptions: {
-                        line: {
-                          dataLabels: {
-                            enabled: false
-                          },
-                          enableMouseTracking: true
+                          text: 'Total Jam',
+                          style: {
+                           fontWeight: 'bold',
+                         }
+                       }
+                     },
+                     legend: {
+                      enabled: false
+                    },
+                    plotOptions: {
+                      line: {
+                        dataLabels: {
+                          enabled: false
                         },
-                        series: {
-                          marker: {
-                            enabled: false
-                          }
-                        }
+                        enableMouseTracking: true
                       },
-                      series: s
-                    });
+                      series: {
+                        marker: {
+                          enabled: false
+                        },
+                           lineWidth: 1
+                      }
+                    },
+                    series: s
+                  });
                     $('#load').css('display','none');
                   }
                 });
@@ -245,7 +246,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         series: {
                           marker: {
                             enabled: false
-                          }
+                          },
+                          lineWidth: 1
                         }
                       },
                       series: s

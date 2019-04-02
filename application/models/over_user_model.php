@@ -2,9 +2,9 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Over_user_model extends CI_Model {
-	var $column_order = array('','id','tanggal'); //set column field database for datatable orderable
-    var $column_search = array('id','DATE_FORMAT(tanggal, "%a, %d %b %Y")'); //set column field database for datatable searchable 
-    var $order = array('id' => 'asc'); // default order 
+	var $column_order = array('','over_time.id','tanggal'); //set column field database for datatable orderable
+    var $column_search = array('over_time.id','DATE_FORMAT(tanggal, "%a, %d %b %Y")'); //set column field database for datatable searchable 
+    var $order = array('over_time.id' => 'asc'); // default order 
 
     public function __construct()
     {

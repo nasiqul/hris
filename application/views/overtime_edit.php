@@ -49,12 +49,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <div class="row">
                     <div class="col-md-4">
                       <p>Tanggal :</p>
-                      <input type="text" name="tgl" placeholder="select date" class="form-control" id="datepicker" onchange="getHari()" value="<?php echo $isi[0]->tanggal ?>">
+                      <input type="text" name="tgl" placeholder="select date" class="form-control" id="datepicker" value="<?php echo $isi[0]->tanggal ?>" disabled="">
                     </div>
 
                     <div class="col-md-3">
                       <p>Shift :</p>
-                      <select class="form-control" id="shiftF" onchange="showJam()">
+                      <select class="form-control" id="shiftF" onchange="showJam()" disabled="">
                         <option value="" disabled selected>Shift</option>
                         <?php for ($i=1; $i <= 3; $i++) { 
                           if ($i == $isi[0]->shift)
@@ -70,127 +70,143 @@ scratch. This page gets rid of all links and provides the needed markup only.
                       <p>&nbsp;</p>
                       <div class="checkbox" id="4group3">
                         <label class="text-center">
-                          <input type="checkbox" id="4group3s" class="minimal"><br> 4 Grup 3 Shift
-                        </label>
-                      </div>
-                    </div>
+                          <div class="icheckbox_minimal-blue 
+                          <?php if($isi[0]->status_shift == '4G') echo 'checked' ?>
+                          " style="position: relative;"  aria-disabled="false">
+                          <input type="checkbox" id="4group3s" class="minimal" disabled="">
+                        </div>
+                        <br>
+                        4 Grup 3 Shift  
 
-                    <div class="col-md-1">
-                      <p>&nbsp;</p>
-                      <div class="checkbox" id="libur2" style="display: none">
-                        <label class="text-center">
-                          <input type="checkbox" id="libur" class="minimal"><br> Libur
-                        </label>
-                      </div>
-                    </div>
+                      </label>
+                    </div> 
+                  </div>
 
-                    <div class="col-md-12">
-                      <b>Bagian :</b> <b id="namadept2"> </b>
-                      <select name="dep" class="form-control" id="dep" onchange='showSec();namadept()'>
-                        <option value="" disabled selected>Select Section</option>
-                        <?php 
-                        foreach ($dep as $key) {
-                          if ($isi[0]->departemen == $key->id) {
-                            echo "<option value='".$key->id."' name='".$key->id_departemen."' selected>".$key->nama."</option>";
-                          } else {
-                            echo "<option value='".$key->id."' name='".$key->id_departemen."'>".$key->nama."</option>";
-                          }
+                  <div class="col-md-12">
+                    <b>Bagian :</b>
+                    <select name="dep" class="form-control" id="dep" disabled="">
+                      <option value="" disabled selected>Select Section</option>
+                      <?php 
+                      foreach ($dep as $key) {
+                        if ($isi[0]->departemen == $key->id) {
+                          echo "<option value='".$key->id."' name='".$key->id_departemen."' selected>".$key->nama."</option>";
+                        } else {
+                          echo "<option value='".$key->id."' name='".$key->id_departemen."'>".$key->nama."</option>";
                         }
-                        ?>
-                      </select>
-                    </div>
+                      }
+                      ?>
+                    </select>
+                  </div>
 
-                    <div class="col-md-12">
-                      <select name="sec" class="form-control" id="sec" onchange='showSubSec()'>
-                        <option value="" disabled selected>Select Sub Section</option>
-                      </select>
-                    </div>
+                  <div class="col-md-12">
+                    <select name="sec" class="form-control" id="sec" disabled="">
+                      <option value="" disabled selected>Select Sub Section</option>
+                      <?php 
+                      foreach ($sec as $key2) {
+                        if ($isi[0]->section == $key2->id) {
+                          echo "<option value='".$key2->id."' selected>".$key2->nama."</option>";
+                        } else {
+                          echo "<option value='".$key2->id."'>".$key2->nama."</option>";
+                        }
+                      }
+                      ?>
+                    </select>
+                  </div>
 
-                    <div class="col-md-12">
-                      <select name="subsec" class="form-control" id="subsec">
-                        <option value="" disabled selected>Select Group</option>
-                      </select>
-                    </div>
-
+                  <div class="col-md-12">
+                    <select name="subsec" class="form-control" id="subsec" disabled="">
+                      <option value="" disabled selected>Select Group</option>
+                      <?php 
+                      foreach ($sub_sec as $key3) {
+                        if ($isi[0]->sub_sec == $key3->id) {
+                          echo "<option value='".$key3->id."' selected>".$key3->nama."</option>";
+                        } else {
+                          echo "<option value='".$key3->id."'>".$key3->nama."</option>";
+                        }
+                      }
+                      ?>
+                    </select>
                   </div>
 
                 </div>
-                <div class="col-md-6">
 
-                  <p>Keperluan :</p>
-                  <input type="text" name="kep" placeholder="keperluan" class="form-control" id="kep" value="<?php echo $isi[0]->keperluan ?>">
-
-                  <p>Catatan :</p>
-                  <input type="text" name="cat" placeholder="Catatan" class="form-control" id="cat" value="<?php echo $isi[0]->catatan ?>">
-                </div>
-              </form>
-              <div class="col-md-12">
-                <hr>
-                <p class="pull-right"><b>Hari : </b><span id="textHari"> <?php echo $isi[0]->hari ?> </span></p>
               </div>
+              <div class="col-md-6">
+
+                <p>Keperluan :</p>
+                <input type="text" name="kep" placeholder="keperluan" class="form-control" id="kep" value="<?php echo $isi[0]->keperluan ?>" disabled="">
+
+                <p>Catatan :</p>
+                <input type="text" name="cat" placeholder="Catatan" class="form-control" id="cat" value="<?php echo $isi[0]->catatan ?>" disabled="">
+              </div>
+            </form>
+            <div class="col-md-12">
+              <hr>
+              <p class="pull-right"><b>Hari : </b><span id="textHari"> <?php echo $isi[0]->hari ?> </span></p>
             </div>
           </div>
+        </div>
 
-          <div class="box box-solid">
-            <div class="box-header">
-              <h3 class="box-title"><i class="fa fa-group"></i> Peserta</h3>
-              <div class="pull-right">
-                <button class="btn btn-primary" id="print" onclick="tombol_print()" style="display: none;"><i class="fa fa-print"></i> Print</button>&nbsp&nbsp&nbsp
-                <button id="submit" class="btn btn-primary" onclick="submit1()"><i class="fa fa-pencil"></i> Edit</button>
-              </div>
-
+        <div class="box box-solid">
+          <div class="box-header">
+            <h3 class="box-title"><i class="fa fa-group"></i> Peserta</h3>
+            <div class="pull-right">
+              <button class="btn btn-primary" id="print" onclick="tombol_print()" style="display: none;"><i class="fa fa-print"></i> Print</button>&nbsp&nbsp&nbsp
+              <button id="submit" class="btn btn-primary" onclick="edit1()"><i class="fa fa-pencil"></i> Edit</button>
             </div>
 
-            <input type="hidden" name="nodoc2" id="nodoc2" value="<?php echo $isi[0]->id ?>">
-            <div class="box-body">
-              <div class="col-md-12">
-                <table class="table" border="0">
-                  <thead>
-                    <tr>                    
-                      <th > 
-                        <b id="totalsemua">Total</b>
-                      </th>
-                      <th></th>
-                      <th>Dari
-                        <input type="text" name="dari" id="dari" class="form-control timepicker" onchange="dari()" value="<?php echo $isi[0]->dari ?>">
-                      </th>
-                      <th  name="jam0">Sampai
-                        <input type="text" name="sampai" id="sampai" class="form-control timepicker" onchange="sampai()" value="<?php echo $isi[0]->sampai ?>">
-                      </th>
-                      <th><p id="jam0" hidden>0</p> <p id="jamfix">0</p></th>
-                      <th>
-                        <select class='form-control' id='transF' name="trans" onchange="gantiTrans()">
-                          <option value='-'>-</option>
-                          <option value='B'>B</option>
-                          <option value='P'>P</option>
-                        </select>
-                      </th>
-                      <th>
-                        <div class="checkbox">
-                          <label><input type='checkbox' id='makanF' name="makan" value="1"></label>
-                        </div>
-                      </th>
-                      <th>
-                        <div class="checkbox">
-                          <label><input type='checkbox' id='exfoodF' name="exFood"></label>
-                        </div>
-                      </th>
-                    </tr>
-                    <tr>
-                      <th width="17%">Nik</th>
-                      <th width="26%">Nama</th>
-                      <th width="8%">Dari</th>
-                      <th width="8%">Sampai</th>
-                      <th width="8%">Jam</th>
-                      <th width="8%">Transport</th>
-                      <th width="5%">Makan</th>
-                      <th>Ext-Food</th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                </table>
-              </div>
-              <div id="peserta">
+          </div>
+
+          <input type="hidden" name="nodoc2" id="nodoc2" value="<?php echo $isi[0]->id ?>">
+          <div class="box-body">
+            <div class="col-md-12">
+              <table class="table" border="0">
+                <thead>
+                  <tr>                    
+                    <th > 
+                      <b id="totalsemua">Total</b>
+                    </th>
+                    <th></th>
+                    <th>Dari
+                      <input type="text" name="dari" id="dari" class="form-control timepicker" onchange="dari()" value="<?php echo $isi[0]->dari ?>">
+                    </th>
+                    <th  name="jam0">Sampai
+                      <input type="text" name="sampai" id="sampai" class="form-control timepicker" onchange="sampai()" value="<?php echo $isi[0]->sampai ?>">
+                    </th>
+                    <th><p id="jam0" hidden>0</p> <p id="jamfix">0</p></th>
+                    <th>
+                      <select class='form-control' id='transF' name="trans" onchange="gantiTrans()">
+                        <option value='-'>-</option>
+                        <option value='B'>B</option>
+                        <option value='P'>P</option>
+                      </select>
+                    </th>
+                    <th>
+                      <div class="checkbox">
+                        <label><input type='checkbox' id='makanF' name="makan" value="1"></label>
+                      </div>
+                    </th>
+                    <th>
+                      <div class="checkbox">
+                        <label><input type='checkbox' id='exfoodF' name="exFood"></label>
+                      </div>
+                    </th>
+                  </tr>
+                  <tr>
+                    <th width="17%">Nik</th>
+                    <th width="26%">Nama</th>
+                    <th width="8%">Dari</th>
+                    <th width="8%">Sampai</th>
+                    <th width="8%">Jam</th>
+                    <th width="8%">Transport</th>
+                    <th width="5%">Makan</th>
+                    <th>Ext-Food</th>
+                    <th></th>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+            <div id="peserta">
 
             </div>
           </div>
@@ -229,9 +245,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
     $(document).ready(function()
     {
       append();
-    });
 
-    $('#datepicker').datepicker({
+    })
+
+
+    $('.datepicker').datepicker({
       autoclose: true,
       format: "dd-mm-yyyy",
       todayHighlight: true,
@@ -372,64 +390,64 @@ scratch. This page gets rid of all links and provides the needed markup only.
     function append() {
       <?php foreach ($isi as $key) { 
         if ($key->makan == 1)
-              $cekM = 'checked';
-            else 
-              $cekM = '';
+          $cekM = 'checked';
+        else 
+          $cekM = '';
 
-            if ($key->ext_food == 1) 
-              $cekExF="checked";
-            else
-              $cekExF='';
+        if ($key->ext_food == 1) 
+          $cekExF="checked";
+        else
+          $cekExF='';
 
-            if ($key->transport == '-') {
-              $t1='selected';
-              $t2 = '';
-              $t3 = '';
-            }
-            else if ($key->transport == 'B') {
-              $t1 = '';
-              $t2='selected';
-              $t3 = '';
-            }
-            else if ($key->transport == 'P') {
-              $t1 = '';
-              $t2 = '';
-              $t3='selected';
-            }
+        if ($key->transport == '-') {
+          $t1='selected';
+          $t2 = '';
+          $t3 = '';
+        }
+        else if ($key->transport == 'B') {
+          $t1 = '';
+          $t2='selected';
+          $t3 = '';
+        }
+        else if ($key->transport == 'P') {
+          $t1 = '';
+          $t2 = '';
+          $t3='selected';
+        }
         ?>
 
         var newdiv1 = $( "<div class='col-md-12' style='margin-bottom: 5px' id='"+no+"'>"+
-        "<div class='col-md-2'><input type='text' id='nik"+no+"' value='<?php echo $key->nik ?>' class='form-control' readonly></div>"+
-        "<div class='col-md-3'><p id='nama"+no+"'><?php echo $key->namaKaryawan ?></p></div><div class='col-md-1'><input class='form-control timepicker' value='<?php echo $key->dari ?>'  id='dari"+no+"' name='dari"+no+"' onchange='dariid("+no+")'></input></div>"+
-        "<div class='col-md-1'><input class='form-control timepicker' id='sampai"+no+"'  name='sampai"+no+"' value='<?php echo $key->sampai ?>' onchange='sampaiid("+no+")'></input></div><div class='col-md-1'><p id='jam"+no+"' hidden></p><p id='jamfix"+no+"'><?php echo $key->jam ?></p></div>"+
-        "<div class='col-md-1'><select class='form-control' id='trans"+no+"'>"+
-        "<option value='-' <?php echo $t1 ?>>-</option><option value='B' <?php echo $t2 ?>>B</option><option value='P' <?php echo $t3 ?>>P</option></select></div>"+
-        "<div class='col-md-1'><input type='checkbox' id='makan"+no+"' <?php echo $cekM ?>></div>"+
-        "<div class='col-md-1'><input type='checkbox' id='exfood"+no+"' <?php echo $cekExF ?>></div>"+
-        "<div class='col-md-1'><button class='btn btn-danger btn-xs' id='delete"+no+"' onclick='deleteRow(this); ali()'><i class='fa fa-minus'></i></button></div>"+
-        "<input type='hidden' id='idJam"+no+"'></div>");
+          "<div class='col-md-2'><input type='text' id='nik"+no+"' value='<?php echo $key->nik ?>' class='form-control' readonly></div>"+
+          "<div class='col-md-3'><p id='nama"+no+"'><?php echo $key->namaKaryawan ?></p></div><div class='col-md-1'><input class='form-control timepicker' value='<?php echo $key->dari ?>'  id='dari"+no+"' name='dari"+no+"' onchange='dariid("+no+")'></input></div>"+
+          "<div class='col-md-1'><input class='form-control timepicker' id='sampai"+no+"'  name='sampai"+no+"' value='<?php echo $key->sampai ?>' onchange='sampaiid("+no+")'></input></div><div class='col-md-1'><p id='jam"+no+"' hidden></p><p id='jamfix"+no+"'><?php echo $key->jam ?></p></div>"+
+          "<div class='col-md-1'><select class='form-control' id='trans"+no+"'>"+
+          "<option value='-' <?php echo $t1 ?>>-</option><option value='B' <?php echo $t2 ?>>B</option><option value='P' <?php echo $t3 ?>>P</option></select></div>"+
+          "<div class='col-md-1'><input type='checkbox' id='makan"+no+"' <?php echo $cekM ?>></div>"+
+          "<div class='col-md-1'><input type='checkbox' id='exfood"+no+"' <?php echo $cekExF ?>></div>"+
+          "<div class='col-md-1'><button class='btn btn-danger btn-xs' id='delete"+no+"' onclick='deleteRow(this); ali()'><i class='fa fa-minus'></i></button></div>"+
+          "<input type='hidden' id='idJam"+no+"'></div>");
 
-      $("#peserta").append(newdiv1).find('.timepicker').timepicker({
-        showInputs: false,
-        showMeridian: false,
-        interval: 30,
+        $("#peserta").append(newdiv1).find('.timepicker').timepicker({
+          showInputs: false,
+          showMeridian: false,
+          interval: 30,
 
-      });
+        });
 
-      var sampai = $('#sampai').val();
-      var dari = $('#dari').val();
-      var jam = $('#jam0').text();
-      var jamfix = $('#jamfix').val();
-      $('#jam'+no).text(jam);
-      $('#jamfix'+no).val(jamfix).change();
-      $('#sampai'+no).val(sampai).change();
-      $('#dari'+no).val(dari);
+        var sampai = $('#sampai').val();
+        var dari = $('#dari').val();
+        var jam = $('#jam0').text();
+        var jamfix = $('#jamfix').val();
+        $('#jam'+no).text(jam);
+        $('#jamfix'+no).val(jamfix).change();
+        $('#sampai'+no).val(sampai).change();
+        $('#dari'+no).val(dari);
 
-      $('#nomor').val(no);
+        $('#nomor').val(no);
 
-      no+=1;
-      nomorali+=1;
-      $('#totalsemua').text("Total : "+nomorali);
+        no+=1;
+        nomorali+=1;
+        $('#totalsemua').text("Total : "+nomorali);
       <?php } ?>
     }
 
@@ -522,18 +540,22 @@ scratch. This page gets rid of all links and provides the needed markup only.
         data: {
           'id': id
         },
+        dataType: 'json',
         success: function (data) {
             // the next thing you want to do 
             var $section = $('#sec');
+            var $subsec = $('#subsec');
 
             $section.empty();
+            $subsec.empty();
+            $subsec.append('<option value="" disabled selected>Select Group</option>');
 
-            var s = $.parseJSON(data);
+            $section.append('<option value="" disabled selected>'+ data[0][1] +'</option>');
 
-            $section.append('<option value="" disabled selected>'+ s[0][1] +'</option>');
+            for (var i = 1; i < data.length; i++) {
 
-            for (var i = 1; i <= s.length; i++) {
-              $section.append('<option id=' + s[i][0] + ' value=' + s[i][0] + '>' + s[i][1] + '</option>');
+              $section.append('<option id=' + data[i][0] + ' value=' + data[i][0] + '>' + data[i][1] + '</option>');
+              
             }
             
             //manually trigger a change event for the contry so that the change handler will get triggered
@@ -543,6 +565,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     }
 
     function showSubSec() {
+
       var id = $('#sec').find(':selected')[0].value;
 
       if (id == 7) {
@@ -570,8 +593,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
             $subsec.append('<option value="" disabled selected>'+ s[0][1] +'</option>');
 
-            for (var i = 1; i <= s.length; i++) {
+            for (var i = 1; i < s.length; i++) {
+
               $subsec.append('<option id=' + s[i][0] + ' value=' + s[i][0] + '>' + s[i][1] + '</option>');
+              
             }
             
             //manually trigger a change event for the contry so that the change handler will get triggered
@@ -611,107 +636,66 @@ scratch. This page gets rid of all links and provides the needed markup only.
     $('#txtJam').text(hour+" Jam");
   }
 
-  function submit1() {
+  function edit1() {
     if ($('#nik1').length == 0) {
       openDangerGritter();
       return false;
     }
 
-    if ($('#4group3s').is(':checked')) {
-      var group4 = "4G";
-    } else {
-      var group4 = "";
-    }
-    var nodoc = document.getElementById('no_doc').value;
-    var tgl = document.getElementById('datepicker').value;
-    var dep = document.getElementById('dep').value;
-    var sec = document.getElementById('sec').value;
-    var subsec = document.getElementById('subsec').value;
-    var kep = document.getElementById('kep').value;
-    var cat = document.getElementById('cat').value;
-    var shift = $("#shiftF").val();
+    var no_doc2 = document.getElementById('nodoc2').value;
 
     $.ajax({
       type: 'POST',
-      url: '<?php echo base_url("ot/get_id") ?>',
+      url: '<?php echo base_url("ot/deleteSPL") ?>',
       data: {
-        'tgl': tgl,
+        'nodoc2': no_doc2
       },
       success: function(data){
-        var s = $.parseJSON(data);
-        
-        idDoc = parseInt(s)+1;
-        
-        document.getElementById('no_doc').value = idDoc;
+        for (var i = 1; i <= no; i++) {
 
-        $.ajax({
-          type: 'POST',
-          url: '<?php echo base_url("ot/ot_submit") ?>',
-          data: {
-            'no': idDoc,
-            'tgl': tgl,
-            'dep': dep,
-            'sec': sec,
-            'kep': kep,
-            'cat': cat,
-            'subsec' : subsec,
-            'hari' : hari,
-            'grup' : group4,
-            'shift' : shift
-          },
-          success: function(data){
+          var nik1 = document.getElementById('nik'+i).value;
 
-            var no_doc2 = document.getElementById('nodoc2').value;
+          var sampai = $('#sampai'+i).val();
+          var dari = $('#dari'+i).val();
 
-            for (var i = 1; i <= no; i++) {
+          var jamS = $("#jamfix"+i).text();
 
-              var nik1 = document.getElementById('nik'+i).value;
+          var e = document.getElementById("trans"+i);
+          var transS = e.options[e.selectedIndex].value;
 
-              var sampai = $('#sampai'+i).val();
-              var dari = $('#dari'+i).val();
+          if ($('#makan'+i).is(':checked'))
+            makanS="1";
+          else
+            makanS="0";
 
-              var jamS = $("#jamfix"+i).text();
+          if ($('#exfood'+i).is(':checked'))
+            exfoodS="1";
+          else
+            exfoodS="0";
 
-              var e = document.getElementById("trans"+i);
-              var transS = e.options[e.selectedIndex].value;
+          var id_jam = $("#idJam"+i).val();
 
-              if ($('#makan'+i).is(':checked'))
-                makanS="1";
-              else
-                makanS="0";
-
-              if ($('#exfood'+i).is(':checked'))
-                exfoodS="1";
-              else
-                exfoodS="0";
-
-              var id_jam = $("#idJam"+i).val();
-
-              $.ajax({
-                type: 'POST',
-                url: '<?php echo base_url("ot/ot_member_submit") ?>',
-                data: {
-                  'nodoc2': idDoc,
-                  'nik': nik1,
-                  'dari': dari,
-                  'sampai': sampai,
-                  'jam': jamS,
-                  'trans': transS,
-                  'makan': makanS,
-                  'exfood': exfoodS,
-                  'id_jam': id_jam,
-                },
-                success: function(data){
-                  openSuccessGritter();
-                  $('#submit').css("display", "none");
-                  $('#print').css("display", "block");
-                }
-              });
+          $.ajax({
+            type: 'POST',
+            url: '<?php echo base_url("ot/ot_member_submit") ?>',
+            data: {
+              'nodoc2': no_doc2,
+              'nik': nik1,
+              'dari': dari,
+              'sampai': sampai,
+              'jam': jamS,
+              'trans': transS,
+              'makan': makanS,
+              'exfood': exfoodS,
+              'id_jam': id_jam,
+            },
+            success: function(data){
+              openSuccessGritter();
             }
-          }
-        });
+          });
+        }
       }
-    })
+    });
   }
 
   function openSuccessGritter(){
