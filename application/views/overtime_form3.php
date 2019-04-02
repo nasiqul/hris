@@ -519,14 +519,19 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
     function showSubSec() {
       var id = $('#sec').find(':selected')[0].value;
+      var shift = $("#shiftF").val();
 
       if (id == 7) {
         $('#libur2').css('display','block');
         sec = 7;
       }
       else {
-        $('#libur2').css('display','none');
-        sec = 0;
+        if (shift == 3) {
+          $('#libur2').css('display','block');
+        }else {
+          $('#libur2').css('display','none');
+          sec = 0;
+        }
       }
 
       $.ajax({

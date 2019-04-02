@@ -89,7 +89,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <!-- /.box-body -->
               <div class="box-footer">
                 <a class="btn btn-primary" onclick="tanggal()"><i class="fa fa-search"></i> <span>Search</span></a>
-                <a class="btn btn-warning" id="reset" href="<?php echo base_url('home/session_destroy') ?>" ><i class="fa fa-refresh"></i> Reset</a>
+                <a class="btn btn-warning" id="reset" onclick="reset()"><i class="fa fa-refresh"></i> Reset</a>
 
               </div>
             </form>
@@ -101,133 +101,195 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <div class="col-md-12">
           <div class="box box-solid">
             <div class="box-body">
-               <div class="col-md-6">
+             <div class="col-md-6">
               <a class="btn btn-success" href="<?php echo base_url('home/overtime_form') ?>"> <i class="fa fa-plus"></i> New Entry</a>
             </div>
-              <div class="col-md-6">
+            <div class="col-md-6">
               <div class="form-group ">
                 <label>No SPL</label>
-                <select class="form-control select2" multiple="multiple" data-placeholder="Select a State"
-                        style="width: 80%;">
-                  <option>Alabama</option>
-                  <option>Alaska</option>
-                  <option>California</option>
-                  <option>Delaware</option>
-                  <option>Tennessee</option>
-                  <option>Texas</option>
-                  <option>Washington</option>
-                </select>
-                <button class="btn btn-primary btn-sm">Make</button>
+                <input id="NoSpl" type="text" class="form-control tags" name="NoSpl">
+                <button class="btn btn-primary btn-sm" onclick="openModal3()">Make</button>
+
               </div>
             </div>
-              <br>
-              <br>
-              <table id="example1" class="table table-responsive table-striped">
-                <thead>
-                  <tr>
-                    <th width="5%">No</th>
-                    <th>No. SPL</th>
-                    <th>Tanggal</th>
-                    <th width="10%">Aksi</th>
-                  </tr>
-                </thead>
-                <tbody>
-                </tbody>
-              </table>
-            </div>
+            <br>
+            <br>
+            <table id="example1" class="table table-responsive table-striped">
+              <thead>
+                <tr>
+                  <th width="5%">No</th>
+                  <th>No. SPL</th>
+                  <th>Tanggal</th>
+                  <th width="10%">Aksi</th>
+                </tr>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
           </div>
         </div>
+      </div>
 
-        <div class="modal fade" id="myModal">
-          <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h4 style="float: right;" id="modal-title"></h4>
-                <h4 class="modal-title">PT. YAMAHA MUSICAL PRODUCT INDONESIA</h4>
-              </div>
-              <div class="modal-body">
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="col-md-4">
-                      <p>Hari</p>
-                      <p>Tanggal</p>
-                      <p>Bagian</p>
-                    </div>
-                    <div class="col-md-8">
-                      <p>: <c id="hari"></c></p>
-                      <p>: <c id="tgl"></c></p>
-                      <p>: <c id="sec"></c> - <c id="subsec"></c> - <c id="group"></p>
-                      </div>
-                    </div>
-                    <div class="col-md-6">
-                      <p>Keperluan : </p>
-                      <input type="text" class="form-control" readonly id="kep" style="height:70px;">
-                    </div>
-
-                    <div class="col-md-12">
-                      <br>
-                      <table class="table table-hover" id="example2" style="width: 100%;">
-                        <thead>
-                          <tr>
-                            <th>No</th>
-                            <th>NIK</th>
-                            <th>Nama</th>
-                            <th>Dari</th>
-                            <th>Sampai</th>
-                            <th>Jam</th>
-                            <th>Trans</th>
-                            <th>Makan</th>
-                            <th>E.Food</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-
-                        </tbody>
-                        <tfoot>
-                          <tr>
-                            <td colspan="4"><b>B = Bangil, P = Pasuruan</b></td>
-                            <td><c class="pull-right">Total :</c></td>
-                            <td class="text-center"></td>
-                            <td>Jam</td>
-                          </tr>
-                        </tfoot>
-                      </table>
-                      <p>Catatan :</p>
-                      <input type="text" class="form-control" readonly id="cat" style="height:70px;">
+      <div class="modal fade" id="myModal3">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 style="float: right;" id="modal-title"></h4>
+              <h4 class="modal-title">PT. YAMAHA MUSICAL PRODUCT INDONESIA</h4>
+            </div>
+            <div class="modal-body">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="col-md-4">
+                    <p>Hari</p>
+                    <p>Tanggal</p>
+                    <p>Bagian</p>
+                  </div>
+                  <div class="col-md-8">
+                    <p>: <c id="hari"></c></p>
+                    <p>: <c id="tgl"></c></p>
+                    <p>: <c id="sec"></c> - <c id="subsec"></c> - <c id="group"></p>
                     </div>
                   </div>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                  <a id="exportid" href="<?php echo base_url('ot/createXLS/19030008') ?>" class="btn btn-warning">Export to Excel</a>
-                  <button class="btn btn-primary" onclick="tombol_print()"><i class="fa fa-print"></i> Print</button>
-                </div>
-              </div>
-              <!-- /.modal-content -->
-            </div>
-            <!-- /.modal-dialog -->
-          </div>
+                  <div class="col-md-6">
+                    <p>Keperluan : </p>
+                    <input type="text" class="form-control" readonly id="kep" style="height:70px;">
+                  </div>
 
-          <div class="modal fade" id="myModal2">
-            <div class="modal-dialog modal-sm">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h3 class="modal-title">Yakin hapus "<b id="id2"></b>" ?</h3>
-                </div>
-                <div class="modal-footer">
-                  <button class="btn btn-danger pull-left" onclick="hapus()"><i class="fa fa-trash"></i> Hapus</button>
-                  <button type="button" class="btn btn-default pull-right" data-dismiss="modal"><i class="fa fa-mail-forward"></i> Tidak</button>
+                  <div class="col-md-12">
+                    <br>
+                    <table class="table table-hover" id="example2" style="width: 100%;">
+                      <thead>
+                        <tr>
+                          <th>No</th>
+                          <th>NIK</th>
+                          <th>Nama</th>
+                          <th>Dari</th>
+                          <th>Sampai</th>
+                          <th>Jam</th>
+                          <th>Trans</th>
+                          <th>Makan</th>
+                          <th>E.Food</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+
+                      </tbody>
+                      <tfoot>
+                        <tr>
+                          <td colspan="4"><b>B = Bangil, P = Pasuruan</b></td>
+                          <td><c class="pull-right">Total :</c></td>
+                          <td class="text-center"></td>
+                          <td>Jam</td>
+                        </tr>
+                      </tfoot>
+                    </table>
+                    <p>Catatan :</p>
+                    <input type="text" class="form-control" readonly id="cat" style="height:70px;">
+                  </div>
                 </div>
               </div>
-              <!-- /.modal-content -->
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                <a id="exportid" href="<?php echo base_url('ot/createXLS/19030008') ?>" class="btn btn-warning">Export to Excel</a>
+                <button class="btn btn-primary" onclick="tombol_print()"><i class="fa fa-print"></i> Print</button>
+              </div>
             </div>
-            <!-- /.modal-dialog -->
+            <!-- /.modal-content -->
           </div>
-        </section>
-        <!-- /.content -->
-      </div>
-      <!-- /.content-wrapper -->
-      <!-- /.control-sidebar -->
+          <!-- /.modal-dialog -->
+        </div>
+
+      <div class="modal fade" id="myModal">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 style="float: right;" id="modal-title"></h4>
+              <h4 class="modal-title">PT. YAMAHA MUSICAL PRODUCT INDONESIA</h4>
+            </div>
+            <div class="modal-body">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="col-md-4">
+                    <p>Hari</p>
+                    <p>Tanggal</p>
+                    <p>Bagian</p>
+                  </div>
+                  <div class="col-md-8">
+                    <p>: <c id="hari"></c></p>
+                    <p>: <c id="tgl"></c></p>
+                    <p>: <c id="sec"></c> - <c id="subsec"></c> - <c id="group"></p>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <p>Keperluan : </p>
+                    <input type="text" class="form-control" readonly id="kep" style="height:70px;">
+                  </div>
+
+                  <div class="col-md-12">
+                    <br>
+                    <table class="table table-hover" id="example2" style="width: 100%;">
+                      <thead>
+                        <tr>
+                          <th>No</th>
+                          <th>NIK</th>
+                          <th>Nama</th>
+                          <th>Dari</th>
+                          <th>Sampai</th>
+                          <th>Jam</th>
+                          <th>Trans</th>
+                          <th>Makan</th>
+                          <th>E.Food</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+
+                      </tbody>
+                      <tfoot>
+                        <tr>
+                          <td colspan="4"><b>B = Bangil, P = Pasuruan</b></td>
+                          <td><c class="pull-right">Total :</c></td>
+                          <td class="text-center"></td>
+                          <td>Jam</td>
+                        </tr>
+                      </tfoot>
+                    </table>
+                    <p>Catatan :</p>
+                    <input type="text" class="form-control" readonly id="cat" style="height:70px;">
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                <a id="exportid" href="<?php echo base_url('ot/createXLS/19030008') ?>" class="btn btn-warning">Export to Excel</a>
+                <button class="btn btn-primary" onclick="tombol_print()"><i class="fa fa-print"></i> Print</button>
+              </div>
+            </div>
+            <!-- /.modal-content -->
+          </div>
+          <!-- /.modal-dialog -->
+        </div>
+
+        <div class="modal fade" id="myModal2">
+          <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h3 class="modal-title">Yakin hapus "<b id="id2"></b>" ?</h3>
+              </div>
+              <div class="modal-footer">
+                <button class="btn btn-danger pull-left" onclick="hapus()"><i class="fa fa-trash"></i> Hapus</button>
+                <button type="button" class="btn btn-default pull-right" data-dismiss="modal"><i class="fa fa-mail-forward"></i> Tidak</button>
+              </div>
+            </div>
+            <!-- /.modal-content -->
+          </div>
+          <!-- /.modal-dialog -->
+        </div>
+      </section>
+      <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+    <!-- /.control-sidebar -->
   <!-- Add the sidebar's background. This div must be placed
     immediately after the control sidebar -->
     <div class="control-sidebar-bg"></div>
@@ -237,6 +299,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <script>
     var table;
     $(document).ready(function() {
+      $('.tags').tagsInput({ height: '40px', width : 'auto' });
      tabel2 = $('#example1').DataTable();
      tabel2.destroy();
 
@@ -257,7 +320,17 @@ scratch. This page gets rid of all links and provides the needed markup only.
     });
    })
 
-    $('.select2').select2()
+    function make() {
+      alert($('#NoSpl').val());
+    }
+
+    $('.select2').select2();
+
+    function multi(id) {
+      // $("#NoSpl").val(id);
+      $('#NoSpl').addTag(id);
+      console.log(id);
+    }
 
     function detail_spl(id) {
       tabel = $('#example2').DataTable();
@@ -374,15 +447,38 @@ scratch. This page gets rid of all links and provides the needed markup only.
       }
     });
 
-
    }
 
-   $('.datepicker').datepicker({
+   function reset() {
+    tabel2 = $('#example1').DataTable();
+    var tanggal = $('#tanggal').val();
+    var sub = $('#dep1').find(':selected')[0].value;
+    var subsec = $('#sec1').find(':selected')[0].value;
+    var group = $('#subsec1').find(':selected')[0].value;
+    tabel2.destroy();
+    tabel2 = $('#example1').DataTable({
+      "lengthMenu"    : [[10, 25, 50, -1], [10, 25, 50, "All"]],
+      "processing"    : true,
+      "serverSide"    : true,
+      'order'         : [],
+      "ajax": {
+        "url": "<?php echo base_url('ot/ajax_ot_user')?>",
+        "type": "GET",
+        'data' : { tanggal : tanggal,
+          sub:sub,
+          subsec:subsec,
+          group:group
+        }
+      }
+    });
+  }
+
+  $('.datepicker').datepicker({
     autoclose: true,
     format: "yyyy-mm-dd"
   });
 
-   function namadept() {
+  function namadept() {
     var id = $('#dep1').find('option:selected').attr("name");
       //alert(id);
       $.ajax({
@@ -496,6 +592,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
           });
         }
       });
+    }
+
+
+    function openModal3() {
+      $('#myModal3').modal('show');
     }
 
 

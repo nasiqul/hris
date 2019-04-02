@@ -144,6 +144,7 @@ class Home extends CI_Controller {
 
     public function hr_ot()
     {
+        $data['dep'] = $this->over_model->get_dep();
         $data['menu2'] = 'Overtime';
         $data['menu'] = 'HR - Overtime';
         $this->load->view("ot_hr", $data);
