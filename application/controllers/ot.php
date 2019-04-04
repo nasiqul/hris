@@ -569,12 +569,12 @@ class Ot extends CI_Controller {
 				$row[] = $no;
 				$row[] = $key->id;
 				$row[] = $key->tanggal;
-				$row[] = $key->section." - ".$key->subsection." - ".$key->grup;
-				$row[] = $key->jml;
+				// $row[] = $key->section." - ".$key->subsection." - ".$key->grup;
+				// $row[] = $key->jml;
 				if ($key->status != '0') 
 					$row[] = "<button class='btn btn-primary btn-xs' onclick='detail_spl(".$key->id."); exporta(".$key->id.")'>Detail</button>";
 				else
-					$row[] = "<button class='btn btn-primary btn-xs' onclick='detail_spl(".$key->id."); exporta(".$key->id.")'>Detail</button>&nbsp;<button class='btn btn-warning btn-xs' onclick='multi(".$key->id.")'>Add</button>";
+					$row[] = "<button class='btn btn-primary btn-xs' onclick='detail_spl(".$key->id."); exporta(".$key->id.")'>Detail</button>&nbsp;";
 
 				// <button class='btn btn-danger btn-xs' onclick='modal_open(".$key->id.");'><i class='fa fa-trash'></i></button>
 				
