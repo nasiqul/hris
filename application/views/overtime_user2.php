@@ -29,7 +29,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <!-- Content Header (Page header) -->
       <section class="content-header">
         <h1>
-          Overtime Data ALI
+          Overtime Data 
           <small>Optional description</small>
         </h1>
       </section>
@@ -57,8 +57,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <div class="col-md-3">
                   <div class="form-group">
                     <label for="inputNik"><i class="fa fa-id-badge"></i>  <span>Section</span><!--  <b id="namadept2"> </b> --></label>
-                    <select name="dep" class="form-control" id="dep1" onchange='showSec();namadept()'>
+                    <select name="dep" class="form-control" id="dep1" onchange='showSec();'>
                       <option value="" disabled selected>Select Section</option>
+                      <option value="0">All</option>
                       <?php 
                       foreach ($dep as $key) {
                         echo "<option value='".$key->id."' name='".$key->id_departemen."'>".$key->nama."</option>";
@@ -101,27 +102,37 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <div class="col-md-12">
           <div class="box box-solid">
             <div class="box-body">
-             <div class="col-md-6">
-              <a class="btn btn-success" href="<?php echo base_url('home/overtime_form') ?>"> <i class="fa fa-plus"></i> New Entry</a>
+             <div class="col-md-12" >
+              <div class="row">
+                <div class="col-md-3">
+                  <a class="btn btn-success" href="<?php echo base_url('home/overtime_form') ?>"> <i class="fa fa-plus"></i> New Entry</a>
+                </div>
+
+                <div class="col-md-9">
+                  <div class="form-group" style="float: none; margin: 0 auto;">
+                    <div class="col-md-2" style="padding: 0px"><label>SPL Grup</label></div>
+                    <div class="col-md-9"><input id="NoSpl" type="text" class="form-control tags" name="NoSpl"></div>
+                    <div class="col-md-1"><button class="btn btn-primary btn-sm" onclick="openModal3()">Make</button></div>
+                  </div>
+                </div>
+
+              </div>   
+              <br>
+              <br>           
             </div>
-            <div class="col-md-6">
-              <div class="form-group ">
-                <label>No SPL</label>
-                <input id="NoSpl" type="text" class="form-control tags" name="NoSpl">
-                <button class="btn btn-primary btn-sm" onclick="openModal3()">Make</button>
-              </div>
-            </div>
-            <br>
-            <br>
-            <table id="example1" class="table table-responsive table-striped">
+
+            
+
+            <table id="example1" class="table table-responsive table-striped"  width="100%">
               <thead>
                 <tr>
                   <th width="5%">No</th>
-                  <th width="20%">No. SPL</th>
+                  <th width="15%">No. SPL</th>
                   <th>Tanggal</th>
-                  <th>Bagian</th>
+                  <th width="35%">Bagian</th>
                   <th width="10%">Jumlah (orang)</th>
-                  <th width="10%">Aksi</th>
+                  <th width="15%">Aksi</th>
+                  <th>asd</th>
                 </tr>
               </thead>
               <tbody>
@@ -141,23 +152,102 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <div class="row">
                 <div class="col-md-12">
                   <table class="table table-responsive" width="100%">
+                   <thead>
                     <tr>
                       <th>No.</th>
-                      <th>ID Overtime</th>
                       <th>Tanggal</th>
+                      <th>ID Overtime</th>
+                      <th>Bagian</th>
                       <th>Jumlah (orang)</th>
                       <th>Jumlah (jam)</th>
                       <th>Max OT</th>
                       <th>Aktual</th>
                       <th>Diff</th>
                     </tr>
-                    <tr></tr>
+                  </thead>
+                  <tbody id="extmakanfood">
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+            <form action="<?php echo base_url('ot/print_grup/'); ?>" method="POST" target="_blank">
+                <input type="hidden" name="id" id="id2">
+                <input type="hidden" name="tanggal" id="tgl2">
+                <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-print"></i> Print</button>
+            </form>
+          </div>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+
+    <div class="modal fade" id="myModal">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 style="float: right;" id="modal-title"></h4>
+            <h4 class="modal-title">PT. YAMAHA MUSICAL PRODUCT INDONESIA</h4>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="col-md-4">
+                  <p>Hari</p>
+                  <p>Tanggal</p>
+                  <p>Bagian</p>
+                </div>
+                <div class="col-md-8">
+                  <p>: <c id="hari"></c></p>
+                  <p>: <c id="tgl"></c></p>
+                  <p>: <c id="sec"></c> - <c id="subsec"></c> - <c id="group"></p>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <p>Keperluan : </p>
+                  <input type="text" class="form-control" readonly id="kep" style="height:70px;">
+                </div>
+
+                <div class="col-md-12">
+                  <br>
+                  <table class="table table-hover" id="example2" style="width: 100%;">
+                    <thead>
+                      <tr>
+                        <th>No</th>
+                        <th>NIK</th>
+                        <th>Nama</th>
+                        <th>Dari</th>
+                        <th>Sampai</th>
+                        <th>Jam</th>
+                        <th>Trans</th>
+                        <th>Makan</th>
+                        <th>E.Food</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                    <tfoot>
+                      <tr>
+                        <td colspan="4"><b>B = Bangil, P = Pasuruan</b></td>
+                        <td><c class="pull-right">Total :</c></td>
+                        <td class="text-center"></td>
+                        <td>Jam</td>
+                      </tr>
+                    </tfoot>
                   </table>
+                  <p>Catatan :</p>
+                  <input type="text" class="form-control" readonly id="cat" style="height:70px;">
                 </div>
               </div>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+              <a id="exportid" href="<?php echo base_url('ot/createXLS/19030008') ?>" class="btn btn-warning">Export to Excel</a>
+              <button class="btn btn-primary" onclick="tombol_print()"><i class="fa fa-print"></i> Print</button>
             </div>
           </div>
           <!-- /.modal-content -->
@@ -165,96 +255,26 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <!-- /.modal-dialog -->
       </div>
 
-      <div class="modal fade" id="myModal">
-        <div class="modal-dialog modal-lg">
+      <div class="modal fade" id="myModal2">
+        <div class="modal-dialog modal-sm">
           <div class="modal-content">
             <div class="modal-header">
-              <h4 style="float: right;" id="modal-title"></h4>
-              <h4 class="modal-title">PT. YAMAHA MUSICAL PRODUCT INDONESIA</h4>
+              <h3 class="modal-title">Yakin hapus "<b id="id2"></b>" ?</h3>
             </div>
-            <div class="modal-body">
-              <div class="row">
-                <div class="col-md-6">
-                  <div class="col-md-4">
-                    <p>Hari</p>
-                    <p>Tanggal</p>
-                    <p>Bagian</p>
-                  </div>
-                  <div class="col-md-8">
-                    <p>: <c id="hari"></c></p>
-                    <p>: <c id="tgl"></c></p>
-                    <p>: <c id="sec"></c> - <c id="subsec"></c> - <c id="group"></p>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <p>Keperluan : </p>
-                    <input type="text" class="form-control" readonly id="kep" style="height:70px;">
-                  </div>
-
-                  <div class="col-md-12">
-                    <br>
-                    <table class="table table-hover" id="example2" style="width: 100%;">
-                      <thead>
-                        <tr>
-                          <th>No</th>
-                          <th>NIK</th>
-                          <th>Nama</th>
-                          <th>Dari</th>
-                          <th>Sampai</th>
-                          <th>Jam</th>
-                          <th>Trans</th>
-                          <th>Makan</th>
-                          <th>E.Food</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-
-                      </tbody>
-                      <tfoot>
-                        <tr>
-                          <td colspan="4"><b>B = Bangil, P = Pasuruan</b></td>
-                          <td><c class="pull-right">Total :</c></td>
-                          <td class="text-center"></td>
-                          <td>Jam</td>
-                        </tr>
-                      </tfoot>
-                    </table>
-                    <p>Catatan :</p>
-                    <input type="text" class="form-control" readonly id="cat" style="height:70px;">
-                  </div>
-                </div>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                <a id="exportid" href="<?php echo base_url('ot/createXLS/19030008') ?>" class="btn btn-warning">Export to Excel</a>
-                <button class="btn btn-primary" onclick="tombol_print()"><i class="fa fa-print"></i> Print</button>
-              </div>
+            <div class="modal-footer">
+              <button class="btn btn-danger pull-left" onclick="hapus()"><i class="fa fa-trash"></i> Hapus</button>
+              <button type="button" class="btn btn-default pull-right" data-dismiss="modal"><i class="fa fa-mail-forward"></i> Tidak</button>
             </div>
-            <!-- /.modal-content -->
           </div>
-          <!-- /.modal-dialog -->
+          <!-- /.modal-content -->
         </div>
-
-        <div class="modal fade" id="myModal2">
-          <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h3 class="modal-title">Yakin hapus "<b id="id2"></b>" ?</h3>
-              </div>
-              <div class="modal-footer">
-                <button class="btn btn-danger pull-left" onclick="hapus()"><i class="fa fa-trash"></i> Hapus</button>
-                <button type="button" class="btn btn-default pull-right" data-dismiss="modal"><i class="fa fa-mail-forward"></i> Tidak</button>
-              </div>
-            </div>
-            <!-- /.modal-content -->
-          </div>
-          <!-- /.modal-dialog -->
-        </div>
-      </section>
-      <!-- /.content -->
-    </div>
-    <!-- /.content-wrapper -->
-    <!-- /.control-sidebar -->
+        <!-- /.modal-dialog -->
+      </div>
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+  <!-- /.control-sidebar -->
   <!-- Add the sidebar's background. This div must be placed
     immediately after the control sidebar -->
     <div class="control-sidebar-bg"></div>
@@ -281,19 +301,27 @@ scratch. This page gets rid of all links and provides the needed markup only.
             subsec:'asd',
             group:'asd'
           }
-        }
-      });
+        },
+        "columnDefs": [
+        {
+              "targets": [ 4,5,6 ], //first column / numbering column
+              "orderable": false, //set not orderable
+            }
+            ]
+          });
     })
-
-    function make() {
-      alert($('#NoSpl').val());
-    }
 
     $('.select2').select2();
 
     function multi(id) {
-      // $("#NoSpl").val(id);
-      $('#NoSpl').addTag(id);
+
+      var tag = $('#NoSpl').val();
+      if (tag.search(id) !=-1) {
+        alert("ada")
+      }else{
+        $('#NoSpl').addTag(id);
+      }
+      
       console.log(id);
     }
 
@@ -381,6 +409,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
       window.open(url,'_blank');
     }
 
+    function tombol_print_grup() {
+      var tanggal = $("#tanggal").val();
+      var id =  $('#NoSpl').val();
+      var id3 = [];
+      id3 = id;
+      var url = "<?php echo base_url('ot/print_grup/'); ?>"+id3+"/"+tanggal;
+
+      window.open(url,'_blank');
+    }
+
     function exporta($id) {
       var id = $id;      
       var url = "<?php echo base_url('ot/exportexcel/'); ?>"+id;
@@ -409,7 +447,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
           subsec:subsec,
           group:group
         }
+      },
+      "columnDefs": [
+      {
+        "targets": [ 4,5,6 ], //first column / numbering column
+        "orderable": false, //set not orderable
       }
+      ]
     });
 
    }
@@ -478,6 +522,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             var s = $.parseJSON(data);
 
             $section.append('<option value="" disabled selected>'+ s[0][1] +'</option>');
+            $section.append('<option value="0">All</option>');
 
             for (var i = 1; i <= s.length; i++) {
               $section.append('<option id=' + s[i][0] + ' value=' + s[i][0] + '>' + s[i][1] + '</option>');
@@ -507,6 +552,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             var s = $.parseJSON(data);
 
             $subsec.append('<option value="" disabled selected>'+ s[0][1] +'</option>');
+            $subsec.append('<option value="0">All</option>');
 
             for (var i = 1; i <= s.length; i++) {
               $subsec.append('<option id=' + s[i][0] + ' value=' + s[i][0] + '>' + s[i][1] + '</option>');
@@ -562,6 +608,39 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
     function openModal3() {
       $('#myModal3').modal('show');
+      var tanggal = $("#tanggal").val();
+      var id =  $('#NoSpl').val();
+
+      $("#id2").val(id);
+      $("#tgl2").val(tanggal);
+
+      var no =1;
+      $.ajax({
+        url: "<?php echo base_url('ot/multiot/')?>",
+        type : "POST",
+        data: {
+          tgl:tanggal,
+          id:id
+        },
+        dataType: 'json',
+        success: function(data){
+          $("#extmakanfood").empty();
+          $.each(data, function(i, item) {
+            if ( item[0] !="-"){
+              var newdiv1 = $( "<tr>"+                  
+                "<td>"+no+"</td><td>"+item[1]+"</td>"+
+                "<td>"+item[0]+"</td><td>"+item[6]+' - '+item[7]+' - '+item[8]+"</td><td>"+item[2]+"</td>"+
+                "<td>"+item[3]+"</td><td>"+item[4]+"</td>"+
+                "<td>"+item[5]+"</td><td>"+(parseFloat(item[4])-parseFloat(item[5]))+"</td>"+
+                "</tr>");
+              no+=1;
+
+              $("#extmakanfood").append(newdiv1);
+            }
+          });
+
+        }
+      })
     }
 
 

@@ -32,6 +32,7 @@
    <link rel="stylesheet" href="<?php echo base_url()?>app/plugins/timepicker/bootstrap-timepicker.min.css">
    <link rel="stylesheet" href="<?php echo base_url()?>app/bower_components/select2/dist/css/select2.min.css">
    <link rel="stylesheet" href="<?php echo base_url()?>app/plugins/iCheck/all.css">
+   <link rel="stylesheet" type="text/css" href="<?php echo base_url()?>app/bower_components/jquery-ui/themes/base/jquery-ui.css">
 
    <!-- DataTables -->
    <script src="<?php echo base_url()?>app/bower_components/jquery/dist/jquery.min.js"></script>
@@ -40,6 +41,7 @@
    <script src="<?php echo base_url()?>app/plugins/timepicker/bootstrap-timepicker.min.js"></script>
    <script src="<?php echo base_url()?>app/dist/js/jquery.validate.min.js"></script>
    <script src="<?php echo base_url()?>app/dist/js/jquery.tagsinput.min.js"></script>
+   <script type="text/javascript" src="<?php echo base_url()?>app/bower_components/jquery-ui/jquery-ui.js"></script>
    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>

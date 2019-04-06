@@ -48,7 +48,7 @@ class Home extends CI_Controller {
             $this->load->view('report', $data);
             
         } else {
-            redirect('home/overtime_form'); 
+            redirect('login'); 
         }
     }
 
@@ -144,7 +144,7 @@ class Home extends CI_Controller {
 
     public function hr_ot()
     {
-        $data['dep'] = $this->over_model->get_dep();
+        $data['dep'] = $this->home_model->get_dep_all();
         $data['menu2'] = 'Overtime';
         $data['menu'] = 'HR - Overtime';
         $this->load->view("ot_hr", $data);
@@ -177,7 +177,7 @@ class Home extends CI_Controller {
 
     public function overtime_form()
     {
-        $data['dep'] = $this->over_model->get_dep();
+        $data['dep'] = $this->home_model->get_dep_all();
         $data['id_doc'] = $this->over_model->get_id_doc();
         $data['menu2'] = 'Overtime';
         $data['menu'] = 'Overtime Data';
@@ -186,7 +186,7 @@ class Home extends CI_Controller {
 
      public function overtime_edit($id_ot)
     {
-        $data['dep'] = $this->over_model->get_dep();
+        $data['dep'] = $this->home_model->get_dep_all();
         $data['isi'] = $this->over_model_new->ot_hr($id_ot);
 
         $isi2 = $this->over_model_new->ot_hr($id_ot);
@@ -299,10 +299,11 @@ class Home extends CI_Controller {
 
     public function overtime_user()
     {
-        $data['dep'] = $this->over_model->get_dep();
+        $username = $this->session->userdata('nik');
+        $data['dep'] = $this->over_model->get_dep($username);
         $data['menu2'] = 'ovrU';
         $data['menu'] = 'ovrU';
-        $this->load->view('overtime_user',$data);
+        $this->load->view('overtime_user2',$data);
     }
 
     public function report_GA()
@@ -369,6 +370,7 @@ class Home extends CI_Controller {
         $data['grade'] = $this->karyawan_model->get_grade();
         $data['jabatan'] = $this->karyawan_model->get_jabatan();
         $data['kode'] = $this->karyawan_model->get_kode();
+        $data['menu2'] = 'Employee';
         $data['menu'] = 'emp';
         $this->load->view('karyawan_form',$data);
     }

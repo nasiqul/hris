@@ -89,8 +89,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <!-- /.box-body -->
               <div class="box-footer">
                 <a class="btn btn-primary" onclick="tanggal()"><i class="fa fa-search"></i> <span>Search</span></a>
-                <a class="btn btn-warning" id="reset" href="<?php echo base_url('home/session_destroy') ?>" ><i class="fa fa-refresh"></i> Reset</a>
-
               </div>
             </form>
           </div>

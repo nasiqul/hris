@@ -32,6 +32,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
               Tanggal<br>
               <input type="text" name="tglfilter" id="tglfilter" class="form-control datepicker pull-left" style="width: 10%" onchange="gantitanggal();"> &nbsp;
               <input type="button" id="konfirm" onclick="konfirm()" class="btn btn-default" value="konfirmasi">
+              <div id="progressbar2">
+                <i class="fa fa-refresh fa-spin"></i> Loading...  
+              </div>
               <a class="btn btn-success pull-right" href="<?php echo base_url('home/overtime_form') ?>"> <i class="fa fa-plus"></i> New Entry</a>
               <br>
               <br>
@@ -161,53 +164,72 @@ scratch. This page gets rid of all links and provides the needed markup only.
   </div>
   <!-- ./wrapper -->
   <script>
-    $(document).ready(function() {
-      buattable();
-    });
+  //   window.onbeforeunload = function (e) {
+  //     e = e || window.event;
 
-    function gantitanggal() {
-     buattable();
-   }
+  //   // For IE and Firefox prior to version 4
+  //   if (e) {
+  //     e.returnValue = 'Sure?';
+  //   }
 
-   function konfirm() {
-    var tgl = $('#tglfilter').val();
-    $.ajax({
-      url: '<?php echo base_url('ot/updatedataover')?>',
-      data :{
-        tgl:tgl
-      },
-      success: function() {
-        buattable();
-      }
-    });
-  }
+  //   // For Safari
+  //   return 'Sure?';
+  // };
+  
+  $(document).ready(function() {
+    buattable();
+    $("#progressbar2").hide();
+  });
 
-  function buattable() {
-   var table2 = $('#example1').DataTable();
-   table2.destroy();
-   var tgl = $('#tglfilter').val();
-   $('#example1').DataTable({
-    "lengthMenu"    : [[10, 25, 50, -1], [10, 25, 50, "All"]],
-    "processing"    : true,
-    "serverSide"    : true,
-    "bInfo": false,
-    'order'         : [],
-    "ajax": {
-      "url": "<?php echo base_url('ot/ajax_ot2')?>",
-      "data":{
-        tgl:tgl
-      } ,      
-      "type": "GET"
+  function gantitanggal() {
+   buattable();
+ }
+
+ function konfirm() {
+  var tgl = $('#tglfilter').val();
+  $.ajax({
+    url: '<?php echo base_url('ot/updatedataover')?>',
+    data :{
+      tgl:tgl
     },
-    "columnDefs": [
-    {
+    beforeSend: function () {
+      $('#progressbar2').show();
+    },
+    complete: function () {
+      $("#progressbar2").hide();
+    },
+    success: function() {
+      buattable();
+    }
+  });
+}
+
+function buattable() {
+ var table2 = $('#example1').DataTable();
+ table2.destroy();
+ var tgl = $('#tglfilter').val();
+ $('#example1').DataTable({
+  "lengthMenu"    : [[10, 25, 50, -1], [10, 25, 50, "All"]],
+  "processing"    : true,
+  "serverSide"    : true,
+  "bInfo": false,
+  'order'         : [],
+  "ajax": {
+    "url": "<?php echo base_url('ot/ajax_ot2')?>",
+    "data":{
+      tgl:tgl
+    } ,      
+    "type": "GET"
+  },
+  "columnDefs": [
+  {
               "targets": [ 10 ], //first column / numbering column
               "orderable": false, //set not orderable
             }
             ],
           });
- }
- function detail_spl(id) {
+}
+function detail_spl(id) {
   tabel = $('#example2').DataTable();
   tabel.destroy();
   $.ajax({

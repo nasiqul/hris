@@ -276,4 +276,10 @@ class Home_model extends CI_Model {
      $query = $this->db->query($q);
      return $query->result();   
  }
+
+ public function get_dep_all()
+    {
+        $query = $this->db->get('section');
+        return $query->result();
+    }
 }

@@ -110,7 +110,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <th width="5%">No</th>
                     <th>No. SPL</th>
                     <th>Tanggal</th>
-                    <th width="10%">Aksi</th>
+                    <th width="15%">Aksi</th>
                   </tr>
                 </thead>
                 <tbody>

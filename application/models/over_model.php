@@ -419,10 +419,11 @@ class Over_model extends CI_Model {
         $this->db->update($table);
     }  
 
-    public function get_dep()
+    public function get_dep($id)
     {
-    	$query = $this->db->get('section');
-    	return $query->result();
+        $this->db->where("id_departemen = (select departemen.id from login2 join departemen on login2.department = departemen.nama where username = '".$id."')");
+        $query = $this->db->get('section');
+        return $query->result();
     }
 
     public function get_sub_sec($id)
@@ -918,6 +919,48 @@ public function extrafood2($tgl,$id)
     return $query->result();
 }
 
+public function multiot2($tgl,$id,$tgl2)
+{
+    $this->db->select("id,tanggal,jumlah_org,jumlah_jam,maxot,actual,sec,sub,grup");
+    $this->db->from("(
+        select id,tanggal,a.costCenter,jumlah_org,jumlah_jam,(jumlah*budget) as maxot, sec,sub,grup from (
+        SELECT over_time.id,over_time.tanggal, over_time_member.nik, karyawan.costCenter,cost_center_budget.budget, master_cc.name, COUNT(over_time_member.nik) as jumlah_org,sum(over_time_member.jam) as jumlah_jam, section.nama as sec,sub_section.nama as sub,group1.nama as grup FROM over_time_member 
+        LEFT JOIN over_time  on over_time.id = over_time_member.id_ot
+        left join karyawan on over_time_member.nik = karyawan.nik 
+        left join cost_center_budget on cost_center_budget.id_cc = karyawan.costCenter
+        LEFT JOIN master_cc on master_cc.id_cc = cost_center_budget.id_cc
+        left join section on over_time.departemen = section.id
+        left join sub_section on over_time.section = sub_section.id
+        left join group1 on over_time.sub_sec = group1.id
+        WHERE id_ot IN (".$id.") and DATE_FORMAT(period,'%Y-%m-%d')='".$tgl."'
+        GROUP BY over_time.id
+        ) a left join (
+        select COUNT(nik) as jumlah, costCenter from karyawan where costCenter in(
+        SELECT karyawan.costCenter FROM over_time_member 
+        left join karyawan on over_time_member.nik = karyawan.nik 
+        WHERE id_ot IN (".$id.") and karyawan.Status='aktif'
+        GROUP BY karyawan.costCenter
+        ) GROUP BY costCenter
+        )b
+        on a.costCenter = b.costCenter
+        ) a 
+        left join (
+        SELECT costCenter as cc,sum(jam) as actual from (
+        SELECT karyawan.nik,karyawan.costCenter FROM over_time_member 
+        left join karyawan on karyawan.nik = over_time_member.nik
+        WHERE id_ot IN (".$id.") and karyawan.Status='aktif'
+        ) a left join
+        (
+        select nik,jam,tanggal from over
+        )b on a.nik = b.nik
+        WHERE DATE_FORMAT(tanggal,'%Y-%m')='".$tgl2."'
+        GROUP BY cc
+    )b on a.costCenter = b.cc");
+
+    $query = $this->db->get();
+    return $query->result();
+}
+
 public function transdb($id,$tgl,$dari,$sampai)
 {
     $this->db->select("*");
@@ -1267,7 +1310,38 @@ public function get_cc5($tgl,$cc)
     }
 
     $q = "  
-    select c.mon, c.tanggal, c.departemen, coalesce(d.total_jam, 0) as jam from
+    select c.*, IFNULL(total_jam,0) as jam from
+    (
+    select b.tanggal, master_cc.departemen from (select tanggal from kalender_fy where DATE_FORMAT(tanggal, '%m-%Y') = '".$tgl."') b
+    cross join master_cc
+    group by b.tanggal, departemen
+    ) as c
+    left join 
+    (
+    select '".$tgl."' as mon, tanggal, departemen, round(sum(jam),1) as total_jam from over
+    left join karyawan on karyawan.nik = over.nik
+    left join master_cc on master_cc.id_cc = karyawan.costCenter
+    where DATE_FORMAT(tanggal, '%m-%Y') = '".$tgl."'
+    GROUP BY mon, tanggal, departemen
+    ) as d on d.departemen = c.departemen and d.tanggal = c.tanggal ".$where."
+    order by c.tanggal, c.departemen asc";
+    $query = $this->db->query($q);
+    return $query->result();
+}
+
+public function get_cc5_hari($tgl,$tgl2,$cc,$fiskal)
+{
+    if ($cc != "0"){
+        $where = "where c.departemen ='".$cc."'";
+        $where1 = "where departemen ='".$cc."'";
+    }
+    else{
+        $where = "";
+        $where1 = "";
+    }
+
+    $q = "  
+    select c.mon, c.tanggal, c.departemen, coalesce(d.total_jam, 0) as jam, IFNULL(tot_budget,0) tot_budget from
     (
     select a.mon, a.tanggal, b.departemen from
     (
@@ -1277,21 +1351,53 @@ public function get_cc5($tgl,$cc)
     ) as a
     left join
     (
-    select distinct '".$tgl."' as mon, departemen from master_cc
+    select distinct '03-2019' as mon, departemen from master_cc
     ) as b on b.mon = date_format(a.tanggal, '%m-%Y')
     ) as c
     left join
     (
-    select '".$tgl."' as mon, tanggal, departemen, round(sum(jam),1) as total_jam from over
+    select '03-2019' as mon, tanggal, departemen, round(sum(jam),1) as total_jam from over
     left join karyawan on karyawan.nik = over.nik
     left join master_cc on master_cc.id_cc = karyawan.costCenter
     where DATE_FORMAT(tanggal, '%m-%Y') = '".$tgl."'
     GROUP BY mon, tanggal, departemen
-) as d on c.mon = d.mon and c.departemen = d.departemen and c.tanggal = d.tanggal ".
-$where."
-order by c.tanggal asc";
-$query = $this->db->query($q);
-return $query->result();
+    ) as d on c.mon = d.mon and c.departemen = d.departemen and c.tanggal = d.tanggal
+    left join (
+    select c.tanggal , (d.tot_karyawan * c.budget_jam) as tot_budget, master_cc.departemen from (
+    select mon, costCenter, count(if(if(date_format(a.tanggalMasuk, '%Y-%m') < mon, 1, 0 ) - if(date_format(a.tanggalKeluar, '%Y-%m') < mon, 1, 0 ) = 0, null, 1)) as tot_karyawan from
+    (
+    select distinct fiskal, date_format(tanggal, '%Y-%m') as mon
+    from kalender_fy
+    ) as b
+    join
+    (
+    select '".$fiskal."' as fy, karyawan.kode, tanggalKeluar, tanggalMasuk, nik, costCenter
+    from karyawan
+    ) as a
+    on a.fy = b.fiskal
+    group by mon, costCenter
+    having mon = '".$tgl2."'
+    ) as d
+    left join master_cc on master_cc.id_cc = d.costCenter
+    left join (
+    select tanggal, dep, sum(jam) as budget_jam from budget_harian
+    where DATE_FORMAT(tanggal,'%m-%Y') = '".$tgl."'
+    group by tanggal,dep
+    ) c on c.dep = master_cc.departemen
+    group by tanggal,dep
+    ) as m on m.tanggal = c.tanggal and c.departemen = m.departemen
+    order by c.tanggal asc";
+    $query = $this->db->query($q);
+    return $query->result();
+}
+
+public function get_budget_hari($tgl)
+{
+    $q = "select tanggal, dep, sum(jam) as budget_jam from budget_harian
+    where DATE_FORMAT(tanggal,'%m-%Y') = '".$tgl."'
+    group by tanggal";
+    $query = $this->db->query($q);
+    return $query->result();
 }
 
 

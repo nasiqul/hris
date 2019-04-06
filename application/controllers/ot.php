@@ -279,8 +279,8 @@ class Ot extends CI_Controller {
 			$row[] = $key->sampai;
 			$row[] = $key->jam;
 			$row[] = $key->transport;
-			$row[] = $key->makan;
-			$row[] = $key->ext_food;
+			$row[] = ($key->makan == 1)? "&#x2714" : "-";
+			$row[] = ($key->ext_food == 1)? "&#x2714" : "-";
 
 			$data[] = $row;
 			$no++;
@@ -414,6 +414,23 @@ class Ot extends CI_Controller {
 		$data['cc_member'] = $this->over_model->costCenter($cc[sizeof($cc)-1]->id_cc);
 
 		$this->load->view('print_ot',$data);
+	}
+
+	public function print_grup()
+	{
+		if (!isset($_POST['tanggal'])) {
+			$tgl2 = date('Y-m');
+			$tgl = date('Y-m-d',strtotime($tgl2."-01"));
+		} else {
+			$time = $_POST['tanggal'];
+			$tgl2 = date('Y-m',strtotime($time));
+			$tgl = date('Y-m-d',strtotime($tgl2."-01"));
+		}
+		$id = $_POST['id'];
+
+		$data['anggota'] = $this->over_model->multiot2($tgl,$id,$tgl2);
+
+		$this->load->view('print_ot_grup', $data);
 	}
 
 	public function cek_nik()
@@ -556,11 +573,12 @@ class Ot extends CI_Controller {
 		$sub = $_GET['sub'];
 		$subsec = $_GET['subsec'];
 		$group = $_GET['group'];
+		$user = $this->session->userdata('nik');
 
-		$list = $this->over_user_model->get_ot_user($tgl,$sub,$subsec,$group);
+		$list = $this->over_user_model->get_ot_user($tgl,$sub,$subsec,$group,$user);
 
-		$tot = $this->over_user_model->count_all($tgl,$sub,$subsec,$group);
-		$filter = $this->over_user_model->count_filtered($tgl,$sub,$subsec,$group);
+		$tot = $this->over_user_model->count_all($tgl,$sub,$subsec,$group,$user);
+		$filter = $this->over_user_model->count_filtered($tgl,$sub,$subsec,$group,$user);
 		$data = array();
 		if(!empty($list)) {
 			$no = 1;
@@ -569,15 +587,16 @@ class Ot extends CI_Controller {
 				$row[] = $no;
 				$row[] = $key->id;
 				$row[] = $key->tanggal;
-				// $row[] = $key->section." - ".$key->subsection." - ".$key->grup;
-				// $row[] = $key->jml;
+				$row[] = $key->section." - ".$key->subsection." - ".$key->grup;
+				$row[] = $key->jml;
 				if ($key->status != '0') 
 					$row[] = "<button class='btn btn-primary btn-xs' onclick='detail_spl(".$key->id."); exporta(".$key->id.")'>Detail</button>";
 				else
-					$row[] = "<button class='btn btn-primary btn-xs' onclick='detail_spl(".$key->id."); exporta(".$key->id.")'>Detail</button>&nbsp;";
-
-				// <button class='btn btn-danger btn-xs' onclick='modal_open(".$key->id.");'><i class='fa fa-trash'></i></button>
-				
+					$row[] = "
+				<a class='btn btn-primary btn-xs' href='".base_url("home/overtime_edit/".$key->id)."'><i class='fa fa-pencil'></i></a> &nbsp;
+				<button class='btn btn-primary btn-xs' onclick='detail_spl(".$key->id."); exporta(".$key->id.")'>Detail</button>&nbsp;
+				<button class='btn btn-danger btn-xs' onclick='modal_open(".$key->id.");'><i class='fa fa-trash'></i></button>";
+				$row[] = "<button class='btn btn-success btn-xs' id='add".$key->id."' onclick='multi(".$key->id.")'>Add <i class='fa fa-level-up'></button>";
 
 				$data[] = $row;
 
@@ -844,6 +863,47 @@ class Ot extends CI_Controller {
 				$row[] = $key->sec;
 				$row[] = $key->sub;
 				$row[] = $key->gruop1;
+
+				$data[] = $row;
+			}
+			echo json_encode($data);
+
+		} else {
+			
+			$data[] = "-";
+
+			echo json_encode($data);
+		}
+	}
+
+
+	public function multiot()
+	{	
+		if (!isset($_POST['tgl'])) {
+			$tgl2 = date('Y-m');
+			$tgl = date('Y-m-d',strtotime($tgl2."-01"));
+		} else {
+			$time = $_POST['tgl'];
+			$tgl2 = date('Y-m',strtotime($time));
+			$tgl = date('Y-m-d',strtotime($tgl2."-01"));
+		}
+		$id = $_POST['id'];
+
+		$list = $this->over_model->multiot2($tgl,$id,$tgl2);
+		$data = array();
+
+		if (!empty($list)) {
+			foreach ($list as $key) {
+				$row = array();
+				$row[] = $key->id;
+				$row[] = $key->tanggal;
+				$row[] = $key->jumlah_org;
+				$row[] = $key->jumlah_jam;
+				$row[] = $key->maxot;
+				$row[] = $key->actual;
+				$row[] = $key->sec;
+				$row[] = $key->sub;
+				$row[] = $key->grup;
 
 				$data[] = $row;
 			}
@@ -1279,6 +1339,49 @@ class Ot extends CI_Controller {
 
 	}
 
+	public function overtime_chart_per_dep_hari()
+	{
+		if (isset($_POST['bulan'])) {
+            //$n = date('m-Y', strtotime($_POST['date2']));
+			$tgl = $_POST['bulan'];
+			$tgl2 = date('Y-m',strtotime("01-".$_POST['bulan']));
+		}
+		else {
+			$tgl = date('m-Y');
+			$tgl2 = date('Y-m');
+		}
+
+		if (isset($_POST['bagian'])) {
+            //$n = date('m-Y', strtotime($_POST['date2']));
+			$cc = $_POST['bagian'];
+		}
+		else {
+			$cc = "0";
+		}
+
+		$data4 = array();
+		$fiskal = $this->home_model->getFiskal($tgl2);
+
+		$list2 = $this->over_model->get_cc5_hari($tgl,$tgl2,$cc,$fiskal[0]->fiskal);
+		
+
+		$data2 = array();
+
+		foreach ($list2 as $key2) {
+			$row = array();
+			$row[] = date('d',strtotime($key2->tanggal)); 
+			$row[] = $key2->departemen;
+			$row[] = (float) $key2->jam;
+			$row[] = (float) $key2->tot_budget;
+
+			$data2[] = $row;
+		}		
+
+            //output to json format
+		echo json_encode($data2);
+
+	}
+
 
 	public function createXLS($id) {
 		// create file name
@@ -1470,11 +1573,12 @@ class Ot extends CI_Controller {
 		$sub = $_GET['sub'];
 		$subsec = $_GET['subsec'];
 		$group = $_GET['group'];
+		$user = "0";
 
-		$list = $this->over_user_model->get_ot_user($tgl,$sub,$subsec,$group);
+		$list = $this->over_user_model->get_ot_user($tgl,$sub,$subsec,$group,$user);
 
-		$tot = $this->over_user_model->count_all($tgl,$sub,$subsec,$group);
-		$filter = $this->over_user_model->count_filtered($tgl,$sub,$subsec,$group);
+		$tot = $this->over_user_model->count_all($tgl,$sub,$subsec,$group,$user);
+		$filter = $this->over_user_model->count_filtered($tgl,$sub,$subsec,$group,$user);
 		$data = array();
 		if(!empty($list)) {
 			$no = 1;

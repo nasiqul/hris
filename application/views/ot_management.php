@@ -93,14 +93,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 
                   </div>
-                  <div id="load" class="overlay" style="display: none;">
+                  <div id="progressbar2" class="overlay">
                     <i class="fa fa-refresh fa-spin"></i>
                   </div>
                 </div>
 
-                <div id="container" style ="width: 95%;margin: 0 auto">
-
-                </div>
+                <div id="container" style ="width: 95%;margin: 0 auto"></div>
 
               </div>
             </div>
@@ -123,7 +121,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <script>
 
     var notif = document.getElementById("notif");
-
     function check() {
       notif.style.display = "none";
     }
@@ -135,7 +132,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
         format: "yyyy",
         viewMode: "years", 
         minViewMode: "years"
-      })
+      });
+
+      $("#progressbar2").hide();
     });
 
     //---------CHART---------------
@@ -147,13 +146,19 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
       var url = "<?php echo base_url('ot/ajax_ot_manaj/') ?>"+tahun+"/"+section+"";
       $.ajax({
-        type: "POST",
-        url: url,
-        success: function(data) {
-          var s = $.parseJSON(data);
-          var processed_json = new Array();
-          var seriesData = [];
-          var nama;
+       type: "POST",
+       url: url,
+       beforeSend: function () {
+        $('#progressbar2').show();
+      },
+      complete: function () {
+        $("#progressbar2").hide();
+      },
+      success: function(data) {
+        var s = $.parseJSON(data);
+        var processed_json = new Array();
+        var seriesData = [];
+        var nama;
                     // Populate series
 
 
@@ -189,7 +194,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         marker: {
                           enabled: false
                         },
-                           lineWidth: 1
+                        lineWidth: 1
                       }
                     },
                     series: s
@@ -210,6 +215,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
       $.ajax({
         type: "POST",
         url: url,
+        beforeSend: function () {
+          $('#progressbar2').show();
+        },
+        complete: function () {
+          $("#progressbar2").hide();
+        },
         success: function(data) {
           var s = $.parseJSON(data);
           var processed_json = new Array();

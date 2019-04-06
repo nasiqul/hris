@@ -210,7 +210,7 @@ input.error, input select.error {
 
                       <div class="form-group">
                         <label for="leader">Leader NIK</label>
-                        <input type="text" name="leader" id="leader" class="form-control" required>
+                        <input type="text" name="leader" id="leader" class="form-control">
                       </div>
 
                     </div>

@@ -182,13 +182,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 function progressData()
 {
-  
+
   if (ofc != 0) {
    var direct = ((ofc2/ofc)*100).toFixed(2) + '%';
    if( ((ofc2/ofc)*100).toFixed(0) > 100){
     $('#progress_bar_prod').removeClass('progress-bar-green').addClass('progress-bar-red');
   } else
-    $('#progress_bar_prod').removeClass('progress-bar-red').addClass('progress-bar-green');
+  $('#progress_bar_prod').removeClass('progress-bar-red').addClass('progress-bar-green');
   $('#persendirect').html("( "+direct+" )");
   $('#persendirect2').html(ofc2+" / "+ofc+" Hours");
   $('#progress_bar_prod').html(direct);
@@ -237,7 +237,7 @@ if (pl != 0)
   if( ((pl2/pl)*100).toFixed(0) > 100){
     $('#progress_bar_pl').removeClass('progress-bar-blue').addClass('progress-bar-red');
   } else
-    $('#progress_bar_pl').removeClass('progress-bar-red').addClass('progress-bar-blue');
+  $('#progress_bar_pl').removeClass('progress-bar-red').addClass('progress-bar-blue');
   $('#persenpl').html("( "+plData+" )");
   $('#persenpl2').html(pl2+" / "+pl+" Hours");
   $('#progress_bar_pl').html(plData);
@@ -262,11 +262,12 @@ $(function () {
   var per_bulan = new Array();
   var manam_bulan = new Array();
 
-  $.getJSON('<?php echo base_url("ot/overtime_chart_per_dep/")?>', function(data) {
+  $.getJSON('<?php echo base_url("ot/overtime_chart_per_dep_hari/")?>', function(data) {
 
    var xCategories = [];
    var seriesData = [];
-   var i, cat;
+   var budget = [];
+   var i, cat, cat2;
    var title = $("[name=date2]").val();
 
    var intVal = function ( i ) {
@@ -276,84 +277,79 @@ $(function () {
     i : 0;
   };
 
-  for(i = 0; i < data[0].length; i++){
-    cat = data[0][i][0];
+  for(i = 0; i < data.length; i++){
+    cat = data[i][0];
+    cat2 = data[i][3];
     if(xCategories.indexOf(cat) === -1){
      xCategories[xCategories.length] = cat;
-   }
- }
+     budget[xCategories.length] = cat2;
+   } else {
+    budget[xCategories.length] += cat2;
+  }
+}
 
- for(i = 0; i < data[0].length; i++){
+var budget2 = [];
+var bdt = 0;
+
+for (var i = 1; i < budget.length; i++) {
+  bdt += budget[i];
+  budget2.push(bdt);
+}
+
+for(i = 0; i < data.length; i++){
   if(seriesData){
-   var currSeries = seriesData.filter(function(seriesObject){ return seriesObject.name == data[0][i][1];});
+   var currSeries = seriesData.filter(function(seriesObject){ return seriesObject.name == data[i][1];});
    if(currSeries.length === 0){
-    seriesData[seriesData.length] = currSeries = {name: data[0][i][1], data: []};
+    seriesData[seriesData.length] = currSeries = {name: data[i][1], data: []};
   } else {
     currSeries = currSeries[0];
   }
   var index = currSeries.data.length;
-  currSeries.data[index] = data[0][i][2];
+  currSeries.data[index] = data[i][2];
 } else {
- seriesData[0] = {name: data[0][i][1], data: [intVal(data[0][i][2])]}
+ seriesData[0] = {name: data[i][1], data: [intVal(data[i][2])]}
 }
 }
-   
-    var grphDates = new Array();
-    var groupedObjects = new Array();
-    $.each(data[0], function (ix, obj) {
-      var existingObj;
-      if ($.inArray(obj[0], grphDates) >= 0) {
-       var index = groupedObjects.map(function(o, i) { 
-        if(o[0] == obj[0])return i;
-      }).filter(isFinite);
 
-       groupedObjects[index][2] += obj[2];
-     } else {
-       groupedObjects.push(obj);
-       grphDates.push(obj[0]);
-     }
-    });
+var grphDates = new Array();
+var groupedObjects = new Array();
+$.each(data, function (ix, obj) {
+  var existingObj;
+  if ($.inArray(obj[0], grphDates) >= 0) {
+   var index = groupedObjects.map(function(o, i) { 
+    if(o[0] == obj[0])return i;
+  }).filter(isFinite);
 
-    cumulativeData = [0];
+   groupedObjects[index][2] += obj[2];
+ } else {
+   groupedObjects.push(obj);
+   grphDates.push(obj[0]);
+ }
+});
 
-    accData = [];
-    for(i=0; i < groupedObjects.length; i++){
-      accData.push(groupedObjects[i][2]);
-    }
+cumulativeData = [0];
 
-    accData.forEach(function(elementToAdd, index) {
-      var newElement = cumulativeData[index] + elementToAdd;
-      cumulativeData.push(newElement);
-    });
-    cumulativeData.shift();
+accData = [];
+for(i=0; i < groupedObjects.length; i++){
+  accData.push(groupedObjects[i][2]);
+}
 
-        cumulativeData2 = [0];
-        accData2 = [];
-        for(i=0; i < xCategories.length; i++){
-          accData2.push(data[1][0][2] / xCategories.length);
-        }
-
-
-        accData2.forEach(function(elementToAdd2, index) {
-          var newElement2 = cumulativeData2[index] + elementToAdd2;
-          cumulativeData2.push(newElement2);
-        });
-
-        cumulativeData2.shift();
-        for (var i = 0; i <= cumulativeData2.length; i++) {
-         // alert(cumulativeData2[i]+" ");
-        }
+accData.forEach(function(elementToAdd, index) {
+  var newElement = cumulativeData[index] + elementToAdd;
+  cumulativeData.push(newElement);
+});
+cumulativeData.shift();
 
         //Title Name
         const monthNames = ["January", "February", "March", "April", "May", "June",
-              "July", "August", "September", "October", "November", "December"
-            ];
+        "July", "August", "September", "October", "November", "December"
+        ];
 
-          var dt = "01-"+title;
-           var date = new Date(dt.replace( /(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3"))
+        var dt = "01-"+title;
+        var date = new Date(dt.replace( /(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3"))
           // End Title
 
-               seriesData.push({type: 'line', name: 'Cumulative Budget', data: cumulativeData2});
+               seriesData.push({type: 'line', name: 'Cumulative Budget', data: budget2});
                seriesData.push({type: 'line', name: 'Cumulative Actual', data: cumulativeData});
 
                Highcharts.setOptions({
@@ -387,7 +383,6 @@ $(function () {
              }
            },
            tooltip: {
-            valueDecimals: 2, 
              headerFormat: '<b>{point.x}</b><br/>',
              pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
            },
@@ -412,7 +407,7 @@ $(function () {
 
 
 function postTgl() {
- var url = "<?php echo base_url('ot/overtime_chart_per_dep') ?>";
+ var url = "<?php echo base_url('ot/overtime_chart_per_dep_hari') ?>";
  var bulan = $("#bulan").val();
  var bagian = $("#bagian").val();
  $.ajax({
@@ -430,7 +425,9 @@ function postTgl() {
 
    var xCategories = [];
    var seriesData = [];
-   var i, cat;
+   var budget = [];
+   var d = [];
+   var i, cat, cat2;
 
    var intVal = function ( i ) {
     return typeof i === 'string' ?
@@ -439,31 +436,43 @@ function postTgl() {
     i : 0;
   };
 
-  for(i = 0; i < data[0].length; i++){
-    cat = data[0][i][0];
+  for(i = 0; i < data.length; i++){
+    cat = data[i][0];
+    cat2 = data[i][3];
     if(xCategories.indexOf(cat) === -1){
      xCategories[xCategories.length] = cat;
-   }
- }
+     budget[xCategories.length] = cat2;
+   } else {
+    budget[xCategories.length] += cat2;
+  }
+}
 
- for(i = 0; i < data[0].length; i++){
+var budget2 = [];
+var bdt = 0;
+
+for (var i = 1; i < budget.length; i++) {
+  bdt += budget[i];
+  budget2.push(bdt);
+}
+
+for(i = 0; i < data.length; i++){
   if(seriesData){
-   var currSeries = seriesData.filter(function(seriesObject){ return seriesObject.name == data[0][i][1];});
+   var currSeries = seriesData.filter(function(seriesObject){ return seriesObject.name == data[i][1];});
    if(currSeries.length === 0){
-    seriesData[seriesData.length] = currSeries = {name: data[0][i][1], data: []};
+    seriesData[seriesData.length] = currSeries = {name: data[i][1], data: []};
   } else {
     currSeries = currSeries[0];
   }
   var index = currSeries.data.length;
-  currSeries.data[index] = data[0][i][2];
+  currSeries.data[index] = data[i][2];
 } else {
- seriesData[0] = {name: data[0][i][1], data: [intVal(data[0][i][2])]}
+ seriesData[0] = {name: data[i][1], data: [intVal(data[i][2])]}
 }
 }
 
 var grphDates = new Array();
 var groupedObjects = new Array();
-$.each(data[0], function (ix, obj) {
+$.each(data, function (ix, obj) {
   var existingObj;
   if ($.inArray(obj[0], grphDates) >= 0) {
    var index = groupedObjects.map(function(o, i) { 
@@ -490,78 +499,58 @@ accData.forEach(function(elementToAdd, index) {
 });
 cumulativeData.shift();
 
-    var d =  data[1][0][0];
-    var res = d.split("-");
+const monthNames = ["January", "February", "March", "April", "May", "June",
+"July", "August", "September", "October", "November", "December"
+];
 
-        cumulativeData2 = [0]; accData2 = [];
-        for(i=0; i < xCategories.length; i++){ 
-          accData2.push(data[1][0][2] / xCategories.length); 
-        }
-
-
-        accData2.forEach(function(elementToAdd2, index) {
-          var newElement2 = cumulativeData2[index] + elementToAdd2;
-          cumulativeData2.push(newElement2);
-        });
-
-        cumulativeData2.shift();
-        for (var i = 0; i <= cumulativeData2.length; i++) {
-         // alert(cumulativeData2[i]+" ");
-        }
-
-        const monthNames = ["January", "February", "March", "April", "May", "June",
-              "July", "August", "September", "October", "November", "December"
-            ];
-            
-          var dt = "01-"+title;
-           var date = new Date(dt.replace( /(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3"))
+var dt = "01-"+title;
+var date = new Date(dt.replace( /(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3"))
 
 
-               seriesData.push({type: 'line', name: 'Cumulative Budget', data: cumulativeData2});
+seriesData.push({type: 'line', name: 'Cumulative Budget', data: budget2});
 
+seriesData.push({type: 'line', name: 'Cumulative Actual', data: cumulativeData})
 
-               seriesData.push({type: 'line', name: 'Cumulative Actual', data: cumulativeData})
-
-               Highcharts.chart('container8', {
-                chart: {
-                 type: 'column'
-               },
-               title: {
-                 text: monthNames[date.getMonth()]
-               },
-               xAxis: {
-                 categories: xCategories
-               },
-               yAxis: {
-                 title: {
-                  text: 'Total Jam',
-                  style: {
-                   fontWeight: 'bold'
-                 }
-               },
-               stackLabels: {
-                enabled: true,
-                style: {
-                 fontWeight: 'bold',
-                 color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
-               }
-             }
-           },
-           tooltip: {
-            valueDecimals: 2, 
-             headerFormat: '<b>{point.x}</b><br/>',
-             pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
-           },
-           plotOptions: {
-             column: {
-              stacking: 'normal',
-              minPointLength: 5
-            },
-            series: {
-             cursor: 'pointer',
-             events: {
-               click: function (event) {
-                 details(this.name,event.point.category, title);
+Highcharts.chart('container8', {
+  chart: {
+   type: 'column'
+ },
+ title: {
+   text: monthNames[date.getMonth()]
+ },
+ xAxis: {
+   categories: xCategories
+ },
+ yAxis: {
+   title: {
+    text: 'Total Jam',
+    style: {
+     fontWeight: 'bold'
+   }
+ },
+ stackLabels: {
+  enabled: true,
+  style: {
+   fontWeight: 'bold',
+   color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+ }
+}
+},
+tooltip: {
+  valueDecimals: 2, 
+  headerFormat: '<b>{point.x}</b><br/>',
+  pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+},
+plotOptions: {
+ column: {
+  stacking: 'normal',
+  minPointLength: 5
+},
+series: {
+ cursor: 'pointer',
+ events: {
+   click: function (event) {
+     details(this.name,event.point.category, title);
                                    // alert(this.name + ' clicked ' + event.point.category + title);
                                  }
                                }
@@ -571,8 +560,8 @@ cumulativeData.shift();
                          });
 
 
-             }
-           });
+}
+});
 }
 
 $('.datepicker').datepicker({
