@@ -4,8 +4,8 @@
 
     <!-- Sidebar Menu -->
     <ul class="sidebar-menu" data-widget="tree">
-      <?php if (!isset($i) && !isset($z)): ?>
       <li class="header">MAIN</li>
+      <?php if (!isset($i) && !isset($z) && $this->session->userdata('role') == '1'): ?>
       <!-- Optionally, you can add icons to the links -->
       <li class="<?php if($menu2 == 'home') echo 'active'?>"><a href="<?php echo base_url(); ?>"><i class="fa fa-home"></i> <span>HOME</span></a></li>
     <?php endif ?>
