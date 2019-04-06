@@ -128,7 +128,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
 </div>
 <!-- /.modal-dialog -->
 </div>
-
+<?php 
+$tgl = '02 Apr 2019';
+$tanggal = date('Y-m-d',strtotime($tgl));
+echo $tanggal;
+?>
 </section>
 <!-- /.content -->
 </div>
@@ -182,13 +186,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 function progressData()
 {
-  
+
   if (ofc != 0) {
    var direct = ((ofc2/ofc)*100).toFixed(2) + '%';
    if( ((ofc2/ofc)*100).toFixed(0) > 100){
     $('#progress_bar_prod').removeClass('progress-bar-green').addClass('progress-bar-red');
   } else
-    $('#progress_bar_prod').removeClass('progress-bar-red').addClass('progress-bar-green');
+  $('#progress_bar_prod').removeClass('progress-bar-red').addClass('progress-bar-green');
   $('#persendirect').html("( "+direct+" )");
   $('#persendirect2').html(ofc2+" / "+ofc+" Hours");
   $('#progress_bar_prod').html(direct);
@@ -237,7 +241,7 @@ if (pl != 0)
   if( ((pl2/pl)*100).toFixed(0) > 100){
     $('#progress_bar_pl').removeClass('progress-bar-blue').addClass('progress-bar-red');
   } else
-    $('#progress_bar_pl').removeClass('progress-bar-red').addClass('progress-bar-blue');
+  $('#progress_bar_pl').removeClass('progress-bar-red').addClass('progress-bar-blue');
   $('#persenpl').html("( "+plData+" )");
   $('#persenpl2').html(pl2+" / "+pl+" Hours");
   $('#progress_bar_pl').html(plData);
@@ -297,117 +301,117 @@ $(function () {
  seriesData[0] = {name: data[0][i][1], data: [intVal(data[0][i][2])]}
 }
 }
-   
-    var grphDates = new Array();
-    var groupedObjects = new Array();
-    $.each(data[0], function (ix, obj) {
-      var existingObj;
-      if ($.inArray(obj[0], grphDates) >= 0) {
-       var index = groupedObjects.map(function(o, i) { 
-        if(o[0] == obj[0])return i;
-      }).filter(isFinite);
 
-       groupedObjects[index][2] += obj[2];
-     } else {
-       groupedObjects.push(obj);
-       grphDates.push(obj[0]);
-     }
-    });
+var grphDates = new Array();
+var groupedObjects = new Array();
+$.each(data[0], function (ix, obj) {
+  var existingObj;
+  if ($.inArray(obj[0], grphDates) >= 0) {
+   var index = groupedObjects.map(function(o, i) { 
+    if(o[0] == obj[0])return i;
+  }).filter(isFinite);
 
-    cumulativeData = [0];
+   groupedObjects[index][2] += obj[2];
+ } else {
+   groupedObjects.push(obj);
+   grphDates.push(obj[0]);
+ }
+});
 
-    accData = [];
-    for(i=0; i < groupedObjects.length; i++){
-      accData.push(groupedObjects[i][2]);
-    }
+cumulativeData = [0];
 
-    accData.forEach(function(elementToAdd, index) {
-      var newElement = cumulativeData[index] + elementToAdd;
-      cumulativeData.push(newElement);
-    });
-    cumulativeData.shift();
+accData = [];
+for(i=0; i < groupedObjects.length; i++){
+  accData.push(groupedObjects[i][2]);
+}
 
-        cumulativeData2 = [0];
-        accData2 = [];
-        for(i=0; i < xCategories.length; i++){
-          accData2.push(data[1][0][2] / xCategories.length);
-        }
+accData.forEach(function(elementToAdd, index) {
+  var newElement = cumulativeData[index] + elementToAdd;
+  cumulativeData.push(newElement);
+});
+cumulativeData.shift();
+
+cumulativeData2 = [0];
+accData2 = [];
+for(i=0; i < xCategories.length; i++){
+  accData2.push(data[1][0][2] / xCategories.length);
+}
 
 
-        accData2.forEach(function(elementToAdd2, index) {
-          var newElement2 = cumulativeData2[index] + elementToAdd2;
-          cumulativeData2.push(newElement2);
-        });
+accData2.forEach(function(elementToAdd2, index) {
+  var newElement2 = cumulativeData2[index] + elementToAdd2;
+  cumulativeData2.push(newElement2);
+});
 
-        cumulativeData2.shift();
-        for (var i = 0; i <= cumulativeData2.length; i++) {
+cumulativeData2.shift();
+for (var i = 0; i <= cumulativeData2.length; i++) {
          // alert(cumulativeData2[i]+" ");
-        }
+       }
 
         //Title Name
         const monthNames = ["January", "February", "March", "April", "May", "June",
-              "July", "August", "September", "October", "November", "December"
-            ];
+        "July", "August", "September", "October", "November", "December"
+        ];
 
-          var dt = "01-"+title;
-           var date = new Date(dt.replace( /(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3"))
+        var dt = "01-"+title;
+        var date = new Date(dt.replace( /(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3"))
           // End Title
 
-               seriesData.push({type: 'line', name: 'Cumulative Budget', data: cumulativeData2});
-               seriesData.push({type: 'line', name: 'Cumulative Actual', data: cumulativeData});
+          seriesData.push({type: 'line', name: 'Cumulative Budget', data: cumulativeData2});
+          seriesData.push({type: 'line', name: 'Cumulative Actual', data: cumulativeData});
 
-               Highcharts.setOptions({
-                colors: ['#058DC7', '#50B432', '#ED561B', '#DDDF00', '#24CBE5', '#64E572', '#FF9655', '#FFF263', '#6AF9C4', '#303133', '#db2929','#d1cccc','#9a3dd3','#236330']});
+          Highcharts.setOptions({
+            colors: ['#058DC7', '#50B432', '#ED561B', '#DDDF00', '#24CBE5', '#64E572', '#FF9655', '#FFF263', '#6AF9C4', '#303133', '#db2929','#d1cccc','#9a3dd3','#236330']});
 
 
-               Highcharts.chart('container8', {
-                chart: {
-                 type: 'column'
-               },
-               title: {
-                 text: monthNames[date.getMonth()]
-               },
-               xAxis: {
-                 categories: xCategories
-               },
-               yAxis: {
-                 title: {
-                  text: 'Total Jam',
-                  style: {
-                   fontWeight: 'normal',
-                   fontSize: 15
-                 }
-               },
-               stackLabels: {
-                enabled: true,
-                style: {
-                 fontWeight: 'bold',
-                 color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
-               }
+          Highcharts.chart('container8', {
+            chart: {
+             type: 'column'
+           },
+           title: {
+             text: monthNames[date.getMonth()]
+           },
+           xAxis: {
+             categories: xCategories
+           },
+           yAxis: {
+             title: {
+              text: 'Total Jam',
+              style: {
+               fontWeight: 'normal',
+               fontSize: 15
              }
            },
-           tooltip: {
-            valueDecimals: 2, 
-             headerFormat: '<b>{point.x}</b><br/>',
-             pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
-           },
-           plotOptions: {
-             column: {
-              stacking: 'normal',
-              minPointLength: 5
-            },
-            series: {
-             cursor: 'pointer',
-             events: {
-               click: function (event) {
-                 details(this.name,event.point.category, title);
-               }
-             }
+           stackLabels: {
+            enabled: true,
+            style: {
+             fontWeight: 'bold',
+             color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
            }
-         },
-         series: seriesData
-       });
-             });
+         }
+       },
+       tooltip: {
+        valueDecimals: 2, 
+        headerFormat: '<b>{point.x}</b><br/>',
+        pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+      },
+      plotOptions: {
+       column: {
+        stacking: 'normal',
+        minPointLength: 5
+      },
+      series: {
+       cursor: 'pointer',
+       events: {
+         click: function (event) {
+           details(this.name,event.point.category, title);
+         }
+       }
+     }
+   },
+   series: seriesData
+ });
+        });
 });
 
 
@@ -490,78 +494,78 @@ accData.forEach(function(elementToAdd, index) {
 });
 cumulativeData.shift();
 
-    var d =  data[1][0][0];
-    var res = d.split("-");
+var d =  data[1][0][0];
+var res = d.split("-");
 
-        cumulativeData2 = [0]; accData2 = [];
-        for(i=0; i < xCategories.length; i++){ 
-          accData2.push(data[1][0][2] / xCategories.length); 
-        }
+cumulativeData2 = [0]; accData2 = [];
+for(i=0; i < xCategories.length; i++){ 
+  accData2.push(data[1][0][2] / xCategories.length); 
+}
 
 
-        accData2.forEach(function(elementToAdd2, index) {
-          var newElement2 = cumulativeData2[index] + elementToAdd2;
-          cumulativeData2.push(newElement2);
-        });
+accData2.forEach(function(elementToAdd2, index) {
+  var newElement2 = cumulativeData2[index] + elementToAdd2;
+  cumulativeData2.push(newElement2);
+});
 
-        cumulativeData2.shift();
-        for (var i = 0; i <= cumulativeData2.length; i++) {
+cumulativeData2.shift();
+for (var i = 0; i <= cumulativeData2.length; i++) {
          // alert(cumulativeData2[i]+" ");
-        }
+       }
 
-        const monthNames = ["January", "February", "March", "April", "May", "June",
-              "July", "August", "September", "October", "November", "December"
-            ];
-            
-          var dt = "01-"+title;
-           var date = new Date(dt.replace( /(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3"))
+       const monthNames = ["January", "February", "March", "April", "May", "June",
+       "July", "August", "September", "October", "November", "December"
+       ];
 
-
-               seriesData.push({type: 'line', name: 'Cumulative Budget', data: cumulativeData2});
+       var dt = "01-"+title;
+       var date = new Date(dt.replace( /(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3"))
 
 
-               seriesData.push({type: 'line', name: 'Cumulative Actual', data: cumulativeData})
+       seriesData.push({type: 'line', name: 'Cumulative Budget', data: cumulativeData2});
 
-               Highcharts.chart('container8', {
-                chart: {
-                 type: 'column'
-               },
-               title: {
-                 text: monthNames[date.getMonth()]
-               },
-               xAxis: {
-                 categories: xCategories
-               },
-               yAxis: {
-                 title: {
-                  text: 'Total Jam',
-                  style: {
-                   fontWeight: 'bold'
-                 }
-               },
-               stackLabels: {
-                enabled: true,
-                style: {
-                 fontWeight: 'bold',
-                 color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
-               }
-             }
-           },
-           tooltip: {
-            valueDecimals: 2, 
-             headerFormat: '<b>{point.x}</b><br/>',
-             pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
-           },
-           plotOptions: {
-             column: {
-              stacking: 'normal',
-              minPointLength: 5
-            },
-            series: {
-             cursor: 'pointer',
-             events: {
-               click: function (event) {
-                 details(this.name,event.point.category, title);
+
+       seriesData.push({type: 'line', name: 'Cumulative Actual', data: cumulativeData})
+
+       Highcharts.chart('container8', {
+        chart: {
+         type: 'column'
+       },
+       title: {
+         text: monthNames[date.getMonth()]
+       },
+       xAxis: {
+         categories: xCategories
+       },
+       yAxis: {
+         title: {
+          text: 'Total Jam',
+          style: {
+           fontWeight: 'bold'
+         }
+       },
+       stackLabels: {
+        enabled: true,
+        style: {
+         fontWeight: 'bold',
+         color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+       }
+     }
+   },
+   tooltip: {
+    valueDecimals: 2, 
+    headerFormat: '<b>{point.x}</b><br/>',
+    pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+  },
+  plotOptions: {
+   column: {
+    stacking: 'normal',
+    minPointLength: 5
+  },
+  series: {
+   cursor: 'pointer',
+   events: {
+     click: function (event) {
+       details(this.name,event.point.category, title);
                                    // alert(this.name + ' clicked ' + event.point.category + title);
                                  }
                                }
@@ -571,8 +575,8 @@ cumulativeData.shift();
                          });
 
 
-             }
-           });
+     }
+   });
 }
 
 $('.datepicker').datepicker({

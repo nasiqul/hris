@@ -101,7 +101,7 @@ class import_excel extends CI_Controller {
                     // instead assigning one by onb use php list -> http://php.net/manual/en/function.list.php
                     list($pin, $nik, $tgl , $masuk, $keluar, $shift) = $lineArr;
 
-                    // $shift2 = trim(preg_replace('/\s\s+/', ' ', $shift));
+                    $shift2 = trim(preg_replace('/\s\s+/', ' ', $shift));
 
                     $daily_data = Array(
                         'pin' => $pin,
@@ -109,7 +109,7 @@ class import_excel extends CI_Controller {
                         'nik' => $nik,
                         'masuk'       => $masuk,
                         'keluar'       => $keluar,
-                        'shift'       => $shift,
+                        'shift'       => $shift2,
                         'hari'       => date('w' , strtotime($tgl)),
                     );
 
