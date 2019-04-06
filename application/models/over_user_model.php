@@ -12,9 +12,9 @@ class Over_user_model extends CI_Model {
     	$this->load->database();
     }
 
-    public function get_ot_user($tgl,$sub,$subsec,$group,$user)
+    public function get_ot_user($tgl,$sub,$subsec,$group,$user,$role)
     {
-    	$this->_get_datatables_query($tgl,$sub,$subsec,$group,$user);
+    	$this->_get_datatables_query($tgl,$sub,$subsec,$group,$user,$role);
     	if($_GET['length'] != -1){
     		$this->db->limit($_GET['length'], $_GET['start']);
     	}
@@ -22,7 +22,7 @@ class Over_user_model extends CI_Model {
     	return $query->result();
     }
 
-    private function _get_datatables_query($tgl,$sub,$subsec,$group,$user)
+    private function _get_datatables_query($tgl,$sub,$subsec,$group,$user,$role)
     {
     	$this->db->select("over_time.id, DATE_FORMAT(tanggal, '%a, %d %b %Y') as tanggal, over_time_member.status, sc.nama as section, ssc.nama as subsection, gr.nama as grup, count(nik) as jml");
     	$this->db->from("over_time");
@@ -34,7 +34,7 @@ class Over_user_model extends CI_Model {
         $this->db->where("tanggal = '".$tgl."'");
         $this->db->where("deleted_at IS NULL");
         
-        if ($user != "0") {
+        if ($role != "1") {
         $this->db->where("departemen.nama = (select department from login2 where username = '".$user."')");
         }
         if ($sub !="asd" && $sub && $sub != "0" ) {
@@ -83,16 +83,16 @@ class Over_user_model extends CI_Model {
     }
 
 
-    function count_filtered($tgl,$sub,$subsec,$group,$user)
+    function count_filtered($tgl,$sub,$subsec,$group,$user,$role)
     {
-        $this->_get_datatables_query($tgl,$sub,$subsec,$group,$user);
+        $this->_get_datatables_query($tgl,$sub,$subsec,$group,$user,$role);
         $query = $this->db->get();
         return $query->num_rows();
     }
 
-    public function count_all($tgl,$sub,$subsec,$group,$user)
+    public function count_all($tgl,$sub,$subsec,$group,$user,$role)
     {
-        $this->_get_datatables_query($tgl,$sub,$subsec,$group,$user);
+        $this->_get_datatables_query($tgl,$sub,$subsec,$group,$user,$role);
         return $this->db->count_all_results();
     }
 }

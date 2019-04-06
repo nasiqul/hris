@@ -574,11 +574,12 @@ class Ot extends CI_Controller {
 		$subsec = $_GET['subsec'];
 		$group = $_GET['group'];
 		$user = $this->session->userdata('nik');
+		$role2 = $this->session->userdata('role');
 
-		$list = $this->over_user_model->get_ot_user($tgl,$sub,$subsec,$group,$user);
+		$list = $this->over_user_model->get_ot_user($tgl,$sub,$subsec,$group,$user,$role2);
 
-		$tot = $this->over_user_model->count_all($tgl,$sub,$subsec,$group,$user);
-		$filter = $this->over_user_model->count_filtered($tgl,$sub,$subsec,$group,$user);
+		$tot = $this->over_user_model->count_all($tgl,$sub,$subsec,$group,$user,$role2);
+		$filter = $this->over_user_model->count_filtered($tgl,$sub,$subsec,$group,$user,$role2);
 		$data = array();
 		if(!empty($list)) {
 			$no = 1;
