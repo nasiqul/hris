@@ -1262,6 +1262,29 @@ public function jam_by_nik($nik, $tahun)
     return $query->result();
 }
 
+public function manajemen_section($fiskal, $costCenter)
+{
+    $q = "select main.*, IFNULL(jam ,0) jam from
+            (
+                select * from 
+                ( Select * from kalender_fy
+                    where fiskal = '".$fiskal."' 
+                    group by DATE_FORMAT(tanggal, '%m-%Y')
+                ) as d
+                cross join 
+                ( select karyawan.nik, namaKaryawan from karyawan where costCenter = '".$costCenter."') as m
+            ) main left join 
+            (
+                select tanggal, nik, sum(jam) jam from over
+                group by DATE_FORMAT(tanggal, '%m-%Y'), nik
+            ) as u on u.nik = main.nik and DATE_FORMAT(u.tanggal, '%m-%Y') = DATE_FORMAT(main.tanggal, '%m-%Y')
+            order by main.tanggal
+    ";
+
+    $query = $this->db->query($q);
+    return $query->result();
+}
+
 public function get_chart_dep()
 {
     $q = "select tanggal, ROUND(sum(jam),1) as jam, IFNULL(k.costCenter,0) as cc from over

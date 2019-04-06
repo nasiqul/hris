@@ -79,7 +79,18 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                   <div class="pull-right">
                     Tahun : 
-                    <input type="text" name="tahun" id="tahun" class="form-control" onchange="postTahun()" value="<?php echo date('Y') ?>">
+                    <select name="tahun" class="form-control" id="tahun" onchange="postTahun()">
+                      <?php 
+                      foreach ($fiskal as $key) { 
+                        if ($key->tanggal < date('Y-m-d')) {
+                          echo '<option value="'.$key->fiskal.'" selected>'.$key->fiskal.'</option>';
+                        } else {
+                          echo '<option value="'.$key->fiskal.'">'.$key->fiskal.'</option>';
+                        }
+                      ?>
+                        
+                      <?php } ?>
+                    </select>
                   </div>
                   <div class="pull-right" style="margin-right: 20px">
 
@@ -125,14 +136,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       notif.style.display = "none";
     }
 
-    $(document).ready(function() {
-
-      $('#tahun').datepicker({
-        autoclose: true,
-        format: "yyyy",
-        viewMode: "years", 
-        minViewMode: "years"
-      });
+    $(document).ready(function() {      
 
       $("#progressbar2").hide();
     });
@@ -148,6 +152,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       $.ajax({
        type: "POST",
        url: url,
+       dataType: "json",
        beforeSend: function () {
         $('#progressbar2').show();
       },
@@ -155,10 +160,35 @@ scratch. This page gets rid of all links and provides the needed markup only.
         $("#progressbar2").hide();
       },
       success: function(data) {
-        var s = $.parseJSON(data);
+
         var processed_json = new Array();
         var seriesData = [];
-        var nama;
+        var xCategories = [];
+        var seriesData = [];
+        var i, cat;
+        var title = data[0][4];
+
+        for(i = 0; i < data.length; i++){
+          cat = data[i][0];
+          if(xCategories.indexOf(cat) === -1){
+           xCategories[xCategories.length] = cat;
+         }
+       }
+
+       for(i = 0; i < data.length; i++){
+        if(seriesData){
+         var currSeries = seriesData.filter(function(seriesObject){ return seriesObject.name == data[i][2];});
+         if(currSeries.length === 0){
+          seriesData[seriesData.length] = currSeries = {name: data[i][2], data: []};
+        } else {
+          currSeries = currSeries[0];
+        }
+        var index = currSeries.data.length;
+        currSeries.data[index] = data[i][3];
+      } else {
+       seriesData[0] = {name: data[i][2], data: [intVal(data[i][3])]}
+     }
+   }
                     // Populate series
 
 
@@ -167,10 +197,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         type: 'spline'
                       },
                       title: {
-                        text: 'YEAR '+$("#tahun").val()
+                        text: 'YEAR '+title
                       },
                       xAxis: {
-                        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+                        categories: xCategories
                       },
                       yAxis: {
                         title: {
@@ -197,7 +227,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         lineWidth: 1
                       }
                     },
-                    series: s
+                    series: seriesData
                   });
                     $('#load').css('display','none');
                   }
@@ -215,6 +245,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       $.ajax({
         type: "POST",
         url: url,
+        dataType: "json",
         beforeSend: function () {
           $('#progressbar2').show();
         },
@@ -222,10 +253,34 @@ scratch. This page gets rid of all links and provides the needed markup only.
           $("#progressbar2").hide();
         },
         success: function(data) {
-          var s = $.parseJSON(data);
-          var processed_json = new Array();
-          var seriesData = [];
-          var nama;
+         var processed_json = new Array();
+         var seriesData = [];
+         var xCategories = [];
+         var seriesData = [];
+         var i, cat;
+         var title = data[0][4];
+
+         for(i = 0; i < data.length; i++){
+          cat = data[i][0];
+          if(xCategories.indexOf(cat) === -1){
+           xCategories[xCategories.length] = cat;
+         }
+       }
+
+       for(i = 0; i < data.length; i++){
+        if(seriesData){
+         var currSeries = seriesData.filter(function(seriesObject){ return seriesObject.name == data[i][2];});
+         if(currSeries.length === 0){
+          seriesData[seriesData.length] = currSeries = {name: data[i][2], data: []};
+        } else {
+          currSeries = currSeries[0];
+        }
+        var index = currSeries.data.length;
+        currSeries.data[index] = data[i][3];
+      } else {
+       seriesData[0] = {name: data[i][2], data: [intVal(data[i][3])]}
+     }
+   }
                     // Populate series
 
 
@@ -234,10 +289,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         type: 'spline'
                       },
                       title: {
-                        text: 'YEAR '+$("#tahun").val()
+                        text: 'YEAR '+title
                       },
                       xAxis: {
-                        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+                        categories: xCategories
                       },
                       yAxis: {
                         title: {
@@ -261,7 +316,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                           lineWidth: 1
                         }
                       },
-                      series: s
+                      series: seriesData
                     });
                     $('#load').css('display','none');
                   }

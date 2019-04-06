@@ -1242,43 +1242,24 @@ class Ot extends CI_Controller {
 
 	}
 
-	public function ajax_ot_manaj($tahun,$section)
+	public function ajax_ot_manaj($tahun ,$cc)
 	{
-
-		$list = $this->over_model->nik_by_cc($section);
+		$list = $this->over_model->manajemen_section($tahun ,$cc);
 		$data = array();
-		$data3 = array();
-
+		
 		foreach ($list as $key) {
-			$data2 = array();
+			$row = array();
+			$row[] = date('M Y',strtotime($key->tanggal));
+			$row[] = $key->nik;
+			$row[] = $key->namaKaryawan;
+			$row[] = (float) $key->jam;
+			$row[] = $key->fiskal;
 
-			$nik = $key->nik;
+			$data[] = $row;
 
-			$data2["name"] = $key->namaKaryawan;
-			$data3["name"] = $key->target;
-
-			$list2 = $this->over_model->jam_by_nik($nik,$tahun);
-
-			$row2 = array();
-			$d = array();
-
-			foreach ($list2 as $key2) {
-				$row = array();
-				$row[] = (float) $key2->tot;
-
-				array_push($row2, $row);
-				array_push($d, (float) $key2->budget);
-			}
-
-			$data2["data"] =  $row2;
-			$data3["data"] =  $d;
-			$data3["dashStyle"] =  'Dash';
-
-			array_push($data, $data2);
-			array_push($data, $data3);
 		}
 
-            //output to json format
+        //output to json format
 		echo json_encode($data);
 	}
 

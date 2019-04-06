@@ -277,6 +277,13 @@ class Home_model extends CI_Model {
      return $query->result();   
  }
 
+ public function getFiskalAll()
+ {
+    $q = "select fiskal, tanggal from kalender_fy group by fiskal";
+     $query = $this->db->query($q);
+     return $query->result();   
+ }
+
  public function get_dep_all()
     {
         $query = $this->db->get('section');

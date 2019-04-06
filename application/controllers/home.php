@@ -180,6 +180,7 @@ class Home extends CI_Controller {
         $data['menu2'] = 'Overtime';
         $data['menu'] = 'OT Management By Section';
         $data['section'] = $this->budget_model->get_name_cc();
+        $data['fiskal'] = $this->home_model->getFiskalAll();
         $this->load->view("ot_management",$data);
     }
 

@@ -20,18 +20,30 @@
 		body {
 			font-size: 12pt;
 		}
+		#tb-collapse tr td{
+		padding: 2px;
+	}
 	}
 
 	body {
 		font-family: sans-serif;
 		padding: 5px;
 	}
+	.main {
+		width: 100%;
+		margin: 5px 0px 20px 0px;
+	}
+	.main tr th, .main tr td {
+		padding: 8px;
+		vertical-align: top;
+	}
 </style>
 <body>
 	<div class="row">
 		<div class="col-md-12">
-			<center><h3>LEMBAR PERSETUJUAN</h3></center>
-			<table class="table table-bordered">
+			<b>PT. YAMAHA MUSICAL PRODUCT INDONESIA</b>
+			<center><h3>LEMBAR PERSETUJUAN LEMBUR LIBUR</h3></center>
+			<table class="main" border="1px">
 				<tr>
 					<th>No</th>
 					<th>Tanggal</th>
@@ -47,7 +59,7 @@
 				foreach ($anggota as $key) { ?>
 					<tr>
 						<td><?php echo $no ?></td>
-						<td><?php echo $key->tanggal ?></td>
+						<td><?php echo date('d-m-Y',strtotime($key->tanggal)) ?></td>
 						<td><?php echo $key->id ?></td>
 						<td><?php echo $key->sec." - ".$key->sub." - ".$key->grup ?></td>
 						<td><?php echo $key->jumlah_org ?></td>
