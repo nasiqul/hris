@@ -20,6 +20,7 @@ class Management_mp extends CI_Controller {
         $data['grade'] = $this->karyawan_model->by_grade();
         $data['kode'] = $this->karyawan_model->by_kode();
         $data['posisi'] = $this->karyawan_model->by_posisi();
+        $data['menu2'] = 'empG1';
         $data['menu'] = 'empG1';
         $data['chart'] = 'status';
         $this->load->view("karyawan_graph", $data);

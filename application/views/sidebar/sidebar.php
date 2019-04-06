@@ -10,7 +10,7 @@
       <li class="<?php if($menu2 == 'home') echo 'active'?>"><a href="<?php echo base_url(); ?>"><i class="fa fa-home"></i> <span>HOME</span></a></li>
     <?php endif ?>
 
-    <?php if ($this->session->userdata('nik')) { 
+    <?php if ($this->session->userdata('nik') && !isset($i) && !isset($z)) { 
       $username = $this->session->userdata('nik');
       ?>
       <li class="treeview <?php if($menu2 == 'Employee') echo 'active' ?>">

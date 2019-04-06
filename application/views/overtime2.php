@@ -31,7 +31,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <div class="box-body">
               Tanggal<br>
               <input type="text" name="tglfilter" id="tglfilter" class="form-control datepicker pull-left" style="width: 10%" onchange="gantitanggal();"> &nbsp;
-              <input type="button" id="konfirm" onclick="konfirm()" class="btn btn-default" value="konfirmasi">
+              <input type="button" id="konfirm" onclick="konfirm()" class="btn btn-default" value="konfirmasi" disabled>
               <div id="progressbar2">
                 <i class="fa fa-refresh fa-spin"></i> Loading...  
               </div>
