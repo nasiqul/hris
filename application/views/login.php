@@ -80,11 +80,7 @@
 						document.getElementById("nik").className = document.getElementById("nik").className + " error";  // this adds the error class
 						document.getElementById("pass").className = document.getElementById("pass").className + " error";  // this adds the error class
 					} else {
-						if (s.role == 1) 
-							window.location.replace("<?php echo base_url() ?>");
-						else
-							window.location.replace("<?php echo base_url('client/') ?>");
-
+						window.location.replace("<?php echo base_url() ?>");
 					}
 				}
 			})

@@ -43,9 +43,17 @@ class Home extends CI_Controller {
         }
         
         if ($this->session->userdata('nik')) { 
-            $data['menu2'] = 'home';
-            $data['menu'] = '';
-            $this->load->view('report', $data);
+            if ($this->session->userdata('role') == '1') {
+                $data['menu2'] = 'home';
+                $data['menu'] = '';
+                $this->load->view('report', $data);
+            }
+            else if ($this->session->userdata('role') == '2')
+            {
+                $data['menu2'] = 'Overtime';
+                $data['menu'] = 'Overtime User';
+                $this->load->view('overtime_user2', $data);
+            }
             
         } else {
             redirect('login'); 
@@ -184,7 +192,7 @@ class Home extends CI_Controller {
         $this->load->view("overtime_form3",$data);
     }
 
-     public function overtime_edit($id_ot)
+    public function overtime_edit($id_ot)
     {
         $data['dep'] = $this->home_model->get_dep_all();
         $data['isi'] = $this->over_model_new->ot_hr($id_ot);
@@ -732,9 +740,9 @@ public function ajax_presensi_shift()
       }
   }
   else
-     $result[] = json_decode ("{}");
+   $result[] = json_decode ("{}");
 
- echo json_encode($result);
+echo json_encode($result);
 }
 
 public function ajax_emp_keluarga()
