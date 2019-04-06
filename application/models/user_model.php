@@ -21,8 +21,9 @@ class User_model extends CI_Model {
 
     public function login_data($nik, $pass)
     {
-        $this->db->select("username, password, role");
+        $this->db->select("username, password, role, karyawan.namaKaryawan");
         $this->db->from('login2');
+        $this->db->join('karyawan','login2.username = karyawan.nik','left');
         $this->db->where('username',$nik);
         $this->db->where('password',$pass);
 

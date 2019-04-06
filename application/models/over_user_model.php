@@ -32,6 +32,7 @@ class Over_user_model extends CI_Model {
         $this->db->join("group1 gr",'gr.id = over_time.sub_sec','left');
         $this->db->join("departemen",'departemen.id = sc.id_departemen','left');
         $this->db->where("tanggal = '".$tgl."'");
+        $this->db->where("deleted_at IS NULL");
         
         if ($user != "0") {
         $this->db->where("departemen.nama = (select department from login2 where username = '".$user."')");

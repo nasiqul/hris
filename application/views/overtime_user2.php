@@ -259,7 +259,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <div class="modal-dialog modal-sm">
           <div class="modal-content">
             <div class="modal-header">
-              <h3 class="modal-title">Yakin hapus "<b id="id2"></b>" ?</h3>
+              <h3 class="modal-title">Yakin hapus "<b id="id3"></b>" ?</h3>
             </div>
             <div class="modal-footer">
               <button class="btn btn-danger pull-left" onclick="hapus()"><i class="fa fa-trash"></i> Hapus</button>
@@ -567,11 +567,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
     function modal_open(id) {
       $('#myModal2').modal({backdrop: 'static', keyboard: false});
-      $('#id2').text(id);
+      $('#id3').text(id);
     }
 
     function hapus() {
-      var id = $('#id2').text();
+      var id = $('#id3').text();
 
       $.ajax({
         type: 'POST',

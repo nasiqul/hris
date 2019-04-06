@@ -452,7 +452,9 @@ class Over_model extends CI_Model {
             'hari' => $hari,
             'sub_sec' => $subsec,
             'status_shift' => $grup,
-            'shift' => $shift
+            'shift' => $shift,
+            'created_at' => date('Y-m-d'),
+            'last_edited' => date('Y-m-d')
         );
 
     	$this->db->insert('over_time', $data);
@@ -1625,12 +1627,11 @@ return $query->result();
 
 public function hapus($id)
 {
+    $nik = $this->session->userdata('nik');
+    $this->db->set('deleted_at', date('Y-m-d'));
+    // $this->db->set('nik_delete', $nik);
     $this->db->where('id', $id);
-    $this->db->delete('over_time'); 
-
-
-    $this->db->where('id_ot', $id);
-    $this->db->delete('over_time_member'); 
+    $this->db->update('over_time');
 }
 
 

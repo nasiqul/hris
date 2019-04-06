@@ -40,14 +40,16 @@ class Login extends CI_Controller {
 		if ($list == 1) {
 			$newdata = array(
 				'nik'  => $nik,
-				'role'  => $isi[0]->role
+				'role'  => $isi[0]->role,
+				'nama'  => $isi[0]->namaKaryawan
 			);
 
 			$this->session->set_userdata($newdata);
 
 			$newdata2 = array(
 				'rows'  => 1,
-				'role'  => $isi[0]->role
+				'role'  => $isi[0]->role,
+				'nama'  => $isi[0]->namaKaryawan
 			);
 
 			echo json_encode($newdata2);

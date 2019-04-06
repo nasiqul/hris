@@ -52,6 +52,8 @@ class Home extends CI_Controller {
             {
                 $data['menu2'] = 'Overtime';
                 $data['menu'] = 'Overtime User';
+                $username = $this->session->userdata('nik');
+                $data['dep'] = $this->over_model->get_dep($username);
                 $this->load->view('overtime_user2', $data);
             }
             
@@ -741,9 +743,9 @@ public function ajax_presensi_shift()
       }
   }
   else
-   $result[] = json_decode ("{}");
+     $result[] = json_decode ("{}");
 
-echo json_encode($result);
+ echo json_encode($result);
 }
 
 public function ajax_emp_keluarga()

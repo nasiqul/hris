@@ -155,7 +155,7 @@ class Karyawan_model extends CI_Model {
     }
 
     public function by_status(){
-        $q = "SELECT statusKaryawan, COUNT(*) AS jml from karyawan group by statusKaryawan";
+        $q = "SELECT statusKaryawan, COUNT(*) AS jml from karyawan where Status = 'Aktif' group by statusKaryawan";
         $query = $this->db->query($q);
 
         if($query->num_rows() > 0){
@@ -167,7 +167,7 @@ class Karyawan_model extends CI_Model {
     }
 
     public function by_gender(){
-        $q = "SELECT jk, COUNT(nik) AS jml from karyawan group by jk";
+        $q = "SELECT jk, COUNT(nik) AS jml from karyawan where Status = 'Aktif' group by jk";
         $query = $this->db->query($q);
 
         if($query->num_rows() > 0){
@@ -179,7 +179,7 @@ class Karyawan_model extends CI_Model {
     }
 
     public function by_grade(){
-        $q = "SELECT grade, COUNT(*) AS jml from karyawan where grade <> '-' group by grade ORDER BY FIELD(grade, 'E0','E1','E2','E3','E4','E5','E6','E7','E8','L1','L2','L3','L4','M1','M2','M3','M4','M5','D3') ASC";
+        $q = "SELECT grade, COUNT(*) AS jml from karyawan where grade <> '-' and Status = 'Aktif' group by grade ORDER BY FIELD(grade, 'E0','E1','E2','E3','E4','E5','E6','E7','E8','L1','L2','L3','L4','M1','M2','M3','M4','M5','D3') ASC";
         $query = $this->db->query($q);
 
         if($query->num_rows() > 0){
@@ -194,6 +194,7 @@ class Karyawan_model extends CI_Model {
         $q = "SELECT dp.nama as dep, COUNT(k.nik) as jml from karyawan k
         LEFT JOIN posisi p ON p.nik = k.nik 
         JOIN departemen dp ON dp.id = p.id_dep
+        where Status = 'Aktif'
         GROUP BY dp.id
         ORDER BY jml ASC";
         $query = $this->db->query($q);
@@ -207,7 +208,7 @@ class Karyawan_model extends CI_Model {
     }
 
     public function by_posisi(){
-        $q = "SELECT jabatan, COUNT(*) AS jml from karyawan where jabatan <> '-' and jabatan <> '' group by jabatan order by jml ASC";
+        $q = "SELECT jabatan, COUNT(*) AS jml from karyawan where jabatan <> '-' and jabatan <> '' and Status = 'Aktif'group by jabatan order by jml ASC";
         $query = $this->db->query($q);
 
         if($query->num_rows() > 0){
@@ -219,7 +220,7 @@ class Karyawan_model extends CI_Model {
     }
 
     public function tot(){
-        $q = "SELECT COUNT(*) AS jml from karyawan";
+        $q = "SELECT COUNT(*) AS jml from karyawan where Status = 'Aktif'";
         $query = $this->db->query($q);
 
         if($query->num_rows() > 0){
