@@ -14,6 +14,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <?php require_once(APPPATH.'views/header/navbar.php'); ?>
     <!-- SIDEBAR -->
     <?php require_once(APPPATH.'views/sidebar/sidebar.php'); ?>
+    <?php if (! $this->session->userdata('nik')) { redirect('home'); }?>
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
