@@ -209,8 +209,18 @@ table tr th {
 								<td width="25%">Diterima,</td>
 							</tr>
 							<tr>
-								<td>Staff / Leader</td>
-								<td>Chief / Foreman</td>
+								<td>
+									<?php if ($usul[0]->jabatan == "-" || $usul[0]->jabatan == "Leader") {
+											echo $this->session->userdata('nama');			
+										} else { echo "Staff / Leader"; }
+									?> 
+								</td>
+								<td>
+									<?php if ($usul[0]->jabatan == "Chief" || $usul[0]->jabatan == "Foreman") {
+											echo $this->session->userdata('nama');			
+										} else { echo "Chief / Foreman"; }
+									?>
+								</td>
 								<td>Dept. Manager</td>
 								<td>HR Dept.</td>
 							</tr>

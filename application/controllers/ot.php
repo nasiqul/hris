@@ -66,6 +66,7 @@ class Ot extends CI_Controller {
 		$no_doc = $_POST['nodoc2'];
 
 		$this->over_model->deleteSPL($no_doc);
+		$this->over_model->editSPL_status($no_doc);
 	}
 
 	public function ajax_ot()
@@ -149,12 +150,12 @@ class Ot extends CI_Controller {
 			$row[] = $key->keluar;
 			$row[] = $key->jam_plan;
 
-			if ($key->aktual > $key->jam_plan)
+			if ($key->act > $key->jam_plan)
 				$row[] = "<button class='btn btn-danger btn-xs' id=d".$key->nik.$key->id." onclick='applyJam(".$key->id.",\"".$key->nik."\",".$key->jam_plan.",\"".$tg."\")'><i class='fa fa-close'></i></button>  &nbsp <b>"
-			.$key->aktual."</b> 
-			&nbsp<button class='btn btn-success btn-xs' id=c".$key->nik.$key->id." onclick='applyJam(".$key->id.",\"".$key->nik."\",".$key->aktual.",\"".$tg."\")'><i class='fa fa-check'></i></button>";
+			.$key->act."</b> 
+			&nbsp<button class='btn btn-success btn-xs' id=c".$key->nik.$key->id." onclick='applyJam(".$key->id.",\"".$key->nik."\",".$key->act.",\"".$tg."\")'><i class='fa fa-check'></i></button>";
 			else
-				$row[] = $key->aktual;
+				$row[] = $key->act;
 			$row[] = $key->diff;
 			$row[] = "<p id='f".$key->nik.$key->id."'>".$key->final."<p>";
 
@@ -185,8 +186,6 @@ class Ot extends CI_Controller {
 			$cost = 0;	
 			$budget = 0;
 			if ($key->jml_nik == "1") {
-
-				if ($key->diff == "0") {				
 
 					if ($key->jam_plan != "0") {
 						$where = array(
@@ -231,7 +230,6 @@ class Ot extends CI_Controller {
 						}
 
 					}
-				}
 			}
 
 			// echo json_encode($s);
@@ -408,6 +406,8 @@ class Ot extends CI_Controller {
 
 	public function print_preview($id,$tgl)
 	{
+		$nik = $this->session->userdata('nik');
+		$data['usul'] = $this->home_model->get_jabatan($nik);
 		$data['list'] = $this->over_model->get_over_by_id($id);
 		$data['list_anggota'] = $this->over_model->get_member_id($id,$tgl);
 		$cc = $this->over_model->get_member_id($id,$tgl);
@@ -597,7 +597,11 @@ class Ot extends CI_Controller {
 				<a class='btn btn-primary btn-xs' href='".base_url("home/overtime_edit/".$key->id)."'><i class='fa fa-pencil'></i></a> &nbsp;
 				<button class='btn btn-primary btn-xs' onclick='detail_spl(".$key->id."); exporta(".$key->id.")'>Detail</button>&nbsp;
 				<button class='btn btn-danger btn-xs' onclick='modal_open(".$key->id.");'><i class='fa fa-trash'></i></button>";
-				$row[] = "<button class='btn btn-success btn-xs' id='add".$key->id."' onclick='multi(".$key->id.")'>Add <i class='fa fa-level-up'></button>";
+
+				if ($key->status != '0') 
+					$row[] = "<button class='btn btn-success btn-xs' id='add".$key->id."' onclick='multi(".$key->id.")'>Add <i class='fa fa-level-up'></button>";
+				else
+					$row[] = "";
 
 				$data[] = $row;
 
@@ -1246,7 +1250,11 @@ class Ot extends CI_Controller {
 	public function ajax_ot_manaj($tahun ,$cc)
 	{
 		$list = $this->over_model->manajemen_section($tahun ,$cc);
+		$list2 = $this->over_model->getTarget($tahun ,$cc);
 		$data = array();
+		$data2 = array();
+
+		$data3 = array();
 		
 		foreach ($list as $key) {
 			$row = array();
@@ -1260,8 +1268,23 @@ class Ot extends CI_Controller {
 
 		}
 
+		foreach ($list2 as $key2) {
+			$row = array();
+			$row[] = date('M Y',strtotime($key2->tanggal));
+			$row[] = $key2->nik;
+			$row[] = $key2->namaKaryawan;
+			$row[] = (float) $key2->jam;
+			$row[] = $key2->fiskal;
+
+			$data2[] = $row;
+
+		}
+
+		array_push($data3, $data);
+		array_push($data3, $data2);
+
         //output to json format
-		echo json_encode($data);
+		echo json_encode($data3);
 	}
 
 	public function overtime_chart_per_dep()

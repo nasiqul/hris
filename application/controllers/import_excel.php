@@ -69,69 +69,105 @@ class import_excel extends CI_Controller {
 
         public function upload3()
         { 
-            $file = rand(1000, 100000) . "-" . $_FILES['file']['name'];
-            $file_loc = $_FILES['file']['tmp_name'];
-            $file_size = $_FILES['file']['size'];
-            $file_type = $_FILES['file']['type'];
-            $folder = "./app/excel/";
-            $location = $_FILES['file'];
+            $file = $_FILES['file']['tmp_name'];
+            $data = file_get_contents($file);
 
+            $rows = explode("\r\n", $data);
 
-        $new_size = $file_size / 1024; // new file size in KB
-        $new_file_name = strtolower($file);
-        $final_file = str_replace(' ', '-', $new_file_name); // make file name in lower case
+            // $row = explode("\t", $rows);
+            $first = explode("\t", $rows[0]);
+            $date =  date('Y-m-d' , strtotime($first[2]));
+            $this->export_model->deletePresensi($date);
 
-        if (move_uploaded_file($file_loc, $folder . $final_file)) {
-
-            //Prepare upload data
-            $upload_data = Array(
-                'file'  => $final_file,
-                'type'  => $file_type,
-                'size'  => $new_size
-            );
-            //Insert into tbl_uploads
-            // $this->db->insert('daily_data2', $upload_data);
-
-            $handle = fopen(base_url()."app/excel/$file", "r");
-
-            if ($handle) {
-                while (($line = fgets($handle)) !== false) {
-
-                    $lineArr = explode("\t", $line);
-                    // instead assigning one by onb use php list -> http://php.net/manual/en/function.list.php
-                    list($pin, $nik, $tgl , $masuk, $keluar, $shift) = $lineArr;
-
-                    $shift2 = trim(preg_replace('/\s\s+/', ' ', $shift));
-
+            foreach ($rows as $row)
+            {
+                if (strlen($row) > 0) {
+                    $row = explode("\t", $row);
+                    $shift2 = trim(preg_replace('/\s\s+/', ' ', $row[5]));
                     $daily_data = Array(
-                        'pin' => $pin,
-                        'tgl'    => date('m/d/Y' , strtotime($tgl)) ,
-                        'nik' => $nik,
-                        'masuk'       => $masuk,
-                        'keluar'       => $keluar,
+                        'pin' => $row[0],
+                        'tgl'    => date('Y-m-d' , strtotime($row[2])),
+                        'nik' => $row[1],
+                        'masuk'       => $row[3],
+                        'keluar'       => $row[4],
                         'shift'       => $shift2,
-                        'hari'       => date('w' , strtotime($tgl)),
+                        'hari'       => date('w' , strtotime($row[2]))
                     );
 
-                    //Insert data
                     $this->export_model->export_presensi($daily_data);
                 }
-                fclose($handle);
-                $path2 = base_url()."/app/excel/$file";
-                // unlink($path2) or die("Couldn't delete file");
-                // redirect('home/presensi');
             }
-        } else {
-                //Alert error
-            $this->alert('error while uploading file');
+
+
+        //     $file = rand(1000, 100000) . "-" . $_FILES['file']['name'];
+        //     $file_loc = $_FILES['file']['tmp_name'];
+        //     $file_size = $_FILES['file']['size'];
+        //     $file_type = $_FILES['file']['type'];
+        //     $folder = "./app/excel/";
+        //     $location = $_FILES['file'];
+
+
+        // $new_size = $file_size / 1024; // new file size in KB
+        // $new_file_name = strtolower($file);
+        // $final_file = str_replace(' ', '-', $new_file_name); // make file name in lower case
+
+        // if (move_uploaded_file($file_loc, $folder . $final_file)) {
+
+        //     //Prepare upload data
+        //     $upload_data = Array(
+        //         'file'  => $final_file,
+        //         'type'  => $file_type,
+        //         'size'  => $new_size
+        //     );
+        //     //Insert into tbl_uploads
+        //     // $this->db->insert('daily_data2', $upload_data);
+
+        //     $handle = fopen(base_url()."app/excel/$file", "r");
+        //     // $x = 1;
+
+        //     if ($handle) {
+        //         while (($line = fgets($handle)) !== false) {
+        //         // for ($i=0; $i < 1000; $i++) { 
+
+        //             $lineArr = explode("\t", $line);
+        //             // instead assigning one by onb use php list -> http://php.net/manual/en/function.list.php
+        //             list($pin, $nik, $tgl , $masuk, $keluar, $shift) = $lineArr;
+
+        //             $shift2 = trim(preg_replace('/\s\s+/', ' ', $shift));
+
+
+        //                 $daily_data = Array(
+        //                 'pin' => $pin,
+        //                 'tgl'    => date('m/d/Y' , strtotime($tgl)) ,
+        //                 'nik' => $nik,
+        //                 'masuk'       => $masuk,
+        //                 'keluar'       => $keluar,
+        //                 'shift'       => $shift2,
+        //                 'hari'       => date('w' , strtotime($tgl)),
+        //             );
+
+        //             //Insert data
+        //             $this->export_model->export_presensi($daily_data);
+
+
+        //             // $x++;
+        //         }
+        //         fclose($handle);
+        //         $path2 = base_url()."/app/excel/$file";
+        //         // unlink($path2) or die("Couldn't delete file");
+        //         // redirect('home/presensi');
+        // }
+    // } else {
+    //             //Alert error
+    //     $this->alert('error while uploading file');
+    // }
+
+        }
+
+        protected function alert($text) {
+            return "<script> alert('".$text."'); </script>";
         }
 
     }
 
-    protected function alert($text) {
-        return "<script> alert('".$text."'); </script>";
-    }
-
-}
-
-?>
+    ?>

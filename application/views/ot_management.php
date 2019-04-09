@@ -87,7 +87,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         } else {
                           echo '<option value="'.$key->fiskal.'">'.$key->fiskal.'</option>';
                         }
-                      ?>
+                        ?>
                         
                       <?php } ?>
                     </select>
@@ -166,30 +166,36 @@ scratch. This page gets rid of all links and provides the needed markup only.
         var xCategories = [];
         var seriesData = [];
         var i, cat;
-        var title = data[0][4];
+        var title = data[0][0][4];
 
-        for(i = 0; i < data.length; i++){
-          cat = data[i][0];
+        for(i = 0; i < data[0].length; i++){
+          cat = data[0][i][0];
           if(xCategories.indexOf(cat) === -1){
            xCategories[xCategories.length] = cat;
          }
        }
 
-       for(i = 0; i < data.length; i++){
+       for(i = 0; i < data[0].length; i++){
         if(seriesData){
-         var currSeries = seriesData.filter(function(seriesObject){ return seriesObject.name == data[i][2];});
+         var currSeries = seriesData.filter(function(seriesObject){ return seriesObject.name == data[0][i][2];});
          if(currSeries.length === 0){
-          seriesData[seriesData.length] = currSeries = {name: data[i][2], data: []};
+          seriesData[seriesData.length] = currSeries = {name: data[0][i][2], data: []};
         } else {
           currSeries = currSeries[0];
         }
         var index = currSeries.data.length;
-        currSeries.data[index] = data[i][3];
+        currSeries.data[index] = data[0][i][3];
       } else {
-       seriesData[0] = {name: data[i][2], data: [intVal(data[i][3])]}
+       seriesData[0] = {name: data[0][i][2], data: [intVal(data[0][i][3])]}
      }
    }
+
+   var target = [];
+   for (var i = 0; i < data[1].length; i++) {
+    target.push(data[1][i][3]);
+  }
                     // Populate series
+                    seriesData.push({type: 'spline', name: 'Max OT', data: target, color: 'red', dashStyle: 'dash'});
 
 
                     $('#container').highcharts({
@@ -258,69 +264,75 @@ scratch. This page gets rid of all links and provides the needed markup only.
          var xCategories = [];
          var seriesData = [];
          var i, cat;
-         var title = data[0][4];
+         var title = data[0][0][4];
 
-         for(i = 0; i < data.length; i++){
-          cat = data[i][0];
+         for(i = 0; i < data[0].length; i++){
+          cat = data[0][i][0];
           if(xCategories.indexOf(cat) === -1){
            xCategories[xCategories.length] = cat;
          }
        }
 
-       for(i = 0; i < data.length; i++){
+       for(i = 0; i < data[0].length; i++){
         if(seriesData){
-         var currSeries = seriesData.filter(function(seriesObject){ return seriesObject.name == data[i][2];});
+         var currSeries = seriesData.filter(function(seriesObject){ return seriesObject.name == data[0][i][2];});
          if(currSeries.length === 0){
-          seriesData[seriesData.length] = currSeries = {name: data[i][2], data: []};
+          seriesData[seriesData.length] = currSeries = {name: data[0][i][2], data: []};
         } else {
           currSeries = currSeries[0];
         }
         var index = currSeries.data.length;
-        currSeries.data[index] = data[i][3];
+        currSeries.data[index] = data[0][i][3];
       } else {
-       seriesData[0] = {name: data[i][2], data: [intVal(data[i][3])]}
+       seriesData[0] = {name: data[0][i][2], data: [intVal(data[0][i][3])]}
      }
    }
-                    // Populate series
+
+   var target = [];
+   for (var i = 0; i < data[1].length; i++) {
+    target.push(data[1][i][3]);
+  }
+        // Populate series
+        seriesData.push({type: 'spline', name: 'Max OT', data: target, color: 'red', dashStyle: 'dash'});
 
 
-                    $('#container').highcharts({
-                      chart: {
-                        type: 'spline'
-                      },
-                      title: {
-                        text: 'YEAR '+title
-                      },
-                      xAxis: {
-                        categories: xCategories
-                      },
-                      yAxis: {
-                        title: {
-                          text: 'Total Jam'
-                        }
-                      },
-                      legend: {
-                        enabled: false
-                      },
-                      plotOptions: {
-                        line: {
-                          dataLabels: {
-                            enabled: false
-                          },
-                          enableMouseTracking: true
-                        },
-                        series: {
-                          marker: {
-                            enabled: false
-                          },
-                          lineWidth: 1
-                        }
-                      },
-                      series: seriesData
-                    });
-                    $('#load').css('display','none');
-                  }
-                });
+        $('#container').highcharts({
+          chart: {
+            type: 'spline'
+          },
+          title: {
+            text: 'YEAR '+title
+          },
+          xAxis: {
+            categories: xCategories
+          },
+          yAxis: {
+            title: {
+              text: 'Total Jam'
+            }
+          },
+          legend: {
+            enabled: false
+          },
+          plotOptions: {
+            line: {
+              dataLabels: {
+                enabled: false
+              },
+              enableMouseTracking: true
+            },
+            series: {
+              marker: {
+                enabled: false
+              },
+              lineWidth: 1
+            }
+          },
+          series: seriesData
+        });
+        $('#load').css('display','none');
+      }
+    });
     }
 
     function ShowData(tgl, by){

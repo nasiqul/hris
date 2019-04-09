@@ -68,7 +68,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
         $bln = date('F Y', strtotime($b));
       }
       $str = '\'Attendance in '.$bln.'\'';
-
       ?>
       <div class="box box-solid">
         <div class="box-body">

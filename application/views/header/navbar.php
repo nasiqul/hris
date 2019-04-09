@@ -22,7 +22,7 @@
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <img id="fotoHead2" class="user-image" alt="User Image">
-              <span class="hidden-xs"><?php $nik2 = $this->session->userdata('nik'); echo $nik2;?> </span>&nbsp<i class="fa fa-sort-down"> </i>
+              <span class="hidden-xs"><?php $nama = $this->session->userdata('nama'); echo $nama;?> </span>&nbsp<i class="fa fa-sort-down"> </i>
             </a>
             <ul class="dropdown-menu">
               <!-- User image -->
@@ -30,7 +30,7 @@
                 <img src="<?php echo base_url()?>app/img/image-user.png" class="img-circle" alt="User Image">
 
                 <p>
-                  <?php echo $nik2 ?>
+                  <?php echo $nama ?>
                   <small></small>
                 </p>
               </li>

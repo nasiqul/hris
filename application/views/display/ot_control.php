@@ -67,25 +67,25 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <div class="box-body">
 
        <div class="col-md-12">
-        Direct (Production) <b id="persendirect2"></b> <b id="persendirect"></b> 
-        <div class="progress" style="margin: 0 auto">
+        <f style="font-size: 25px"> Direct (Production) <b id="persendirect2"></b> <b id="persendirect"></b> </f>
+        <div class="progress" style="margin: 0 auto; height: 35px">
          <div class="progress-bar progress-bar-green progress-bar-striped active" id="progress_bar_prod" ></div>
        </div>
        <CENTER> <span class="progress-number" id="progress_number_delivery" style="font-weight:bold;"></span></CENTER>
-       Indirect (PC, LOG, PCH, QA, CHM, STD, PE, MTC, MIS)   <b id="persenindirect2" ></b> <b id="persenindirect"></b>
+       <f style="font-size: 25px"> Indirect (PC, LOG, PCH, QA, CHM, STD, PE, MTC, MIS)   <b id="persenindirect2" ></b> <b id="persenindirect"></b> </f>
 
-       <div class="progress" style="margin: 0 auto">
+       <div class="progress" style="margin: 0 auto; height: 35px">
          <div class="progress-bar progress-bar-yellow progress-bar-striped active" id="progress_bar_ofc"></div>
        </div>
 
-       Pl (ACC, HR, GA, Canteen, Driver, Security)  <b id="persenpl2" ></b> <b id="persenpl"></b> 
+       <f style="font-size: 25px"> Pl (ACC, HR, GA, Canteen, Driver, Security)  <b id="persenpl2" ></b> <b id="persenpl"></b>  </f>
 
-       <div class="progress" style="margin: 0 auto">
+       <div class="progress" style="margin: 0 auto; height: 35px">
          <div class="progress-bar progress-bar-blue progress-bar-striped active" id="progress_bar_pl"></div>
        </div>
        <CENTER> <span class="progress-number" id="progress_number_delivery" style="font-weight:bold;"></span></CENTER>
-
-       <div id="container8" style="width: 100%"></div> 
+       <br>
+       <div id="container8" style="width: 1800px; height: 500px"></div> 
      </div>
    </div>
  </div>   
@@ -188,20 +188,23 @@ function progressData()
     $('#progress_bar_prod').removeClass('progress-bar-green').addClass('progress-bar-red');
   } else
     $('#progress_bar_prod').removeClass('progress-bar-red').addClass('progress-bar-green');
-    
+
   $('#persendirect').html("( "+direct+" )");
   $('#persendirect2').html(ofc2+" / "+ofc+" Hours");
   $('#progress_bar_prod').html(direct);
   $('#progress_bar_prod').css('width', (ofc2/ofc)*100 + '%');
   $('#progress_bar_prod').css('color', 'WHITE');
   $('#progress_bar_prod').css('font-weight', 'bold');
-  $('#progress_bar_prod').css('font-size', '12pt');
-  $('#progress_bar_prod').css('line-height', '20px');
+  $('#progress_bar_prod').css('font-size', '25px');
+  $('#progress_bar_prod').css('line-height', '30px');
 }
 else{
+  $('#progress_bar_prod').css('font-weight', 'bold');
+  $('#progress_bar_prod').css('font-size', '25px');
+  $('#progress_bar_prod').css('line-height', '30px');
   $('#progress_bar_prod').css('width', '0%');
-  $('#progress_bar_prod').html("0 %");
-  $('#persenindirect').html("( 0 % )");
+  $('#progress_bar_prod').html("0%");
+  $('#persenindirect').html("( 0% )");
   $('#persenindirect2').html("0 / 0 Hours");
 }
 
@@ -220,14 +223,17 @@ if (prod != 0)
   $('#progress_bar_ofc').css('width', (prod2/prod)*100 + '%');
   $('#progress_bar_ofc').css('color', 'WHITE');
   $('#progress_bar_ofc').css('font-weight', 'bold');
-  $('#progress_bar_ofc').css('font-size', '12pt');
-  $('#progress_bar_ofc').css('line-height', '20px');
+  $('#progress_bar_ofc').css('font-size', '25px');
+  $('#progress_bar_ofc').css('line-height', '30px');
 }
 else {
- $('#progress_bar_ofc').css('width','0%');
- $('#progress_bar_ofc').html("0 %");
- $('#persendirect').html("( 0 % )");
- $('#persendirect2').html("0 / 0 Hours");
+  $('#progress_bar_ofc').css('font-weight', 'bold');
+  $('#progress_bar_ofc').css('font-size', '25px');
+  $('#progress_bar_ofc').css('line-height', '30px');
+  $('#progress_bar_ofc').css('width','0%');
+  $('#progress_bar_ofc').html("0%");
+  $('#persendirect').html("( 0 % )");
+  $('#persendirect2').html("0 / 0 Hours");
 }
 
 if (pl != 0)
@@ -244,14 +250,17 @@ if (pl != 0)
   $('#progress_bar_pl').css('width', (pl2/pl)*100 + '%');
   $('#progress_bar_pl').css('color', 'WHITE');
   $('#progress_bar_pl').css('font-weight', 'bold');
-  $('#progress_bar_pl').css('font-size', '12pt');
-  $('#progress_bar_pl').css('line-height', '20px');
+  $('#progress_bar_pl').css('font-size', '25px');
+  $('#progress_bar_pl').css('line-height', '30px');
 }
 else{             
- $('#progress_bar_pl').css('width', '0%');
- $('#progress_bar_pl').html("0 %");
- $('#persenpl').html("( 0 % )");
- $('#persenpl2').html("0 / 0 Hours");
+  $('#progress_bar_pl').css('font-weight', 'bold');
+  $('#progress_bar_pl').css('font-size', '25px');
+  $('#progress_bar_pl').css('line-height', '30px');
+  $('#progress_bar_pl').css('width', '0%');
+  $('#progress_bar_pl').html("0%");
+  $('#persenpl').html("( 0 % )");
+  $('#persenpl2').html("0 / 0 Hours");
 }
 }
 
@@ -287,14 +296,14 @@ $(function () {
   if(seriesData){
    var currSeries = seriesData.filter(function(seriesObject){ return seriesObject.name == data[0][i][1];});
    if(currSeries.length === 0){
-    seriesData[seriesData.length] = currSeries = {name: data[0][i][1], data: []};
+    seriesData[seriesData.length] = currSeries = {name: data[0][i][1], data: [], pointWidth: 45};
   } else {
     currSeries = currSeries[0];
   }
   var index = currSeries.data.length;
   currSeries.data[index] = data[0][i][2];
 } else {
- seriesData[0] = {name: data[0][i][1], data: [intVal(data[0][i][2])]}
+ seriesData[0] = {name: data[0][i][1], data: [intVal(data[0][i][2])], pointWidth: 45}
 }
 }
 
@@ -350,6 +359,7 @@ for (var i = 0; i <= cumulativeData2.length; i++) {
         ];
 
         var dt = "01-"+title;
+        var year = title.split("-");
         var date = new Date(dt.replace( /(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3"))
           // End Title
 
@@ -365,48 +375,69 @@ for (var i = 0; i <= cumulativeData2.length; i++) {
              type: 'column'
            },
            title: {
-             text: monthNames[date.getMonth()]
-           },
-           xAxis: {
-             categories: xCategories
-           },
-           yAxis: {
-             title: {
-              text: 'Total Jam',
-              style: {
-               fontWeight: 'normal',
-               fontSize: 15
-             }
-           },
-           stackLabels: {
-            enabled: true,
+             text: '<span style="font-size: 2vw;">Monthly Overtime Control</span><br><span style="color: rgba(96, 92, 168);">'+ monthNames[date.getMonth()] + " " + year[1] +'</span>',
+             style: {
+              fontSize: '30px',
+              fontWeight: 'bold'
+            }
+          },
+          xAxis: {
+           categories: xCategories,
+           labels: {
             style: {
-             fontWeight: 'bold',
-             color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
-           }
+              fontSize:'20px'
+            }
+          }
+        },
+        yAxis: {
+         title: {
+          text: 'Total Jam',
+          style: {
+           fontWeight: 'normal',
+           fontSize: '20px'
          }
        },
-       tooltip: {
-        valueDecimals: 2, 
-        headerFormat: '<b>{point.x}</b><br/>',
-        pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
-      },
-      plotOptions: {
-       column: {
-        stacking: 'normal',
-        minPointLength: 5
-      },
-      series: {
-       cursor: 'pointer',
-       events: {
-         click: function (event) {
-           details(this.name,event.point.category, title);
-         }
+       stackLabels: {
+        enabled: true,
+        style: {
+         fontWeight: 'bold',
+         fontSize: '20px',
+         color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
        }
      }
    },
-   series: seriesData
- });
+   tooltip: {
+    valueDecimals: 2, 
+    headerFormat: '<b>{point.x}</b><br/>',
+    pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}',
+    style: {
+      fontSize:'15px'
+    }
+
+  },
+  legend: {
+    itemStyle: {
+      fontWeight: 'bold',
+      fontSize:'20px'
+    }
+
+  },
+  plotOptions: {
+   column: {
+    stacking: 'normal',
+    minPointLength: 5
+  },
+  series: {
+   cursor: 'pointer',
+   events: {
+     click: function (event) {
+       details(this.name,event.point.category, title);
+     }
+   }
+ }
+},
+series: seriesData
+});
         });
 });
 
@@ -450,14 +481,14 @@ function postTgl() {
   if(seriesData){
    var currSeries = seriesData.filter(function(seriesObject){ return seriesObject.name == data[0][i][1];});
    if(currSeries.length === 0){
-    seriesData[seriesData.length] = currSeries = {name: data[0][i][1], data: []};
+    seriesData[seriesData.length] = currSeries = {name: data[0][i][1], data: [], pointWidth: 45};
   } else {
     currSeries = currSeries[0];
   }
   var index = currSeries.data.length;
   currSeries.data[index] = data[0][i][2];
 } else {
- seriesData[0] = {name: data[0][i][1], data: [intVal(data[0][i][2])]}
+ seriesData[0] = {name: data[0][i][1], data: [intVal(data[0][i][2])], pointWidth: 45}
 }
 }
 
@@ -514,6 +545,7 @@ for (var i = 0; i <= cumulativeData2.length; i++) {
        ];
 
        var dt = "01-"+title;
+       var year = title.split("-");
        var date = new Date(dt.replace( /(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3"))
 
 
@@ -527,30 +559,44 @@ for (var i = 0; i <= cumulativeData2.length; i++) {
          type: 'column'
        },
        title: {
-         text: monthNames[date.getMonth()]
+         text: '<span style="font-size: 2vw;">Monthly Overtime Control</span><br><span style="color: rgba(96, 92, 168);">'+ monthNames[date.getMonth()] + " " + year[1] + '</span>',
+             style: {
+              fontSize: '30px',
+              fontWeight: 'bold'
+            }
        },
        xAxis: {
-         categories: xCategories
+         categories: xCategories,
+         labels: {
+            style: {
+              fontSize:'20px'
+            }
+          }
        },
        yAxis: {
          title: {
           text: 'Total Jam',
           style: {
-           fontWeight: 'bold'
+           fontWeight: 'bold',
+           fontSize: '20px'
          }
        },
        stackLabels: {
         enabled: true,
         style: {
          fontWeight: 'bold',
-         color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+         fontSize: '20px',
+         color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
        }
      }
    },
    tooltip: {
     valueDecimals: 2, 
     headerFormat: '<b>{point.x}</b><br/>',
-    pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+    pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}',
+    style: {
+      fontSize:'15px'
+    }
   },
   plotOptions: {
    column: {
@@ -562,16 +608,21 @@ for (var i = 0; i <= cumulativeData2.length; i++) {
    events: {
      click: function (event) {
        details(this.name,event.point.category, title);
-                                   // alert(this.name + ' clicked ' + event.point.category + title);
-                                 }
-                               }
-                             }
-                           },
-                           series: seriesData
-                         });
-
-
+        // alert(this.name + ' clicked ' + event.point.category + title);
      }
+    }
+  }
+  },
+  legend: {
+    itemStyle: {
+      fontWeight: 'bold',
+      fontSize:'20px'
+    }
+
+  },
+    series: seriesData
+  });
+    }
    });
 }
 

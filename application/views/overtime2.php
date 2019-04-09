@@ -6,7 +6,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <html>
 <!-- HEADER -->
 <?php require_once(APPPATH.'views/header/head.php'); ?>
-<?php if (! $this->session->userdata('nik')) { redirect('home/overtime_user'); }?>
+<?php if (! $this->session->userdata('nik')) { redirect('login'); }?>
 <body class="hold-transition skin-purple sidebar-mini">
   <div class="wrapper">
 
@@ -31,7 +31,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <div class="box-body">
               Tanggal<br>
               <input type="text" name="tglfilter" id="tglfilter" class="form-control datepicker pull-left" style="width: 10%" onchange="gantitanggal();"> &nbsp;
-              <input type="button" id="konfirm" onclick="konfirm()" class="btn btn-default" value="konfirmasi" disabled>
+              <input type="button" id="konfirm" onclick="konfirm()" class="btn btn-default" value="konfirmasi">
               <div id="progressbar2">
                 <i class="fa fa-refresh fa-spin"></i> Loading...  
               </div>
@@ -179,6 +179,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   $(document).ready(function() {
     buattable();
     $("#progressbar2").hide();
+    $("#konfirm").prop('disabled',true);
   });
 
   function gantitanggal() {
@@ -193,9 +194,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
       tgl:tgl
     },
     beforeSend: function () {
+      $("#tglfilter").prop('disabled',true);
+      $("#konfirm").prop('disabled',true);
       $('#progressbar2').show();
     },
     complete: function () {
+      $("#tglfilter").removeAttr('disabled');
+      $("#konfirm").removeAttr('disabled');
       $("#progressbar2").hide();
     },
     success: function() {
@@ -205,25 +210,32 @@ scratch. This page gets rid of all links and provides the needed markup only.
 }
 
 function buattable() {
- var table2 = $('#example1').DataTable();
- table2.destroy();
- var tgl = $('#tglfilter').val();
- $('#example1').DataTable({
-  "lengthMenu"    : [[10, 25, 50, -1], [10, 25, 50, "All"]],
-  "processing"    : true,
-  "serverSide"    : true,
-  "bInfo": false,
-  'order'         : [],
-  "ajax": {
-    "url": "<?php echo base_url('ot/ajax_ot2')?>",
-    "data":{
-      tgl:tgl
-    } ,      
-    "type": "GET"
-  },
-  "columnDefs": [
-  {
-              "targets": [ 10 ], //first column / numbering column
+  $("#konfirm").prop('disabled',true);
+  var table2 = $('#example1').DataTable();
+  table2.destroy();
+  var tgl = $('#tglfilter').val();
+  $('#example1').DataTable({
+    "lengthMenu"    : [[25, 50, -1], [25, 50, "All"]],
+    "processing"    : true,
+    "serverSide"    : true,
+    "bInfo": false,
+    'order'         : [],
+    "ajax": {
+      "url": "<?php echo base_url('ot/ajax_ot2')?>",
+      "data":{
+        tgl:tgl
+      } ,      
+      "type": "GET",
+      beforeSend: function () {
+        $("#konfirm").prop('disabled',true);
+      },
+      complete: function () {
+        $("#konfirm").removeAttr('disabled');
+      },
+    },
+    "columnDefs": [
+    {
+              "targets": [ 10,9,8,7,6,5,4 ], //first column / numbering column
               "orderable": false, //set not orderable
             }
             ],

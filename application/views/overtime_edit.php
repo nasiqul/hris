@@ -152,7 +152,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <h3 class="box-title"><i class="fa fa-group"></i> Peserta</h3>
             <div class="pull-right">
               <button class="btn btn-primary" id="print" onclick="tombol_print()" style="display: none;"><i class="fa fa-print"></i> Print</button>&nbsp&nbsp&nbsp
-              <button id="submit" class="btn btn-primary" onclick="edit1()"><i class="fa fa-pencil"></i> Edit</button>
+              <button id="submit" class="btn btn-primary" onclick="edit1()"><i class="fa fa-pencil"></i>&nbsp; Update</button>
             </div>
 
           </div>

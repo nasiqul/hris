@@ -50,7 +50,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <div class="col-md-3">
                   <div class="form-group">
                     <label for="inputTanggal"><i class="fa fa-calendar"></i> <span>Date</span></label>
-                    <input type="text" name="tanggal" id="tanggal" class="form-control datepicker" placeholder="Select date">
+                    <input type="text" name="tanggal" id="tanggal" class="form-control datepicker" placeholder="Select date" value="<?php echo date('Y-m-d') ?>">
                   </div>
                 </div>
 
@@ -132,7 +132,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <th width="35%">Bagian</th>
                   <th width="10%">Jumlah (orang)</th>
                   <th width="15%">Aksi</th>
-                  <th>asd</th>
+                  <th>grup</th>
                 </tr>
               </thead>
               <tbody>
@@ -165,7 +165,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                       <th>Diff</th>
                     </tr>
                   </thead>
-                  <tbody id="extmakanfood">
+                  <tbody id="isi2">
                   </tbody>
                 </table>
               </div>
@@ -176,7 +176,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <form action="<?php echo base_url('ot/print_grup/'); ?>" method="POST" target="_blank">
                 <input type="hidden" name="id" id="id2">
                 <input type="hidden" name="tanggal" id="tgl2">
-                <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-print"></i> Print</button>
+                <button type="submit" class="btn btn-primary pull-right" id="p2"><i class="fa fa-print"></i> Print</button>
             </form>
           </div>
         </div>
@@ -624,7 +624,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
         },
         dataType: 'json',
         success: function(data){
-          $("#extmakanfood").empty();
+          $("#p2").prop('disabled',false);
+          $("#isi2").empty();
           $.each(data, function(i, item) {
             if ( item[0] !="-"){
               var newdiv1 = $( "<tr>"+                  
@@ -635,10 +636,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 "</tr>");
               no+=1;
 
-              $("#extmakanfood").append(newdiv1);
+              $("#isi2").append(newdiv1);
             }
           });
 
+        },
+        error: function (data) {
+          $("#isi2").empty();
+          $("#p2").prop('disabled',true);
         }
       })
     }

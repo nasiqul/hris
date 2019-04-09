@@ -31,6 +31,7 @@ class Management extends CI_Controller {
 		$data['i'] = 'ok';
 		$data['menu'] = 'OT-m';
 		$data['section'] = $this->budget_model->get_name_cc();
+        $data['fiskal'] = $this->home_model->getFiskalAll();
 		$this->load->view('ot_management', $data);
 	}
 
@@ -95,6 +96,15 @@ class Management extends CI_Controller {
 		);
             //output to json format
 		echo json_encode($output);
+	}
+
+	public function display_ot_c()
+	{
+		$data['i'] = 'ok';
+		$data['menu2'] = 'Overtime';
+        $data['menu'] = 'Monthly Overtime Control';
+        $data['section'] = $this->budget_model->get_name_cc2();
+        $this->load->view("display/ot_control", $data);
 	}
 
 }

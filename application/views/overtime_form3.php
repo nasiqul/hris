@@ -14,7 +14,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <?php require_once(APPPATH.'views/header/navbar.php'); ?>
     <!-- SIDEBAR -->
     <?php require_once(APPPATH.'views/sidebar/sidebar.php'); ?>
-    <?php if (! $this->session->userdata('nik')) { redirect('home'); }?>
+    <?php if (! $this->session->userdata('nik')) { redirect('login'); }?>
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
@@ -251,8 +251,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
     var nikS = document.getElementById('nikF');
     var txtJam = document.getElementById('txtJam');
 
-    
-
     $(document).ready(function()
     {
 
@@ -272,8 +270,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
     //nik on enter
     $('#nikF').bind("enterKey",function(e){
-      appendRow();
-      ali();
+      if($(this).val().length >= 8){
+        appendRow();
+      } else {
+        openDanger4Gritter();
+      }
     });
     $('#nikF').keydown(function(e){
       if(e.keyCode == 13 || e.which == 9)
@@ -292,13 +293,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
       // var j = jam.innerHTML;
       var n = nikS.value;
       var dep = $("#dep").val();
-
-      for (var z = 0; z < arrNik.length; z++) {
-        if (arrNik[z] == n) {
-          openDanger3Gritter();
-          return false;
-        }
-      }
 
       var nama ="";
       var t1 = "";
@@ -321,8 +315,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
             return false;
           }
 
-          arrNik.push(n);
-
           $.ajax({
             type: 'POST',
             url: '<?php echo base_url("home/ajax_get_nama") ?>',
@@ -332,6 +324,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
             success: function (data) {
             // the next thing you want to do 
             var sr = $.parseJSON(data);
+
+            for (var z = 0; z < arrNik.length; z++) {
+              if (arrNik[z] == sr[0][0]) {
+                openDanger3Gritter();
+                return false;
+              }
+            }
+
+            arrNik.push(sr[0][0]);
+            console.log(arrNik);
 
             nama = sr[0][1];
             nik = sr[0][0];
@@ -464,11 +466,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
         // $("#nomorauto"+newid).text(a);
       }
 
-    }
-
-    function ali() {
-      var aa = nomorali;
-      // alert(aa);
     }
     
 
@@ -710,6 +707,17 @@ scratch. This page gets rid of all links and provides the needed markup only.
     jQuery.gritter.add({
       title: "Failed",
       text: "Ada Data yang Kosong",
+      class_name: 'growl-danger',
+      image: '<?php echo base_url()?>app/img/close.png',
+      sticky: false,
+      time: '2000'
+    });
+  }
+
+  function openDanger4Gritter(){
+    jQuery.gritter.add({
+      title: "Failed",
+      text: "Panjang NIK Kurang (min. 8 char)",
       class_name: 'growl-danger',
       image: '<?php echo base_url()?>app/img/close.png',
       sticky: false,

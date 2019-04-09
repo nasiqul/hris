@@ -10,8 +10,8 @@ class User_model extends CI_Model {
 
     public function login($nik, $pass)
     {
-        $this->db->select("username, password, role");
-        $this->db->from('login2');
+        $this->db->select("username, password");
+        $this->db->from('login');
         $this->db->where('username',$nik);
         $this->db->where('password',$pass);
 
@@ -24,6 +24,17 @@ class User_model extends CI_Model {
         $this->db->select("username, password, role, karyawan.namaKaryawan");
         $this->db->from('login2');
         $this->db->join('karyawan','login2.username = karyawan.nik','left');
+        $this->db->where('username',$nik);
+        $this->db->where('password',$pass);
+
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+    public function login_data2($nik, $pass)
+    {
+        $this->db->select("username, password, role, nama");
+        $this->db->from('login');
         $this->db->where('username',$nik);
         $this->db->where('password',$pass);
 

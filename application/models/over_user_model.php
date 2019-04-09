@@ -35,7 +35,7 @@ class Over_user_model extends CI_Model {
         $this->db->where("deleted_at IS NULL");
         
         if ($role != "1") {
-        $this->db->where("departemen.nama = (select department from login2 where username = '".$user."')");
+        $this->db->where("departemen.nama = (select department from login where username = '".$user."')");
         }
         if ($sub !="asd" && $sub && $sub != "0" ) {
             $this->db->where("departemen = '".$sub."'");

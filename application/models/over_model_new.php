@@ -3,8 +3,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Over_model_new extends CI_Model {
 
-	var $column_order = array('id','tanggal','nik','nama','masuk','keluar','jam','aktual','diff','final2'); //set column field database for datatable orderable
-    var $column_search = array('id','DATE_FORMAT(tanggal, "%d-%m-%Y")','nik','nama','masuk','keluar','jam','aktual','diff','final2'); //set column field database for datatable searchable 
+	var $column_order = array('id','m.tanggal','m.nik','namaKaryawan'); //set column field database for datatable orderable
+    var $column_search = array('id','DATE_FORMAT(m.tanggal, "%d-%m-%Y")','m.nik','namaKaryawan'); //set column field database for datatable searchable 
     var $order = array('id' => 'desc'); // default order 
 
     public function __construct()
@@ -25,25 +25,17 @@ class Over_model_new extends CI_Model {
 
     private function _get_datatables_query($tgl)
     {
-        $this->db->select("over_time.id, over_time.tanggal, om.nik, karyawan.namaKaryawan, p.masuk, p.keluar, over_time.hari, om.jam as jam_plan, IFNULL(p2.jam,0) as aktual, (IFNULL(p2.jam,0) - om.jam) as diff, IF(om.final = 0, om.jam, om.final) as final");
+        $this->db->select("m.*,  p.masuk, p.keluar, (m.act - m.jam_plan) as diff, m.jam_plan as final, namaKaryawan");
         $this->db->from("(
-            select tanggal, id, hari from over_time
-            where tanggal = '".$tgl."'
-        ) over_time");
-        $this->db->join('over_time_member om','om.id_ot = over_time.id');
-        $this->db->join("(
-            select nik, tanggal, masuk, keluar from presensi
-            where tanggal = '".$tgl."'
-        ) p",'p.nik = om.nik','left');
-        $this->db->join("karyawan","karyawan.nik = om.nik","left");
-        $this->db->join("(
-            select tanggal, nik, jam, status from over where tanggal = '".$tgl."'
-        ) d","d.tanggal = over_time.tanggal","left");
-        $this->db->join("(
-            select tanggal, nik, jam, status from over where tanggal = '".$tgl."'
-        ) p2","p2.nik = om.nik","left");
-        $this->db->where("om.status","0");
-        $this->db->group_by(array("tanggal", "nik", "id_ot"));
+    select o.*, over_time_member.nik, over_time_member.jam as jam_plan, IFNULL(over.jam,0) as act from (select id, tanggal from over_time where tanggal = '".$tgl."' and deleted_at IS NULL) as o
+    join over_time_member on o.id = over_time_member.id_ot
+    left join (select tanggal, nik, jam from over where tanggal = '".$tgl."') over on over.nik = over_time_member.nik
+    where status = 0
+    GROUP BY nik, id_ot
+    
+) m");
+        $this->db->join('karyawan','karyawan.nik = m.nik', 'left');
+        $this->db->join("(select masuk,keluar, nik from presensi where tanggal = '".$tgl."') p",'p.nik = m.nik');
 
 
         $i = 0;
@@ -294,17 +286,16 @@ class Over_model_new extends CI_Model {
     {
         $q = "select *, COUNT(nik) as jml_nik from
         (
-        select IFNULL(d.id,'-') as id, over.tanggal, over.nik, over.jam as aktual, IFNULL(d.jam,0) as jam_plan, IFNULL((over.jam - d.jam),0) as diff, IF(final = 0 OR final IS NULL, d.jam, 0) as final2, final, d.status from over
+        select IFNULL(d.id,'-') as id, over.tanggal, over.nik, over.jam as aktual, IFNULL(d.jam,0) as jam_plan, IFNULL((over.jam - d.jam),0) as diff, IF(final = 0 OR final IS NULL, IFNULL(d.jam,0) , 0) as final2, d.status from over
         left join (
         select over_time_member.id_ot, over_time.id, tanggal, nik, jam, final, over_time_member.status from over_time
-        left join over_time_member on over_time_member.id_ot = over_time.id
+        join over_time_member on over_time_member.id_ot = over_time.id
+                where deleted_at IS NULL
         ) d on d.tanggal = over.tanggal and d.nik = over.nik
-        left join karyawan on karyawan.nik = over.nik
-        left join presensi on presensi.nik = over.nik
-        left join presensi p2 on p2.tanggal = over.tanggal
-        where over.tanggal = '".$tgl."' and presensi.tanggal = '".$tgl."'
+        where over.tanggal = '".$tgl."'
         group by over.nik, id_ot
         ) as m 
+                where diff = 0
         GROUP BY nik
         ";
 

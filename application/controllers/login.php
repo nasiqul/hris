@@ -35,13 +35,13 @@ class Login extends CI_Controller {
 		$pass = $_POST['pass'];
 
 		$list = $this->user_model->login($nik,$pass);
-		$isi = $this->user_model->login_data($nik,$pass);
+		$isi = $this->user_model->login_data2($nik,$pass);
 
 		if ($list == 1) {
 			$newdata = array(
 				'nik'  => $nik,
 				'role'  => $isi[0]->role,
-				'nama'  => $isi[0]->namaKaryawan
+				'nama'  => $isi[0]->nama
 			);
 
 			$this->session->set_userdata($newdata);
@@ -49,7 +49,7 @@ class Login extends CI_Controller {
 			$newdata2 = array(
 				'rows'  => 1,
 				'role'  => $isi[0]->role,
-				'nama'  => $isi[0]->namaKaryawan
+				'nama'  => $isi[0]->nama
 			);
 
 			echo json_encode($newdata2);
