@@ -48,7 +48,7 @@ class Home extends CI_Controller {
                 $data['menu'] = '';
                 $this->load->view('report', $data);
             }
-            else if ($this->session->userdata('role') == '2')
+            else if ($this->session->userdata('role') == '3')
             {
                 $data['menu2'] = 'Overtime';
                 $data['menu'] = 'Overtime User';
