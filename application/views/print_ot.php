@@ -210,16 +210,10 @@ table tr th {
 							</tr>
 							<tr>
 								<td>
-									<?php if ($usul[0]->jabatan == "-" || $usul[0]->jabatan == "Leader") {
-											echo $this->session->userdata('nama');			
-										} else { echo "Staff / Leader"; }
-									?> 
+									Staff / Leader
 								</td>
 								<td>
-									<?php if ($usul[0]->jabatan == "Chief" || $usul[0]->jabatan == "Foreman") {
-											echo $this->session->userdata('nama');			
-										} else { echo "Chief / Foreman"; }
-									?>
+									Chief / Foreman
 								</td>
 								<td>Dept. Manager</td>
 								<td>HR Dept.</td>
