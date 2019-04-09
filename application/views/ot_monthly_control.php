@@ -188,7 +188,7 @@ function progressData()
     $('#progress_bar_prod').removeClass('progress-bar-green').addClass('progress-bar-red');
   } else
     $('#progress_bar_prod').removeClass('progress-bar-red').addClass('progress-bar-green');
-    
+
   $('#persendirect').html("( "+direct+" )");
   $('#persendirect2').html(ofc2+" / "+ofc+" Hours");
   $('#progress_bar_prod').html(direct);
@@ -201,8 +201,8 @@ function progressData()
 else{
   $('#progress_bar_prod').css('width', '0%');
   $('#progress_bar_prod').html("0 %");
-  $('#persenindirect').html("( 0 % )");
-  $('#persenindirect2').html("0 / 0 Hours");
+  $('#persendirect').html("( 0 % )");
+  $('#persendirect2').html("0 / 0 Hours");
 }
 
 
@@ -214,6 +214,7 @@ if (prod != 0)
   }
   else
     $('#progress_bar_ofc').removeClass('progress-bar-red').addClass('progress-bar-yellow');
+
   $('#persenindirect').html("( "+indirect+" )");
   $('#persenindirect2').html(prod2+" / "+prod+" Hours");
   $('#progress_bar_ofc').html(indirect);
@@ -226,8 +227,8 @@ if (prod != 0)
 else {
  $('#progress_bar_ofc').css('width','0%');
  $('#progress_bar_ofc').html("0 %");
- $('#persendirect').html("( 0 % )");
- $('#persendirect2').html("0 / 0 Hours");
+ $('#persenindirect').html("( 0 % )");
+ $('#persenindirect2').html("0 / 0 Hours");
 }
 
 if (pl != 0)
