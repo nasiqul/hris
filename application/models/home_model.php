@@ -262,7 +262,7 @@ class Home_model extends CI_Model {
     {
      $q = "select nama_menu, url, parent_menu, icon from master_menu 
      left join role on master_menu.id_menu = role.id_menu
-     LEFT JOIN login as l on role.user_id = l.id
+     LEFT JOIN login as l on role.user_id = l.role
      where l.username ='".$sess."' and master_menu.parent_menu ='".$menu."'";
 
      $query = $this->db->query($q);
