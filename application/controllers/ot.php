@@ -34,6 +34,7 @@ class Ot extends CI_Controller {
 		$grup = $_POST['grup'];
 		$hari = $_POST['hari'];
 		$shift = $_POST['shift'];
+		$nik = $this->session->userdata('nikLogin');
 
 		$params['data'] = $no_doc;
 		$params['level'] = 'H';
@@ -42,7 +43,7 @@ class Ot extends CI_Controller {
 		$this->ciqrcode->generate($params);
 
 		$this->over_model->save_master($no_doc, $tgl, $dep, $sec, $subsec, $kep, $cat, $hari, $grup, 
-			$shift);
+			$shift,$nik);
 	}
 
 	public function ot_member_submit()
@@ -406,7 +407,7 @@ class Ot extends CI_Controller {
 
 	public function print_preview($id,$tgl)
 	{
-		$nik = $this->session->userdata('nik');
+		$nik = $this->session->userdata('nikLogin');
 		$data['usul'] = $this->home_model->get_jabatan($nik);
 		$data['list'] = $this->over_model->get_over_by_id($id);
 		$data['list_anggota'] = $this->over_model->get_member_id($id,$tgl);
@@ -573,7 +574,7 @@ class Ot extends CI_Controller {
 		$sub = $_GET['sub'];
 		$subsec = $_GET['subsec'];
 		$group = $_GET['group'];
-		$user = $this->session->userdata('nik');
+		$user = $this->session->userdata('nikLogin');
 		$role2 = $this->session->userdata('role');
 
 		$list = $this->over_user_model->get_ot_user($tgl,$sub,$subsec,$group,$user,$role2);

@@ -440,7 +440,7 @@ class Over_model extends CI_Model {
         return $query->result();
     }   
 
-    public function save_master($no_doc, $tgl, $dep, $sec, $subsec, $kep, $cat, $hari, $grup, $shift)
+    public function save_master($no_doc, $tgl, $dep, $sec, $subsec, $kep, $cat, $hari, $grup, $shift, $nik)
     {
     	$data = array(
     		'id' => $no_doc,
@@ -453,6 +453,7 @@ class Over_model extends CI_Model {
             'sub_sec' => $subsec,
             'status_shift' => $grup,
             'shift' => $shift,
+            'nik_create' => $nik,
             'created_at' => date('Y-m-d'),
             'last_edited' => date('Y-m-d')
         );
@@ -500,7 +501,7 @@ class Over_model extends CI_Model {
 
     public function editSPL_status($id_ot)
     {
-        $nik = $this->session->userdata('nik');
+        $nik = $this->session->userdata('nikLogin');
         $this->db->set('last_edited', date('Y-m-d'));
         $this->db->set('nik_create', $nik);
         $this->db->where('id', $id_ot);
@@ -1650,9 +1651,9 @@ return $query->result();
 
 public function hapus($id)
 {
-    $nik = $this->session->userdata('nik');
+    $nik = $this->session->userdata('nikLogin');
     $this->db->set('deleted_at', date('Y-m-d'));
-    // $this->db->set('nik_delete', $nik);
+    $this->db->set('nik_delete', $nik);
     $this->db->where('id', $id);
     $this->db->update('over_time');
 }
