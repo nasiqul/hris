@@ -25,7 +25,7 @@ class Over_model_new extends CI_Model {
 
     private function _get_datatables_query($tgl)
     {
-        $this->db->select("m.*,  p.masuk, p.keluar, (m.act - m.jam_plan) as diff, m.jam_plan as final, namaKaryawan");
+        $this->db->select("m.*,  p.masuk, p.keluar, (m.act - m.jam_plan) as diff, IF(m.act < m.jam_plan, m.act, m.jam_plan) as final, namaKaryawan");
         $this->db->from("(
     select o.*, over_time_member.nik, over_time_member.jam as jam_plan, IFNULL(over.jam,0) as act from (select id, tanggal from over_time where tanggal = '".$tgl."' and deleted_at IS NULL) as o
     join over_time_member on o.id = over_time_member.id_ot

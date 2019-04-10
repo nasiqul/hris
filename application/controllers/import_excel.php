@@ -117,10 +117,10 @@ class import_excel extends CI_Controller {
         // Settingan awal fil excel
             $excel->getProperties()->setCreator('MIRAI')
             ->setLastModifiedBy('MIRAI')
-            ->setTitle("Data Presensi MIRAI")
+            ->setTitle("Data Absensi MIRAI")
             ->setSubject("MIRAI")
-            ->setDescription("Laporan Presensi MIRAI")
-            ->setKeywords("Data Presensi");
+            ->setDescription("Laporan Absensi MIRAI")
+            ->setKeywords("Data Absensi");
 
         // Buat sebuah variabel untuk menampung pengaturan style dari header tabel
             $style_col = array(
@@ -150,13 +150,13 @@ class import_excel extends CI_Controller {
             )
             );
 
-        $excel->setActiveSheetIndex(0)->setCellValue('A1', "DATA PRESENSI BULAN ".$bulan); // Set kolom A1 dengan tulisan "DATA SISWA"
+        $excel->setActiveSheetIndex(0)->setCellValue('A1', "DATA ABSENSI BULAN ".$bulan); // Set kolom A1 dengan tulisan "DATA SISWA"
         $excel->getActiveSheet()->mergeCells('A1:K1'); // Set Merge Cell pada kolom A1 sampai E1
         $excel->getActiveSheet()->getStyle('A1')->getFont()->setBold(TRUE); // Set bold kolom A1
         $excel->getActiveSheet()->getStyle('A1')->getFont()->setSize(15); // Set font size 15 untuk kolom A1
         $excel->getActiveSheet()->getStyle('A1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER); // Set text center untuk kolom A1
 
-        $siswa = $this->home_model->get_report_presensi($tgl);
+        $siswa = $this->home_model->get_report_absensi($tgl);
 
 
         // Set kolom A3 dengan tulisan "NO"
@@ -164,23 +164,45 @@ class import_excel extends CI_Controller {
         $excel->setActiveSheetIndex(0)->setCellValue('B3', "NIK"); // Set kolom D3 dengan tulisan "JENIS KELAMIN"
         $excel->setActiveSheetIndex(0)->setCellValue('C3', "Nama Karyawan"); // Set kolom E3 dengan tulisan "ALAMAT"
         $excel->setActiveSheetIndex(0)->setCellValue('D3', "Tgl. Masuk"); 
+        $excel->setActiveSheetIndex(0)->setCellValue('E3', "JK"); 
+        $excel->setActiveSheetIndex(0)->setCellValue('F3', "CT"); 
+        $excel->setActiveSheetIndex(0)->setCellValue('G3', "K"); 
+        $excel->setActiveSheetIndex(0)->setCellValue('H3', "M"); 
+        $excel->setActiveSheetIndex(0)->setCellValue('I3', "Im"); 
+        $excel->setActiveSheetIndex(0)->setCellValue('J3', "N"); 
+        $excel->setActiveSheetIndex(0)->setCellValue('K3', "Sn"); 
+        $excel->setActiveSheetIndex(0)->setCellValue('L3', "KM"); 
+        $excel->setActiveSheetIndex(0)->setCellValue('M3', "CK"); 
+        $excel->setActiveSheetIndex(0)->setCellValue('N3', "SD"); 
+        $excel->setActiveSheetIndex(0)->setCellValue('O3', "S"); 
+        $excel->setActiveSheetIndex(0)->setCellValue('P3', "I"); 
+        $excel->setActiveSheetIndex(0)->setCellValue('Q3', "A"); 
+        $excel->setActiveSheetIndex(0)->setCellValue('R3', "PC"); 
+        $excel->setActiveSheetIndex(0)->setCellValue('S3', "T"); 
         
         // Apply style header yang telah kita buat tadi ke masing-masing kolom header
         $excel->getActiveSheet()->getStyle('A3')->applyFromArray($style_col);
         $excel->getActiveSheet()->getStyle('B3')->applyFromArray($style_col);
         $excel->getActiveSheet()->getStyle('C3')->applyFromArray($style_col);
         $excel->getActiveSheet()->getStyle('D3')->applyFromArray($style_col);
+        $excel->getActiveSheet()->getStyle('E3')->applyFromArray($style_col);
+        $excel->getActiveSheet()->getStyle('F3')->applyFromArray($style_col);
+        $excel->getActiveSheet()->getStyle('G3')->applyFromArray($style_col);
+        $excel->getActiveSheet()->getStyle('H3')->applyFromArray($style_col);
+        $excel->getActiveSheet()->getStyle('I3')->applyFromArray($style_col);
+        $excel->getActiveSheet()->getStyle('J3')->applyFromArray($style_col);
+        $excel->getActiveSheet()->getStyle('K3')->applyFromArray($style_col);
+        $excel->getActiveSheet()->getStyle('L3')->applyFromArray($style_col);
+        $excel->getActiveSheet()->getStyle('M3')->applyFromArray($style_col);
+        $excel->getActiveSheet()->getStyle('N3')->applyFromArray($style_col);
+        $excel->getActiveSheet()->getStyle('O3')->applyFromArray($style_col);
+        $excel->getActiveSheet()->getStyle('P3')->applyFromArray($style_col);
+        $excel->getActiveSheet()->getStyle('Q3')->applyFromArray($style_col);
+        $excel->getActiveSheet()->getStyle('R3')->applyFromArray($style_col);
+        $excel->getActiveSheet()->getStyle('S3')->applyFromArray($style_col);
+
 
         // $current_col = 0;
-        $current_row = 3;
-        $no = 1;
-
-        for ($i=4; $i < $lastDay+4; $i++) {
-            $excel->setActiveSheetIndex(0)->setCellValueByColumnAndRow($i, $current_row, $no); 
-            $excel->getActiveSheet()->getStyleByColumnAndRow($i, $current_row)->applyFromArray($style_col);
-            $no++;
-            // $current_col++;
-        }
 
         $numrow = 4; // Set baris pertama untuk isi tabel adalah baris ke 4
         foreach($siswa as $data){ // Lakukan looping pada variabel siswa
@@ -188,6 +210,7 @@ class import_excel extends CI_Controller {
             $excel->setActiveSheetIndex(0)->setCellValue('B'.$numrow, $data->nik);
             $excel->setActiveSheetIndex(0)->setCellValue('C'.$numrow, $data->namaKaryawan);
             $excel->setActiveSheetIndex(0)->setCellValue('D'.$numrow, $data->tanggalMasuk);
+            $excel->setActiveSheetIndex(0)->setCellValue('E'.$numrow, $data->jk);
             
             
             // Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
@@ -195,10 +218,10 @@ class import_excel extends CI_Controller {
             $excel->getActiveSheet()->getStyle('B'.$numrow)->applyFromArray($style_row);
             $excel->getActiveSheet()->getStyle('C'.$numrow)->applyFromArray($style_row);
             $excel->getActiveSheet()->getStyle('D'.$numrow)->applyFromArray($style_row);
+            $excel->getActiveSheet()->getStyle('E'.$numrow)->applyFromArray($style_row);
             
             $numrow++; // Tambah 1 setiap kali looping
         }
-
         
         // Set height semua kolom menjadi auto (mengikuti height isi dari kolommnya, jadi otomatis)
         $excel->getActiveSheet()->getDefaultRowDimension()->setRowHeight(-1);
@@ -207,12 +230,12 @@ class import_excel extends CI_Controller {
         $excel->getActiveSheet()->getPageSetup()->setOrientation(PHPExcel_Worksheet_PageSetup::ORIENTATION_LANDSCAPE);
 
         // Set judul file excel nya
-        $excel->getActiveSheet(0)->setTitle("Data Lembur");
+        $excel->getActiveSheet(0)->setTitle("Data Absensi");
         $excel->setActiveSheetIndex(0);
 
         // Proses file excel
         header('Content-Type: application/vnd.ms-excel');
-        header('Content-Disposition: attachment; filename="DataLembur.xlsx"'); // Set nama file excel nya
+        header('Content-Disposition: attachment; filename="DataAbsensi.xlsx"'); // Set nama file excel nya
         header('Cache-Control: max-age=0');
 
         $write = PHPExcel_IOFactory::createWriter($excel, 'Excel2007');

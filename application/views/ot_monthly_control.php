@@ -264,7 +264,6 @@ $(function () {
   var manam_bulan = new Array();
 
   $.getJSON('<?php echo base_url("ot/overtime_chart_per_dep/")?>', function(data) {
-
    var xCategories = [];
    var seriesData = [];
    var i, cat;
@@ -571,8 +570,9 @@ for (var i = 0; i <= cumulativeData2.length; i++) {
                            series: seriesData
                          });
 
-
-     }
+       setTimeout(postTgl, 1000);
+     },
+     cache: false
    });
 }
 

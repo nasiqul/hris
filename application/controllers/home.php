@@ -252,7 +252,7 @@ class Home extends CI_Controller {
     public function detailSPL($nik,$tgl)
     {
         $data['menu2'] = 'Overtime';
-        $data['menu'] = 'ovrR2';
+        $data['menu'] = 'OT Management By NIK';
         $data['nik'] = $nik;
         $data['tgl'] = $tgl;
         $this->load->view("graph_report",$data);

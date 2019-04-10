@@ -296,9 +296,9 @@ public function get_jabatan($nik)
     return $query->result();
 }
 
-public function get_report_presensi($tgl)
+public function get_report_absensi($tgl)
 {
-    $q = "select pin, nik, namaKaryawan, tanggalMasuk from karyawan";
+    $q = "select pin, nik, namaKaryawan, tanggalMasuk, jk from karyawan";
     $query = $this->db->query($q);
     return $query->result();
 }

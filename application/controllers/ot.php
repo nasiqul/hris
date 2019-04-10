@@ -578,9 +578,9 @@ class Ot extends CI_Controller {
 				<button class='btn btn-danger btn-xs' onclick='modal_open(".$key->id.");'><i class='fa fa-trash'></i></button>";
 
 				if ($key->status != '0') 
-					$row[] = "<button class='btn btn-success btn-xs' id='add".$key->id."' onclick='multi(".$key->id.")'>Add <i class='fa fa-level-up'></button>";
-				else
 					$row[] = "";
+				else
+					$row[] = "<button class='btn btn-success btn-xs' id='add".$key->id."' onclick='multi(".$key->id.")'>Add <i class='fa fa-level-up'></button>";
 
 				$data[] = $row;
 
