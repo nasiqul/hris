@@ -39,9 +39,9 @@ class Login extends CI_Controller {
 
 		if ($list == 1) {
 			$newdata = array(
-				'nik'  => $nik,
+				'nikLogin'  => $nik,
 				'role'  => $isi[0]->role,
-				'nama'  => $isi[0]->nama
+				'namaLogin'  => $isi[0]->nama
 			);
 
 			$this->session->set_userdata($newdata);

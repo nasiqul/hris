@@ -6,7 +6,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <html>
 <!-- HEADER -->
 <?php require_once(APPPATH.'views/header/head.php'); ?>
-<?php if (! $this->session->userdata('nik')) { redirect('login'); }?>
+<?php if (! $this->session->userdata('nikLogin')) { redirect('login'); }?>
 <body class="hold-transition skin-purple sidebar-mini">
   <div class="wrapper">
 

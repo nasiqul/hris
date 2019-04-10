@@ -42,7 +42,7 @@ class Home extends CI_Controller {
             $data['report2'] = $this->home_model->report2_2();
         }
         
-        if ($this->session->userdata('nik')) { 
+        if ($this->session->userdata('nikLogin')) { 
             if ($this->session->userdata('role') == '1') {
                 $data['menu2'] = 'home';
                 $data['menu'] = '';
@@ -52,7 +52,7 @@ class Home extends CI_Controller {
             {
                 $data['menu2'] = 'Overtime';
                 $data['menu'] = 'Overtime User';
-                $username = $this->session->userdata('nik');
+                $username = $this->session->userdata('nikLogin');
                 $data['dep'] = $this->over_model->get_dep($username);
                 $this->load->view('overtime_user2', $data);
             }
@@ -310,7 +310,7 @@ class Home extends CI_Controller {
 
     public function overtime_user()
     {
-        $username = $this->session->userdata('nik');
+        $username = $this->session->userdata('nikLogin');
         $data['dep'] = $this->over_model->get_dep($username);
         $data['menu2'] = 'ovrU';
         $data['menu'] = 'ovrU';

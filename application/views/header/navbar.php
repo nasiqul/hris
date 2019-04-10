@@ -17,12 +17,12 @@
     <!-- Navbar Right Menu -->
     <div class="navbar-custom-menu">
       <ul class="nav navbar-nav">
-        <?php if ($this->session->userdata('nik')) { ?>
+        <?php if ($this->session->userdata('nikLogin')) { ?>
 
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <img id="fotoHead2" class="user-image" alt="User Image">
-              <span class="hidden-xs"><?php $nama = $this->session->userdata('nama'); echo $nama;?> </span>&nbsp<i class="fa fa-sort-down"> </i>
+              <span class="hidden-xs"><?php $nama = $this->session->userdata('namaLogin'); echo $nama;?> </span>&nbsp<i class="fa fa-sort-down"> </i>
             </a>
             <ul class="dropdown-menu">
               <!-- User image -->

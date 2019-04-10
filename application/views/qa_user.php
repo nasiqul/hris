@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <?php require_once(APPPATH.'views/header/head.php'); ?>
-<?php if (! $this->session->userdata('nik')) { redirect('home/overtime_user'); }?>
+<?php if (! $this->session->userdata('nikLogin')) { redirect('home/overtime_user'); }?>
 <!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
 <body class="hold-transition skin-purple layout-top-nav">
   <div class="wrapper">

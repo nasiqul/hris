@@ -503,7 +503,7 @@ class Over_model extends CI_Model {
         $nik = $this->session->userdata('nik');
         $this->db->set('last_edited', date('Y-m-d'));
         $this->db->set('nik_create', $nik);
-        $this->db->where('id_ot', $id_ot);
+        $this->db->where('id', $id_ot);
         $this->db->update('over_time');
     }
 

@@ -4,7 +4,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Export_model extends CI_Model {
 	public function export_presensi($data2)
 	{
-		$qcekJam = "SELECT jam_kerja, jam_masuk FROM shift where shift = '".$data2['shift']."'";
+		if ($data2['hari'] == '5') {
+			$day = "Jumat";
+		} else {
+			$day = "Normal";
+		}
+
+		$qcekJam = "SELECT jam_kerja, jam_masuk FROM shift where shift = '".$data2['shift']."' and status_hari = '".$day."'";
 		$cekJam = $this->db->query($qcekJam);
 
 		// HITUNG JAM KERJA
@@ -31,7 +37,17 @@ class Export_model extends CI_Model {
 			// HARI LIBUR
 			$hari = 'L';
 
-			if ($data2['shift'] == '3' || $data2['shift'] == '2') {
+			if ($data2['shift'] == '3') {
+				if ($data2['hari'] == "5") {
+					$time1 = new DateTime(date('Y-m-d H:i:s' ,strtotime('2019-01-01 '.$data2['masuk'])));
+					$time2 = new DateTime(date('Y-m-d H:i:s' ,strtotime('2019-01-01 '.$data2['keluar'])));
+				}
+				else {
+					$time1 = new DateTime(date('Y-m-d H:i:s' ,strtotime('2019-01-01 '.$data2['masuk'])));
+					$time2 = new DateTime(date('Y-m-d H:i:s' ,strtotime('2019-01-02 '.$data2['keluar'])));
+				}
+			}
+			else if ($data2['shift'] == '2') {
 				$time1 = new DateTime(date('Y-m-d H:i:s' ,strtotime('2019-01-01 '.$data2['masuk'])));
 				$time2 = new DateTime(date('Y-m-d H:i:s' ,strtotime('2019-01-02 '.$data2['keluar'])));
 			}
@@ -91,8 +107,16 @@ class Export_model extends CI_Model {
 			
 			else if ($data2['shift'] == '3') {
 				//HITUNG JAM AWAL
-				$time1 = new DateTime(date('Y-m-d H:i:s' ,strtotime('2019-01-01 '.$data2['masuk'])));
-				$time2 = new DateTime(date('Y-m-d H:i:s' ,strtotime('2019-01-01 '.$jam_masuk)));
+
+				if ($data2['hari'] = "5") {
+					$time1 = new DateTime(date('Y-m-d H:i:s' ,strtotime('2019-01-01 '.$data2['masuk'])));
+					$time2 = new DateTime(date('Y-m-d H:i:s' ,strtotime('2019-01-02 '.$jam_masuk)));
+				}
+				else {
+					$time1 = new DateTime(date('Y-m-d H:i:s' ,strtotime('2019-01-01 '.$data2['masuk'])));
+					$time2 = new DateTime(date('Y-m-d H:i:s' ,strtotime('2019-01-01 '.$jam_masuk)));
+				}
+				
 
 				$interval = $time1->diff($time2);
 				$s = $interval->format('%H:%i:%s');
@@ -144,7 +168,7 @@ class Export_model extends CI_Model {
 
 				$jam = $time_seconds2 - $jam_kerja;
 
-				if ($jam >= 9000) 
+				if ($jam > 9000) 
 					$d = $jam - 1800;
 				else
 					$d = $jam;
