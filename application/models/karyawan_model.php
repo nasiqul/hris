@@ -60,16 +60,16 @@ class Karyawan_model extends CI_Model {
         }
     }
 
-    public function get_data_karyawan_coba()
+    public function get_data_karyawan_coba($stat)
     {
-        $this->_get_datatables_query2();
+        $this->_get_datatables_query2($stat);
         if($_POST['length'] != -1)
             $this->db->limit($_POST['length'], $_POST['start']);
         $query = $this->db->get();
         return $query->result();
     }
 
-    private function _get_datatables_query2()
+    private function _get_datatables_query2($stat)
     {
         $this->db->select("k.nik, k.namaKaryawan, dv.nama as namadev, dp.nama as namadep, k.tanggalMasuk, k.statusKaryawan, k.status, k.atasan");
         $this->db->from('karyawan k');
@@ -79,7 +79,12 @@ class Karyawan_model extends CI_Model {
         $this->db->join('section sec','p.id_sec = sec.id', 'left');
         $this->db->join('sub_section ssec','p.id_sub_sec = ssec.id', 'left');
         $this->db->join('group1 gr','p.id_group = gr.id', 'left');
-        $this->db->where("k.Status","Aktif");
+
+        if ($stat == "1" || $stat == "") {
+            $this->db->where("k.Status","Aktif");
+        } else if ($stat == "2") {
+            $this->db->where("k.Status","Non-Aktif");
+        }
 
         $i = 0;
 
@@ -125,6 +130,19 @@ class Karyawan_model extends CI_Model {
     public function count_all()
     {
         $this->db->from('karyawan');
+        return $this->db->count_all_results();
+    }
+
+    function count_filtered2($stat)
+    {
+        $this->_get_datatables_query2($stat);
+        $query = $this->db->get();
+        return $query->num_rows();
+    }
+
+    public function count_all2($stat)
+    {
+        $this->_get_datatables_query2($stat);
         return $this->db->count_all_results();
     }
 

@@ -21,7 +21,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <!-- Content Header (Page header) -->
       <section class="content-header">
         <h1>
-          Employee Data
+          Employee Data 
           <span class="text-purple">従業員データ</span>
         </h1>
       </section>
@@ -37,7 +37,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <a class="btn btn-success" href="<?php echo base_url('home/karyawan_t'); ?>"><i class="fa fa-plus"></i> New Entry</a>
                   <a class="btn btn-warning" href="<?php echo base_url('home/reset_karyawan'); ?>"><i class="fa fa-refresh"></i> Reload Data</a>
                   <div class="pull-right">
-                    <select class="form-control" id="stat">
+                    <select class="form-control" id="stat" onchange="changes()">
                       <option value="1">Aktif</option>
                       <option value="2">Non-Aktif</option>
                       <option value="3">All</option>
@@ -266,9 +266,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
     var grade = [];
     var id_grd;
     var atasan = [];
+    var tabel7;
 
     $(document).ready(function() {
-      $('#example1').DataTable({
+      tabel7 = $('#example1').DataTable({
         "lengthMenu"    : [[10, 25, 50, -1], [10, 25, 50, "All"]],
         "processing"    : true,
         "serverSide"    : true,
@@ -294,6 +295,39 @@ scratch. This page gets rid of all links and provides the needed markup only.
         ]
       })
     })
+
+    function changes() {
+      var statusAktif = $('#stat').find(':selected')[0].value;
+      tabel7.destroy();
+      tabel7 = $('#example1').DataTable({
+        "lengthMenu"    : [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        "processing"    : true,
+        "serverSide"    : true,
+        'order'         : [],
+        "ajax": {
+          "url": "<?php echo base_url('home/ajax_emp_coba')?>",
+          data : {
+            "stat" : statusAktif
+          },           
+          "type": "POST"
+        },
+        "columns": [
+        { "data": 0 },
+        { "data": 1 },
+        { "data": 2 },
+        { "data": 3 },
+        { "data": 4 },
+        { "data": 5 },
+        { "data": 6 }
+        ],
+        "columnDefs": [
+        {
+          "targets": [ 6 ], //first column / numbering column
+          "orderable": false, //set not orderable
+        }
+        ]
+      })
+    }
 
     $('#openModal').click(function(){
       $("#myModal").modal('show');

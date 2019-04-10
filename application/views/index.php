@@ -87,64 +87,68 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <div class="col-md-12">
           <div class="box box-solid">
             <div class="box-body">
-            <table id="example1" class="table table-responsive table-striped" width="100%">
-              <thead>
-                <th>Date</th>
-                <th>NIK</th>
-                <th>Name</th>
-                <th>Bagian</th>
-                <th>Arrive</th>
-                <th>Leave</th>
-                <th>Shift</th>
-              </thead>        
-              <tbody>
-              </tbody>
-              <tfoot>
-                <tr>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                </tr>
-              </tfoot>
-            </table>
+              <form method="POST" action="<?php echo base_url('import_excel/export_excel_presensi/') ?>">
+                <input type="text" name="tgl" id="tgl" class="form-control datepicker">
+                <button id="export" type="submit" class="btn btn-sm btn-default">Export to Excel</button>
+              </form>
+              <table id="example1" class="table table-responsive table-striped" width="100%">
+                <thead>
+                  <th>Date</th>
+                  <th>NIK</th>
+                  <th>Name</th>
+                  <th>Bagian</th>
+                  <th>Datang</th>
+                  <th>Pulang</th>
+                  <th>Shift</th>
+                </thead>        
+                <tbody>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
           </div>
-        </div>
-      </div>   
+        </div>   
 
-      <div class="modal fade" id="myModal">
-        <div class="modal-dialog modal-sm">
-          <form method="post" action="<?php echo base_url('import_excel/upload3'); ?>" enctype="multipart/form-data" class="pull-right">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h4 style="float: right;" id="modal-title"></h4>
-                <h4 class="modal-title"><b>Import Presensi</b> <b id="sifMakan"></b></h4>
-              </div>
-              <div class="modal-body">
-                <div class="row">
-                  <div class="col-md-12">
-                    <input type="file" name="file">
+        <div class="modal fade" id="myModal">
+          <div class="modal-dialog modal-sm">
+            <form method="post" action="<?php echo base_url('import_excel/upload3'); ?>" enctype="multipart/form-data" class="pull-right">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 style="float: right;" id="modal-title"></h4>
+                  <h4 class="modal-title"><b>Import Presensi</b> <b id="sifMakan"></b></h4>
+                </div>
+                <div class="modal-body">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <input type="file" name="file">
+                    </div>
                   </div>
                 </div>
+                <div class="modal-footer">
+                  <input type="submit" name="submit" value="Import" class="btn btn-success btn-sm pull-right">
+                  <button type="button" class="btn btn-danger btn-sm pull-left" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                </div>
               </div>
-              <div class="modal-footer">
-                <input type="submit" name="submit" value="Import" class="btn btn-success btn-sm pull-right">
-                <button type="button" class="btn btn-danger btn-sm pull-left" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
-              </div>
-            </div>
-          </form>
+            </form>
+          </div>
+          <!-- /.modal-dialog -->
         </div>
-        <!-- /.modal-dialog -->
-      </div>
 
-    </section>
-    <!-- /.content -->
+      </section>
+      <!-- /.content -->
 
-  </div>
-  <!-- /.content-wrapper -->
-  <!-- /.control-sidebar -->
+    </div>
+    <!-- /.content-wrapper -->
+    <!-- /.control-sidebar -->
   <!-- Add the sidebar's background. This div must be placed
     immediately after the control sidebar -->
     <div class="control-sidebar-bg"></div>
@@ -167,18 +171,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
         "orderCellsTop": true,
         "fixedHeader": true
       });
-
-      table.columns().every( function () {
-        var that = this;
-
-        $( 'input', this.footer() ).on( 'keyup change', function () {
-          if ( that.search() !== this.value ) {
-            that
-            .search( this.value )
-            .draw();
-          }
-        } );
-      } );
     })
 
     function openModal() {
@@ -188,6 +180,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
     $('#datepicker').datepicker({
       autoclose: true,
       format: 'dd/mm/yyyy',
+    })
+
+    $('.datepicker').datepicker({
+      autoclose: true,
+      format: "mm-yyyy",
+      viewMode: "months", 
+      minViewMode: "months"
     })
   </script>
 

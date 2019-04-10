@@ -388,7 +388,6 @@ table tr th {
 						},
 					})
 
-
 						window.print();
 					}
 				});

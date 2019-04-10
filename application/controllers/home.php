@@ -700,9 +700,9 @@ public function ajax_presensi_shift()
       }
   }
   else
-   $result[] = json_decode ("{}");
+     $result[] = json_decode ("{}");
 
-echo json_encode($result);
+ echo json_encode($result);
 }
 
 public function ajax_emp_keluarga()
@@ -1042,9 +1042,15 @@ public function ajax_emp_coba()
         $filter = $this->cari_karyawan_model->count_filtered($status,$grade,$dep,$pos);
     }
     else {
-        $list = $this->karyawan_model->get_data_karyawan_coba();
-        $tot = $this->karyawan_model->count_all();
-        $filter = $this->karyawan_model->count_filtered();
+        if (isset($_POST['stat'])) {
+            $stat = $_POST['stat'];
+        } else {
+            $stat = "";
+        }
+        
+        $list = $this->karyawan_model->get_data_karyawan_coba($stat);
+        $tot = $this->karyawan_model->count_all2($stat);
+        $filter = $this->karyawan_model->count_filtered2($stat);
     }
 
     $data = array();
