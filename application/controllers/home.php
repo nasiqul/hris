@@ -100,7 +100,6 @@ class Home extends CI_Controller {
             $tgl = date('Y-m')."-01";
         }
         $data['cc'] = $this->budget_model->get_chart_data($tgl);
-        $data['menu'] = 'Btot';
         $this->load->view("budget_graph",$data);
     }
 
@@ -122,7 +121,6 @@ class Home extends CI_Controller {
             $tgl = date('Y-m')."-01";
         }
         $data['cc2'] = $this->budget_model->get_chart_data_mp($tgl);
-        $data['menu'] = 'Btot2';
         $this->load->view("budget_graph_mp",$data);
     }
 
@@ -293,7 +291,7 @@ class Home extends CI_Controller {
 
             $this->session->set_userdata($newdata);
         }
-        $data['menu'] = 'emp';
+        $data['menu'] = 'Employee Data';
         $this->load->view("karyawan", $data);
     }
 
@@ -312,8 +310,8 @@ class Home extends CI_Controller {
     {
         $username = $this->session->userdata('nikLogin');
         $data['dep'] = $this->over_model->get_dep($username);
-        $data['menu2'] = 'ovrU';
-        $data['menu'] = 'ovrU';
+        $data['menu2'] = 'Overtime';
+        $data['menu'] = 'Overtime User';
         $this->load->view('overtime_user2',$data);
     }
 
@@ -327,7 +325,7 @@ class Home extends CI_Controller {
     public function karyawan_2()
     {
         $data['menu2'] = 'Employee';
-        $data['menu'] = 'Employee2';
+        $data['menu'] = 'Employee Data';
         $this->load->view('karyawan_2',$data);
     }
 
@@ -382,7 +380,7 @@ class Home extends CI_Controller {
         $data['jabatan'] = $this->karyawan_model->get_jabatan();
         $data['kode'] = $this->karyawan_model->get_kode();
         $data['menu2'] = 'Employee';
-        $data['menu'] = 'emp';
+        $data['menu'] = 'Employee Data';
         $this->load->view('karyawan_form',$data);
     }
 
@@ -626,94 +624,53 @@ public function ajax_absensi_cari_g()
     echo json_encode($output);
 }
 
-public function ajax_emp()
-{
-    if (isset($_SESSION['status']) || isset($_SESSION['grade']) || isset($_SESSION['dep']) || isset($_SESSION['pos'])) 
-    {
-        $status = $this->session->userdata('status');
-        $grade = $this->session->userdata('grade');
-        $dep = $this->session->userdata('dep');
-        $pos = $this->session->userdata('pos');
-        $list = $this->cari_karyawan_model->get_data_karyawan_cari($status,$grade,$dep,$pos);
-        $tot = $this->cari_karyawan_model->count_all();
-        $filter = $this->cari_karyawan_model->count_filtered($status,$grade,$dep,$pos);
-    }
-    elseif (isset($_SESSION['bulan'])) {
-        $bulan = $this->session->userdata('bulan');
-        $list = $this->karyawan_by_period_model->get_karyawan($bulan);
-    }
-    else {
-        $list = $this->karyawan_model->get_data_karyawan();
-        $tot = $this->karyawan_model->count_all();
-        $filter = $this->karyawan_model->count_filtered();
-    }
-
-    $data = array();
-    $i = 1;
-    foreach ($list as $key) {
-        $row = array();
-        $row[] = $key->nik;
-                //$row[] = $key->foto;
-        $row[] = "<a style='cursor: pointer' onclick='ShowModal(".$i.")' data-toggle='modal' data-id='".$key->nik."' id='tes".$i."'>".$key->namaKaryawan."</a>";
-        $row[] = $key->dep;
-        $row[] = $key->group;
-        $row[] = date("j M Y", strtotime($key->tanggalMasuk));
-        $row[] = $key->statusKaryawan;
-        $row[] = "<p class='text-center'><small class='label bg-green'>".$key->status." <i class='fa fa-check'></i> </small></p>";
-
-        $data[] = $row;
-        $i++;
-    }
-
-    $output = array(
-        "draw" => $_POST['draw'],
-        "recordsTotal" => $tot,
-        "recordsFiltered" => $filter,
-        "data" => $data,
-    );
-            //output to json format
-    echo json_encode($output);
-}
-
-// public function ajax_emp_by_nik($id)
+// public function ajax_emp()
 // {
-//             // echo $_GET['dataId'];
-//     $list = $this->karyawan_model->get_data_karyawan_by_nik($id);
-//     $data = array();
-//     foreach ($list as $key) {
-//         $row = array();
-//         $row[] = $key->pin;
-//         $row[] = $key->nik;
-//         $row[] = $key->costCenter;
-//         $row[] = $key->foto;
-//         $row[] = $key->namaKaryawan;
-//         $row[] = $key->dep;
-//         $row[] = $key->group;
-//         $row[] = $key->kode;
-//         $row[] = date("d-m-Y", strtotime($key->tanggalMasuk));
-//         $row[] = $key->jk;
-//         $row[] = $key->statusKaryawan;
-//         $row[] = $key->grade;
-//         $row[] = $key->namaGrade;
-//         $row[] = $key->jabatan;
-//         $row[] = $key->statusKeluarga;
-//         $row[] = $key->tempatLahir;
-//         $row[] = $key->tanggalLahir;
-//         $row[] = $key->alamat;
-//         $row[] = $key->hp;
-//         $row[] = $key->ktp;
-//         $row[] = $key->rekening;
-//         $row[] = $key->bpjstk;
-//         $row[] = $key->jp;
-//         $row[] = $key->bpjskes;
-//         $row[] = $key->npwp;
-//         $row[] = $key->status;
-
-//         $data[] = $row;
+//     if (isset($_SESSION['status']) || isset($_SESSION['grade']) || isset($_SESSION['dep']) || isset($_SESSION['pos'])) 
+//     {
+//         $status = $this->session->userdata('status');
+//         $grade = $this->session->userdata('grade');
+//         $dep = $this->session->userdata('dep');
+//         $pos = $this->session->userdata('pos');
+//         $list = $this->cari_karyawan_model->get_data_karyawan_cari($status,$grade,$dep,$pos);
+//         $tot = $this->cari_karyawan_model->count_all();
+//         $filter = $this->cari_karyawan_model->count_filtered($status,$grade,$dep,$pos);
+//     }
+//     elseif (isset($_SESSION['bulan'])) {
+//         $bulan = $this->session->userdata('bulan');
+//         $list = $this->karyawan_by_period_model->get_karyawan($bulan);
+//     }
+//     else {
+//         $list = $this->karyawan_model->get_data_karyawan();
+//         $tot = $this->karyawan_model->count_all();
+//         $filter = $this->karyawan_model->count_filtered();
 //     }
 
+//     $data = array();
+//     $i = 1;
+//     foreach ($list as $key) {
+//         $row = array();
+//         $row[] = $key->nik;
+//                 //$row[] = $key->foto;
+//         $row[] = "<a style='cursor: pointer' onclick='ShowModal(".$i.")' data-toggle='modal' data-id='".$key->nik."' id='tes".$i."'>".$key->namaKaryawan."</a>";
+//         $row[] = $key->dep;
+//         $row[] = $key->group;
+//         $row[] = date("j M Y", strtotime($key->tanggalMasuk));
+//         $row[] = $key->statusKaryawan;
+//         $row[] = "<p class='text-center'><small class='label bg-green'>".$key->status." <i class='fa fa-check'></i> </small></p>";
+
+//         $data[] = $row;
+//         $i++;
+//     }
+
+//     $output = array(
+//         "draw" => $_POST['draw'],
+//         "recordsTotal" => $tot,
+//         "recordsFiltered" => $filter,
+//         "data" => $data,
+//     );
 //             //output to json format
-//     echo json_encode($data);
+//     echo json_encode($output);
 // }
 
 public function ajax_presensi_shift()
@@ -743,9 +700,9 @@ public function ajax_presensi_shift()
       }
   }
   else
-     $result[] = json_decode ("{}");
+   $result[] = json_decode ("{}");
 
- echo json_encode($result);
+echo json_encode($result);
 }
 
 public function ajax_emp_keluarga()
@@ -1067,7 +1024,7 @@ public function karyawan()
         $this->session->set_userdata($newdata);
     }
     $data['menu2'] = 'Employee';
-    $data['menu'] = 'emp';
+    $data['menu'] = 'Employee Data';
     $this->load->view("karyawan2", $data);
 }
 
@@ -1084,10 +1041,6 @@ public function ajax_emp_coba()
         $tot = $this->cari_karyawan_model->count_all();
         $filter = $this->cari_karyawan_model->count_filtered($status,$grade,$dep,$pos);
     }
-    // elseif (isset($_SESSION['bulan'])) {
-    //     $bulan = $this->session->userdata('bulan');
-    //     $list = $this->karyawan_by_period_model->get_karyawan($bulan);
-    // }
     else {
         $list = $this->karyawan_model->get_data_karyawan_coba();
         $tot = $this->karyawan_model->count_all();

@@ -2,9 +2,9 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Karyawan_model extends CI_Model {
-	var $column_order = array('k.nik','namaKaryawan','dep/subSec','sec/Group','tanggalMasuk','statusKaryawan','status'); //set column field database for datatable orderable
-    var $column_search = array('k.nik','namaKaryawan','dep/subSec','sec/Group','DATE_FORMAT(tanggalMasuk, "%d %M %Y")','statusKaryawan','status'); //set column field database for datatable searchable 
-    var $order = array('tanggalMasuk' => 'asc', 'nik' => 'asc'); // default order 
+	var $column_order = array('k.nik','namaKaryawan','dep/subSec','sec/Group','tanggalMasuk','statusKaryawan'); //set column field database for datatable orderable
+    var $column_search = array('k.nik','namaKaryawan','dep/subSec','sec/Group','DATE_FORMAT(tanggalMasuk, "%d %M %Y")','statusKaryawan'); //set column field database for datatable searchable 
+    var $order = array('pin' => 'asc'); // default order 
 
     public function __construct()
     {
@@ -79,6 +79,7 @@ class Karyawan_model extends CI_Model {
         $this->db->join('section sec','p.id_sec = sec.id', 'left');
         $this->db->join('sub_section ssec','p.id_sub_sec = ssec.id', 'left');
         $this->db->join('group1 gr','p.id_group = gr.id', 'left');
+        $this->db->where("k.Status","Aktif");
 
         $i = 0;
 

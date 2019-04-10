@@ -188,49 +188,27 @@ class Ot extends CI_Controller {
 			$budget = 0;
 			if ($key->jml_nik == "1") {
 
-					if ($key->jam_plan != "0") {
-						$where = array(
-							'nik' => $key->nik,
-							'id_ot' =>$key->id
-						);
+				if ($key->jam_plan != "0") {
+					$where = array(
+						'nik' => $key->nik,
+						'id_ot' =>$key->id
+					);
 
-						$jam = $key->jam_plan;
+					$jam = $key->jam_plan;
 
-						$this->over_model->update_data_over($where,'over_time_member');
-						$this->over_model->update_data_final($where,'over_time_member',$key->final2);
+					$this->over_model->update_data_over($where,'over_time_member');
+					$this->over_model->update_data_final($where,'over_time_member',$key->final2);
 
-					}
-					else {
-						$jam = "0";
-					}
+				}
+				else {
+					$jam = "0";
+				}
 
-					$nik = $key->nik;
-					$tgl = $key->tanggal;
+				$nik = $key->nik;
+				$tgl = $key->tanggal;
 
-					$this->over_model->change_over($nik, $tgl, $jam);
+				$this->over_model->change_over($nik, $tgl, $jam);
 
-					$nikkar = "";
-					$nikkar = $this->db->query("SELECT costCenter FROM karyawan WHERE NIK='".$key->nik."'");
-					
-					foreach ($nikkar->result() as $row) //Iterate through results
-					{
-						$cost = $row->costCenter;
-						$aktual = "";
-						$aktual = $this->db->query("SELECT aktual FROM cost_center_budget WHERE id_cc='".$cost."' and DATE_FORMAT(period,'%Y-%m') =  DATE_FORMAT('".$key->tanggal."','%Y-%m')");
-						foreach ($aktual->result() as $row) //Iterate through results
-						{
-							$act = $row->aktual;
-							$total =  (float) $act + (float) $key->final2;
-							$tgl = date('Y-m',strtotime($key->tanggal))."-01";
-
-							$where2 = array(
-								'id_cc' => $cost,
-								'period' => $tgl
-							);
-							$this->over_model->update_data_budget($where2,'cost_center_budget',$total);
-						}
-
-					}
 			}
 
 			// echo json_encode($s);

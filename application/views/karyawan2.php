@@ -32,9 +32,19 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <div class="col-md-12">
           <div class="box box-solid">
             <div class="box-body">
-              <a class="btn btn-success" href="<?php echo base_url('home/karyawan_t'); ?>"><i class="fa fa-plus"></i> New Entry</a>
-              <a class="btn btn-warning" href="<?php echo base_url('home/reset_karyawan'); ?>"><i class="fa fa-refresh"></i> Reload Data</a>
-              <br>
+              <div class="row">
+                <div class="col-md-12">
+                  <a class="btn btn-success" href="<?php echo base_url('home/karyawan_t'); ?>"><i class="fa fa-plus"></i> New Entry</a>
+                  <a class="btn btn-warning" href="<?php echo base_url('home/reset_karyawan'); ?>"><i class="fa fa-refresh"></i> Reload Data</a>
+                  <div class="pull-right">
+                    <select class="form-control" id="stat">
+                      <option value="1">Aktif</option>
+                      <option value="2">Non-Aktif</option>
+                      <option value="3">All</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
               <br>
               <table id="example1" class="table table-responsive table-striped">
                 <thead>
@@ -275,6 +285,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
         { "data": 4 },
         { "data": 5 },
         { "data": 6 }
+        ],
+        "columnDefs": [
+        {
+          "targets": [ 6 ], //first column / numbering column
+          "orderable": false, //set not orderable
+        }
         ]
       })
     })
@@ -323,7 +339,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             $("#group").text(data[i][32]);
             $("#kode").text(data[i][8]);
             $("#grade").text("[ "+data[i][12]+" ] "+data[i][13]+"");
-             $("#atasan").text(data[i][35]);
+            $("#atasan").text(data[i][35]);
             // $("#namaGrade").text();
             $("#jabatan").text(data[i][14]);
             $("#statKaryawan").text(data[i][11]);
@@ -736,7 +752,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       'id' : 'txtpin'}
       ));
 
-     var atasan2 = $('#atasan').text();
+    var atasan2 = $('#atasan').text();
     $('#atasan').text('').append($('<input />',
     {
       'value' : pin2, 
@@ -1089,24 +1105,24 @@ function showGroup() {
      });
     }
 
-     function getConfirmation() {
-               var retVal = confirm("Do you want to continue ?");
-               if( retVal == true ) {
-                  terminasi();
-                  return true;
-               } else {
-                  
-                  return false;
-               }
-            }
+    function getConfirmation() {
+     var retVal = confirm("Do you want to continue ?");
+     if( retVal == true ) {
+      terminasi();
+      return true;
+    } else {
+
+      return false;
+    }
+  }
 
 
-    $('.datepicker').datepicker({
-      autoclose: true,
-      format: "dd-mm-yyyy"
-    });
+  $('.datepicker').datepicker({
+    autoclose: true,
+    format: "dd-mm-yyyy"
+  });
 
-  </script>
+</script>
 
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the

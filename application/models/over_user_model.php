@@ -37,13 +37,14 @@ class Over_user_model extends CI_Model {
         if ($role != "1") {
         $this->db->where("departemen.nama = (select department from login where username = '".$user."')");
         }
-        if ($sub !="asd" && $sub && $sub != "0" ) {
+
+        if ($sub !="" && $sub && $sub != "0" ) {
             $this->db->where("departemen = '".$sub."'");
         }
-        if ($subsec != "asd" && $subsec && $subsec != "0") {
+        if ($subsec != "" && $subsec && $subsec != "0") {
             $this->db->where("section = '".$subsec."'");
         }
-        if ($group != "asd" && $group && $group != "0") {
+        if ($group != "" && $group && $group != "0") {
             $this->db->where("sub_sec = '".$group."'");
         }
         $this->db->group_by('over_time.id');

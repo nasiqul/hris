@@ -297,9 +297,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
           "url": "<?php echo base_url('ot/ajax_ot_user')?>",
           "type": "GET",
           "data" : { 
-            sub:'asd',
-            subsec:'asd',
-            group:'asd'
+            sub:'',
+            subsec:'',
+            group:''
           }
         },
         "columnDefs": [
