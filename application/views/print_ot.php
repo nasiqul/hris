@@ -108,7 +108,7 @@ table tr th {
 	?>
 	<table width="100%" border="0" style="padding-right: 20px;">
 		<tr>
-			<td width="85%" colspan="5"><b>PT. YAMAHA MUSICAL PRODUCT INDONESIA</b></td>
+			<td width="85%" colspan="5"><b>PT. YAMAHA MUSICAL PRODUCTS INDONESIA</b></td>
 		</tr>
 		<tr>
 			<td colspan="4"><center><h2>FORM LEMBUR KARYAWAN</h2></center></td>

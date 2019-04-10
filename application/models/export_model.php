@@ -84,6 +84,7 @@ class Export_model extends CI_Model {
 					$time_masuk = $data2['masuk'];
 				else 
 					$time_masuk = $jam_masuk;
+
 				$time3 = new DateTime(date('Y-m-d H:i:s' ,strtotime('2019-01-01 '.$time_masuk)));
 				$time4 = new DateTime(date('Y-m-d H:i:s' ,strtotime('2019-01-02 '.$data2['keluar'])));
 			}
@@ -143,7 +144,7 @@ class Export_model extends CI_Model {
 
 				$jam = $time_seconds2 - $jam_kerja;
 
-				if ($jam > 7200) 
+				if ($jam >= 9000) 
 					$d = $jam - 1800;
 				else
 					$d = $jam;

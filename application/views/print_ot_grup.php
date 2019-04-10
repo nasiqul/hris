@@ -41,7 +41,7 @@
 <body>
 	<div class="row">
 		<div class="col-md-12">
-			<b>PT. YAMAHA MUSICAL PRODUCT INDONESIA</b>
+			<b>PT. YAMAHA MUSICAL PRODUCTS INDONESIA</b>
 			<center><h3>LEMBAR PERSETUJUAN LEMBUR LIBUR</h3></center>
 			<table class="main" border="1px">
 				<tr>

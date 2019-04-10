@@ -163,7 +163,7 @@ By Dep <br> <span class="text-purple">???</span></a>
           <div class="modal-content">
                <div class="modal-header">
                     <h4 style="float: right;" id="modal-title"></h4>
-                    <h4 class="modal-title"><b>PT. YAMAHA MUSICAL PRODUCT INDONESIA</b></h4>
+                    <h4 class="modal-title"><b>PT. YAMAHA MUSICAL PRODUCTS INDONESIA</b></h4>
                </div>
                <div class="modal-body">
                     <div class="row">
@@ -202,7 +202,7 @@ By Dep <br> <span class="text-purple">???</span></a>
           <div class="modal-content">
                <div class="modal-header">
                     <h4 style="float: right;" id="modal-title"></h4>
-                    <h4 class="modal-title"><b>PT. YAMAHA MUSICAL PRODUCT INDONESIA</b></h4>
+                    <h4 class="modal-title"><b>PT. YAMAHA MUSICAL PRODUCTS INDONESIA</b></h4>
                </div>
                <div class="modal-body">
                     <div class="row">
@@ -239,7 +239,7 @@ By Dep <br> <span class="text-purple">???</span></a>
           <div class="modal-content">
                <div class="modal-header">
                     <h4 style="float: right;" id="modal-title"></h4>
-                    <h4 class="modal-title"><b>PT. YAMAHA MUSICAL PRODUCT INDONESIA</b></h4>
+                    <h4 class="modal-title"><b>PT. YAMAHA MUSICAL PRODUCTS INDONESIA</b></h4>
                </div>
                <div class="modal-body">
                     <div class="row">

@@ -125,7 +125,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <div class="modal-content">
               <div class="modal-header">
                 <h4 style="float: right;" id="modal-title"></h4>
-                <h4 class="modal-title">PT. YAMAHA MUSICAL PRODUCT INDONESIA</h4>
+                <h4 class="modal-title">PT. YAMAHA MUSICAL PRODUCTS INDONESIA</h4>
               </div>
               <div class="modal-body">
                 <div class="row">
