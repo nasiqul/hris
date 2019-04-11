@@ -160,10 +160,10 @@ class Home extends CI_Controller {
 
     public function emp_tot()
     {
-        $data['menu2'] = 'Overtime';
+        $data['menu2'] = 'Employee';
         $data['prs'] = $this->over_model->get_p_data();
         $data['prs2'] = $this->over_model->tes1();
-        $data['menu'] = 'ovrG';
+        $data['menu'] = 'Total Employee';
         $this->load->view('tabel1',$data);
     }
 
@@ -270,31 +270,6 @@ class Home extends CI_Controller {
         $this->load->view("karyawan_graph", $data);
     }
 
-    public function karyawan_coba()
-    {
-        if (isset($_POST['status']) || isset($_POST['grade']) || isset($_POST['dep']) || isset($_POST['pos'])) 
-        {
-            $newdata = array(
-                'status'  => $_POST['status'],
-                'grade'  => $_POST['grade'],
-                'dep'  => $_POST['dep'],
-                'pos'  => $_POST['pos']
-            );
-
-            $this->session->set_userdata($newdata);
-        }
-
-        if (isset($_POST['bulan'])) {
-            $newdata = array(
-                'bulan' => $_POST['bulan']
-            );
-
-            $this->session->set_userdata($newdata);
-        }
-        $data['menu'] = 'Employee Data';
-        $this->load->view("karyawan", $data);
-    }
-
     public function user_QA()
     {
         $this->load->view("qa_user");
@@ -320,13 +295,6 @@ class Home extends CI_Controller {
         $data['menu2'] = 'Overtime';
         $data['menu'] = 'GA - Report';
         $this->load->view('GAreport',$data);
-    }
-
-    public function karyawan_2()
-    {
-        $data['menu2'] = 'Employee';
-        $data['menu'] = 'Employee Data';
-        $this->load->view('karyawan_2',$data);
     }
 
     public function ot()

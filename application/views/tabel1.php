@@ -21,8 +21,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <!-- Content Header (Page header) -->
       <section class="content-header">
         <h1>
-          Question and Answer
-          <span class="text-purple">質疑応答</span>
+          Employee Report
+          <span class="text-purple">???</span>
         </h1>
       </section>
 
