@@ -18,12 +18,6 @@
 		background-color: #dddddd !important;
 		-webkit-print-color-adjust: exact; 
 	}
-	body {
-		font-size: 17pt;
-	}
-	#container {
-		font-size: 17pt;
-	}
 }
 
 body {
@@ -194,10 +188,16 @@ table tr th {
 			<td colspan="9">
 				<table width="100%" id="tb-collapse" style="margin: 0;padding: 0; background-color: #dddddd">
 					<tr>
-						<td width="25%" cellpading="0" cellspacing="0">Diusulkan,</td><td width="25%">Disetujui,</td><td width="25%">Diketahui,</td><td width="25%">Diterima,</td>
+						<td width="25%" cellpading="0" cellspacing="0">Diusulkan,</td>
+						<td width="25%">Disetujui,</td>
+						<td width="25%">Diketahui,</td>
+						<td width="25%">Diterima,</td>
 					</tr>
 					<tr>
-						<td>Staff / Leader</td><td>Chief / Foreman</td><td>Dept. Manager</td><td>HR Dept.</td>
+						<td>Staff / Leader</td>
+						<td>Chief / Foreman</td>
+						<td>Dept. Manager</td>
+						<td>HR Dept.</td>
 					</tr>
 					<tr>
 						<td height="92px"></td><td></td><td></td><td></td>

@@ -180,7 +180,7 @@ class Over_model extends CI_Model {
 
     public function get_over_by_id($id)
     {
-        $this->db->select("o.id as id_over, tanggal, d.nama as departemen, s.nama as section, keperluan, catatan");
+        $this->db->select("o.id as id_over, tanggal, d.nama as departemen, s.nama as section, keperluan, catatan, hari");
         $this->db->from('over_time o');
         $this->db->join('departemen d','o.departemen = d.id','left');
         $this->db->join('section s','o.section = s.id','left');
