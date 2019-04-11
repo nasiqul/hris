@@ -6,6 +6,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <html>
 <!-- HEADER -->
 <?php require_once(APPPATH.'views/header/head.php'); ?>
+<?php if (! $this->session->userdata('nikLogin')) { redirect('login'); }?>
 
 <style type="text/css">
   #info {

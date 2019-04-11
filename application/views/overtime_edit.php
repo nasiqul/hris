@@ -8,6 +8,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <?php require_once(APPPATH.'views/header/head.php'); ?>
 
 <body class="hold-transition skin-purple sidebar-mini">
+  <?php if (! $this->session->userdata('nikLogin')) { redirect('login'); }?>
   <div class="wrapper">
 
     <!-- NAVBAR -->
@@ -227,8 +228,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- ./wrapper -->
   <script type="text/javascript">
     var nomorali = 0;
-    var idDoc;
     var sec = 0;
+    var idDoc;
 
     var no = 1;
     var hari = 'N';
@@ -240,12 +241,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
     var nikS = document.getElementById('nikF');
     var txtJam = document.getElementById('txtJam');
 
-    
-
     $(document).ready(function()
     {
+      idDoc = $("#no_doc").val();
       append();
-
     })
 
 
@@ -260,132 +259,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
       showMeridian: false,
       interval: 30,
     });
-
-    //nik on enter
-    // $('#nikF').bind("enterKey",function(e){
-    //   appendRow();
-    //   ali();
-    // });
-    // $('#nikF').keydown(function(e){
-    //   if(e.keyCode == 13 || e.which == 9)
-    //   {
-    //     $(this).trigger("enterKey");
-    //     console.log(no);
-    //   }
-    // });
-
-    // function appendRow() {
-    //   if ($('#no_doc').val() == "" || $('#datepicker').val() == "" || $('#kep').val() == "" || $('#nikF').val() == "" || $('#dep').find(':selected').prop('disabled') == true || $('#sec').find(':selected').prop('disabled') == true || $('#subsec').find(':selected').prop('disabled') == true || $('#shiftF').find(':selected').prop('disabled') == true){
-    //     openDangerGritter();
-    //     return false;
-    //   }
-
-    //   // var j = jam.innerHTML;
-    //   var n = nikS.value;
-    //   var dep = $("#dep").val();
-
-    //   for (var z = 0; z < arrNik.length; z++) {
-    //     if (arrNik[z] == n) {
-    //       openDanger3Gritter();
-    //       return false;
-    //     }
-    //   }
-
-    //   var nama ="";
-    //   var t1 = "";
-    //   var t2 = "";
-    //   var t3 = "";
-
-    //   var cekM = "";
-    //   var cekFd = "";
-
-    //   $.ajax({
-    //     type: 'POST',
-    //     url: '<?php // echo base_url("ot/cek_nik") ?>',
-    //     data: {
-    //       'nik': n,
-    //       'dep': dep
-    //     },
-    //     success: function (data) {
-    //       if ($.parseJSON(data) == 0) {
-    //         openDanger2Gritter();
-    //         return false;
-    //       }
-
-    //       arrNik.push(n);
-
-    //       $.ajax({
-    //         type: 'POST',
-    //         url: '<?php // echo base_url("home/ajax_get_nama") ?>',
-    //         data: {
-    //           'nik': n
-    //         },
-    //         success: function (data) {
-    //         // the next thing you want to do 
-    //         var sr = $.parseJSON(data);
-
-    //         nama = sr[0][1];
-    //         nik = sr[0][0];
-    //         dariz = $('#dari').val();
-    //         sampaiz = $('#sampai').val();
-
-    //         if ($('#makanF').is(':checked')) {
-    //           cekM="checked";
-    //         }
-
-    //         if ($('#exfoodF').is(':checked')) {
-    //           cekFd="checked";
-    //         }
-
-    //         if ($('#transF option:selected').text() == '-') {
-    //           t1="selected";
-    //         }
-    //         else if ($('#transF option:selected').text() == 'B') {
-    //           t2="selected";
-    //         }
-    //         else if ($('#transF option:selected').text() == 'P') {
-    //           t3="selected";
-    //         }
-
-    //         var newdiv1 = $( "<div class='col-md-12' style='margin-bottom: 5px' id='"+no+"'>"+
-    //           "<div class='col-md-2'><input type='text' id='nik"+no+"' value='"+nik+"' class='form-control' readonly></div>"+
-    //           "<div class='col-md-3'><p id='nama"+no+"'>"+nama+"</p></div><div class='col-md-1'><input class='form-control timepicker' value='"+dariz+"'  id='dari"+no+"' name='dari"+no+"' onchange='dariid("+no+")'></input></div>"+
-    //           "<div class='col-md-1'><input class='form-control timepicker' id='sampai"+no+"'  name='sampai"+no+"' value='"+sampaiz+"' onchange='sampaiid("+no+")'></input></div><div class='col-md-1'><p id='jam"+no+"' hidden></p><p id='jamfix"+no+"'>0</p></div>"+
-    //           "<div class='col-md-1'><select class='form-control' id='trans"+no+"'>"+
-    //           "<option value='-' "+t1+">-</option><option value='B' "+t2+">B</option><option value='P' "+t3+">P</option></select></div>"+
-    //           "<div class='col-md-1'><input type='checkbox' id='makan"+no+"' "+cekM+"></div>"+
-    //           "<div class='col-md-1'><input type='checkbox' id='exfood"+no+"' "+cekFd+"></div>"+
-    //           "<div class='col-md-1'><button class='btn btn-danger btn-xs' id='delete"+no+"' onclick='deleteRow(this); ali()'><i class='fa fa-minus'></i></button></div>"+
-    //           "<input type='hidden' id='idJam"+no+"'></div>");
-
-    //         $("#peserta").append(newdiv1).find('.timepicker').timepicker({
-    //           showInputs: false,
-    //           showMeridian: false,
-    //           interval: 30,
-
-    //         });
-
-    //         var sampai = $('#sampai').val();
-    //         var dari = $('#dari').val();
-    //         var jam = $('#jam0').text();
-    //         var jamfix = $('#jamfix').val();
-    //         $('#jam'+no).text(jam);
-    //         $('#jamfix'+no).val(jamfix).change();
-    //         $('#sampai'+no).val(sampai).change();
-    //         $('#dari'+no).val(dari);
-
-    //         $('#nomor').val(no);
-
-    //         no+=1;
-    //         nomorali+=1;
-    //         $('#totalsemua').text("Total : "+nomorali);
-    //       }
-    //     });
-
-    //     }
-    //   });
-
-    // }
 
     function append() {
       <?php foreach ($isi as $key) { 
@@ -430,18 +303,17 @@ scratch. This page gets rid of all links and provides the needed markup only.
         $("#peserta").append(newdiv1).find('.timepicker').timepicker({
           showInputs: false,
           showMeridian: false,
-          interval: 30,
-
+          interval: 30
         });
 
-        var sampai = $('#sampai').val();
-        var dari = $('#dari').val();
-        var jam = $('#jam0').text();
-        var jamfix = $('#jamfix').val();
-        $('#jam'+no).text(jam);
-        $('#jamfix'+no).val(jamfix).change();
-        $('#sampai'+no).val(sampai).change();
-        $('#dari'+no).val(dari);
+        // var sampai = $('#sampai').val();
+        // var dari = $('#dari').val();
+        // var jam = $('#jam0').text();
+        // var jamfix = $('#jamfix').val();
+        // $('#jam'+no).text(jam);
+        // $('#jamfix'+no).val(jamfix).change();
+        // $('#sampai'+no).val(sampai).change();
+        // $('#dari'+no).val(dari);
 
         $('#nomor').val(no);
 
@@ -691,6 +563,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
             },
             success: function(data){
               openSuccessGritter();
+              $('#submit').css("display", "none");
+              $('#print').css("display", "block");
             }
           });
         }

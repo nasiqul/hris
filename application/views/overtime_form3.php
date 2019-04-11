@@ -8,6 +8,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <?php require_once(APPPATH.'views/header/head.php'); ?>
 
 <body class="hold-transition skin-purple sidebar-mini">
+  <?php if (! $this->session->userdata('nikLogin')) { redirect('login'); }?>
   <div class="wrapper">
 
     <!-- NAVBAR -->

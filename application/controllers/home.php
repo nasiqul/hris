@@ -204,7 +204,7 @@ class Home extends CI_Controller {
         $data['sub_sec'] = $this->over_model->get_grup($isi2[0]->section);
 
         $data['menu2'] = 'Overtime';
-        $data['menu'] = 'HR - Overtime';
+        $data['menu'] = 'Overtime User';
         $this->load->view("overtime_edit",$data);
     }
 

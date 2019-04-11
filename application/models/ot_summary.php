@@ -12,16 +12,16 @@ class Ot_summary extends CI_Model {
         $this->load->database();
     }
 
-    public function ot_summary_m($tgl1)
+    public function ot_summary_m($tgl1, $fiskal)
     {
-        $this->_get_data_summary($tgl1);
+        $this->_get_data_summary($tgl1, $fiskal);
         if($_POST['length'] != -1)
             $this->db->limit($_POST['length'], $_POST['start']);
         $query = $this->db->get();
         return $query->result();
     }
 
-    private function _get_data_summary($tgl1)
+    private function _get_data_summary($tgl1, $fiskal)
     {
         $this->db->select("mon, p.id_cc, name, karyawan, aktual, round((aktual/karyawan),1) as avg, coalesce(min, 0) as min_final, coalesce(max, 0) as max_final");
 
@@ -36,7 +36,7 @@ class Ot_summary extends CI_Model {
             ) as b
             join
             (
-                select '195' as fy, karyawan.kode, tanggalKeluar, tanggalMasuk, nik, costCenter
+                select '".$fiskal."' as fy, karyawan.kode, tanggalKeluar, tanggalMasuk, nik, costCenter
                 from karyawan
             ) as a
             on a.fy = b.fiskal
@@ -49,7 +49,6 @@ class Ot_summary extends CI_Model {
             ");
 
         $this->db->join("(
---              INI
         select tanggal, costCenter, ROUND(sum(jam),1) as aktual from over
                 left join karyawan on karyawan.nik = over.nik
                 where DATE_FORMAT(tanggal,'%Y-%m') = '".$tgl1."'
@@ -109,16 +108,16 @@ class Ot_summary extends CI_Model {
         }
     }
 
-    function count_filtered($tgl1)
+    function count_filtered($tgl1, $fiskal)
     {
-        $this->_get_data_summary($tgl1);
+        $this->_get_data_summary($tgl1, $fiskal);
         $query = $this->db->get();
         return $query->num_rows();
     }
 
-    public function count_all($tgl1)
+    public function count_all($tgl1, $fiskal)
     {
-        $this->_get_data_summary($tgl1);
+        $this->_get_data_summary($tgl1, $fiskal);
         return $this->db->count_all_results();
     }
 }

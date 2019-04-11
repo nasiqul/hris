@@ -1410,14 +1410,16 @@ class Ot extends CI_Controller {
 	{
 		if (isset($_POST['tgl'])) {
 			$tgl1 = date('Y-m',strtotime('01-'.$_POST['tgl']));
+			$fiskal = $this->home_model->getFiskal($tgl1);
 		}
 		else{
 			$tgl1 = date('Y-m');
+			$fiskal = $this->home_model->getFiskal($tgl1);
 		}
 
-		$list = $this->ot_summary->ot_summary_m($tgl1);
-		$tot = $this->ot_summary->count_all($tgl1);
-		$filter = $this->ot_summary->count_filtered($tgl1);
+		$list = $this->ot_summary->ot_summary_m($tgl1, $fiskal[0]->fiskal);
+		$tot = $this->ot_summary->count_all($tgl1, $fiskal[0]->fiskal);
+		$filter = $this->ot_summary->count_filtered($tgl1, $fiskal[0]->fiskal);
 
 		$data = array();
 

@@ -30,6 +30,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <section class="content container-fluid">
         <br>
         <div class="col-md-12">
+          
           <div class="box box-solid">
             <div class="box-body">
               <div class="row">
@@ -1149,7 +1150,6 @@ function showGroup() {
       return false;
     }
   }
-
 
   $('.datepicker').datepicker({
     autoclose: true,
