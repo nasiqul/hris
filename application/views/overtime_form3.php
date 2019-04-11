@@ -286,7 +286,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     });
 
     function appendRow() {
-      if ($('#no_doc').val() == "" || $('#datepicker').val() == "" || $('#kep').val() == "" || $('#nikF').val() == "" || $('#dep').find(':selected').prop('disabled') == true || $('#sec').find(':selected').prop('disabled') == true || $('#subsec').find(':selected').prop('disabled') == true || $('#shiftF').find(':selected').prop('disabled') == true){
+      if ($('#no_doc').val() == "" || $('#datepicker').val() == "" || $('#kep').val() == "" || $('#nikF').val() == "" || $('#dep').find(':selected').prop('disabled') == true || $('#sec').find(':selected').prop('disabled') == true || $('#shiftF').find(':selected').prop('disabled') == true){
         openDangerGritter();
         return false;
       }
