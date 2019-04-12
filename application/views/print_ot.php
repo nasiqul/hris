@@ -9,64 +9,64 @@
 <script src="<?php echo base_url()?>app/dist/js/highcharts.js"></script>
 
 <style type="text/css">
-@page {
-	size: A4 portrait;
-	margin: 1;
-}
-@media print {
-	#tb-collapse {
-		background-color: #dddddd !important;
-		-webkit-print-color-adjust: exact;
+	@page {
+		size: A4 portrait;
+		margin: 1;
 	}
+	@media print {
+		#tb-collapse {
+			background-color: #dddddd !important;
+			-webkit-print-color-adjust: exact;
+		}
+		body {
+			font-size: 16pt;
+		}
+	}
+
 	body {
-		font-size: 16pt;
+		font-family: sans-serif;
+		padding: 5px;
 	}
-}
+	.div {
+		border: 1px solid black;
+		width: 90%;
+		height: 35px;
+		margin: 0 auto;
+		padding: 0 5px 0 5px;
+		line-height: 25px;
+	}
+	.kep {
+		border: 1px solid black;
+	}
+	p {
+		max-width: 300px;
+		word-wrap: break-word;
+	}
+	#anggota {
+		border-top: 1px solid black;
+		border-collapse:collapse;
+	}
+	#anggota tr th { 
+		border-bottom: 1px solid #000;
+		padding: 5px 0 5px 0;
+		text-align: center;
+	}
+	#anggota #bottom td { 
+		border-top: 1px solid #000;
+		padding: 5px 0 5px 0;
+	}
+	#tb-collapse {
+		border-collapse:collapse; border: 1px solid black;
+	}
+	#tb-collapse td {
+		border: 1px solid black;
+	}
 
-body {
-	font-family: sans-serif;
-	padding: 5px;
-}
-.div {
-	border: 1px solid black;
-	width: 90%;
-	height: 35px;
-	margin: 0 auto;
-	padding: 0 5px 0 5px;
-	line-height: 25px;
-}
-.kep {
-	border: 1px solid black;
-}
-p {
-	max-width: 300px;
-	word-wrap: break-word;
-}
-#anggota {
-	border-top: 1px solid black;
-	border-collapse:collapse;
-}
-#anggota tr th { 
-	border-bottom: 1px solid #000;
-	padding: 5px 0 5px 0;
-	text-align: center;
-}
-#anggota #bottom td { 
-	border-top: 1px solid #000;
-	padding: 5px 0 5px 0;
-}
-#tb-collapse {
-	border-collapse:collapse; border: 1px solid black;
-}
-#tb-collapse td {
-	border: 1px solid black;
-}
-
-table,
-table tr td,
-table tr th {
-	page-break-inside: avoid;
-}
+	table,
+	table tr td,
+	table tr th {
+		page-break-inside: avoid;
+	}
 </style>
 <body>
 	<?php 
@@ -199,53 +199,29 @@ table tr th {
 					<div class="div" style="height: 177px; margin: 0; width: 100%"><?php echo $list[0]->catatan ?></div>
 				</td>
 				<td style="padding-left: 4px">
-					<?php if ($list[0]->hari == "N"){ ?>
 
-						<table width="100%" id="tb-collapse" style="margin: 0;padding: 0; background-color: #dddddd">
-							<tr>
-								<td width="25%" cellpading="0" cellspacing="0">Diusulkan,</td>
-								<td width="25%">Disetujui,</td>
-								<td width="25%">Diketahui,</td>
-								<td width="25%">Diterima,</td>
-							</tr>
-							<tr>
-								<td>
-									Staff / Leader
-								</td>
-								<td>
-									Chief / Foreman
-								</td>
-								<td>Dept. Manager</td>
-								<td>HR Dept.</td>
-							</tr>
-							<tr>
-								<td height="92px"></td><td></td><td></td><td></td>
-							</tr>
-							<tr><td style="text-align: left;">tgl. </td><td style="text-align: left;">tgl. </td><td style="text-align: left;">tgl. </td><td style="text-align: left;">tgl. </td></tr>
-						</table>
-
-					<?php } else { ?>
-
-						<table width="100%" id="tb-collapse" style="margin: 0;padding: 0; background-color: #dddddd">
-							<tr>
-								<td width="25%" cellpading="0" cellspacing="0">Diusulkan,</td>
-								<td width="25%">Disetujui,</td>
-								<td width="25%">Disetujui,</td>
-								<td width="25%">Diketahui,</td>
-							</tr>
-							<tr>
-								<td>Chief / Foreman</td>
-								<td>Dept. Manager</td>
-								<td>General Manager Devision</td>
-								<td>HR Direktur</td>
-							</tr>
-							<tr>
-								<td height="92px"></td><td></td><td></td><td></td>
-							</tr>
-							<tr><td style="text-align: left;">tgl. </td><td style="text-align: left;">tgl. </td><td style="text-align: left;">tgl. </td><td style="text-align: left;">tgl. </td></tr>
-						</table>
-
-					<?php } ?>
+					<table width="100%" id="tb-collapse" style="margin: 0;padding: 0; background-color: #dddddd">
+						<tr>
+							<td width="25%" cellpading="0" cellspacing="0">Diusulkan,</td>
+							<td width="25%">Disetujui,</td>
+							<td width="25%">Diketahui,</td>
+							<td width="25%">Diterima,</td>
+						</tr>
+						<tr>
+							<td>
+								Staff / Leader
+							</td>
+							<td>
+								Chief / Foreman
+							</td>
+							<td>Dept. Manager</td>
+							<td>HR Dept.</td>
+						</tr>
+						<tr>
+							<td height="92px"></td><td></td><td></td><td></td>
+						</tr>
+						<tr><td style="text-align: left;">tgl. </td><td style="text-align: left;">tgl. </td><td style="text-align: left;">tgl. </td><td style="text-align: left;">tgl. </td></tr>
+					</table>
 				</td>
 			</tr>
 			<tr>
