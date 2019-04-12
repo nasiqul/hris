@@ -73,7 +73,22 @@
           }  ?>
         </ul>
       </li>
-      <li class="<?php if($menu == 'qa') echo 'active'?>"><a href="<?php echo base_url('home/tanya'); ?>"><i class="fa fa-comments-o"></i> <span>Q & A List</span></a></li>
+      <li class="treeview <?php if($menu2 == 'Master') echo 'active' ?>">
+        <a href="#"><i class="fa fa-line-chart"></i> <span>Master</span>
+          <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+          </span>
+        </a>
+        <ul class="treeview-menu">
+          <?php 
+          $sidebar5 = $this->home_model->getMenu2($username, "Master");
+          foreach ($sidebar5 as $key6) { 
+            if($menu == $key6->nama_menu) $set = 'active'; else $set = '';
+            echo '<li class="'.$set.'"><a href="'.base_url($key6->url).'"><i class="'.$key6->icon.'"></i>'.$key6->nama_menu.'</a></li>';
+          }  ?>
+        </ul>
+      </li>
+      <!-- <li class="<?php if($menu == 'qa') echo 'active'?>"><a href="<?php echo base_url('home/tanya'); ?>"><i class="fa fa-comments-o"></i> <span>Q & A List</span></a></li> -->
       <li><a href="<?php echo base_url('home/ot_graph'); ?>">  </a></li>
 
         <!-- UNTUK MANAGEMENT DARI MIRAI -->

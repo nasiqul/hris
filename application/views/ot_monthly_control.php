@@ -187,7 +187,7 @@ function progressData()
    if( ((ofc2/ofc)*100).toFixed(0) > 100){
     $('#progress_bar_prod').removeClass('progress-bar-green').addClass('progress-bar-red');
   } else
-    $('#progress_bar_prod').removeClass('progress-bar-red').addClass('progress-bar-green');
+  $('#progress_bar_prod').removeClass('progress-bar-red').addClass('progress-bar-green');
 
   $('#persendirect').html("( "+direct+" )");
   $('#persendirect2').html(ofc2+" / "+ofc+" Hours");
@@ -407,6 +407,7 @@ for (var i = 0; i <= cumulativeData2.length; i++) {
    },
    series: seriesData
  });
+
         });
 });
 
@@ -524,9 +525,9 @@ for (var i = 0; i <= cumulativeData2.length; i++) {
 
        Highcharts.chart('container8', {
         chart: {
-         type: 'column'
-       },
-       title: {
+          type: 'column'
+        },
+        title: {
          text: monthNames[date.getMonth()]
        },
        xAxis: {
@@ -553,24 +554,25 @@ for (var i = 0; i <= cumulativeData2.length; i++) {
     pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
   },
   plotOptions: {
-   column: {
-    stacking: 'normal',
-    minPointLength: 5
-  },
-  series: {
-   cursor: 'pointer',
-   events: {
-     click: function (event) {
-       details(this.name,event.point.category, title);
-                                   // alert(this.name + ' clicked ' + event.point.category + title);
-                                 }
-                               }
-                             }
-                           },
-                           series: seriesData
-                         });
+    column: {
+      stacking: 'normal',
+      minPointLength: 5
+    },
+    series: {
+      animation: false,
+      cursor: 'pointer',
+      events: {
+       click: function (event) {
+         details(this.name,event.point.category, title);
+        // alert(this.name + ' clicked ' + event.point.category + title);
+      }
+    }
+  }
+},
+series: seriesData
+});
 
-       setTimeout(postTgl, 1000);
+       setTimeout(postTgl, 5000);
      },
      cache: false
    });

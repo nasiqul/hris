@@ -27,13 +27,13 @@ class Over_model_new extends CI_Model {
     {
         $this->db->select("m.*,  p.masuk, p.keluar, (m.act - m.jam_plan) as diff, IF(m.act < m.jam_plan, m.act, m.jam_plan) as final, namaKaryawan");
         $this->db->from("(
-    select o.*, over_time_member.nik, over_time_member.jam as jam_plan, IFNULL(over.jam,0) as act from (select id, tanggal from over_time where tanggal = '".$tgl."' and deleted_at IS NULL) as o
-    join over_time_member on o.id = over_time_member.id_ot
-    left join (select tanggal, nik, jam from over where tanggal = '".$tgl."') over on over.nik = over_time_member.nik
-    where status = 0
-    GROUP BY nik, id_ot
-    
-) m");
+            select o.*, over_time_member.nik, over_time_member.jam as jam_plan, IFNULL(over.jam,0) as act from (select id, tanggal from over_time where tanggal = '".$tgl."' and deleted_at IS NULL) as o
+            join over_time_member on o.id = over_time_member.id_ot
+            left join (select tanggal, nik, jam from over where tanggal = '".$tgl."') over on over.nik = over_time_member.nik
+            where status = 0
+            GROUP BY nik, id_ot
+
+        ) m");
         $this->db->join('karyawan','karyawan.nik = m.nik', 'left');
         $this->db->join("(select masuk,keluar, nik from presensi where tanggal = '".$tgl."') p",'p.nik = m.nik');
 
@@ -290,12 +290,12 @@ class Over_model_new extends CI_Model {
         left join (
         select over_time_member.id_ot, over_time.id, tanggal, nik, jam, final, over_time_member.status from over_time
         join over_time_member on over_time_member.id_ot = over_time.id
-                where deleted_at IS NULL
+        where deleted_at IS NULL
         ) d on d.tanggal = over.tanggal and d.nik = over.nik
         where over.tanggal = '".$tgl."'
         group by over.nik, id_ot
         ) as m 
-                where diff = 0
+        where diff = 0
         GROUP BY nik
         ";
 
@@ -306,10 +306,41 @@ class Over_model_new extends CI_Model {
     public function ot_hr($id)
     {
         $q = "select over_time.id, DATE_FORMAT(over_time.tanggal,'%d-%m-%Y') as tanggal, over_time.departemen, over_time.section, over_time.sub_sec, over_time.keperluan, over_time.catatan, over_time.hari, over_time.shift, over_time.status_shift, over_time_member.nik, namaKaryawan, jam, dari, sampai, makan, ext_food, transport from over_time
-            left join over_time_member on over_time.id = over_time_member.id_ot
-            left join karyawan on karyawan.nik = over_time_member.nik
-            where over_time.id = '".$id."'";
+        left join over_time_member on over_time.id = over_time_member.id_ot
+        left join karyawan on karyawan.nik = over_time_member.nik
+        where over_time.id = '".$id."'";
         $query = $this->db->query($q);
+        return $query->result();
+    }
+
+    public function ot_control($tgl)
+    {
+        $q = "select master_cc.id_cc, master_cc.name, ROUND((budget_total / DATE_FORMAT(LAST_DAY('".$tgl."'),'%d')),1) as budget_tot, IFNULL(z.aktual,0) as act from master_cc
+        join (select id_cc, budget_total from cost_center_budget where DATE_FORMAT(period,'%Y-%m') = DATE_FORMAT('".$tgl."','%Y-%m')) x on x.id_cc = master_cc.id_cc
+        left join (
+        select m.tanggal, sum(m.jam) as aktual, karyawan.costCenter from
+        ( select tanggal, nik, jam from over where tanggal = '".$tgl."' ) m
+        left join karyawan on karyawan.nik = m.nik
+        GROUP BY costCenter ) z on z.costCenter = master_cc.id_cc";
+        $query = $this->db->query($q);
+        return $query->result();
+    }
+
+    public function ot_control_detail($cc, $tgl)
+    {
+        $q = "SELECT over.tanggal, over.nik, karyawan.namaKaryawan, jam from over
+        left join karyawan on karyawan.nik = over.nik
+        where tanggal = '".$tgl."' and karyawan.costCenter = '".$cc."'";
+        $query = $this->db->query($q);
+        return $query->result();
+    }
+
+    public function get_cc($cc_name)
+    {
+        $this->db->select("id_cc");
+        $this->db->from("master_cc");
+        $this->db->where("name",$cc_name);
+        $query = $this->db->get();
         return $query->result();
     }
 

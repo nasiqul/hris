@@ -109,6 +109,13 @@ class Home extends CI_Controller {
         $this->load->view("graph_report",$data);
     }
 
+    public function overtime_control_new()
+    {
+        $data['menu2'] = 'Overtime';
+        $data['menu'] = 'Overtime Control New';
+        $this->load->view("overtime_control_new",$data);
+    }
+
     public function budget_chart_mp()
     {
         $data['menu2'] = 'Overtime';

@@ -1620,6 +1620,55 @@ class Ot extends CI_Controller {
 		echo json_encode($data);
 	}
 
+	public function overtime_chart_control()
+	{
+		if (isset($_POST['tgl']) && $_POST['tgl'] != "") {
+			$tgl = date('Y-m-d',strtotime($_POST['tgl']));
+		}
+		else {
+			$tgl = date('Y-m-d');	
+		}
+
+		$data = array();
+
+		$list = $this->over_model_new->ot_control($tgl);
+
+		foreach ($list as $key) {
+			$row = array();
+			$row[] = $key->id_cc;
+			$row[] = $key->name;
+			$row[] = (float) $key->budget_tot;
+			$row[] = (float) $key->act;
+			$row[] = date('d F Y',strtotime($tgl));
+
+			$data[] = $row;
+		}
+
+		echo json_encode($data);
+	}
+
+	public function overtime_control_detail()
+	{
+		$tgl = date('Y-m-d',strtotime($_POST['tgl']));
+		$cc = $_POST['cc'];
+		$list2 = $this->over_model_new->get_cc($cc);
+		$list = $this->over_model_new->ot_control_detail($list2[0]->id_cc,$tgl);
+
+		$data = array();
+
+		foreach ($list as $key) {
+			$row = array();
+			$row[] = $key->tanggal;
+			$row[] = $key->nik;
+			$row[] = $key->namaKaryawan;
+			$row[] = (float) $key->jam;			
+
+			$data[] = $row;
+		}
+
+		echo json_encode($data);
+	}
+
 	public function exportexcel($id){
 
 		// $tgl = $_POST['tgl'];
@@ -1896,5 +1945,6 @@ class Ot extends CI_Controller {
 	}
 }
 ?>
+
 
 

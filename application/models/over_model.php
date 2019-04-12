@@ -794,15 +794,15 @@ public function set_jam($id, $nik, $jam)
 
 public function get_data_chart($tgl,$cc,$target)
 {
-    $q = "select tanggal, jam,".$target." as target from (
-    SELECT tanggal, costCenter, SUM(final) as jam from over_time o
-    JOIN over_time_member om ON o.id = om.id_ot
-    JOIN karyawan k ON k.nik = om.nik
-    WHERE costCenter = ".$cc." AND
+    $q = "
+    select tanggal, jam, ".$target." as target from (
+        select tanggal, costCenter, sum(jam) as jam, over.status_final from over
+        left join karyawan k on k.nik = over.nik
+        WHERE costCenter = ".$cc." AND
     DATE_FORMAT(tanggal,'%m-%Y') = DATE_FORMAT(STR_TO_DATE('".$tgl."', '%d-%m-%Y'), '%m-%Y')
     GROUP BY tanggal
-    )a
-    where a.jam > 0";
+        ) a
+        where a.status_final = 1";
     return $this->db->query($q)->result();
 }
 
@@ -1602,7 +1602,7 @@ $q = "
 select mon, ".$kode.", IFNULL(sum(budget_tot),'0') as budget_tot2, IFNULL(sum(aktual),'0') as aktual from
 (
 
-select mon, c.id_cc, c.kode, karyawan, budget, karyawan * budget as budget_tot, aktual from 
+select mon, b.id_cc, b.kode, karyawan, IFNULL(budget,0) as budget, IFNULL(karyawan * budget,0) as budget_tot, IFNULL(aktual,0) as aktual from 
 (
 select mon, master_cc.id_cc, kode, master_cc.departemen ,sum(tot_karyawan) as karyawan from (
 select mon, costCenter, count(if(if(date_format(a.tanggalMasuk, '%Y-%m') < mon, 1, 0 ) - if(date_format(a.tanggalKeluar, '%Y-%m') < mon, 1, 0 ) = 0, null, 1)) as tot_karyawan from

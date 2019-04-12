@@ -21,7 +21,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <!-- Content Header (Page header) -->
       <section class="content-header">
         <h1>
-          Cost Center Budget
+          Master
           <span class="text-purple">???</span>
         </h1>
       </section>
@@ -29,21 +29,19 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <!-- Main content -->
       <section class="content container-fluid">
         <div class="col-md-12">
+
           <div class="box box-solid">
             <div class="box-body">
-                <form action="<?php echo base_url();?>import_excel/upload/" method="post" enctype="multipart/form-data">
-                  <button class="btn btn-sm btn-primary pull-right" type="submit"> <i class="fa fa-plus"></i> Import Budget</button>
-                  <input type="file" name="file" class="btn pull-right" accept=".csv" />
-                </form>
-                <br>
-                <br>
-
-              <table id="example1" class="table table-responsive table-striped table-hover table-bordered">
+              <table id="example1" class="table table-responsive table-striped">
                 <thead>
                   <tr>
-                    <th>ID CC</th>
-                    <th>Period</th>
-                    <th>Budget</th>
+                    <th>Question time</th>
+                    <th>Question's</th>
+                    <th>Question</th>
+                    <th>Answer</th>
+                    <th>Answer's</th>
+                    <th>Answer time</th>
+                    <th>Action</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -72,7 +70,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         "serverSide"    : true,
         'order'         : [],
         "ajax": {
-          "url": "<?php echo base_url('budget/ajax_budget')?>",            
+          "url": "<?php echo base_url('home/ajax_qa')?>",            
           "type": "POST"
         }
       })

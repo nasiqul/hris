@@ -5,12 +5,13 @@ class Budget extends CI_Controller {
 	function __construct(){
 		parent::__construct();
 		$this->load->model('budget_model');
+		$this->load->model('home_model');
 	}
 
 	public function index()
 	{
-		$data['menu2'] = "Overtime";
-		$data['menu'] = 'Cost - Center Budget';
+		$data['menu2'] = 'Overtime';
+        $data['menu'] = 'Cost - Center Budget';
 		$this->load->view('budget',$data);
 	}
 
