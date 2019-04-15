@@ -54,16 +54,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <div class="col-md-12">
                     <div class="col-md-3">
                       <div class="description-block border-right">
-                        <h5 class="description-header" style="font-size: 60px;">
-                          <span class="description-percentage text-black" id="tot_budget"></span>
+                        <h5 class="description-header" style="font-size: 60px; color: #f76111">
+                          <span class="description-percentage" id="tot_budget"></span>
                         </h5>      
                         <span class="description-text" style="font-size: 35px;">Total Budget<br><span class="text-purple">???</span></span>   
                       </div>
                     </div>
                     <div class="col-md-3">
                       <div class="description-block border-right">
-                        <h5 class="description-header" style="font-size: 60px;">
-                          <span class="description-percentage text-purple" id="tot_act"></span>
+                        <h5 class="description-header" style="font-size: 60px; ">
+                          <span class="description-percentage" id="tot_act" style="color: #7300ab"></span>
                         </h5>      
                         <span class="description-text" style="font-size: 35px;">Total Actual<br><span class="text-purple">???</span></span>   
                       </div>
@@ -203,8 +203,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
         $('#tot_diff').removeClass('text-green').addClass('text-red');
         $("#tot_diff").html("<i class='fa fa-caret-down'></i> "+tot_diff2);
       }
-
-      $("#avg").html(data[1]);
+      avg = tot_act / data[1];
+      avg = Math.round(avg * 100) / 100;
+      $("#avg").html(avg);
 
       var interval = Math.ceil(300/10);
 
@@ -276,11 +277,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
         series: [{
           name: 'Overtime Budget',
           data: seriesDataBudget,
-          color: "#222d32"
+          color: "#f76111"
         }, {
           name: 'Overtime Actual',
           data: seriesDataAktual,
-          color: "#605ca8"
+          color: "#7300ab"
         }]
       });
     }
