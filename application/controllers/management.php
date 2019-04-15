@@ -59,6 +59,13 @@ class Management extends CI_Controller {
         $this->load->view("graph_report",$data);
     }
 
+    public function overtime_control()
+    {
+        $data['i'] = 'ok';
+        $data['menu'] = 'OT-new';
+        $this->load->view("overtime_control_new",$data);
+    }
+
 
     public function ajax_ot_report_d()
 	{

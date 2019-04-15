@@ -62,11 +62,11 @@
 						<td><?php echo date('d-m-Y',strtotime($key->tanggal)) ?></td>
 						<td><?php echo $key->id ?></td>
 						<td><?php echo $key->sec." - ".$key->sub." - ".$key->grup ?></td>
-						<td><?php echo $key->jumlah_org ?></td>
-						<td><?php echo $key->jumlah_jam ?></td>
-						<td><?php echo $key->maxot ?></td>
-						<td><?php echo $key->actual ?></td>
-						<td><?php echo $key->maxot-$key->actual ?></td>
+						<td><?php echo $key->jml_org ?></td>
+						<td><?php echo $key->jml_jam ?></td>
+						<td><?php echo $key->bgt ?></td>
+						<td><?php echo $key->act ?></td>
+						<td><?php echo $key->bgt-$key->act ?></td>
 					</tr>
 					<?php $no++; } ?>
 				</table>

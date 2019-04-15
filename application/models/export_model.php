@@ -58,7 +58,12 @@ class Export_model extends CI_Model {
 
 			$haric = date('w' ,strtotime($data2['tgl']));
 
-			$quer = 'select IFNULL(sum(TIME_TO_SEC(duration)),0) as istirahat from breaktime where day =  "'.$haric.'" and breaktime.start >= "'.$data2['masuk'].'" and breaktime.end <= "'.$data2['keluar'].'"';
+			if ($data2['shift'] == '3') {
+				$quer = 'select IFNULL(sum(TIME_TO_SEC(duration)),0) as istirahat from breaktime where day =  "'.$haric.'" and breaktime.end <= "'.$data2['keluar'].'" and shift = "'.$data2['shift'].'"';
+			} else {
+				$quer = 'select IFNULL(sum(TIME_TO_SEC(duration)),0) as istirahat from breaktime where day =  "'.$haric.'" and breaktime.start >= "'.$data2['masuk'].'" and breaktime.end <= "'.$data2['keluar'].'" and shift = "'.$data2['shift'].'"';	
+			}
+			
 			$query8 = $this->db->query($quer);
 
 			foreach($query8->result() as $data3){

@@ -313,24 +313,41 @@ class Over_model_new extends CI_Model {
         return $query->result();
     }
 
-    public function ot_control($tgl)
+    public function ot_control($tgl, $tgl2)
     {
-        $q = "select master_cc.id_cc, master_cc.name, ROUND((budget_total / DATE_FORMAT(LAST_DAY('".$tgl."'),'%d')),1) as budget_tot, IFNULL(z.aktual,0) as act from master_cc
-        join (select id_cc, budget_total from cost_center_budget where DATE_FORMAT(period,'%Y-%m') = DATE_FORMAT('".$tgl."','%Y-%m')) x on x.id_cc = master_cc.id_cc
-        left join (
-        select m.tanggal, sum(m.jam) as aktual, karyawan.costCenter from
-        ( select tanggal, nik, jam from over where tanggal = '".$tgl."' ) m
-        left join karyawan on karyawan.nik = m.nik
-        GROUP BY costCenter ) z on z.costCenter = master_cc.id_cc";
+        $q = "
+        select n.id_cc, master_cc.name, sum(n.act) as act, sum(budget_tot) as tot from 
+        (
+        select l.id_cc, d.tanggal, COALESCE(act,0) act, l.budget_tot from
+        (select id_cc,  ROUND((budget_total / DATE_FORMAT(LAST_DAY('".$tgl."'),'%d')),1) budget_tot from cost_center_budget where DATE_FORMAT(period,'%Y-%m') = '".$tgl2."') as l
+        cross join 
+        (
+        select tanggal from over
+        where DATE_FORMAT(tanggal,'%Y-%m') = '".$tgl2."'
+        group by tanggal
+        ) as d
+        left join 
+        (
+        select d.tanggal, sum(jam) as act, karyawan.costCenter from
+        (select nik, tanggal, jam from over where DATE_FORMAT(tanggal,'%Y-%m') = '".$tgl2."' and jam <> 0) d
+        left join karyawan on karyawan.nik = d.nik
+        group by tanggal, costCenter
+        ) x on x.costCenter = l.id_cc and x.tanggal = d.tanggal
+        where d.tanggal <= '".$tgl."'
+        ) as n
+        left join master_cc on master_cc.id_cc = n.id_cc
+        group by id_cc";
         $query = $this->db->query($q);
         return $query->result();
     }
 
-    public function ot_control_detail($cc, $tgl)
+    public function ot_control_detail($cc, $tgl, $tgl2)
     {
-        $q = "SELECT over.tanggal, over.nik, karyawan.namaKaryawan, jam from over
-        left join karyawan on karyawan.nik = over.nik
-        where tanggal = '".$tgl."' and karyawan.costCenter = '".$cc."'";
+        $q = "select m.nik, sum(m.jam) jam, karyawan.namaKaryawan from ( select nik, tanggal, jam from over where jam <> 0 and date_format(tanggal, '%Y-%m') = '".$tgl2."' ) as m
+        left join karyawan on karyawan.nik = m.nik
+        where tanggal <= '".$tgl."' and costCenter = '".$cc."'
+        group by m.nik
+        ORDER BY jam desc";
         $query = $this->db->query($q);
         return $query->result();
     }
@@ -341,6 +358,25 @@ class Over_model_new extends CI_Model {
         $this->db->from("master_cc");
         $this->db->where("name",$cc_name);
         $query = $this->db->get();
+        return $query->result();
+    }
+
+    public function tot_karyawan($tgl, $fy)
+    {
+        $q = "select mon, costCenter, count(if(if(date_format(a.tanggalMasuk, '%Y-%m') < mon, 1, 0 ) - if(date_format(a.tanggalKeluar, '%Y-%m') < mon, 1, 0 ) = 0, null, 1)) as tot_karyawan from
+        (
+        select distinct fiskal, date_format(tanggal, '%Y-%m') as mon
+        from kalender_fy
+        ) as b
+        join
+        (
+        select '".$fy."' as fy, karyawan.kode, tanggalKeluar, tanggalMasuk, nik, costCenter
+        from karyawan
+        ) as a
+        on a.fy = b.fiskal
+        group by mon, costCenter
+        having mon = '".$tgl."'";
+        $query = $this->db->query($q);
         return $query->result();
     }
 

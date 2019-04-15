@@ -204,7 +204,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <div class="col-md-8">
                   <p>: <c id="hari"></c></p>
                   <p>: <c id="tgl"></c></p>
-                  <p>: <c id="sec"></c> - <c id="subsec"></c> - <c id="group"></p>
+                  <p>: <c id="dep"></c> - <c id="sec"></c> - <c id="subsec"></c> - <c id="group"></p>
                   </div>
                 </div>
                 <div class="col-md-6">
@@ -349,6 +349,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           $("#group").text(s[0][7]);
           $("#kep").val(s[0][5]);
           $("#cat").val(s[0][6]);
+          $("#dep").text(s[0][8]);
 
 
           $('#example2').DataTable({

@@ -24,7 +24,7 @@ class Over_user_model extends CI_Model {
 
     private function _get_datatables_query($tgl,$sub,$subsec,$group,$user,$role)
     {
-    	$this->db->select("over_time.id, DATE_FORMAT(tanggal, '%a, %d %b %Y') as tanggal, over_time_member.status, sc.nama as section, ssc.nama as subsection, gr.nama as grup, count(nik) as jml");
+    	$this->db->select("over_time.id, DATE_FORMAT(tanggal, '%a, %d %b %Y') as tanggal, over_time_member.status, departemen.nama as dp, sc.nama as section, ssc.nama as subsection, gr.nama as grup, count(nik) as jml");
     	$this->db->from("over_time");
         $this->db->join("over_time_member",'over_time_member.id_ot = over_time.id','left');
         $this->db->join("section sc",'sc.id = over_time.departemen','left');

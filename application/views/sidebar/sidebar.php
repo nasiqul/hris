@@ -100,6 +100,7 @@
           <li class="<?php if($menu == 'OT-m') echo 'active'?>"><a href="<?php echo base_url('management/ot_m'); ?>"><i class="fa fa-bar-chart"></i>OT Management By Section</a></li>
           <li class="<?php if($menu == 'ovrR2') echo 'active'?>"><a href="<?php echo base_url('management/ot_report2'); ?>"><i class="fa fa-book"></i>OT Management By NIK</a></li>
           <li class="<?php if($menu == 'ovrMo') echo 'active'?>"><a href="<?php echo base_url('management/monthly'); ?>"><i class="fa fa-book"></i> Monthly Overtime Summary</a></li>
+          <li class="<?php if($menu == 'OT-new') echo 'active'?>"><a href="<?php echo base_url('management/overtime_control'); ?>"><i class="fa fa-bar-chart"></i>Overtime Control</a></li>
 
         <?php } else if(isset($z)) { ?>
           <li class="header">ManPower Information</li>

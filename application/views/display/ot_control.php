@@ -147,10 +147,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
  var prod2 = 0;
  var ofc2 = 0;
  var pl2 = 0;
+
  $(document).ready(function() {
-  progress_bar();
-  progressData();
-})
+  
+ })
+
+ $('body').toggleClass('sidebar-collapse');
 
  function progress_bar()
  {
@@ -187,7 +189,7 @@ function progressData()
    if( ((ofc2/ofc)*100).toFixed(0) > 100){
     $('#progress_bar_prod').removeClass('progress-bar-green').addClass('progress-bar-red');
   } else
-    $('#progress_bar_prod').removeClass('progress-bar-red').addClass('progress-bar-green');
+  $('#progress_bar_prod').removeClass('progress-bar-red').addClass('progress-bar-green');
 
   $('#persendirect').html("( "+direct+" )");
   $('#persendirect2').html(ofc2+" / "+ofc+" Hours");
@@ -266,180 +268,7 @@ else{
 }
 
 $(function () {
-  var cat = new Array();
-  var tiga_jam = new Array();
-  var per_minggu = new Array();
-  var per_bulan = new Array();
-  var manam_bulan = new Array();
-
-  $.getJSON('<?php echo base_url("ot/overtime_chart_per_dep/")?>', function(data) {
-
-   var xCategories = [];
-   var seriesData = [];
-   var i, cat;
-   var title = $("[name=date2]").val();
-
-   var intVal = function ( i ) {
-    return typeof i === 'string' ?
-    i.replace(/.[\$,]/g, '')*1 :
-    typeof i === 'number' ?
-    i : 0;
-  };
-
-  for(i = 0; i < data[0].length; i++){
-    cat = data[0][i][0];
-    if(xCategories.indexOf(cat) === -1){
-     xCategories[xCategories.length] = cat;
-   }
- }
-
- for(i = 0; i < data[0].length; i++){
-  if(seriesData){
-   var currSeries = seriesData.filter(function(seriesObject){ return seriesObject.name == data[0][i][1];});
-   if(currSeries.length === 0){
-    seriesData[seriesData.length] = currSeries = {name: data[0][i][1], data: [], pointWidth: 45};
-  } else {
-    currSeries = currSeries[0];
-  }
-  var index = currSeries.data.length;
-  currSeries.data[index] = data[0][i][2];
-} else {
- seriesData[0] = {name: data[0][i][1], data: [intVal(data[0][i][2])], pointWidth: 45}
-}
-}
-
-var grphDates = new Array();
-var groupedObjects = new Array();
-$.each(data[0], function (ix, obj) {
-  var existingObj;
-  if ($.inArray(obj[0], grphDates) >= 0) {
-   var index = groupedObjects.map(function(o, i) { 
-    if(o[0] == obj[0])return i;
-  }).filter(isFinite);
-
-   groupedObjects[index][2] += obj[2];
- } else {
-   groupedObjects.push(obj);
-   grphDates.push(obj[0]);
- }
-});
-
-cumulativeData = [0];
-
-accData = [];
-for(i=0; i < groupedObjects.length; i++){
-  accData.push(groupedObjects[i][2]);
-}
-
-accData.forEach(function(elementToAdd, index) {
-  var newElement = cumulativeData[index] + elementToAdd;
-  cumulativeData.push(newElement);
-});
-cumulativeData.shift();
-
-cumulativeData2 = [0];
-accData2 = [];
-for(i=0; i < xCategories.length; i++){
-  accData2.push(data[1][0][2] / xCategories.length);
-}
-
-
-accData2.forEach(function(elementToAdd2, index) {
-  var newElement2 = cumulativeData2[index] + elementToAdd2;
-  cumulativeData2.push(newElement2);
-});
-
-cumulativeData2.shift();
-for (var i = 0; i <= cumulativeData2.length; i++) {
-         // alert(cumulativeData2[i]+" ");
-       }
-
-        //Title Name
-        const monthNames = ["January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"
-        ];
-
-        var dt = "01-"+title;
-        var year = title.split("-");
-        var date = new Date(dt.replace( /(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3"))
-          // End Title
-
-          seriesData.push({type: 'line', name: 'Cumulative Budget', data: cumulativeData2, color: 'red'});
-          seriesData.push({type: 'line', name: 'Cumulative Actual', data: cumulativeData, color: 'green'});
-
-          Highcharts.setOptions({
-            colors: ['#058DC7', '#50B432', '#ED561B', '#DDDF00', '#24CBE5', '#64E572', '#FF9655', '#FFF263', '#6AF9C4', '#303133', '#db2929','#d1cccc','#9a3dd3','#236330']});
-
-
-          Highcharts.chart('container8', {
-            chart: {
-             type: 'column'
-           },
-           title: {
-             text: '<span style="font-size: 2vw;">Monthly Overtime Control</span><br><span style="color: rgba(96, 92, 168);">'+ monthNames[date.getMonth()] + " " + year[1] +'</span>',
-             style: {
-              fontSize: '30px',
-              fontWeight: 'bold'
-            }
-          },
-          xAxis: {
-           categories: xCategories,
-           labels: {
-            style: {
-              fontSize:'20px'
-            }
-          }
-        },
-        yAxis: {
-         title: {
-          text: 'Total Jam',
-          style: {
-           fontWeight: 'normal',
-           fontSize: '20px'
-         }
-       },
-       stackLabels: {
-        enabled: true,
-        style: {
-         fontWeight: 'bold',
-         fontSize: '20px',
-         color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
-       }
-     }
-   },
-   tooltip: {
-    valueDecimals: 2, 
-    headerFormat: '<b>{point.x}</b><br/>',
-    pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}',
-    style: {
-      fontSize:'15px'
-    }
-
-  },
-  legend: {
-    itemStyle: {
-      fontWeight: 'bold',
-      fontSize:'20px'
-    }
-
-  },
-  plotOptions: {
-   column: {
-    stacking: 'normal',
-    minPointLength: 5
-  },
-  series: {
-   cursor: 'pointer',
-   events: {
-     click: function (event) {
-       details(this.name,event.point.category, title);
-     }
-   }
- }
-},
-series: seriesData
-});
-        });
+  postTgl();
 });
 
 
@@ -454,6 +283,7 @@ function postTgl() {
     bulan : bulan,
     bagian : bagian
   },
+  cache: false,
   success: function(data) {
    progressData();
    progress_bar();
@@ -561,69 +391,71 @@ for (var i = 0; i <= cumulativeData2.length; i++) {
        },
        title: {
          text: '<span style="font-size: 2vw;">Monthly Overtime Control</span><br><span style="color: rgba(96, 92, 168);">'+ monthNames[date.getMonth()] + " " + year[1] + '</span>',
-             style: {
-              fontSize: '30px',
-              fontWeight: 'bold'
-            }
-       },
-       xAxis: {
-         categories: xCategories,
-         labels: {
-            style: {
-              fontSize:'20px'
-            }
-          }
-       },
-       yAxis: {
-         title: {
-          text: 'Total Jam',
-          style: {
-           fontWeight: 'bold',
-           fontSize: '20px'
-         }
-       },
-       stackLabels: {
-        enabled: true,
+         style: {
+          fontSize: '30px',
+          fontWeight: 'bold'
+        }
+      },
+      xAxis: {
+       categories: xCategories,
+       labels: {
         style: {
-         fontWeight: 'bold',
-         fontSize: '20px',
-         color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
-       }
+          fontSize:'20px'
+        }
+      }
+    },
+    yAxis: {
+     title: {
+      text: 'Total Jam',
+      style: {
+       fontWeight: 'bold',
+       fontSize: '20px'
      }
    },
-   tooltip: {
-    valueDecimals: 2, 
-    headerFormat: '<b>{point.x}</b><br/>',
-    pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}',
+   stackLabels: {
+    enabled: true,
     style: {
-      fontSize:'15px'
-    }
-  },
-  plotOptions: {
-   column: {
-    stacking: 'normal',
-    minPointLength: 5
-  },
-  series: {
-   cursor: 'pointer',
-   events: {
-     click: function (event) {
-       details(this.name,event.point.category, title);
+     fontWeight: 'bold',
+     fontSize: '20px',
+     color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+   }
+ }
+},
+tooltip: {
+  valueDecimals: 2, 
+  headerFormat: '<b>{point.x}</b><br/>',
+  pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}',
+  style: {
+    fontSize:'15px'
+  }
+},
+plotOptions: {
+ column: {
+  stacking: 'normal',
+  minPointLength: 5
+},
+series: {
+ cursor: 'pointer',
+ animation: false,
+ events: {
+   click: function (event) {
+     details(this.name,event.point.category, title);
         // alert(this.name + ' clicked ' + event.point.category + title);
-     }
+      }
     }
   }
-  },
-  legend: {
-    itemStyle: {
-      fontWeight: 'bold',
-      fontSize:'20px'
-    }
+},
+legend: {
+  itemStyle: {
+    fontWeight: 'bold',
+    fontSize:'20px'
+  }
 
-  },
-    series: seriesData
-  });
-    }
+},
+series: seriesData
+});
+       setTimeout(postTgl, 5000);
+     }
    });
 }
 

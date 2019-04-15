@@ -138,7 +138,7 @@
 			<tr>
 				<td width="10%" style="padding: 5px 0  5px 20px">Bagian</td>
 				<td width="2%">:</td>
-				<td width="25%"><?php echo $list[0]->section ?> - <?php echo $list[0]->sub_sec ?> - <?php echo $list[0]->grup ?></td>
+				<td width="25%"><?php echo $list[0]->dp." - ".$list[0]->section." - ".$list[0]->sub_sec." - ".$list[0]->grup ?></td>
 			</tr>
 		</table>
 		<table width="100%" style="margin-top: 10px" id="anggota"  align="center" border="1">
@@ -176,8 +176,6 @@
 					$p+=1;
 				$jml += (float) $key->jam; 
 				$no++;
-				$total = $key->budget;
-				$aktual = $key->aktual;
 			} ?>
 			<tr id="bottom">
 				<td colspan="5" style="text-align: left;">B = Bangil <br> P = Pasuruan</td>
@@ -196,7 +194,7 @@
 					<td colspan="2">Catatan :</td>
 				</tr>
 				<td width="50%" style="padding-right: 4px">
-					<div class="div" style="height: 177px; margin: 0; width: 100%"><?php echo $list[0]->catatan ?></div>
+					<div class="div" style="height: 157px; margin: 0; width: 100%"><?php echo $list[0]->catatan ?></div>
 				</td>
 				<td style="padding-left: 4px">
 
@@ -226,15 +224,15 @@
 			</tr>
 			<tr>
 				<td colspan="2">
-					<table width="100%" id="tb-collapse" style="background-color: #dddddd; margin-top: 10px; text-align: center">
-						<tr><td width="34%">MAX.OT</td><td width="33%">AKTUAL</td><td width="33%">DIFF</td></tr>
+					<table width="100%" height="100%" id="tb-collapse" style="background-color: #dddddd; margin-top: 10px; text-align: center">
+						<tr><td width="34%">BUDGET</td><td width="33%">AKTUAL</td><td width="33%">DIFF</td></tr>
 						<tr>
-							<td height="20px"><d id="target" style="font-size: 25pt"><?php echo $cc_member[0]->jml*$total ?></d></td>
-							<td><d style="font-size: 25pt"><?php echo $aktual ?></d></td>
-							<td><d style="font-size: 25pt"><?php echo ($cc_member[0]->jml*$total) - $aktual ?></d></td>
+							<td height="20px"><d id="target" style="font-size: 25pt"></d></td>
+							<td><d style="font-size: 25pt" id="aktual"></d></td>
+							<td><d style="font-size: 25pt" id="diff"></d></td>
 						</tr>
 						<tr><td colspan="3" height="150px">
-							<p id="cc" hidden><?php echo $cc_member[0]->costCenter ?></p>
+							<p id="cc" hidden><?php echo $cc_member[0]->id_cc ?></p>
 							<div id="container" style = "height: 148px; margin: 0 auto"></div>
 						</td></tr>
 					</table>
@@ -258,6 +256,12 @@
 				var cc = $('#cc').text();
 				var target = $('#target').text();
 				var url = "<?php echo base_url('ot/ajax_spl_g') ?>";
+
+				var processed_json = new Array();
+				var processed_jsontr = new Array();
+				var processed_jsont = new Array();
+				var z = 0, max = 0;
+
 				$.ajax({
 					type: "POST",
 					url: url,
@@ -268,15 +272,12 @@
 					},
 					success: function(data) {
 						var s = $.parseJSON(data);
-						var processed_json = new Array();
-						var processed_jsontr = new Array();
-						var processed_jsont = new Array();
-						var z = 0;
 
 						for (i = 0; i < s.length; i++){
-							z += parseFloat(s[i][0]);
+							z += s[i][0];
+							max += s[i][2];
 							processed_json.push(z);
-							processed_jsontr.push(parseFloat(s[i][2]));
+							processed_jsontr.push(Math.round(max* 100) / 100);
 							processed_jsont.push(s[i][1]);
 						}
 
@@ -302,12 +303,7 @@
 								title: {
 									text: 'Jumlah Jam'
 								},
-								gridLineColor: '#fff',
-								plotLines: [{
-									value: target,
-									width: 3,
-									color: 'rgba(204,0,0,0.75)'
-								}]
+								gridLineColor: '#fff'
 							},
 
 							xAxis: {
@@ -338,7 +334,8 @@
 						},
 						{
 							name: 'Target',
-							type: 'scatter',
+							type: 'spline',
+							color: 'red',
 							marker: {
 								enabled: false
 							},
@@ -365,6 +362,9 @@
 					})
 
 						window.print();
+						$('#target').text(processed_jsontr[processed_jsontr.length-1].toFixed(2));
+						$('#aktual').text(processed_json[processed_json.length-1]);
+						$('#diff').text(processed_jsontr[processed_jsontr.length-1] - processed_json[processed_json.length-1]);
 					}
 				});
 			})

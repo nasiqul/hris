@@ -231,6 +231,7 @@ class Ot extends CI_Controller {
 			$row[] = $key->keperluan;
 			$row[] = $key->catatan;
 			$row[] = $key->grup;
+			$row[] = $key->dp;
 
 			$data[] = $row;
 		}
@@ -359,25 +360,24 @@ class Ot extends CI_Controller {
 
 	public function ajax_spl_g()
 	{
-		$tgl = $_POST['tanggal'];
+		$tgl = date('Y-m-d',strtotime($_POST['tanggal']));
+		$tgl2 = date('Y-m',strtotime($_POST['tanggal']));
 		$cc = $_POST['cc'];
 		$target = $_POST['target'];
 
-		$list = $this->over_model->get_data_chart($tgl, $cc, $target);
+		$list = $this->over_model->get_data_chart($tgl, $cc, $tgl2);
 		$data = array();
 		if(!empty($list)) {
 			foreach ($list as $key) {
 				$row = array();
-				$row[] = $key->jam;
+				$row[] = (float) $key->act;
 				$row[] = date("d/m",strtotime($key->tanggal));
-				$row[] = $key->target;
+				$row[] = (float) $key->budget_tot;
 
 				$data[] = $row;
 			}
 
-		}else
-		$data[] = json_decode("{}");
-
+		}
             //output to json format
 		echo json_encode($data);
 	}
@@ -386,11 +386,14 @@ class Ot extends CI_Controller {
 	public function print_preview($id,$tgl)
 	{
 		$nik = $this->session->userdata('nikLogin');
+		$tgl2 = date('Y-m',strtotime($tgl));
+
 		$data['usul'] = $this->home_model->get_jabatan($nik);
 		$data['list'] = $this->over_model->get_over_by_id($id);
-		$data['list_anggota'] = $this->over_model->get_member_id($id,$tgl);
+		$data['list_anggota'] = $this->over_model->get_member_id($id);
 		$cc = $this->over_model->get_member_id($id,$tgl);
-		$data['cc_member'] = $this->over_model->costCenter($cc[sizeof($cc)-1]->id_cc);
+		$fiskal = $this->home_model->getFiskal($tgl2);
+		$data['cc_member'] = $this->over_model->costCenter($cc[sizeof($cc)-1]->costCenter, $tgl2, $fiskal[0]->fiskal);
 
 		$this->load->view('print_ot',$data);
 	}
@@ -407,7 +410,9 @@ class Ot extends CI_Controller {
 		}
 		$id = $_POST['id'];
 
-		$data['anggota'] = $this->over_model->multiot2($tgl,$id,$tgl2);
+		$fiskal = $this->home_model->getFiskal($tgl2);
+
+		$data['anggota'] = $this->over_model->multiot2($id,$tgl2,$fiskal[0]->fiskal);
 
 		$this->load->view('print_ot_grup', $data);
 	}
@@ -567,7 +572,7 @@ class Ot extends CI_Controller {
 				$row[] = $no;
 				$row[] = $key->id;
 				$row[] = $key->tanggal;
-				$row[] = $key->section." - ".$key->subsection." - ".$key->grup;
+				$row[] = $key->dp." - ".$key->section." - ".$key->subsection." - ".$key->grup;
 				$row[] = $key->jml;
 				if ($key->status != '0') 
 					$row[] = "<button class='btn btn-primary btn-xs' onclick='detail_spl(".$key->id."); exporta(".$key->id.")'>Detail</button>";
@@ -873,7 +878,9 @@ class Ot extends CI_Controller {
 		}
 		$id = $_POST['id'];
 
-		$list = $this->over_model->multiot2($tgl,$id,$tgl2);
+		$fiskal = $this->home_model->getFiskal($tgl2);
+
+		$list = $this->over_model->multiot2($id,$tgl2,$fiskal[0]->fiskal);
 		$data = array();
 
 		if (!empty($list)) {
@@ -881,10 +888,10 @@ class Ot extends CI_Controller {
 				$row = array();
 				$row[] = $key->id;
 				$row[] = $key->tanggal;
-				$row[] = $key->jumlah_org;
-				$row[] = $key->jumlah_jam;
-				$row[] = $key->maxot;
-				$row[] = $key->actual;
+				$row[] = $key->jml_org;
+				$row[] = $key->jml_jam;
+				$row[] = $key->bgt;
+				$row[] = $key->act;
 				$row[] = $key->sec;
 				$row[] = $key->sub;
 				$row[] = $key->grup;
@@ -1624,41 +1631,58 @@ class Ot extends CI_Controller {
 	{
 		if (isset($_POST['tgl']) && $_POST['tgl'] != "") {
 			$tgl = date('Y-m-d',strtotime($_POST['tgl']));
+			$tgl2 = date('Y-m',strtotime($_POST['tgl']));
 		}
 		else {
-			$tgl = date('Y-m-d');	
+			$tgl = date('Y-m-d');
+			$tgl2 = date('Y-m');
 		}
 
-		$data = array();
+		$kar = 0;
 
-		$list = $this->over_model_new->ot_control($tgl);
+		$data = array();
+		$data3 = array();
+
+		$list = $this->over_model_new->ot_control($tgl, $tgl2);
+
+		$fiskal = $this->home_model->getFiskal($tgl2);
+		$list2 = $this->over_model_new->tot_karyawan($tgl2, $fiskal[0]->fiskal);
 
 		foreach ($list as $key) {
 			$row = array();
 			$row[] = $key->id_cc;
 			$row[] = $key->name;
-			$row[] = (float) $key->budget_tot;
+			$row[] = (float) $key->tot;
 			$row[] = (float) $key->act;
 			$row[] = date('d F Y',strtotime($tgl));
 
 			$data[] = $row;
 		}
 
-		echo json_encode($data);
+
+		foreach ($list2 as $key) {
+			$tot = (int) $key->tot_karyawan;
+			$kar += $tot;
+		}
+
+		array_push($data3, $data);
+		array_push($data3, $kar);
+
+		echo json_encode($data3);
 	}
 
 	public function overtime_control_detail()
 	{
 		$tgl = date('Y-m-d',strtotime($_POST['tgl']));
+		$tgl2 = date('Y-m',strtotime($_POST['tgl']));
 		$cc = $_POST['cc'];
 		$list2 = $this->over_model_new->get_cc($cc);
-		$list = $this->over_model_new->ot_control_detail($list2[0]->id_cc,$tgl);
+		$list = $this->over_model_new->ot_control_detail($list2[0]->id_cc,$tgl, $tgl2);
 
 		$data = array();
 
 		foreach ($list as $key) {
 			$row = array();
-			$row[] = $key->tanggal;
 			$row[] = $key->nik;
 			$row[] = $key->namaKaryawan;
 			$row[] = (float) $key->jam;			

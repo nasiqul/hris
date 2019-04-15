@@ -421,7 +421,7 @@ class Over_model extends CI_Model {
 
     public function get_dep($id)
     {
-        $this->db->where("id_departemen = (select departemen.id from login2 join departemen on login2.department = departemen.nama where username = '".$id."')");
+        $this->db->where("id_departemen = (select departemen.id from login join departemen on login.department = departemen.nama where username = '".$id."')");
         $query = $this->db->get('section');
         return $query->result();
     }
@@ -537,11 +537,12 @@ class Over_model extends CI_Model {
 
     public function get_over_by_id($id)
     {
-        $this->db->select("o.id as id_over, tanggal, s.nama as section, sc.nama as sub_sec, gr.nama as grup, keperluan, catatan, hari");
+        $this->db->select("o.id as id_over, tanggal, s.nama as section, sc.nama as sub_sec, gr.nama as grup, keperluan, catatan, hari, departemen.nama as dp");
         $this->db->from('over_time o');
         $this->db->join('section s','o.departemen = s.id','left');
         $this->db->join('sub_section sc','o.section = sc.id','left');
         $this->db->join('group1 gr','o.sub_sec = gr.id','left');
+        $this->db->join("departemen",'departemen.id = s.id_departemen','left');
         $this->db->where("o.id",$id);
         $query = $this->db->get();
         return $query->result();
@@ -557,27 +558,52 @@ class Over_model extends CI_Model {
         return $query->result();
     }
 
-    public function get_member_id($id,$tgl)
+    public function get_member_id($id)
     {
-        $this->db->select("o.id as id_over, tanggal, departemen, section, keperluan, catatan, om.*, k.namaKaryawan, cc.budget, cc.id_cc, cc.aktual as aktual");
-        $this->db->from('over_time o');
-        $this->db->join("over_time_member om","o.id = om.id_ot");
-        $this->db->join("karyawan k","om.nik = k.nik");
-        $this->db->join("cost_center_budget cc","cc.id_cc = k.costCenter");
-        $this->db->where("o.id",$id);
-        $this->db->where("MONTH(cc.period) = MONTH(STR_TO_DATE('".$tgl."', '%d-%m-%Y'))");
-        $this->db->where("YEAR(cc.period) = YEAR(STR_TO_DATE('".$tgl."', '%d-%m-%Y'))");
-        $this->db->group_by('k.nik');
-        $query = $this->db->get();
+        $q = "select om.nik, karyawan.namaKaryawan, costCenter, dari, sampai, transport, makan, ext_food, jam from over_time o 
+        join over_time_member om on o.id = om.id_ot
+        left join karyawan on karyawan.nik = om.nik
+        where o.id = '".$id."'";
+        $query = $this->db->query($q);
         return $query->result();
     }
 
-    public function costCenter($id)
+    public function costCenter($id, $tgl, $fy)
     {
-        $this->db->select("costCenter, COUNT(nik) as jml");
-        $this->db->from("karyawan");
-        $this->db->where("costCenter", $id);
-        $query = $this->db->get();
+        $q = "select n.*, z.act from 
+            (
+            select d.id_cc, d.period, (d.budget * m.karyawan) as tot_budget from (
+                select id_cc, period, budget from cost_center_budget where date_format(period, '%Y-%m') = '".$tgl."'
+            ) d
+            left join
+            (
+            select mon, master_cc.id_cc, sum(tot_karyawan) as karyawan from (
+                select mon, costCenter, count(if(if(date_format(a.tanggalMasuk, '%Y-%m') < mon, 1, 0 ) - if(date_format(a.tanggalKeluar, '%Y-%m') < mon, 1, 0 ) = 0, null, 1)) as tot_karyawan from
+                (
+                select distinct fiskal, date_format(tanggal, '%Y-%m') as mon
+                from kalender_fy
+                ) as b
+                join
+                (
+                select '".$fy."' as fy, karyawan.kode, tanggalKeluar, tanggalMasuk, nik, costCenter
+                from karyawan
+                ) as a
+                on a.fy = b.fiskal
+                group by mon, costCenter
+                having mon = '".$tgl."'
+                ) as b 
+                left join master_cc on master_cc.id_cc = b.costCenter
+                    GROUP BY mon, master_cc.id_cc
+            ) m on m.id_cc = d.id_cc
+            where d.id_cc = '".$id."'
+            ) n left join (
+                select tanggal, sum(jam) act, costCenter from over
+                left join karyawan on karyawan.nik = over.nik
+                where date_format(tanggal, '%Y-%m') = '".$tgl."' and costCenter='".$id."'
+                group by costCenter
+            ) z on n.id_cc = z.costCenter
+            ";
+        $query = $this->db->query($q);
         return $query->result();
     }
 
@@ -792,17 +818,24 @@ public function set_jam($id, $nik, $jam)
     $this->db->query($sql);
 }
 
-public function get_data_chart($tgl,$cc,$target)
+public function get_data_chart($tgl,$cc,$tgl2)
 {
     $q = "
-    select tanggal, jam, ".$target." as target from (
-        select tanggal, costCenter, sum(jam) as jam, over.status_final from over
-        left join karyawan k on k.nik = over.nik
-        WHERE costCenter = ".$cc." AND
-    DATE_FORMAT(tanggal,'%m-%Y') = DATE_FORMAT(STR_TO_DATE('".$tgl."', '%d-%m-%Y'), '%m-%Y')
-    GROUP BY tanggal
-        ) a
-        where a.status_final = 1";
+    select m.id_cc, d.tanggal,  COALESCE(x.act,0) act, ROUND(m.budget_tot,2) as budget_tot from ( select id_cc, (budget_total / DATE_FORMAT(LAST_DAY('".$tgl."'),'%d')) budget_tot from cost_center_budget where DATE_FORMAT(period,'%Y-%m') = '".$tgl2."' and id_cc = ".$cc." ) m
+        cross join 
+        (
+          select tanggal from over
+          where DATE_FORMAT(tanggal,'%Y-%m') = '".$tgl2."'
+          group by tanggal
+        ) as d left join 
+        (
+          select d.tanggal, sum(jam) as act, karyawan.costCenter from
+          (select nik, tanggal, jam from over where DATE_FORMAT(tanggal,'%Y-%m') = '".$tgl2."' and jam <> 0) d
+          left join karyawan on karyawan.nik = d.nik
+          where costCenter = ".$cc."
+            group by tanggal
+        ) x on x.costCenter = m.id_cc and x.tanggal = d.tanggal
+        where d.tanggal <= '".$tgl."'";
     return $this->db->query($q)->result();
 }
 
@@ -931,45 +964,48 @@ public function extrafood2($tgl,$id)
     return $query->result();
 }
 
-public function multiot2($tgl,$id,$tgl2)
+public function multiot2($id,$tgl2,$fiskal)
 {
-    $this->db->select("id,tanggal,jumlah_org,jumlah_jam,maxot,actual,sec,sub,grup");
-    $this->db->from("(
-        select id,tanggal,a.costCenter,jumlah_org,jumlah_jam,(jumlah*budget) as maxot, sec,sub,grup from (
-        SELECT over_time.id,over_time.tanggal, over_time_member.nik, karyawan.costCenter,cost_center_budget.budget, master_cc.name, COUNT(over_time_member.nik) as jumlah_org,sum(over_time_member.jam) as jumlah_jam, section.nama as sec,sub_section.nama as sub,group1.nama as grup FROM over_time_member 
-        LEFT JOIN over_time  on over_time.id = over_time_member.id_ot
-        left join karyawan on over_time_member.nik = karyawan.nik 
-        left join cost_center_budget on cost_center_budget.id_cc = karyawan.costCenter
-        LEFT JOIN master_cc on master_cc.id_cc = cost_center_budget.id_cc
-        left join section on over_time.departemen = section.id
-        left join sub_section on over_time.section = sub_section.id
-        left join group1 on over_time.sub_sec = group1.id
-        WHERE id_ot IN (".$id.") and DATE_FORMAT(period,'%Y-%m-%d')='".$tgl."'
-        GROUP BY over_time.id
-        ) a left join (
-        select COUNT(nik) as jumlah, costCenter from karyawan where costCenter in(
-        SELECT karyawan.costCenter FROM over_time_member 
-        left join karyawan on over_time_member.nik = karyawan.nik 
-        WHERE id_ot IN (".$id.") and karyawan.Status='aktif'
-        GROUP BY karyawan.costCenter
-        ) GROUP BY costCenter
-        )b
-        on a.costCenter = b.costCenter
-        ) a 
-        left join (
-        SELECT costCenter as cc,sum(jam) as actual from (
-        SELECT karyawan.nik,karyawan.costCenter FROM over_time_member 
-        left join karyawan on karyawan.nik = over_time_member.nik
-        WHERE id_ot IN (".$id.") and karyawan.Status='aktif'
-        ) a left join
-        (
-        select nik,jam,tanggal from over
-        )b on a.nik = b.nik
-        WHERE DATE_FORMAT(tanggal,'%Y-%m')='".$tgl2."'
-        GROUP BY cc
-    )b on a.costCenter = b.cc");
+    $q = "select tanggal, over_time.id, section.nama as sec,sub_section.nama as sub,group1.nama as grup, count(over_time_member.nik) as jml_org, sum(over_time_member.jam) as jml_jam, karyawan.costCenter, (karyawan * budget) as bgt, act from over_time
+    join section on over_time.departemen = section.id
+    join sub_section on over_time.section = sub_section.id
+    left join group1 on over_time.sub_sec = group1.id
+    join over_time_member on over_time_member.id_ot = over_time.id
+    left join karyawan on karyawan.nik = over_time_member.nik
 
-    $query = $this->db->get();
+    join    (
+    select mon, master_cc.id_cc, sum(tot_karyawan) as karyawan from (
+    select mon, costCenter, count(if(if(date_format(a.tanggalMasuk, '%Y-%m') < mon, 1, 0 ) - if(date_format(a.tanggalKeluar, '%Y-%m') < mon, 1, 0 ) = 0, null, 1)) as tot_karyawan from
+    (
+    select distinct fiskal, date_format(tanggal, '%Y-%m') as mon
+    from kalender_fy
+    ) as b
+    join
+    (
+    select '".$fiskal."' as fy, karyawan.kode, tanggalKeluar, tanggalMasuk, nik, costCenter
+    from karyawan
+    ) as a
+    on a.fy = b.fiskal
+    group by mon, costCenter
+    having mon = '".$tgl2."'
+    ) as b 
+    left join master_cc on master_cc.id_cc = b.costCenter
+    GROUP BY mon, master_cc.id_cc
+    ) b on b.id_cc = karyawan.costCenter
+    left join (
+    select cost_center_budget.id_cc, cost_center_budget.period, cost_center_budget.budget from cost_center_budget
+    where date_format(period, '%Y-%m') = '".$tgl2."'
+    ) z on z.id_cc = karyawan.costCenter
+    left join (
+    select karyawan.costCenter, COALESCE(sum(jam),0) as act from (
+    select nik, tanggal, jam from over where date_format(tanggal, '%Y-%m') = '".$tgl2."' and status_final = 1
+    ) n join karyawan on karyawan.nik = n.nik
+    GROUP BY costCenter
+    ) k on k.costCenter = karyawan.costCenter
+    where over_time.id IN (".$id.")
+    group by id";
+
+    $query = $this->db->query($q);
     return $query->result();
 }
 
