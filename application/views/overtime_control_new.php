@@ -73,7 +73,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <h5 class="description-header" style="font-size: 60px;">
                           <span class="description-percentage text-green" id="tot_diff"></span>
                         </h5>      
-                        <span class="description-text" style="font-size: 35px;">Differance<br><span class="text-purple">???</span></span>   
+                        <span class="description-text" style="font-size: 35px;">Difference<br><span class="text-purple">???</span></span>   
                       </div>
                     </div>
                     <div class="col-md-3">
