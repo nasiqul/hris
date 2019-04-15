@@ -268,7 +268,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               },
               rotation: -90
             },
-            pointWidth: 19,
+            pointWidth: 17,
             pointPadding: 0,
             borderWidth: 0,
             groupPadding: 0
