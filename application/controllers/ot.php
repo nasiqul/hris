@@ -1274,6 +1274,7 @@ class Ot extends CI_Controller {
 			$row[] = date('M Y',strtotime($key2->tanggal));
 			$row[] = $key2->nik;
 			$row[] = $key2->namaKaryawan;
+			$row[] = $key->nama;
 			$row[] = (float) $key2->jam;
 			$row[] = $key2->fiskal;
 

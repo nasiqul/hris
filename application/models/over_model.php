@@ -1339,7 +1339,7 @@ public function manajemen_section($fiskal, $costCenter)
 
 public function getTarget($fiskal, $cc)
 {
-    $q = "SELECT kalender_fy.tanggal , '0' nik,'target' as namaKaryawan, IFNULL(budget,0) jam, '".$fiskal."' as fiskal from kalender_fy 
+    $q = "SELECT kalender_fy.tanggal , '0' nik,'target' as namaKaryawan, 'target' as nama, IFNULL(budget,0) jam, '".$fiskal."' as fiskal from kalender_fy 
     left join (
     select period ,budget, id_cc from cost_center_budget where id_cc = '".$cc."'
     ) as d on d.period = kalender_fy.tanggal
