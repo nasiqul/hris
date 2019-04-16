@@ -341,6 +341,13 @@ class Over_model_new extends CI_Model {
         return $query->result();
     }
 
+    public function getlastData()
+    {
+        $q = "select tanggal from over ORDER BY tanggal desc limit 1";
+        $query = $this->db->query($q);
+        return $query->result();
+    }
+
     public function ot_control_detail($cc, $tgl, $tgl2)
     {
         $q = "select m.nik, sum(m.jam) jam, karyawan.namaKaryawan from ( select nik, tanggal, jam from over where jam <> 0 and date_format(tanggal, '%Y-%m') = '".$tgl2."' ) as m

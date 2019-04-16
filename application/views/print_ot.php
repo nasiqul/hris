@@ -378,10 +378,11 @@
 						},
 					})
 
-						window.print();
 						$('#target').text(processed_jsontr[processed_jsontr.length-1].toFixed(2));
 						$('#aktual').text(processed_json[processed_json.length-1]);
 						$('#diff').text((processed_jsontr[processed_jsontr.length-1] - processed_json[processed_json.length-1]).toFixed(2));
+
+						window.print();
 					}
 				});
 			})

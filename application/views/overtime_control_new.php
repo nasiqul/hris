@@ -33,9 +33,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <div class="box-body">
               <div class="col-md-12">
                 <div class="row">
-                  <div class="col-md-2">
+                  <div class="col-md-2" style="background-color: #605ca8; color: white">
                     Select Date : 
-                    <input type="text" class="form-control datepicker" id="tgl" onchange="drawChart()">
+                    <input type="text" class="form-control datepicker" id="tgl" onchange="drawChart()" placeholder="select date">
+                    <i class="fa fa-history"></i> Last updated : <?php echo date('d M Y',strtotime($tgl2[0]->tanggal)) ?>
                   </div>
                   <div class="col-md-12">
                     <div id="container" style="width: 100%; margin: 0px auto; height: 550px"></div>

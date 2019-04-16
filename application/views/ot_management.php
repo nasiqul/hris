@@ -144,100 +144,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     //---------CHART---------------
 
     $(function () {
-      $('#load').css('display','block');
-      var tahun = $("#tahun").val();
-      var section = $("#section").val();
-
-      var url = "<?php echo base_url('ot/ajax_ot_manaj/') ?>"+tahun+"/"+section+"";
-      $.ajax({
-       type: "POST",
-       url: url,
-       dataType: "json",
-       beforeSend: function () {
-        $('#progressbar2').show();
-      },
-      complete: function () {
-        $("#progressbar2").hide();
-      },
-      success: function(data) {
-
-        var processed_json = new Array();
-        var seriesData = [];
-        var xCategories = [];
-        var seriesData = [];
-        var i, cat;
-        var title = data[0][0][5];
-
-        for(i = 0; i < data[0].length; i++){
-          cat = data[0][i][0];
-          if(xCategories.indexOf(cat) === -1){
-           xCategories[xCategories.length] = cat;
-         }
-       }
-
-       for(i = 0; i < data[0].length; i++){
-        if(seriesData){
-         var currSeries = seriesData.filter(function(seriesObject){ return seriesObject.name == data[0][i][3];});
-         if(currSeries.length === 0){
-          seriesData[seriesData.length] = currSeries = {name: data[0][i][3], data: []};
-        } else {
-          currSeries = currSeries[0];
-        }
-        var index = currSeries.data.length;
-        currSeries.data[index] = data[0][i][4];
-      } else {
-       seriesData[0] = {name: data[0][i][3], data: [intVal(data[0][i][4])]}
-     }
-   }
-
-   var target = [];
-   for (var i = 0; i < data[1].length; i++) {
-    target.push(data[1][i][4]);
-  }
-                    // Populate series
-                    seriesData.push({type: 'spline', name: 'Max OT', data: target, color: 'red', dashStyle: 'dash'});
-
-
-                    $('#container').highcharts({
-                      chart: {
-                        type: 'spline'
-                      },
-                      title: {
-                        text: 'YEAR '+title
-                      },
-                      xAxis: {
-                        categories: xCategories
-                      },
-                      yAxis: {
-                        title: {
-                          text: 'Total Jam',
-                          style: {
-                           fontWeight: 'bold',
-                         }
-                       }
-                     },
-                     legend: {
-                      enabled: false
-                    },
-                    plotOptions: {
-                      line: {
-                        dataLabels: {
-                          enabled: false
-                        },
-                        enableMouseTracking: true
-                      },
-                      series: {
-                        marker: {
-                          enabled: false
-                        },
-                        lineWidth: 1
-                      }
-                    },
-                    series: seriesData
-                  });
-                    $('#load').css('display','none');
-                  }
-                });
+      postTahun();
     });
     // })
 
@@ -329,6 +236,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
               },
               lineWidth: 1
             }
+          },
+          credits:{
+            enabled:false
           },
           series: seriesData
         });
