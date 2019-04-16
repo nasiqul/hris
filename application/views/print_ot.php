@@ -341,6 +341,9 @@
 									enabled: true
 								},
 								enableMouseTracking: false,
+							},
+							spline: {
+								animation: false,
 							}
 						},
 
