@@ -343,7 +343,7 @@
 								enableMouseTracking: false,
 							},
 							spline: {
-								animation: false,
+								animation: false
 							}
 						},
 
@@ -359,7 +359,8 @@
 							marker: {
 								enabled: false
 							},
-							data: processed_jsontr
+							data: processed_jsontr,
+							dashStyle: 'dash'
 						}],
 
 						responsive: {
