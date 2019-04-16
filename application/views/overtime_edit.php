@@ -169,10 +169,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     </th>
                     <th></th>
                     <th>Dari
-                      <input type="text" name="dari" id="dari" class="form-control timepicker" onchange="dari()" value="<?php echo $isi[0]->dari ?>">
+                      <input type="text" name="dari" id="dari" class="form-control timepicker">
                     </th>
                     <th  name="jam0">Sampai
-                      <input type="text" name="sampai" id="sampai" class="form-control timepicker" onchange="sampai()" value="<?php echo $isi[0]->sampai ?>">
+                      <input type="text" name="sampai" id="sampai" class="form-control timepicker">
                     </th>
                     <th><p id="jam0" hidden>0</p> <p id="jamfix">0</p></th>
                     <th>
@@ -291,8 +291,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
         var newdiv1 = $( "<div class='col-md-12' style='margin-bottom: 5px' id='"+no+"'>"+
           "<div class='col-md-2'><input type='text' id='nik"+no+"' value='<?php echo $key->nik ?>' class='form-control' readonly></div>"+
-          "<div class='col-md-3'><p id='nama"+no+"'><?php echo $key->namaKaryawan ?></p></div><div class='col-md-1'><input class='form-control timepicker' value='<?php echo $key->dari ?>'  id='dari"+no+"' name='dari"+no+"' onchange='dariid("+no+")'></input></div>"+
-          "<div class='col-md-1'><input class='form-control timepicker' id='sampai"+no+"'  name='sampai"+no+"' value='<?php echo $key->sampai ?>' onchange='sampaiid("+no+")'></input></div><div class='col-md-1'><p id='jam"+no+"' hidden></p><p id='jamfix"+no+"'><?php echo $key->jam ?></p></div>"+
+          "<div class='col-md-3'><p id='nama"+no+"'><?php echo $key->namaKaryawan ?></p></div><div class='col-md-1'><input class='form-control timepicker' value='<?php echo $key->dari ?>'  id='dari"+no+"' name='dari"+no+"'></input></div>"+
+          "<div class='col-md-1'><input class='form-control timepicker' id='sampai"+no+"'  name='sampai"+no+"' value='<?php echo $key->sampai ?>'></input></div><div class='col-md-1'><p id='jam"+no+"' hidden></p><p id='jamfix"+no+"'><?php echo $key->jam ?></p></div>"+
           "<div class='col-md-1'><select class='form-control' id='trans"+no+"'>"+
           "<option value='-' <?php echo $t1 ?>>-</option><option value='B' <?php echo $t2 ?>>B</option><option value='P' <?php echo $t3 ?>>P</option></select></div>"+
           "<div class='col-md-1'><input type='checkbox' id='makan"+no+"' <?php echo $cekM ?>></div>"+
@@ -306,6 +306,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
           interval: 30
         });
 
+        $("#dari"+no)[0].setAttribute("onchange","dariid("+no+");");
+        $("#sampai"+no)[0].setAttribute("onchange","sampaiid("+no+")");
+        
         // var sampai = $('#sampai').val();
         // var dari = $('#dari').val();
         // var jam = $('#jam0').text();
@@ -321,6 +324,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
         nomorali+=1;
         $('#totalsemua').text("Total : "+nomorali);
       <?php } ?>
+        $("#dari")[0].setAttribute("onchange","dari();");
+        $("#sampai")[0].setAttribute("onchange","sampai();");
+
     }
 
 
@@ -975,6 +981,7 @@ function secondsTimeSpanToHMS(s) {
 
   function sampai()
   {
+    console.log("ini");
     var sampai1 = $('#sampai').val();   
     var dari1 = $('#dari').val();
     var sampaipost ="";

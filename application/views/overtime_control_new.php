@@ -6,7 +6,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <html>
 <!-- HEADER -->
 <?php require_once(APPPATH.'views/header/head.php'); ?>
-<?php if (! $this->session->userdata('nikLogin')) { redirect('home/overtime_user'); }?>
 
 <body class="hold-transition skin-purple sidebar-mini">
   <div class="wrapper">
@@ -53,33 +52,33 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <div class="row">
                   <div class="col-md-12">
                     <div class="col-md-3">
-                      <div class="description-block border-right">
-                        <h5 class="description-header" style="font-size: 60px; color: #f76111">
+                      <div class="description-block border-right" style="color: #f76111">
+                        <h5 class="description-header" style="font-size: 60px;">
                           <span class="description-percentage" id="tot_budget"></span>
                         </h5>      
                         <span class="description-text" style="font-size: 35px;">Total Budget<br><span class="text-purple">???</span></span>   
                       </div>
                     </div>
                     <div class="col-md-3">
-                      <div class="description-block border-right">
+                      <div class="description-block border-right" style="color: #7300ab" >
                         <h5 class="description-header" style="font-size: 60px; ">
-                          <span class="description-percentage" id="tot_act" style="color: #7300ab"></span>
+                          <span class="description-percentage" id="tot_act"></span>
                         </h5>      
                         <span class="description-text" style="font-size: 35px;">Total Actual<br><span class="text-purple">???</span></span>   
                       </div>
                     </div>
                     <div class="col-md-3">
-                      <div class="description-block border-right">
+                      <div class="description-block border-right text-green" id="diff_text">
                         <h5 class="description-header" style="font-size: 60px;">
-                          <span class="description-percentage text-green" id="tot_diff"></span>
+                          <span class="description-percentage" id="tot_diff"></span>
                         </h5>      
                         <span class="description-text" style="font-size: 35px;">Difference<br><span class="text-purple">???</span></span>   
                       </div>
                     </div>
                     <div class="col-md-3">
-                      <div class="description-block border-right">
+                      <div class="description-block border-right text-yellow">
                         <h5 class="description-header" style="font-size: 60px;">
-                          <span class="description-percentage text-yellow" id="avg"></span>
+                          <span class="description-percentage" id="avg"></span>
                         </h5>      
                         <span class="description-text" style="font-size: 35px;">Average<br><span class="text-purple">???</span></span>   
                       </div>
@@ -196,11 +195,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
        $("#tot_act").text(tot_act2);
 
        if (tot_diff > 0) {
-        $('#tot_diff').removeClass('text-red').addClass('text-green');
+        $('#diff_text').removeClass('text-red').addClass('text-green');
         $("#tot_diff").html("<i class='fa fa-caret-up'></i> "+tot_diff2);
       }
       else {
-        $('#tot_diff').removeClass('text-green').addClass('text-red');
+        $('#diff_text').removeClass('text-green').addClass('text-red');
         $("#tot_diff").html("<i class='fa fa-caret-down'></i> "+tot_diff2);
       }
       avg = tot_act / data[1];
@@ -212,6 +211,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
       Highcharts.chart('container', {
         chart: {
+          spacingTop: 10,
           type: 'column'
         },
         title: {
@@ -225,7 +225,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           min:0,
           allowDecimals: false,
           title: {
-            text: 'Jumlah Lembur (jam)'
+            text: 'Amount of Overtime (hours)'
           }
         },
         xAxis: {
@@ -268,10 +268,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
               },
               rotation: -90
             },
-            pointWidth: 17,
+            pointWidth: 15,
             pointPadding: 0,
             borderWidth: 0,
-            groupPadding: 0
+            groupPadding: 0.1
           }
         },
         series: [{

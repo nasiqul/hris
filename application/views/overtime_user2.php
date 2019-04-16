@@ -161,9 +161,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                       <th>Bagian</th>
                       <th>Jumlah (orang)</th>
                       <th>Jumlah (jam)</th>
-                      <th>Max OT</th>
-                      <th>Aktual</th>
-                      <th>Diff</th>
+                      <th>Kepentingan</th>
                     </tr>
                   </thead>
                   <tbody id="isi2">
@@ -632,9 +630,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
             if ( item[0] !="-"){
               var newdiv1 = $( "<tr>"+                  
                 "<td>"+no+"</td><td>"+item[1]+"</td>"+
-                "<td>"+item[0]+"</td><td>"+item[6]+' - '+item[7]+' - '+item[8]+"</td><td>"+item[2]+"</td>"+
-                "<td>"+item[3]+"</td><td>"+item[4]+"</td>"+
-                "<td>"+item[5]+"</td><td>"+(parseFloat(item[4])-parseFloat(item[5]))+"</td>"+
+                "<td>"+item[0]+"</td><td>"+item[4]+' - '+item[5]+' - '+item[6]+"</td><td>"+item[2]+"</td>"+
+                "<td>"+item[3]+"</td><td>"+item[7]+"</td>"+
                 "</tr>");
               no+=1;
 

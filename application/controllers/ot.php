@@ -402,17 +402,32 @@ class Ot extends CI_Controller {
 	{
 		if (!isset($_POST['tanggal'])) {
 			$tgl2 = date('Y-m');
-			$tgl = date('Y-m-d',strtotime($tgl2."-01"));
+			$tgl = date('Y-m-d');
 		} else {
 			$time = $_POST['tanggal'];
 			$tgl2 = date('Y-m',strtotime($time));
-			$tgl = date('Y-m-d',strtotime($tgl2."-01"));
+			$tgl = date('Y-m-d',strtotime($_POST['tanggal']));
 		}
 		$id = $_POST['id'];
 
-		$fiskal = $this->home_model->getFiskal($tgl2);
+		// $fiskal = $this->home_model->getFiskal($tgl2);
 
-		$data['anggota'] = $this->over_model->multiot2($id,$tgl2,$fiskal[0]->fiskal);
+		$list = $this->over_model->multiot2($id);
+
+		
+		$cc = NULL;
+		foreach ($list as $key) {
+			if (!isset($cc))
+				$cc =  $key->costCenter;
+			else
+				$cc  = $cc.",".$key->costCenter;
+		}
+
+		$data['anggota'] = $list;
+
+		$data['cc'] = $this->over_model->multiot_cc($cc,$tgl,$tgl2);
+
+		// echo $cc;
 
 		$this->load->view('print_ot_grup', $data);
 	}
@@ -878,9 +893,9 @@ class Ot extends CI_Controller {
 		}
 		$id = $_POST['id'];
 
-		$fiskal = $this->home_model->getFiskal($tgl2);
+		// $fiskal = $this->home_model->getFiskal($tgl2);
 
-		$list = $this->over_model->multiot2($id,$tgl2,$fiskal[0]->fiskal);
+		$list = $this->over_model->multiot2($id);
 		$data = array();
 
 		if (!empty($list)) {
@@ -890,11 +905,10 @@ class Ot extends CI_Controller {
 				$row[] = $key->tanggal;
 				$row[] = $key->jml_org;
 				$row[] = $key->jml_jam;
-				$row[] = $key->bgt;
-				$row[] = $key->act;
 				$row[] = $key->sec;
 				$row[] = $key->sub;
 				$row[] = $key->grup;
+				$row[] = $key->keperluan;
 
 				$data[] = $row;
 			}
@@ -1247,6 +1261,7 @@ class Ot extends CI_Controller {
 			$row[] = date('M Y',strtotime($key->tanggal));
 			$row[] = $key->nik;
 			$row[] = $key->namaKaryawan;
+			$row[] = $key->nama;
 			$row[] = (float) $key->jam;
 			$row[] = $key->fiskal;
 

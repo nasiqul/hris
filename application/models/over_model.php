@@ -423,6 +423,10 @@ class Over_model extends CI_Model {
     {
         $this->db->where("id_departemen = (select departemen.id from login join departemen on login.department = departemen.nama where username = '".$id."')");
         $query = $this->db->get('section');
+
+        if ($query->num_rows() == 0) {
+            
+        }
         return $query->result();
     }
 
@@ -964,46 +968,46 @@ public function extrafood2($tgl,$id)
     return $query->result();
 }
 
-public function multiot2($id,$tgl2,$fiskal)
+public function multiot2($id)
 {
-    $q = "select tanggal, over_time.id, section.nama as sec,sub_section.nama as sub,group1.nama as grup, count(over_time_member.nik) as jml_org, sum(over_time_member.jam) as jml_jam, karyawan.costCenter, (karyawan * budget) as bgt, act from over_time
+    $q = "select tanggal, over_time.id, section.nama as sec,sub_section.nama as sub,group1.nama as grup, count(over_time_member.nik) as jml_org, sum(over_time_member.jam) as jml_jam, karyawan.costCenter, over_time.keperluan from over_time
     join section on over_time.departemen = section.id
     join sub_section on over_time.section = sub_section.id
     left join group1 on over_time.sub_sec = group1.id
     join over_time_member on over_time_member.id_ot = over_time.id
     left join karyawan on karyawan.nik = over_time_member.nik
-
-    join    (
-    select mon, master_cc.id_cc, sum(tot_karyawan) as karyawan from (
-    select mon, costCenter, count(if(if(date_format(a.tanggalMasuk, '%Y-%m') < mon, 1, 0 ) - if(date_format(a.tanggalKeluar, '%Y-%m') < mon, 1, 0 ) = 0, null, 1)) as tot_karyawan from
-    (
-    select distinct fiskal, date_format(tanggal, '%Y-%m') as mon
-    from kalender_fy
-    ) as b
-    join
-    (
-    select '".$fiskal."' as fy, karyawan.kode, tanggalKeluar, tanggalMasuk, nik, costCenter
-    from karyawan
-    ) as a
-    on a.fy = b.fiskal
-    group by mon, costCenter
-    having mon = '".$tgl2."'
-    ) as b 
-    left join master_cc on master_cc.id_cc = b.costCenter
-    GROUP BY mon, master_cc.id_cc
-    ) b on b.id_cc = karyawan.costCenter
-    left join (
-    select cost_center_budget.id_cc, cost_center_budget.period, cost_center_budget.budget from cost_center_budget
-    where date_format(period, '%Y-%m') = '".$tgl2."'
-    ) z on z.id_cc = karyawan.costCenter
-    left join (
-    select karyawan.costCenter, COALESCE(sum(jam),0) as act from (
-    select nik, tanggal, jam from over where date_format(tanggal, '%Y-%m') = '".$tgl2."' and status_final = 1
-    ) n join karyawan on karyawan.nik = n.nik
-    GROUP BY costCenter
-    ) k on k.costCenter = karyawan.costCenter
     where over_time.id IN (".$id.")
     group by id";
+
+    $query = $this->db->query($q);
+    return $query->result();
+}
+
+public function multiot_cc($id,$tgl,$tgl2)
+{
+    $q = "
+        select n.id_cc, master_cc.name, sum(n.act) as act, sum(budget_tot) as tot from 
+        (
+            select l.id_cc, d.tanggal, COALESCE(act,0) act, l.budget_tot from
+            (select id_cc, ROUND((budget_total / DATE_FORMAT(LAST_DAY('".$tgl."'),'%d')),1) budget_tot from cost_center_budget where DATE_FORMAT(period,'%Y-%m') = '".$tgl2."' and id_cc IN (".$id.")) as l
+            cross join 
+            (
+                select tanggal from over
+                where DATE_FORMAT(tanggal,'%Y-%m') = '".$tgl2."'
+                group by tanggal
+            ) as d
+            left join 
+            (
+                select d.tanggal, sum(jam) as act, karyawan.costCenter from
+                (select nik, tanggal, jam from over where DATE_FORMAT(tanggal,'%Y-%m') = '".$tgl2."' and jam <> 0) d
+                left join karyawan on karyawan.nik = d.nik
+                where karyawan.costCenter IN (".$id.")
+                group by tanggal, costCenter
+            ) x on x.costCenter = l.id_cc and x.tanggal = d.tanggal
+            where d.tanggal <= '".$tgl."'
+        ) as n
+        left join master_cc on master_cc.id_cc = n.id_cc
+        group by id_cc";
 
     $query = $this->db->query($q);
     return $query->result();
@@ -1312,7 +1316,7 @@ public function jam_by_nik($nik, $tahun)
 
 public function manajemen_section($fiskal, $costCenter)
 {
-    $q = "select main.*, IFNULL(jam ,0) jam from
+    $q = "select main.fiskal, main.tanggal, main.nik, main.namaKaryawan, concat(main.nik, ' ', main.namaKaryawan) as nama, IFNULL(jam ,0) jam from
     (
     select * from 
     ( Select * from kalender_fy

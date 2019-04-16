@@ -166,7 +166,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         var xCategories = [];
         var seriesData = [];
         var i, cat;
-        var title = data[0][0][4];
+        var title = data[0][0][5];
 
         for(i = 0; i < data[0].length; i++){
           cat = data[0][i][0];
@@ -177,22 +177,22 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
        for(i = 0; i < data[0].length; i++){
         if(seriesData){
-         var currSeries = seriesData.filter(function(seriesObject){ return seriesObject.name == data[0][i][2];});
+         var currSeries = seriesData.filter(function(seriesObject){ return seriesObject.name == data[0][i][3];});
          if(currSeries.length === 0){
-          seriesData[seriesData.length] = currSeries = {name: data[0][i][2], data: []};
+          seriesData[seriesData.length] = currSeries = {name: data[0][i][3], data: []};
         } else {
           currSeries = currSeries[0];
         }
         var index = currSeries.data.length;
-        currSeries.data[index] = data[0][i][3];
+        currSeries.data[index] = data[0][i][4];
       } else {
-       seriesData[0] = {name: data[0][i][2], data: [intVal(data[0][i][3])]}
+       seriesData[0] = {name: data[0][i][3], data: [intVal(data[0][i][4])]}
      }
    }
 
    var target = [];
    for (var i = 0; i < data[1].length; i++) {
-    target.push(data[1][i][3]);
+    target.push(data[1][i][4]);
   }
                     // Populate series
                     seriesData.push({type: 'spline', name: 'Max OT', data: target, color: 'red', dashStyle: 'dash'});
@@ -264,7 +264,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
          var xCategories = [];
          var seriesData = [];
          var i, cat;
-         var title = data[0][0][4];
+         var title = data[0][0][5];
 
          for(i = 0; i < data[0].length; i++){
           cat = data[0][i][0];
@@ -275,23 +275,25 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
        for(i = 0; i < data[0].length; i++){
         if(seriesData){
-         var currSeries = seriesData.filter(function(seriesObject){ return seriesObject.name == data[0][i][2];});
-         if(currSeries.length === 0){
-          seriesData[seriesData.length] = currSeries = {name: data[0][i][2], data: []};
-        } else {
-          currSeries = currSeries[0];
+          var currSeries = seriesData.filter(function(seriesObject){ return seriesObject.name == data[0][i][3];});
+          if(currSeries.length === 0){
+            seriesData[seriesData.length] = currSeries = {name: data[0][i][3], data: []};
+          }
+          else {
+            currSeries = currSeries[0];
+          }
+          var index = currSeries.data.length;
+          currSeries.data[index] = data[0][i][4];
         }
-        var index = currSeries.data.length;
-        currSeries.data[index] = data[0][i][3];
-      } else {
-       seriesData[0] = {name: data[0][i][2], data: [intVal(data[0][i][3])]}
-     }
-   }
+        else {
+          seriesData[0] = {name: data[0][i][3], data: [intVal(data[0][i][4])]}
+        }
+      }
 
-   var target = [];
-   for (var i = 0; i < data[1].length; i++) {
-    target.push(data[1][i][3]);
-  }
+      var target = [];
+      for (var i = 0; i < data[1].length; i++) {
+        target.push(data[1][i][4]);
+      }
         // Populate series
         seriesData.push({type: 'spline', name: 'Max OT', data: target, color: 'red', dashStyle: 'dash'});
 

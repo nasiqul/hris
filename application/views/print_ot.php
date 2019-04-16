@@ -21,6 +21,14 @@
 		body {
 			font-size: 16pt;
 		}
+
+		.head {
+			background-color: #dddddd !important
+		}
+
+		.foot {
+			background-color: #e6e8e1 !important;
+		}
 	}
 
 	body {
@@ -38,6 +46,15 @@
 	.kep {
 		border: 1px solid black;
 	}
+
+	.head {
+		background-color: #dddddd
+	}
+
+	.foot {
+		background-color: #e6e8e1;
+	}
+
 	p {
 		max-width: 300px;
 		word-wrap: break-word;
@@ -142,7 +159,7 @@
 			</tr>
 		</table>
 		<table width="100%" style="margin-top: 10px" id="anggota"  align="center" border="1">
-			<tr>
+			<tr class="head">
 				<th width="3%">No</th>
 				<th width="9%">NIK</th>
 				<th >Nama</th>
@@ -177,7 +194,7 @@
 				$jml += (float) $key->jam; 
 				$no++;
 			} ?>
-			<tr id="bottom">
+			<tr class="foot">
 				<td colspan="5" style="text-align: left;">B = Bangil <br> P = Pasuruan</td>
 				<td style="text-align: center;">B = <?php echo $b ?><br>P = <?php echo $p ?></td>
 				<td style="text-align: center;"><?php echo $mkn ?></td>
@@ -364,7 +381,7 @@
 						window.print();
 						$('#target').text(processed_jsontr[processed_jsontr.length-1].toFixed(2));
 						$('#aktual').text(processed_json[processed_json.length-1]);
-						$('#diff').text(processed_jsontr[processed_jsontr.length-1] - processed_json[processed_json.length-1]);
+						$('#diff').text((processed_jsontr[processed_jsontr.length-1] - processed_json[processed_json.length-1]).toFixed(2));
 					}
 				});
 			})
