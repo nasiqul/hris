@@ -9,6 +9,7 @@ class Management extends CI_Controller {
 		$this->load->model('karyawan_model');
 		$this->load->model('over_report_model');
 		$this->load->model('budget_model');
+		$this->load->model('over_model_new');
 	}
 
 	public function index()
@@ -63,6 +64,7 @@ class Management extends CI_Controller {
     {
         $data['i'] = 'ok';
         $data['menu'] = 'OT-new';
+        $data['tgl2'] = $this->over_model_new->getlastData();
         $this->load->view("overtime_control_new",$data);
     }
 

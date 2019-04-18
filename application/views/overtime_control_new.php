@@ -20,7 +20,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <!-- Content Header (Page header) -->
       <section class="content-header">
         <h1>
-          Overtime Control New
+          Overtime Control
           <span class="text-purple">???</span>
         </h1>
       </section>

@@ -117,6 +117,20 @@ class Home extends CI_Controller {
         $this->load->view("overtime_control_new",$data);
     }
 
+    public function hr_report()
+    {
+        $data['menu2'] = 'Overtime';
+        $data['menu'] = 'HR Report';
+        $this->load->view("ot_hr_report",$data);
+    }
+
+    public function overtime_control_mp()
+    {
+        $data['menu2'] = 'Overtime';
+        $data['menu'] = 'Overtime Control MP';
+        $this->load->view("overtime_control_mp",$data);
+    }
+
     public function budget_chart_mp()
     {
         $data['menu2'] = 'Overtime';
