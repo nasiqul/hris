@@ -128,6 +128,7 @@ class Home extends CI_Controller {
     {
         $data['menu2'] = 'Overtime';
         $data['menu'] = 'Overtime Control MP';
+        $data['tgl2'] = $this->over_model_new->getlastData();
         $this->load->view("overtime_control_mp",$data);
     }
 

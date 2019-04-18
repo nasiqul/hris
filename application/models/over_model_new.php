@@ -341,6 +341,40 @@ class Over_model_new extends CI_Model {
         return $query->result();
     }
 
+    public function ot_control_mp($tgl, $tgl2, $fy)
+    {
+        $q = "select budget.id_cc, master_cc.name, budget.period, budget.budget, round((aktual.act / kar.karyawan),2) as act, budget.budget-round((aktual.act / kar.karyawan),2) as diff from
+        ( select id_cc, period, budget from cost_center_budget where DATE_FORMAT(period,'%Y-%m') = '".$tgl2."' ) as budget
+        left join
+        ( select costCenter, COALESCE(sum(ot.jam),0) act from
+        ( select nik, sum(jam) jam from over WHERE DATE_FORMAT(tanggal,'%Y-%m') = '".$tgl2."' and tanggal <= '".$tgl."'
+        group by nik ) as ot
+        right join karyawan on karyawan.nik = ot.nik
+        group by costCenter ) as aktual on budget.id_cc = aktual.costCenter
+        left join
+        ( select mon, master_cc.id_cc, sum(tot_karyawan) as karyawan from (
+        select mon, costCenter, count(if(if(date_format(a.tanggalMasuk, '%Y-%m') < mon, 1, 0 ) - if(date_format(a.tanggalKeluar, '%Y-%m') < mon, 1, 0 ) = 0, null, 1)) as tot_karyawan from
+        (
+        select distinct fiskal, date_format(tanggal, '%Y-%m') as mon
+        from kalender_fy
+        ) as b
+        join
+        (
+        select '".$fy."' as fy, karyawan.kode, tanggalKeluar, tanggalMasuk, nik, costCenter
+        from karyawan
+        ) as a
+        on a.fy = b.fiskal
+        group by mon, costCenter
+        having mon = '".$tgl2."'
+        ) as b 
+        left join master_cc on master_cc.id_cc = b.costCenter
+        GROUP BY mon, master_cc.id_cc ) as kar on kar.id_cc = budget.id_cc
+        left join master_cc on master_cc.id_cc = budget.id_cc
+        order by diff asc";
+        $query = $this->db->query($q);
+        return $query->result();
+    }
+
     public function getlastData()
     {
         $q = "select tanggal from over ORDER BY tanggal desc limit 1";

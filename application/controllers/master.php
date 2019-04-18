@@ -5,14 +5,14 @@ class Master extends CI_Controller {
 	function __construct(){
 		parent::__construct();
 		$this->load->model('home_model');
-		// $this->load->model('master_model');
+		$this->load->model('master_model');
 	}
 
 	public function index()
 	{
 		$data['menu2'] = 'Master';
-        $data['menu'] = 'Master Bagian';
-        $this->load->view("master/master_bagian",$data);
+		$data['menu'] = 'Master Bagian';
+		$this->load->view("master/master_bagian",$data);
 	}
 
 	public function ajax_client()
@@ -90,5 +90,68 @@ class Master extends CI_Controller {
 		echo json_encode($data);
 		
 	}
+
+	public function ajax_devisi($id)
+	{
+		$list = $this->master_model->get_data_master($id);
+		$tot = $this->master_model->count_all($id);
+		$filter = $this->master_model->count_filtered($id);
+
+		$data = array();
+		foreach ($list as $key) {
+			$row = array();
+			
+			$row[] = "<p id='$key->alias$key->id'>$key->nama</p>";
+			if ($id !="tgrup") {
+				$row[] = $key->jml;
+			}
+			
+			$row[] = "<p id='$key->id$key->alias'>$key->induk</p>";
+			$row[] = "<button class='btn btn-info btn-xs' id='detail' name='devisi' onclick='devisi(\"$key->alias$key->id\"); selek(\"$key->id$key->alias\")'>Detail</button>";
+			$data[] = $row;
+		}
+
+		$output = array(
+			"draw" => $_POST['draw'],
+			"data" => $data,
+			"recordsTotal" => $tot,
+			"recordsFiltered" => $filter,
+		);
+        //output to json format
+		echo json_encode($output);
+	}
+
+	public function get_devisi()
+	{
+		$id = $_POST['id'];
+		$nama = $_POST['nama'];
+		$dbtabel = $_POST['dbtabel'];
+		$induk = $_POST['induk'];
+		$tb = $_POST['tb'];
+		$this->master_model->get_devisi($id,$nama,$dbtabel,$induk,$tb);
+		
+	}
+
+	public function get_select()
+	{
+		$nama = $_GET['nama'];
+		$list = $this->master_model->get_select($nama);
+
+		$data = array();
+		foreach ($list as $key) {
+			$row = array();
+
+			$row[] = $key->id;
+			$row[] = $key->nama;
+
+			$data[] = $row;
+		}
+
+        //output to json format
+		echo json_encode($data);
+
+	}
+
+	
 }
 ?>

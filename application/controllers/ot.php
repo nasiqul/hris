@@ -17,6 +17,7 @@ class Ot extends CI_Controller {
 		$this->load->model('over_model_new');
 		$this->load->model('ot_summary');
 		$this->load->model('over_detail_mControl');
+		$this->load->model('hr_resume_model');
 		$this->load->library('ciqrcode');
 		$this->load->helper('file');
 		//$this->load->library(array('PHPExcel','PHPExcel/IOFactory'));
@@ -1710,6 +1711,73 @@ class Ot extends CI_Controller {
 		echo json_encode($data);
 	}
 
+	public function overtime_chart_control_mp()
+	{
+		if (isset($_POST['tgl']) && $_POST['tgl'] != "") {
+			$tgl = date('Y-m-d',strtotime($_POST['tgl']));
+			$tgl2 = date('Y-m',strtotime($_POST['tgl']));
+		}
+		else {
+			$tgl_data = $this->over_model_new->getlastData();
+			$tgl = date('Y-m-d',strtotime($tgl_data[0]->tanggal));
+			$tgl2 = date('Y-m',strtotime($tgl_data[0]->tanggal));
+		}
+
+
+		$data = array();
+
+		$fiskal = $this->home_model->getFiskal($tgl2);
+
+		$list = $this->over_model_new->ot_control_mp($tgl, $tgl2, $fiskal[0]->fiskal);
+
+		foreach ($list as $key) {
+			$row = array();
+			$row[] = $key->id_cc;
+			$row[] = $key->name;
+			$row[] = (float) $key->budget;
+			$row[] = (float) $key->act;
+			$row[] = date('d F Y',strtotime($tgl));
+
+			$data[] = $row;
+		}
+
+		echo json_encode($data);
+	}
+
+	public function ajax_hr_data()
+	{
+		if (isset($_GET['tgl']) && $_GET['tgl'] != "") {
+			$tgl = date('Y-m', strtotime("01-".$_GET['tgl']));
+		} else {
+			$tgl = date('Y-m');
+		}
+		// $tgl2 = date('Y-m',strtotime($_POST['tgl']));
+		$list = $this->hr_resume_model->ot_get_resume_data($tgl);
+		$tot = $this->hr_resume_model->count_all($tgl);
+		$filter = $this->hr_resume_model->count_filtered($tgl);
+
+		$data = array();
+
+		foreach ($list as $key) {
+			$row = array();
+			$row[] = $key->nik;
+			$row[] = $key->namaKaryawan;
+			$row[] = $key->bagian;
+			$row[] = (float) $key->act;
+
+			$data[] = $row;
+		}
+
+		$output = array(
+			"draw" => $_GET['draw'],
+			"recordsTotal" => $tot,
+			"recordsFiltered" => $filter,
+			"data" => $data,
+		);
+
+		echo json_encode($output);
+	}
+
 	public function exportexcel($id){
 
 		// $tgl = $_POST['tgl'];
@@ -1986,6 +2054,7 @@ class Ot extends CI_Controller {
 	}
 }
 ?>
+
 
 
 

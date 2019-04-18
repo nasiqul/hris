@@ -29,7 +29,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </div>
           </div>
         </h1>
-        <small style="font-size: 15px"><i class="fa fa-history"></i> Last updated : <?php echo date('d M Y',strtotime($tgl2[0]->tanggal)) ?> </small>
+        <small style="font-size: 15px; color: #88898c"><i class="fa fa-history"></i> Last updated : <?php echo date('d M Y',strtotime($tgl2[0]->tanggal)) ?> </small>
       </section>
 
       <!-- Main content -->

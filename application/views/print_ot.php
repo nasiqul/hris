@@ -242,7 +242,7 @@
 			<tr>
 				<td colspan="2">
 					<table width="100%" height="100%" id="tb-collapse" style="background-color: #dddddd; margin-top: 10px; text-align: center">
-						<tr><td width="34%">BUDGET</td><td width="33%">AKTUAL</td><td width="33%">DIFF</td></tr>
+						<tr><td width="34%">DAILY BUDGET ACCUMULATIVE</td><td width="33%">ACTUAL ACCUMULATIVE</td><td width="33%">DIFF</td></tr>
 						<tr>
 							<td height="20px"><d id="target" style="font-size: 25pt"></d></td>
 							<td><d style="font-size: 25pt" id="aktual"></d></td>
@@ -318,7 +318,7 @@
 								allowDecimals: true,
 								min: 4,
 								title: {
-									text: 'Jumlah Jam'
+									text: 'Overtime (hours)'
 								},
 								gridLineColor: '#fff'
 							},

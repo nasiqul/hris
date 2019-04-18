@@ -23,6 +23,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <h1>
           HR - Report Overtime
           <span class="text-purple">???</span>
+
+          <div class="col-md-2 pull-right">
+            <div class="input-group date">
+              <div class="input-group-addon bg-green" style="border-color: green">
+                <i class="fa fa-calendar"></i>
+              </div>
+              <input type="text" class="form-control datepicker" id="tgl" onchange="alert(this.value)" placeholder="Select date" style="border-color: green">
+            </div>
+          </div>
+
         </h1>
       </section>
 
@@ -35,13 +45,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <table id="example1" class="table table-responsive table-striped">
                 <thead>
                   <tr>
-                    <th>Question time</th>
-                    <th>Question's</th>
-                    <th>Question</th>
-                    <th>Answer</th>
-                    <th>Answer's</th>
-                    <th>Answer time</th>
-                    <th>Action</th>
+                    <th>NIK</th>
+                    <th>Nama Karyawan</th>
+                    <th>Bagian</th>
+                    <th>Aktual</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -64,18 +71,38 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- ./wrapper -->
   <script>
     $(document).ready(function() {
+      buattable();
+    })
+
+    function buattable() {
+      var tgl = $("tgl").val();
       $('#example1').DataTable({
         "lengthMenu"    : [[10, 25, 50, -1], [10, 25, 50, "All"]],
         "processing"    : true,
         "serverSide"    : true,
         'order'         : [],
         "ajax": {
-          "url": "<?php echo base_url('home/ajax_qa')?>",            
-          "type": "POST"
-        }
+          "url": "<?php echo base_url('ot/ajax_hr_data')?>",            
+          "type": "GET",
+          "data" : {
+            "tgl" : tgl
+          }
+        },
+        "columnDefs": [
+        {
+          "targets": [ 3 ], //first column / numbering column
+          "orderable": false, //set not orderable
+        }]
       })
-    })
-  </script>
+    }
+
+    $('.datepicker').datepicker({
+     autoclose: true,
+     format: "mm-yyyy",
+     viewMode: "months",
+     minViewMode: "months"
+   });
+ </script>
 
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the

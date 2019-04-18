@@ -306,8 +306,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
           interval: 30
         });
 
-        $("#dari"+no)[0].setAttribute("onchange","dariid("+no+");");
-        $("#sampai"+no)[0].setAttribute("onchange","sampaiid("+no+")");
+        $("#dari"+no)[0].setAttribute("onchange","dariid(this.id);");
+        $("#sampai"+no)[0].setAttribute("onchange","sampaiid(this.id);");
         
         // var sampai = $('#sampai').val();
         // var dari = $('#dari').val();
@@ -796,7 +796,7 @@ function getHari() {
 
 function dariid(id)
 {
-  var id = id;
+  id = id.substr(4,2);
   var sampai1 = $('#sampai'+id).val();
   var dari1 = $('#dari'+id).val();
 
@@ -814,7 +814,6 @@ function dariid(id)
   }
   var tgl = $('#datepicker').val();
   var shift = $("#shiftF").find(':selected')[0].value;
-
 
   jam = sampai1.split(":")[0] - dari1.split(":")[0];
   menit = sampai1.split(":")[1] - dari1.split(":")[1];
@@ -1077,6 +1076,7 @@ function secondsTimeSpanToHMS(s) {
 
   function sampaiid(id)
   {
+    id = id.substr(6,2);
     var sampai1 = $('#sampai'+id).val();
     var dari1 = $('#dari'+id).val();
     var sampaipost ="";

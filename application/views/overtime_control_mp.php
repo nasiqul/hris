@@ -20,10 +20,17 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <div class="content-wrapper">
       <!-- Content Header (Page header) -->
       <section class="content-header">
-        <h1>
-          Overtime Control MP
-          <span class="text-purple">???</span>
+        <h1> Overtime Control MP <span class="text-purple">???</span>
+          <div class="col-md-2 pull-right">
+            <div class="input-group date">
+              <div class="input-group-addon bg-green" style="border-color: green">
+                <i class="fa fa-calendar"></i>
+              </div>
+              <input type="text" class="form-control datepicker" id="tgl" onchange="drawChart()" placeholder="Select date" style="border-color: green">
+            </div>
+          </div>
         </h1>
+        <small style="font-size: 15px; color: #88898c"><i class="fa fa-history"></i> Last updated : <?php echo date('d M Y',strtotime($tgl2[0]->tanggal)) ?> </small>
       </section>
 
       <!-- Main content -->
@@ -59,68 +66,33 @@ scratch. This page gets rid of all links and provides the needed markup only.
       var tgl = $("#tgl").val();
       $.ajax({
        type: "POST",
-       url: "<?php echo base_url('ot/overtime_chart_control') ?>",
+       url: "<?php echo base_url('ot/overtime_chart_control_mp') ?>",
        data: {
         tgl : tgl
       },
       dataType: 'json',
       success: function(data) {
-        tot_budget = 0;
-        tot_act = 0;
-        tot_diff = 0;
-        avg = 0;
         var xCategories = [];
         var seriesDataBudget = [];
         var seriesDataAktual = [];
         var cat;
 
-        for(var i = 0; i < data[0].length; i++){
-          cat = data[0][i][1];
-          tot_budget += data[0][i][2];
-          tot_act += data[0][i][3];
-          seriesDataBudget.push(data[0][i][2]);
-          seriesDataAktual.push(data[0][i][3]);
+        for(var i = 0; i < data.length; i++){
+          cat = data[i][1];
+          seriesDataBudget.push(data[i][2]);
+          seriesDataAktual.push(data[i][3 ]);
           if(xCategories.indexOf(cat) === -1){
            xCategories[xCategories.length] = cat;
          }
        }
 
-       tot_diff = tot_budget - tot_act;
-
-       tot_budget = Math.round(tot_budget * 100) / 100;
-       tot_act = Math.round(tot_act * 100) / 100;
-       tot_diff = Math.round(tot_diff * 100) / 100;
-
-       var tot_budget2 = tot_budget.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
-       var tot_act2 = tot_act.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
-
-       var tot_diff2 = tot_diff.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
-
-       $("#tot_budget").text(tot_budget2);
-       $("#tot_act").text(tot_act2);
-
-       if (tot_diff > 0) {
-        $('#diff_text').removeClass('text-red').addClass('text-green');
-        $("#tot_diff").html("<i class='fa fa-caret-up'></i> "+tot_diff2);
-      }
-      else {
-        $('#diff_text').removeClass('text-green').addClass('text-red');
-        $("#tot_diff").html("<i class='fa fa-caret-down'></i> "+tot_diff2);
-      }
-      avg = tot_act / data[1];
-      avg = Math.round(avg * 100) / 100;
-      $("#avg").html(avg);
-
-      var interval = Math.ceil(300/10);
-
-
-      Highcharts.chart('container', {
+       Highcharts.chart('container', {
         chart: {
           spacingTop: 10,
           type: 'column'
         },
         title: {
-          text: '<span style="font-size: 2vw;">Overtime Control</span><br><span style="color: rgba(96, 92, 168);">'+ data[0][0][4] +'</span>'
+          text: '<span style="font-size: 2vw;">Overtime ManPower</span><br><span style="color: rgba(96, 92, 168);">'+ data[0][4] +'</span>'
         },
         credits:{
           enabled:false
@@ -189,9 +161,17 @@ scratch. This page gets rid of all links and provides the needed markup only.
           color: "#7300ab"
         }]
       });
+     }
+   })
     }
-  })
-    }
+
+    $('.datepicker').datepicker({
+      <?php $tgl_max = date('d-m-Y',strtotime($tgl2[0]->tanggal)) ?>
+     autoclose: true,
+     format: "dd-mm-yyyy",
+     endDate: '<?php echo $tgl_max ?>',
+
+   });
   </script>
 
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
