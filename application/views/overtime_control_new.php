@@ -19,114 +19,118 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <div class="content-wrapper">
       <!-- Content Header (Page header) -->
       <section class="content-header">
-        <h1>
-          Overtime Control
-          <span class="text-purple">???</span>
+        <h1>Overtime Control <span class="text-purple">???</span>
+          <div class="col-md-2 pull-right">
+            <div class="input-group date">
+              <div class="input-group-addon bg-green" style="border-color: green">
+                <i class="fa fa-calendar"></i>
+              </div>
+              <input type="text" class="form-control datepicker" id="tgl" onchange="drawChart()" placeholder="Select date" style="border-color: green">
+            </div>
+          </div>
         </h1>
+        <small style="font-size: 15px"><i class="fa fa-history"></i> Last updated : <?php echo date('d M Y',strtotime($tgl2[0]->tanggal)) ?> </small>
       </section>
 
       <!-- Main content -->
       <section class="content container-fluid">
-        <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-12">
 
-          <div class="box box-solid">
-            <div class="box-body">
-              <div class="col-md-12">
-                <div class="row">
-                  <div class="col-md-2" style="background-color: #605ca8; color: white">
-                    Select Date : 
-                    <input type="text" class="form-control datepicker" id="tgl" onchange="drawChart()" placeholder="select date">
-                    <i class="fa fa-history"></i> Last updated : <?php echo date('d M Y',strtotime($tgl2[0]->tanggal)) ?>
-                  </div>
-                  <div class="col-md-12">
-                    <div id="container" style="width: 100%; margin: 0px auto; height: 550px"></div>
+            <div class="box box-solid">
+              <div class="box-body">
+                <div class="col-md-12">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div id="container" style="width: 100%; margin: 0px auto; height: 550px"></div>
+                    </div>
                   </div>
                 </div>
+                <br><br>
               </div>
-              <br><br>
             </div>
-          </div>
 
-          <div class="box box-solid">
-            <div class="box-body">
-              <div class="col-md-12">
-                <div class="row">
-                  <div class="col-md-12">
-                    <div class="col-md-3">
-                      <div class="description-block border-right" style="color: #f76111">
-                        <h5 class="description-header" style="font-size: 60px;">
-                          <span class="description-percentage" id="tot_budget"></span>
-                        </h5>      
-                        <span class="description-text" style="font-size: 35px;">Total Budget<br><span class="text-purple">???</span></span>   
+            <div class="box box-solid">
+              <div class="box-body">
+                <div class="col-md-12">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="col-md-3">
+                        <div class="description-block border-right" style="color: #f76111">
+                          <h5 class="description-header" style="font-size: 60px;">
+                            <span class="description-percentage" id="tot_budget"></span>
+                          </h5>      
+                          <span class="description-text" style="font-size: 35px;">Total Budget<br><span class="text-purple">???</span></span>   
+                        </div>
                       </div>
-                    </div>
-                    <div class="col-md-3">
-                      <div class="description-block border-right" style="color: #7300ab" >
-                        <h5 class="description-header" style="font-size: 60px; ">
-                          <span class="description-percentage" id="tot_act"></span>
-                        </h5>      
-                        <span class="description-text" style="font-size: 35px;">Total Actual<br><span class="text-purple">???</span></span>   
+                      <div class="col-md-3">
+                        <div class="description-block border-right" style="color: #7300ab" >
+                          <h5 class="description-header" style="font-size: 60px; ">
+                            <span class="description-percentage" id="tot_act"></span>
+                          </h5>      
+                          <span class="description-text" style="font-size: 35px;">Total Actual<br><span class="text-purple">???</span></span>   
+                        </div>
                       </div>
-                    </div>
-                    <div class="col-md-3">
-                      <div class="description-block border-right text-green" id="diff_text">
-                        <h5 class="description-header" style="font-size: 60px;">
-                          <span class="description-percentage" id="tot_diff"></span>
-                        </h5>      
-                        <span class="description-text" style="font-size: 35px;">Difference<br><span class="text-purple">???</span></span>   
+                      <div class="col-md-3">
+                        <div class="description-block border-right text-green" id="diff_text">
+                          <h5 class="description-header" style="font-size: 60px;">
+                            <span class="description-percentage" id="tot_diff"></span>
+                          </h5>      
+                          <span class="description-text" style="font-size: 35px;">Difference<br><span class="text-purple">???</span></span>   
+                        </div>
                       </div>
-                    </div>
-                    <div class="col-md-3">
-                      <div class="description-block border-right text-yellow">
-                        <h5 class="description-header" style="font-size: 60px;">
-                          <span class="description-percentage" id="avg"></span>
-                        </h5>      
-                        <span class="description-text" style="font-size: 35px;">Average<br><span class="text-purple">???</span></span>   
+                      <div class="col-md-3">
+                        <div class="description-block border-right text-yellow">
+                          <h5 class="description-header" style="font-size: 60px;">
+                            <span class="description-percentage" id="avg"></span>
+                          </h5>      
+                          <span class="description-text" style="font-size: 35px;">Average<br><span class="text-purple">???</span></span>   
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          <div class="modal fade" id="myModal">
-           <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-             <div class="modal-header">
-              <h4 style="float: right; " id="modal-title"></h4>
-              <h4 class="modal-title"><b>PT. YAMAHA MUSICAL PRODUCTS INDONESIA</b></h4>
-            </div>
-            <div class="modal-body">
-              <div class="row">
-               <div class="col-md-12">
-                <table class="table table-bordered table-stripped table-responsive" style="width: 100%" id="example2">
-                 <thead>
-                   <tr>
-                     <th>No</th>
-                     <th>NIK</th>
-                     <th>Nama</th>
-                     <th>Lembur (jam)</th>
-                   </tr>
-                 </thead>
-                 <tbody id="tabelDetail"></tbody>
-                 <tfoot>
-                   <th>
-                    <td colspan="2" style="font-weight: bold; size: 25px; text-align: right;">TOTAL </td>
-                    <td id="tot" style="font-weight: bold; size: 25px"></td>
-                  </th>
-                </tfoot>
-              </table>
+            <div class="modal fade" id="myModal">
+             <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+               <div class="modal-header">
+                <h4 style="float: right; " id="modal-title"></h4>
+                <h4 class="modal-title"><b>PT. YAMAHA MUSICAL PRODUCTS INDONESIA</b></h4>
+              </div>
+              <div class="modal-body">
+                <div class="row">
+                 <div class="col-md-12">
+                  <table class="table table-bordered table-stripped table-responsive" style="width: 100%" id="example2">
+                   <thead>
+                     <tr>
+                       <th>No</th>
+                       <th>NIK</th>
+                       <th>Nama</th>
+                       <th>Lembur (jam)</th>
+                     </tr>
+                   </thead>
+                   <tbody id="tabelDetail"></tbody>
+                   <tfoot>
+                     <th>
+                      <td colspan="2" style="font-weight: bold; size: 25px; text-align: right;">TOTAL </td>
+                      <td id="tot" style="font-weight: bold; size: 25px"></td>
+                    </th>
+                  </tfoot>
+                </table>
+              </div>
             </div>
           </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger pull-right" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+          </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-danger pull-right" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
-        </div>
+        <!-- /.modal-content -->
       </div>
-      <!-- /.modal-content -->
+      <!-- /.modal-dialog -->
     </div>
-    <!-- /.modal-dialog -->
   </div>
 </div>
 
@@ -197,11 +201,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
        if (tot_diff > 0) {
         $('#diff_text').removeClass('text-red').addClass('text-green');
-        $("#tot_diff").html("<i class='fa fa-caret-up'></i> "+tot_diff2);
+        $("#tot_diff").html(tot_diff2);
       }
       else {
         $('#diff_text').removeClass('text-green').addClass('text-red');
-        $("#tot_diff").html("<i class='fa fa-caret-down'></i> "+tot_diff2);
+        $("#tot_diff").html(tot_diff2);
       }
       avg = tot_act / data[1];
       avg = Math.round(avg * 100) / 100;
