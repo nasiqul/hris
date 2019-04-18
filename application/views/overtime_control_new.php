@@ -19,7 +19,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <div class="content-wrapper">
       <!-- Content Header (Page header) -->
       <section class="content-header">
-        <h1>Overtime <span class="text-purple">???</span>
+        <h1>Overtime <span class="text-purple">残業時間管理</span>
           <div class="col-md-2 pull-right">
             <div class="input-group date">
               <div class="input-group-addon bg-green" style="border-color: green">
@@ -60,7 +60,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                           <h5 class="description-header" style="font-size: 60px;">
                             <span class="description-percentage" id="tot_budget"></span>
                           </h5>      
-                          <span class="description-text" style="font-size: 35px;">Total Budget<br><span class="text-purple">???</span></span>   
+                          <span class="description-text" style="font-size: 35px;">Total Budget<br><span >総予算</span></span>   
                         </div>
                       </div>
                       <div class="col-md-3">
@@ -68,7 +68,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                           <h5 class="description-header" style="font-size: 60px; ">
                             <span class="description-percentage" id="tot_act"></span>
                           </h5>      
-                          <span class="description-text" style="font-size: 35px;">Total Actual<br><span class="text-purple">???</span></span>   
+                          <span class="description-text" style="font-size: 35px;">Total Actual<br><span >総実績</span></span>   
                         </div>
                       </div>
                       <div class="col-md-3">
@@ -76,7 +76,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                           <h5 class="description-header" style="font-size: 60px;">
                             <span class="description-percentage" id="tot_diff"></span>
                           </h5>      
-                          <span class="description-text" style="font-size: 35px;">Difference<br><span class="text-purple">???</span></span>   
+                          <span class="description-text" style="font-size: 35px;">Difference<br><span >差異</span></span>   
                         </div>
                       </div>
                       <div class="col-md-3">
@@ -84,7 +84,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                           <h5 class="description-header" style="font-size: 60px;">
                             <span class="description-percentage" id="avg"></span>
                           </h5>      
-                          <span class="description-text" style="font-size: 35px;">Average<br><span class="text-purple">???</span></span>   
+                          <span class="description-text" style="font-size: 35px;">Average<br><span >平均</span></span>   
                         </div>
                       </div>
                     </div>
