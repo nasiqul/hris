@@ -19,7 +19,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <div class="content-wrapper">
       <!-- Content Header (Page header) -->
       <section class="content-header">
-        <h1>Overtime Control <span class="text-purple">???</span>
+        <h1>Overtime <span class="text-purple">???</span>
           <div class="col-md-2 pull-right">
             <div class="input-group date">
               <div class="input-group-addon bg-green" style="border-color: green">
@@ -220,7 +220,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           type: 'column'
         },
         title: {
-          text: '<span style="font-size: 2vw;">Overtime Control</span><br><span style="color: rgba(96, 92, 168);">'+ data[0][0][4] +'</span>'
+          text: '<span style="font-size: 2vw;">Overtime</span><br><span style="color: rgba(96, 92, 168);">'+ data[0][0][4] +'</span>'
         },
         credits:{
           enabled:false
@@ -328,8 +328,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
     }
 
     $('.datepicker').datepicker({
+      <?php $tgl_max = date('d-m-Y',strtotime($tgl2[0]->tanggal)) ?>
      autoclose: true,
-     format: "dd-mm-yyyy"
+     format: "dd-mm-yyyy",
+     endDate: '<?php echo $tgl_max ?>',
+
    });
 
  </script>

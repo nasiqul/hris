@@ -1650,8 +1650,9 @@ class Ot extends CI_Controller {
 			$tgl2 = date('Y-m',strtotime($_POST['tgl']));
 		}
 		else {
-			$tgl = date('Y-m-d');
-			$tgl2 = date('Y-m');
+			$tgl_data = $this->over_model_new->getlastData();
+			$tgl = date('Y-m-d',strtotime($tgl_data[0]->tanggal));
+			$tgl2 = date('Y-m',strtotime($tgl_data[0]->tanggal));
 		}
 
 		$kar = 0;
