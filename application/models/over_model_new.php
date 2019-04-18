@@ -316,7 +316,7 @@ class Over_model_new extends CI_Model {
     public function ot_control($tgl, $tgl2)
     {
         $q = "
-        select n.id_cc, master_cc.name, sum(n.act) as act, sum(budget_tot) as tot from 
+        select n.id_cc, master_cc.name, sum(n.act) as act, sum(budget_tot) as tot, sum(budget_tot)-sum(n.act) as diff from 
         (
         select l.id_cc, d.tanggal, COALESCE(act,0) act, l.budget_tot from
         (select id_cc,  ROUND((budget_total / DATE_FORMAT(LAST_DAY('".$tgl."'),'%d')),1) budget_tot from cost_center_budget where DATE_FORMAT(period,'%Y-%m') = '".$tgl2."') as l
@@ -336,7 +336,7 @@ class Over_model_new extends CI_Model {
         where d.tanggal <= '".$tgl."'
         ) as n
         left join master_cc on master_cc.id_cc = n.id_cc
-        group by id_cc";
+        group by id_cc order by diff asc";
         $query = $this->db->query($q);
         return $query->result();
     }
