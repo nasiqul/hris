@@ -100,6 +100,9 @@ class import_excel extends CI_Controller {
                 }
             }
 
+            $this->session->set_flashdata('status', 'sukses');
+            redirect("home/presensi");
+
         }
 
         public function export_excel_presensi(){

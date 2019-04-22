@@ -12,6 +12,7 @@ class Budget extends CI_Controller {
 	{
 		$data['menu2'] = 'Overtime';
         $data['menu'] = 'Cost - Center Budget';
+        $data['parentMenu'] = $this->home_model->getParentMenu();
 		$this->load->view('budget',$data);
 	}
 

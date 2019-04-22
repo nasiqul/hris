@@ -12,7 +12,16 @@ class Master extends CI_Controller {
 	{
 		$data['menu2'] = 'Master';
 		$data['menu'] = 'Master Bagian';
+		$data['parentMenu'] = $this->home_model->getParentMenu();
 		$this->load->view("master/master_bagian",$data);
+	}
+
+	public function role()
+	{
+		$data['menu2'] = 'Master';
+		$data['menu'] = 'Master Role';
+		$data['parentMenu'] = $this->home_model->getParentMenu();
+		$this->load->view("master/master_login",$data);
 	}
 
 	public function ajax_client()
@@ -90,7 +99,7 @@ class Master extends CI_Controller {
 		echo json_encode($data);
 		
 	}
-
+//---------------------- BAGIAN 
 	public function ajax_devisi($id)
 	{
 		$list = $this->master_model->get_data_master($id);
@@ -150,6 +159,49 @@ class Master extends CI_Controller {
         //output to json format
 		echo json_encode($data);
 
+	}
+
+	//----------------- ROLE
+
+	public function ajax_role($id)
+	{
+		$list = $this->master_model->get_data_master_role($id);
+		$tot = $this->master_model->count_all_role($id);
+		$filter = $this->master_model->count_filtered_role($id);
+
+		$data = array();
+		foreach ($list as $key) {
+			$row = array();
+			if ($id =="role") {
+			$row[] = "<p id='$key->alias$key->id'>$key->id</p>";				
+			$row[] = "<p id='$key->id$key->alias'>$key->nama</p>";
+		}
+
+		if ($id =="menu") {
+			$row[] = "<p id='$key->alias$key->id'>$key->parent_menu</p>";				
+			$row[] = "<p id='$key->id$key->alias'>$key->nama</p>";
+			$row[] = "<p id='$key->id$key->alias'>$key->url</p>";
+			$row[] = "<p id='$key->id$key->alias'>$key->icon</p>";
+		}
+
+		if ($id =="user") {
+			$row[] = "<p id='$key->alias$key->id'>$key->role</p>";				
+			$row[] = "<p id='$key->id$key->alias'>$key->username</p>";
+			$row[] = "<p id='$key->id$key->alias'>$key->nama</p>";
+			$row[] = "<p id='$key->id$key->alias'>$key->department</p>";
+		}
+			$row[] = "<button class='btn btn-info btn-xs' id='detail' name='devisi' onclick='devisi(\"$key->alias$key->id\"); selek(\"$key->id$key->alias\")'>Detail</button>";
+			$data[] = $row;
+		}
+
+		$output = array(
+			"draw" => $_POST['draw'],
+			"data" => $data,
+			"recordsTotal" => $tot,
+			"recordsFiltered" => $filter,
+		);
+        //output to json format
+		echo json_encode($output);
 	}
 
 	

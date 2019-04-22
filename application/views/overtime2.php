@@ -27,6 +27,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <!-- Main content -->
       <section class="content container-fluid">      
         <div class="col-md-12">
+          <div class="alert alert-success alert-dismissible" id="notif" onclick="check()" style="display: none; cursor: pointer;">
+            <h4><i class="icon fa fa-thumbs-o-up"></i> Upload Berhasil !</h4>
+          </div>
+
+
           <div class="box box-solid">
             <div class="box-body">
               Tanggal<br>
@@ -202,6 +207,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       $("#tglfilter").removeAttr('disabled');
       $("#konfirm").removeAttr('disabled');
       $("#progressbar2").hide();
+      notif.style.display = "block";
     },
     success: function() {
       buattable();
@@ -404,6 +410,10 @@ function gantiJam(nik,id,jam) {
       jam:jam
     }
   })
+}
+
+function check() {
+  notif.style.display = "none";
 }
 
 function openOKGritter(){

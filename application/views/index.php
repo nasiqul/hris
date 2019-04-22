@@ -26,9 +26,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <span class="text-purple">出勤データ</span>
         </h1>      
       </section>
-
       <!-- Main content -->
       <section class="content container-fluid">
+
+        <div class="col-md-12">
+          <div class="alert alert-success alert-dismissible" id="notif2" onclick="check()" style="cursor: pointer;" <?php if (!isset($_SESSION['status'])) echo "hidden"; ?>>
+            <h4><i class="icon fa fa-thumbs-o-up"></i> Upload Berhasil</h4>
+          </div>
+        </div>
 
         <div class="col-md-12">
           <!-- general form elements -->
@@ -82,8 +87,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
           </div>
 
           <!-- /.box -->
-
         </div> 
+
         <div class="col-md-12">
           <div class="box box-solid">
             <div class="box-body">
@@ -175,6 +180,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
     function openModal() {
       $('#myModal').modal({backdrop: 'static', keyboard: false});
+    }
+
+    function check() {
+      notif2.style.display = "none";
     }
 
     $('#datepicker').datepicker({

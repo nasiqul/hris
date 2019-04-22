@@ -1703,7 +1703,8 @@ class Ot extends CI_Controller {
 			$row = array();
 			$row[] = $key->nik;
 			$row[] = $key->namaKaryawan;
-			$row[] = (float) $key->jam;			
+			$row[] = (float) $key->jam;
+			$row[] = $key->kep;
 
 			$data[] = $row;
 		}
@@ -1776,6 +1777,24 @@ class Ot extends CI_Controller {
 		);
 
 		echo json_encode($output);
+	}
+
+	public function budget_total()
+	{
+		$tgl = date('Y-m',strtotime($_POST['tgl']));
+		$cc = $_POST['cc'];
+
+		$data = array();
+		$list = $this->over_model_new->get_budget_total($cc, $tgl);
+
+		foreach ($list as $key) {
+			$row = array();
+			$row[] = (float) $key->budget;
+
+			$data[] = $row;
+		}
+
+		echo json_encode($data);
 	}
 
 	public function exportexcel($id){

@@ -167,11 +167,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
     $('.datepicker').datepicker({
       <?php $tgl_max = date('d-m-Y',strtotime($tgl2[0]->tanggal)) ?>
-     autoclose: true,
-     format: "dd-mm-yyyy",
-     endDate: '<?php echo $tgl_max ?>',
+      autoclose: true,
+      format: "dd-mm-yyyy",
+      endDate: '<?php echo $tgl_max ?>',
 
-   });
+    });
   </script>
 
 <!-- Optionally, you can add Slimscroll and FastClick plugins.

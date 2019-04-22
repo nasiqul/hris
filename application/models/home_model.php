@@ -302,4 +302,11 @@ public function get_report_absensi($tgl)
     $query = $this->db->query($q);
     return $query->result();
 }
+
+public function getParentMenu()
+{
+    $q = "select parent_menu from master_menu group by parent_menu order by id_menu asc";
+    $query = $this->db->query($q);
+    return $query->result();
+}
 }

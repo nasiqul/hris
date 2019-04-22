@@ -6,6 +6,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <html>
 <!-- HEADER -->
 <?php require_once(APPPATH.'views/header/head.php'); ?>
+<style type="text/css">
+  .morecontent span {
+    display: none;
+  }
+  .morelink {
+    display: block;
+  }
+</style>
 
 <body class="hold-transition skin-purple sidebar-mini">
   <div class="wrapper">
@@ -97,12 +105,18 @@ scratch. This page gets rid of all links and provides the needed markup only.
              <div class="modal-dialog modal-lg">
               <div class="modal-content">
                <div class="modal-header">
-                <h4 style="float: right; " id="modal-title"></h4>
+                <h4 style="float: right; " id="modal-title"></h4> 
                 <h4 class="modal-title"><b>PT. YAMAHA MUSICAL PRODUCTS INDONESIA</b></h4>
               </div>
               <div class="modal-body">
                 <div class="row">
                  <div class="col-md-12">
+                  <div id="progressbar2">
+                    <center>
+                      <i class="fa fa-refresh fa-spin" style="font-size: 6em;"></i> 
+                      <br><h4>Loading ...</h4>
+                    </center>
+                  </div>
                   <table class="table table-bordered table-stripped table-responsive" style="width: 100%" id="example2">
                    <thead>
                      <tr>
@@ -110,6 +124,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                        <th>NIK</th>
                        <th>Nama</th>
                        <th>Lembur (jam)</th>
+                       <th>Keperluan</th>
                      </tr>
                    </thead>
                    <tbody id="tabelDetail"></tbody>
@@ -294,6 +309,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
     }
 
     function modalTampil(costCenter, date) {
+      $("#myModal").modal('show');
+      var showChar = 100;  // How many characters are shown by default
+      var ellipsestext = "...";
+      var moretext = "Show more >";
+      var lesstext = "Show less";
+
+      total_budget(costCenter, date);
+
       $.ajax({
        type: "POST",
        url: "<?php echo base_url('ot/overtime_control_detail') ?>",
@@ -302,18 +325,24 @@ scratch. This page gets rid of all links and provides the needed markup only.
         tgl : date
       },
       dataType: 'json',
+      beforeSend: function () {
+        $('#progressbar2').show();
+        $('#example2').hide();
+      },
+      complete: function () {
+        $('#progressbar2').hide();
+        $('#example2').show();
+      },
       success: function(data) {
-        $("#myModal").modal('show');
         $("#tabelDetail").empty();
         var no = 1;
         var jml = 0;
-        $("#modal-title").text(costCenter);
 
         $.each(data, function(i, item) {
           if (item[0] != ""){
             var newdiv1 = $( "<tr>"+                  
               "<td>"+no+"</td><td>"+item[0]+"</td>"+
-              "<td>"+item[1]+"</td><td>"+item[2]+"</td>"+
+              "<td>"+item[1]+"</td><td>"+item[2]+"</td><td><span class='more'>"+item[3]+"</span></td>"+
               "</tr>");
             no++;
             jml += item[2];
@@ -322,20 +351,64 @@ scratch. This page gets rid of all links and provides the needed markup only.
           }
         });
 
+        $('.more').each(function() {
+          var content = $(this).html();
+
+          if(content.length > showChar) {
+
+            var c = content.substr(0, showChar);
+            var h = content.substr(showChar, content.length - showChar);
+
+            var html = c + '<span class="moreellipses">' + ellipsestext+ '&nbsp;</span><span class="morecontent"><span>' + h + '</span>&nbsp;&nbsp;<a href="" class="morelink">' + moretext + '</a></span>';
+
+            $(this).html(html);
+          }
+
+        });
+
+        $(".morelink").click(function(){
+          if($(this).hasClass("less")) {
+            $(this).removeClass("less");
+            $(this).html(moretext);
+          } else {
+            $(this).addClass("less");
+            $(this).html(lesstext);
+          }
+          $(this).parent().prev().toggle();
+          $(this).prev().toggle();
+          return false;
+        });
+
         $("#tot").text(jml);
       }
     })
     }
 
+    function total_budget(costCenter, date) {
+      $.ajax({
+       type: "POST",
+       url: "<?php echo base_url('ot/budget_total') ?>",
+       data: {
+        cc : costCenter,
+        tgl : date
+      },
+      dataType: 'json',
+      success: function(data) {
+        $("#modal-title").html(costCenter+" ( &Sigma; Budget "+data+ " )");
+      }
+    })
+
+    }
+
     $('.datepicker').datepicker({
       <?php $tgl_max = date('d-m-Y',strtotime($tgl2[0]->tanggal)) ?>
-     autoclose: true,
-     format: "dd-mm-yyyy",
-     endDate: '<?php echo $tgl_max ?>',
+      autoclose: true,
+      format: "dd-mm-yyyy",
+      endDate: '<?php echo $tgl_max ?>',
 
-   });
+    });
 
- </script>
+  </script>
 
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the
