@@ -384,10 +384,10 @@ class Over_model_new extends CI_Model {
 
     public function ot_control_detail($cc, $tgl, $tgl2)
     {
-        $q = "select m.nik, sum(m.jam) jam, karyawan.namaKaryawan, GROUP_CONCAT(COALESCE(d.kep,'-')) as kep from ( select nik, tanggal, jam from over where jam <> 0 and date_format(tanggal, '%Y-%m') = '".$tgl2."' ) as m
+        $q = "select m.nik, sum(m.jam) jam, karyawan.namaKaryawan, COALESCE(d.kep,'-') as kep from ( select nik, tanggal, jam from over where jam <> 0 and date_format(tanggal, '%Y-%m') = '".$tgl2."' ) as m
         left join karyawan on karyawan.nik = m.nik
         left join (
-            select over_time.id, tanggal, GROUP_CONCAT(over_time.keperluan) as kep, over_time_member.nik from over_time 
+            select over_time.id, tanggal, GROUP_CONCAT(DISTINCT over_time.keperluan) as kep , over_time_member.nik from over_time 
             join over_time_member on over_time_member.id_ot = over_time.id
             where deleted_at IS NULL and date_format(tanggal, '%Y-%m') = '".$tgl2."' and tanggal <= '".$tgl."'
             group by nik

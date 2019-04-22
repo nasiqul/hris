@@ -313,7 +313,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       var showChar = 100;  // How many characters are shown by default
       var ellipsestext = "...";
       var moretext = "Show more >";
-      var lesstext = "Show less";
+      var lesstext = "< Show less";
 
       total_budget(costCenter, date);
 
