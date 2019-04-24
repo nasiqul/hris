@@ -50,7 +50,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <div class="col-md-12">
                   <div class="row">
                     <div class="col-md-12">
-                      <div id="container" style="width: 100%; margin: 0px auto; height: 550px"></div>
+                      <div id="container" style="width: 100%; margin: 0px auto; height: 550px;"></div>
                     </div>
                   </div>
                 </div>
@@ -235,10 +235,18 @@ scratch. This page gets rid of all links and provides the needed markup only.
           type: 'column'
         },
         title: {
-          text: '<span style="font-size: 2vw;">Overtime</span><br><span style="color: rgba(96, 92, 168);">'+ data[0][0][4] +'</span>'
+          text: '<span style="font-size: 30pt;">Overtime</span><br><center><span style="color: rgba(96, 92, 168);">'+ data[0][0][4] +'</center></span>',
+          useHTML: true
         },
         credits:{
           enabled:false
+        },
+        legend: {
+          itemStyle: {
+            color: '#000000',
+            fontWeight: 'bold',
+            fontSize: '20px'
+          }
         },
         yAxis: {
           tickInterval: 10,
