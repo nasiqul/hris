@@ -333,29 +333,25 @@ class Over_model_new extends CI_Model {
             SELECT nik, tanggal, jam 
                         FROM
                             (
-                        SELECT nik, tanggal, jam, 1 AS cek FROM over 
-                        WHERE DATE_FORMAT( tanggal, '%Y-%m' ) = '".$tgl2."' 
+                        SELECT nik, tanggal, jam FROM over 
+                        WHERE DATE_FORMAT( tanggal, '%Y-%m' ) = '2019-04' 
                             AND jam <> 0    AND status_final = 1 
                             UNION ALL
-                        SELECT a.nik, a.tanggal, a.jam, count( b.id ) AS cek FROM
+                        SELECT a.nik, a.tanggal, a.jam FROM
                             (
                             ( SELECT over.nik, over.tanggal, over.jam FROM over 
-                            WHERE DATE_FORMAT( over.tanggal, '%Y-%m' ) = '".$tgl2."' 
+                            WHERE DATE_FORMAT( over.tanggal, '%Y-%m' ) = '2019-04' 
                             AND over.jam <> 0 
                             AND over.status_final = 0 
                             ) AS a
                             LEFT JOIN (
-                        SELECT over_time.id, over_time.tanggal, over_time_member.nik FROM over_time
-                            LEFT JOIN over_time_member ON over_time_member.id_ot = over_time.id 
-                        WHERE DATE_FORMAT( over_time.tanggal, '%Y-%m' ) = '".$tgl2."' 
-                            AND over_time_member.nik IS NOT NULL 
-                            ) AS b ON a.nik = b.nik 
-                            AND a.tanggal = b.tanggal 
-                            ) 
-                        GROUP BY a.nik, a.tanggal,
-                            a.jam 
-                        HAVING
-                            cek > 0 
+                        SELECT distinct over_time.id, over_time.tanggal, over_time_member.nik FROM over_time
+                            LEFT JOIN over_time_member ON over_time_member.id_ot = over_time.id
+                        WHERE DATE_FORMAT( over_time.tanggal, '%Y-%m' ) = '2019-04'
+                            AND over_time_member.nik IS NOT NULL
+                            ) AS b ON a.nik = b.nik
+                            AND a.tanggal = b.tanggal
+                            ) where b.id is not null
                             ) AS final
         ) d
         left join karyawan on karyawan.nik = d.nik
