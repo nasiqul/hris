@@ -1669,7 +1669,7 @@ class Ot extends CI_Controller {
 		foreach ($list as $key) {
 			$row = array();
 			$row[] = $key->id_cc;
-			$row[] = $key->name;
+			$row[] = $key->NAME;
 			$row[] = (float) $key->tot;
 			$row[] = (float) $key->act;
 			$row[] = date('d F Y',strtotime($tgl));

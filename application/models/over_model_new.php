@@ -315,52 +315,60 @@ class Over_model_new extends CI_Model {
 
     public function ot_control($tgl, $tgl2)
     {
-        $q = "
-        select n.id_cc, master_cc.name, sum(n.act) as act, sum(budget_tot) as tot, sum(budget_tot)-sum(n.act) as diff from 
+        $q = " SELECT  n.id_cc,  master_cc.NAME,
+        sum( n.act ) AS act,        sum( budget_tot ) AS tot,        sum( budget_tot ) - sum( n.act ) AS diff         FROM
         (
-        select l.id_cc, d.tanggal, COALESCE(act,0) act, l.budget_tot from
-        (select id_cc,  ROUND((budget_total / DATE_FORMAT(LAST_DAY('".$tgl."'),'%d')),1) budget_tot from cost_center_budget where DATE_FORMAT(period,'%Y-%m') = '".$tgl2."') as l
-        cross join 
+        SELECT
+        l.id_cc,
+        d.tanggal,
+        COALESCE ( act, 0 ) act,
+        l.budget_tot 
+        FROM
         (
-        select tanggal from over
-        where DATE_FORMAT(tanggal,'%Y-%m') = '".$tgl2."'
-        group by tanggal
-        ) as d
-        left join 
+        SELECT
+        id_cc,
+        ROUND( ( budget_total / DATE_FORMAT( LAST_DAY( '".$tgl."' ), '%d' ) ), 1 ) budget_tot 
+        FROM
+        cost_center_budget 
+        WHERE
+        DATE_FORMAT( period, '%Y-%m' ) = '".$tgl2."' 
+        ) AS l
+        CROSS JOIN ( SELECT tanggal FROM over WHERE DATE_FORMAT( tanggal, '%Y-%m' ) = '".$tgl2."' GROUP BY tanggal ) AS d
+        LEFT JOIN (
+        SELECT
+        d.tanggal,
+        sum( jam ) AS act,
+        karyawan.costCenter 
+        FROM
         (
-        select d.tanggal, sum(jam) as act, karyawan.costCenter from
-        (
-            SELECT nik, tanggal, jam 
-                        FROM
-                            (
-                        SELECT nik, tanggal, jam FROM over 
-                        WHERE DATE_FORMAT( tanggal, '%Y-%m' ) = '".$tgl2."' 
-                            AND jam <> 0    AND status_final = 1 
-                            UNION ALL
-                        SELECT a.nik, a.tanggal, a.jam FROM
-                            (
-                            ( SELECT over.nik, over.tanggal, over.jam FROM over 
-                            WHERE DATE_FORMAT( over.tanggal, '%Y-%m' ) = '".$tgl2."' 
-                            AND over.jam <> 0 
-                            AND over.status_final = 0 
-                            ) AS a
-                            LEFT JOIN (
-                        SELECT distinct over_time.id, over_time.tanggal, over_time_member.nik FROM over_time
-                            LEFT JOIN over_time_member ON over_time_member.id_ot = over_time.id
-                        WHERE DATE_FORMAT( over_time.tanggal, '%Y-%m' ) = '".$tgl2."'
-                            AND over_time_member.nik IS NOT NULL
-                            ) AS b ON a.nik = b.nik
-                            AND a.tanggal = b.tanggal
-                            ) where b.id is not null
-                            ) AS final
+        SELECT
+        over_time_member.nik,
+        over_time.tanggal,
+        sum( over_time_member.final ) AS jam 
+        FROM
+        over_time
+        LEFT JOIN over_time_member ON over_time.id = over_time_member.id_ot 
+        WHERE
+        DATE_FORMAT( over_time.tanggal, '%Y-%m' ) = '".$tgl2."' 
+        AND over_time_member.nik IS NOT NULL 
+        GROUP BY
+        over_time_member.nik,
+        over_time.tanggal
         ) d
-        left join karyawan on karyawan.nik = d.nik
-        group by tanggal, costCenter
-        ) x on x.costCenter = l.id_cc and x.tanggal = d.tanggal
-        where d.tanggal <= '".$tgl."'
-        ) as n
-        left join master_cc on master_cc.id_cc = n.id_cc
-        group by id_cc order by diff asc";
+        LEFT JOIN karyawan ON karyawan.nik = d.nik 
+        GROUP BY
+        tanggal,
+        costCenter 
+        ) x ON x.costCenter = l.id_cc 
+        AND x.tanggal = d.tanggal 
+        WHERE
+        d.tanggal <= '".$tgl."' 
+        ) AS n
+        LEFT JOIN master_cc ON master_cc.id_cc = n.id_cc 
+        GROUP BY
+        id_cc 
+        ORDER BY
+        diff ASC        ";
         $query = $this->db->query($q);
         return $query->result();
     }
