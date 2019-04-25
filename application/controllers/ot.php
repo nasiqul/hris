@@ -455,7 +455,7 @@ class Ot extends CI_Controller {
 
 		$this->over_model->change_over($nik, $tgl2, $jml);
 
-		$this->over_model->tambah_aktual($cc[0]->costCenter, $jml, $tgl);
+		// $this->over_model->tambah_aktual($cc[0]->costCenter, $jml, $tgl);
 
 	}
 
@@ -1789,6 +1789,7 @@ class Ot extends CI_Controller {
 
 		foreach ($list as $key) {
 			$row = array();
+			$row[] = date('M',strtotime($key->period));
 			$row[] = (float) $key->budget;
 
 			$data[] = $row;
@@ -1986,18 +1987,23 @@ class Ot extends CI_Controller {
 		$excel->getActiveSheet()->getStyle('A1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER); // Set text center untuk kolom A1
 
 		// Buat header tabel nya pada baris ke 3
-		$excel->setActiveSheetIndex(0)->setCellValue('A3', "NO"); // Set kolom A3 dengan tulisan "NO"
-		$excel->setActiveSheetIndex(0)->setCellValue('B3', "ID OVER TIME"); // Set kolom B3 dengan tulisan "NIS"
-		$excel->setActiveSheetIndex(0)->setCellValue('C3', "NIK"); // Set kolom C3 dengan tulisan "NAMA"
-		$excel->setActiveSheetIndex(0)->setCellValue('D3', "TANGGAL"); // Set kolom D3 dengan tulisan "JENIS KELAMIN"
-		$excel->setActiveSheetIndex(0)->setCellValue('E3', "NAMA KARYAWAN"); // Set kolom E3 dengan tulisan "ALAMAT"
-		$excel->setActiveSheetIndex(0)->setCellValue('F3', "DARI"); 
-		$excel->setActiveSheetIndex(0)->setCellValue('G3', "SAMPAI"); 
-		$excel->setActiveSheetIndex(0)->setCellValue('H3', "JAM"); 
-		$excel->setActiveSheetIndex(0)->setCellValue('I3', "TRANSPORT"); 
-		$excel->setActiveSheetIndex(0)->setCellValue('J3', "MAKAN"); 
-		$excel->setActiveSheetIndex(0)->setCellValue('K3', "EXTRA FOOD"); 
-		$excel->setActiveSheetIndex(0)->setCellValue('L3', "FINAL");
+		$excel->setActiveSheetIndex(0)->setCellValue('A3', "No"); // Set kolom A3 dengan tulisan "NO"
+		$excel->setActiveSheetIndex(0)->setCellValue('B3', "Id OT"); // Set kolom B3 dengan tulisan "NIS"
+		$excel->setActiveSheetIndex(0)->setCellValue('C3', "Nik"); // Set kolom C3 dengan tulisan "NAMA"
+		$excel->setActiveSheetIndex(0)->setCellValue('D3', "Tanggal"); // Set kolom D3 dengan tulisan "JENIS KELAMIN"
+		$excel->setActiveSheetIndex(0)->setCellValue('E3', "Nama Karyawan"); // Set kolom E3 dengan tulisan "ALAMAT"
+		$excel->setActiveSheetIndex(0)->setCellValue('F3', "Section"); 
+		$excel->setActiveSheetIndex(0)->setCellValue('G3', "Dari Lembur"); 
+		$excel->setActiveSheetIndex(0)->setCellValue('H3', "Sampai Lembur"); 
+		$excel->setActiveSheetIndex(0)->setCellValue('I3', "Jam Lembur"); 
+		$excel->setActiveSheetIndex(0)->setCellValue('J3', "Masuk Aktual"); 
+		$excel->setActiveSheetIndex(0)->setCellValue('K3', "Keluar Aktual"); 
+		$excel->setActiveSheetIndex(0)->setCellValue('L3', "Jam Aktual");
+		$excel->setActiveSheetIndex(0)->setCellValue('M3', "Diff");
+		$excel->setActiveSheetIndex(0)->setCellValue('N3', "Status Hari");
+		$excel->setActiveSheetIndex(0)->setCellValue('O3', "Status Spl");
+		$excel->setActiveSheetIndex(0)->setCellValue('P3', "Final Jam");
+		$excel->setActiveSheetIndex(0)->setCellValue('Q3', "Satuan");
 		// Apply style header yang telah kita buat tadi ke masing-masing kolom header
 		$excel->getActiveSheet()->getStyle('A3')->applyFromArray($style_col);
 		$excel->getActiveSheet()->getStyle('B3')->applyFromArray($style_col);
@@ -2011,6 +2017,11 @@ class Ot extends CI_Controller {
 		$excel->getActiveSheet()->getStyle('J3')->applyFromArray($style_col);
 		$excel->getActiveSheet()->getStyle('K3')->applyFromArray($style_col);
 		$excel->getActiveSheet()->getStyle('L3')->applyFromArray($style_col);
+		$excel->getActiveSheet()->getStyle('M3')->applyFromArray($style_col);
+		$excel->getActiveSheet()->getStyle('N3')->applyFromArray($style_col);
+		$excel->getActiveSheet()->getStyle('O3')->applyFromArray($style_col);
+		$excel->getActiveSheet()->getStyle('P3')->applyFromArray($style_col);
+		$excel->getActiveSheet()->getStyle('Q3')->applyFromArray($style_col);
 
 		// Panggil function view yang ada di SiswaModel untuk menampilkan semua data siswanya
 		$siswa = $this->over_model->exportdatahr($id);
@@ -2023,13 +2034,18 @@ class Ot extends CI_Controller {
 			$excel->setActiveSheetIndex(0)->setCellValue('C'.$numrow, $data->nik);
 			$excel->setActiveSheetIndex(0)->setCellValue('D'.$numrow, $data->tanggal);
 			$excel->setActiveSheetIndex(0)->setCellValue('E'.$numrow, $data->namaKaryawan);
-			$excel->setActiveSheetIndex(0)->setCellValue('F'.$numrow, $data->dari);
-			$excel->setActiveSheetIndex(0)->setCellValue('G'.$numrow, $data->sampai);
-			$excel->setActiveSheetIndex(0)->setCellValue('H'.$numrow, $data->jam);
-			$excel->setActiveSheetIndex(0)->setCellValue('I'.$numrow, $data->transport);
-			$excel->setActiveSheetIndex(0)->setCellValue('J'.$numrow, $data->makan);
-			$excel->setActiveSheetIndex(0)->setCellValue('K'.$numrow, $data->ext_food);
-			$excel->setActiveSheetIndex(0)->setCellValue('L'.$numrow, $data->final);
+			$excel->setActiveSheetIndex(0)->setCellValue('F'.$numrow, $data->nama);
+			$excel->setActiveSheetIndex(0)->setCellValue('G'.$numrow, $data->dari_lembur);
+			$excel->setActiveSheetIndex(0)->setCellValue('H'.$numrow, $data->sampai_lembur);
+			$excel->setActiveSheetIndex(0)->setCellValue('I'.$numrow, $data->jam_lembur);
+			$excel->setActiveSheetIndex(0)->setCellValue('J'.$numrow, $data->masuk_aktual);
+			$excel->setActiveSheetIndex(0)->setCellValue('K'.$numrow, $data->keluar_aktual);
+			$excel->setActiveSheetIndex(0)->setCellValue('L'.$numrow, $data->jam_aktual);
+			$excel->setActiveSheetIndex(0)->setCellValue('M'.$numrow, $data->diff);
+			$excel->setActiveSheetIndex(0)->setCellValue('N'.$numrow, $data->status_hari);
+			$excel->setActiveSheetIndex(0)->setCellValue('O'.$numrow, $data->status_spl);
+			$excel->setActiveSheetIndex(0)->setCellValue('P'.$numrow, $data->final_jam);
+			$excel->setActiveSheetIndex(0)->setCellValue('Q'.$numrow, $data->satuan);
 			
 			
 			// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
@@ -2045,6 +2061,11 @@ class Ot extends CI_Controller {
 			$excel->getActiveSheet()->getStyle('J'.$numrow)->applyFromArray($style_row);
 			$excel->getActiveSheet()->getStyle('K'.$numrow)->applyFromArray($style_row);
 			$excel->getActiveSheet()->getStyle('L'.$numrow)->applyFromArray($style_row);
+			$excel->getActiveSheet()->getStyle('M'.$numrow)->applyFromArray($style_row);
+			$excel->getActiveSheet()->getStyle('N'.$numrow)->applyFromArray($style_row);
+			$excel->getActiveSheet()->getStyle('O'.$numrow)->applyFromArray($style_row);
+			$excel->getActiveSheet()->getStyle('P'.$numrow)->applyFromArray($style_row);
+			$excel->getActiveSheet()->getStyle('Q'.$numrow)->applyFromArray($style_row);
 			
 			$no++; // Tambah 1 setiap kali looping
 			$numrow++; // Tambah 1 setiap kali looping
