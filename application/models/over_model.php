@@ -1609,7 +1609,7 @@ public function exportdatahr($id)
         left join satuan_lembur on over_time_member.final = satuan_lembur.jam and over.status = satuan_lembur.hari
         where DATE_FORMAT(over_time.tanggal,'%Y-%m-%d')='".$id."' 
         and DATE_FORMAT(presensi.tanggal,'%Y-%m-%d')='".$id."' 
-        and DATE_FORMAT(over.tanggal,'%Y-%m-%d')='".$id."' ) a");
+        and DATE_FORMAT(over.tanggal,'%Y-%m-%d')='".$id."' and over_time.deleted_at IS NULL ) a");
 
     $query = $this->db->get();
     return $query->result();
