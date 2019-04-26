@@ -118,7 +118,7 @@ class Home extends CI_Controller {
         $data['menu2'] = 'Overtime';
         $data['menu'] = 'Overtime Control New';
         $data['parentMenu'] = $this->home_model->getParentMenu();
-        $data['tgl2'] = $this->over_model_new->getlastData();
+        // $data['tgl2'] = $this->over_model_new->getlastData();
         $this->load->view("overtime_control_new",$data);
     }
 
@@ -225,6 +225,7 @@ class Home extends CI_Controller {
     public function overtime_form()
     {
         $data['dep'] = $this->home_model->get_dep_all();
+        $data['kep'] = $this->home_model->get_kep_all();
         $data['id_doc'] = $this->over_model->get_id_doc();
         $data['parentMenu'] = $this->home_model->getParentMenu();
         $data['menu2'] = 'Overtime';

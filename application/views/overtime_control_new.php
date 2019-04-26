@@ -37,7 +37,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </div>
           </div>
         </h1>
-        <small style="font-size: 15px; color: #88898c"><i class="fa fa-history"></i> Last updated : <?php echo date('d M Y',strtotime($tgl2[0]->tanggal)) ?> </small>
+        <small style="font-size: 15px; color: #88898c"><i class="fa fa-history"></i> Last updated : <?php echo date('d M Y') ?> </small>
       </section>
 
       <!-- Main content -->
@@ -402,14 +402,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
       },
       dataType: 'json',
       success: function(data) {
-        $("#modal-title").html(costCenter+" ( &Sigma; Budget "+data+ " )");
+        $("#modal-title").html(costCenter+" ( &Sigma; Budget "+data[0]+" )");
       }
     })
 
     }
 
     $('.datepicker').datepicker({
-      <?php $tgl_max = date('d-m-Y',strtotime($tgl2[0]->tanggal)) ?>
+      <?php $tgl_max = date('d-m-Y') ?>
       autoclose: true,
       format: "dd-mm-yyyy",
       endDate: '<?php echo $tgl_max ?>',
