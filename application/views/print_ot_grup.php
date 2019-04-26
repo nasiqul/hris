@@ -74,6 +74,12 @@
 			font-weight: bold; 
 			background-color: #e6e8e1;
 		}
+
+		table,
+		table tr td,
+		table tr th {
+			page-break-inside: avoid;
+		}
 	</style>
 	<body>
 		<div class="row">
