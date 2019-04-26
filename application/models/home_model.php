@@ -309,4 +309,10 @@ public function getParentMenu()
     $query = $this->db->query($q);
     return $query->result();
 }
+
+public function get_kep_all()
+{
+    $query = $this->db->get('master_keperluan');
+    return $query->result();
+}
 }
