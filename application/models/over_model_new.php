@@ -333,7 +333,7 @@ class Over_model_new extends CI_Model {
         WHERE
         DATE_FORMAT( period, '%Y-%m' ) = '".$tgl2."' 
         ) AS l
-        CROSS JOIN ( SELECT tanggal FROM over WHERE DATE_FORMAT( tanggal, '%Y-%m' ) = '".$tgl2."' GROUP BY tanggal ) AS d
+        CROSS JOIN ( SELECT tanggal FROM over_time WHERE DATE_FORMAT( tanggal, '%Y-%m' ) = '".$tgl2."' and tanggal <='".$tgl."' GROUP BY tanggal ) AS d
         LEFT JOIN (
         SELECT
         d.tanggal,
