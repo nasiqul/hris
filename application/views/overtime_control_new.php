@@ -123,7 +123,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                        <th>No</th>
                        <th>NIK</th>
                        <th>Nama</th>
-                       <th>Lembur (jam)</th>
+                       <th>Total Lembur (jam)</th>
                        <th>Keperluan</th>
                      </tr>
                    </thead>
@@ -166,6 +166,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
     var tot_diff = 0;
     $(function () {
       drawChart();
+
+      setInterval(function(){
+        drawChart();
+      }, 10000);
     })
 
     $('body').toggleClass('sidebar-collapse');
@@ -299,7 +303,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
             pointWidth: 15,
             pointPadding: 0,
             borderWidth: 0,
-            groupPadding: 0.1
+            groupPadding: 0.1,
+            animation: false
           }
         },
         series: [{
