@@ -344,13 +344,13 @@ class Over_model_new extends CI_Model {
         SELECT
         over_time_member.nik,
         over_time.tanggal,
-        sum( over_time_member.jam ) AS jam 
+        sum( over_time_member.final ) AS jam 
         FROM
         over_time
         LEFT JOIN over_time_member ON over_time.id = over_time_member.id_ot 
         WHERE
         DATE_FORMAT( over_time.tanggal, '%Y-%m' ) = '".$tgl2."' 
-        AND over_time_member.nik IS NOT NULL and over_time.deleted_at is not null
+        AND over_time_member.nik IS NOT NULL 
         GROUP BY
         over_time_member.nik,
         over_time.tanggal
