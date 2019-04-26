@@ -315,7 +315,7 @@ class Over_model_new extends CI_Model {
 
     public function ot_control($tgl, $tgl2)
     {
-        $q = " SELECT  n.id_cc,  master_cc.NAME,
+        $q = "SELECT  n.id_cc,  master_cc.NAME,
         sum( n.act ) AS act,        sum( budget_tot ) AS tot,        sum( budget_tot ) - sum( n.act ) AS diff         FROM
         (
         SELECT
@@ -416,91 +416,53 @@ class Over_model_new extends CI_Model {
 
     public function ot_control_detail($cc, $tgl, $tgl2)
     {
-            $q = "SELECT
-                    final2.nik,
-                    c.namaKaryawan,
-                    sum(final2.jam) as jam,
-                    GROUP_CONCAT(DISTINCT c.kep) as kep
-                FROM
-                    (
-                SELECT
-                    nik,
-                    tanggal,
-                    sum( jam ) AS jam 
-                FROM
-                    (
-                SELECT
-                    nik,
-                    tanggal,
-                    jam 
-                FROM
-                    over 
-                WHERE
-                    DATE_FORMAT( tanggal, '%Y-%m' ) = '".$tgl2."' 
-                    AND jam <> 0 
-                    AND status_final = 1 UNION ALL
-                SELECT
-                    a.nik,
-                    a.tanggal,
-                    a.jam 
-                FROM
-                    (
-                    (
-                SELECT
-                    over.nik,
-                    over.tanggal,
-                    over.jam 
-                FROM
-                    over 
-                WHERE
-                    DATE_FORMAT( over.tanggal, '%Y-%m' ) = '".$tgl2."' 
-                    AND over.tanggal <= '".$tgl."' 
-                    AND over.jam <> 0 
-                    AND over.status_final = 0 
-                    ) AS a
-                    LEFT JOIN (
-                SELECT DISTINCT
-                    over_time.id,
-                    over_time.tanggal,
-                    over_time_member.nik 
-                FROM
-                    over_time
-                    LEFT JOIN over_time_member ON over_time_member.id_ot = over_time.id 
-                WHERE
-                    DATE_FORMAT( over_time.tanggal, '%Y-%m' ) = '".$tgl2."' 
-                    AND over_time.tanggal <= '".$tgl."' 
-                    AND over_time_member.nik IS NOT NULL 
-                    ) AS b ON a.nik = b.nik 
-                    AND a.tanggal = b.tanggal 
-                    ) 
-                WHERE
-                    b.id IS NOT NULL 
-                    ) AS final 
-                GROUP BY
-                    nik,
-                    tanggal 
-                    ) AS final2
-                    LEFT JOIN (
-                SELECT
-                    over_time_member.nik,
-                    karyawan.namaKaryawan,
-                    karyawan.costCenter,
-                    GROUP_CONCAT( DISTINCT over_time.keperluan ) AS kep 
-                FROM
-                    over_time
-                    LEFT JOIN over_time_member ON over_time_member.id_ot = over_time.id
-                    LEFT JOIN karyawan ON karyawan.nik = over_time_member.nik 
-                WHERE
-                    DATE_FORMAT( over_time.tanggal, '%Y-%m' ) = '".$tgl2."' 
-                    AND over_time.tanggal <= '".$tgl."' 
-                    AND over_time_member.nik IS NOT NULL 
-                GROUP BY
-                    over_time_member.nik,
-                    karyawan.namaKaryawan 
-                    ) AS c ON final2.nik = c.nik
-                    where c.costCenter = '".$cc."'
-                group by final2.nik
-                order by sum(final2.jam) desc";
+        $q = "SELECT
+        final2.nik,
+        c.namaKaryawan,
+        sum( final2.jam ) AS jam,
+        GROUP_CONCAT( DISTINCT c.kep ) AS kep 
+        FROM
+        (
+        SELECT
+        over_time_member.nik,
+        over_time.tanggal,
+        sum( over_time_member.jam ) AS jam 
+        FROM
+        over_time
+        LEFT JOIN over_time_member ON over_time.id = over_time_member.id_ot 
+        WHERE
+        DATE_FORMAT( over_time.tanggal, '%Y-%m' ) = '".$tgl2."' 
+        AND over_time_member.nik IS NOT NULL 
+        AND over_time.deleted_at IS NULL 
+        and over_time.tanggal <='".$tgl."'
+        GROUP BY
+        over_time_member.nik,
+        over_time.tanggal 
+        ) AS final2
+        LEFT JOIN (
+        SELECT
+        over_time_member.nik,
+        karyawan.namaKaryawan,
+        karyawan.costCenter,
+        GROUP_CONCAT( DISTINCT over_time.keperluan ) AS kep 
+        FROM
+        over_time
+        LEFT JOIN over_time_member ON over_time_member.id_ot = over_time.id
+        LEFT JOIN karyawan ON karyawan.nik = over_time_member.nik 
+        WHERE
+        DATE_FORMAT( over_time.tanggal, '%Y-%m' ) = '".$tgl2."' 
+        AND over_time.tanggal <= '".$tgl."' 
+        AND over_time_member.nik IS NOT NULL 
+        GROUP BY
+        over_time_member.nik,
+        karyawan.namaKaryawan 
+        ) AS c ON final2.nik = c.nik 
+        WHERE
+        c.costCenter = '".$cc."' 
+        GROUP BY
+        final2.nik 
+        ORDER BY
+        sum( final2.jam ) DESC";
         $query = $this->db->query($q);
         return $query->result();
     }
