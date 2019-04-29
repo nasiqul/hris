@@ -151,7 +151,7 @@
 						</tr>
 						<tr>
 							<td>Dept. Manager</td>
-							<td>GM Devision</td>
+							<td>GM Division</td>
 							<td>HR Director</td>
 						</tr>
 						<tr>
