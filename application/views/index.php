@@ -11,7 +11,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 <body class="hold-transition skin-purple sidebar-mini">
   <div class="wrapper">
-
     <!-- NAVBAR -->
     <?php require_once(APPPATH.'views/header/navbar.php'); ?>
     <!-- SIDEBAR -->
@@ -81,7 +80,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <div class="box-footer">
                 <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i> <span>Search</span></button>
                 <a class="btn btn-warning" id="reset" href="<?php echo base_url('home/session_destroy') ?>" ><i class="fa fa-refresh"></i> Reset</a>
-                <button class="btn btn-success btn-sm pull-right" type="button" id="import" onclick="openModal()"><i class="fa fa-arrow-down"></i> import presensi</button>
+                <button class="btn btn-success btn-sm pull-right" type="button" id="import" onclick="openModal()"><i class="fa fa-arrow-down" ></i> import presensi</button>
+                <button class="btn btn-warning btn-sm pull-right" type="button" id="import2" onclick="openModal2()"  style="margin-right: 3px"><i class="fa fa-arrow-down"></i> input presensi driver</button>
               </div>
             </form>
           </div>
@@ -92,10 +92,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <div class="col-md-12">
           <div class="box box-solid">
             <div class="box-body">
-              <form method="POST" action="<?php echo base_url('import_excel/export_excel_presensi/') ?>">
+              <!-- <form method="POST" action="<?php echo base_url('import_excel/export_excel_presensi/') ?>">
                 <input type="text" name="tgl" id="tgl" class="form-control datepicker">
                 <button id="export" type="submit" class="btn btn-sm btn-default">Export to Excel</button>
-              </form>
+              </form> -->
               <table id="example1" class="table table-responsive table-striped" width="100%">
                 <thead>
                   <th>Date</th>
@@ -130,16 +130,18 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <div class="modal-header">
                   <h4 style="float: right;" id="modal-title"></h4>
                   <h4 class="modal-title"><b>Import Presensi</b> <b id="sifMakan"></b></h4>
+
                 </div>
                 <div class="modal-body">
                   <div class="row">
                     <div class="col-md-12">
-                      <input type="file" name="file">
+                      <input type="file" name="file" id="file">
+                      <span style="font-size: 2em" id="loading"><i class="fa fa-refresh fa-spin"></i> Importing ...</span>
                     </div>
                   </div>
                 </div>
                 <div class="modal-footer">
-                  <input type="submit" name="submit" value="Import" class="btn btn-success btn-sm pull-right">
+                  <input type="submit" id="submit" name="submit" value="Import" class="btn btn-success btn-sm pull-right">
                   <button type="button" class="btn btn-danger btn-sm pull-left" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
                 </div>
               </div>
@@ -148,12 +150,61 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <!-- /.modal-dialog -->
         </div>
 
-      </section>
-      <!-- /.content -->
+        <div class="modal fade" id="modal-default">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">×</span></button>
+                  <h4 class="modal-title">Input Presensi Driver</h4>
+                </div>
+                <div class="modal-body">
+                  <div class="row">
+                    <div class="col-md-12" style="margin-bottom : 5px">
+                      <input type="text" name="lop" id="lop" value="1" hidden>
+                      <div class="col-xs-4" style="padding:1;">
+                        <label>Nik</label>
+                        <input type="text" class="form-control" id="nik1" name="nik1" placeholder="Enter nik" required>
+                      </div>
+                      <div class="col-xs-2" style="padding:1;">
+                        <label>In</label>
+                        <input type="text" id="in1" name="in1" class="form-control timepicker" value="01:00">
+                      </div>
+                      <div class="col-xs-2" style="padding:1;">
+                       <label>Out</label>
+                       <input type="text" id="out1" name="out1" class="form-control timepicker" value="01:00">
+                     </div>
+                     <div class="col-xs-2" style="padding:1;">
+                       <label>Shift</label>
+                       <input type="text" id="sif1" name="sif1" class="form-control " placeholder="Keterangan" >
+                     </div>
+                     <div class="col-xs-2" style="padding:0;">
+                       <label>Add</label><br>
+                       &nbsp;<button class="btn btn-success" onclick='tambah("tambah","lop");'><i class='fa fa-plus' ></i></button>
+                     </div>  
+                   </div>
+                   <div id="tambah"></div>
 
-    </div>
-    <!-- /.content-wrapper -->
-    <!-- /.control-sidebar -->
+                 </div>
+               </div>
+               <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success" onclick="saveDriver()">Save</button>
+              </div>
+            </div>
+            <!-- /.modal-content -->
+          </div>
+          <!-- /.modal-dialog -->
+        </div>
+
+      </div>
+
+    </section>
+    <!-- /.content -->
+
+  </div>
+  <!-- /.content-wrapper -->
+  <!-- /.control-sidebar -->
   <!-- Add the sidebar's background. This div must be placed
     immediately after the control sidebar -->
     <div class="control-sidebar-bg"></div>
@@ -161,8 +212,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
   </div>
   <!-- ./wrapper -->
   <script>
+    var no = 2;
     var table;
     $(document).ready(function() {
+      $("#loading").hide();
 
       table = $('#example1').DataTable({
         "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
@@ -182,22 +235,109 @@ scratch. This page gets rid of all links and provides the needed markup only.
       $('#myModal').modal({backdrop: 'static', keyboard: false});
     }
 
+    function openModal2() {
+      $('#modal-default').modal({backdrop: 'static', keyboard: false});
+    }
+
     function check() {
       notif2.style.display = "none";
     }
 
-    $('#datepicker').datepicker({
-      autoclose: true,
-      format: 'dd/mm/yyyy',
-    })
+    function tambah(id,lop) {
+      var id = id;
 
-    $('.datepicker').datepicker({
-      autoclose: true,
-      format: "mm-yyyy",
-      viewMode: "months", 
-      minViewMode: "months"
-    })
-  </script>
+      var lop = "";
+
+      if (id == "tambah"){
+        lop = "lop";
+      }else{
+        lop = "lop2";
+      }
+
+      var divdata = $("<div id='"+no+"' class='col-md-12' style='margin-bottom : 5px'> <div class='col-xs-4' style='padding:1;'> <input type='text' class='form-control' id='nik"+no+"' name='nik"+no+"' placeholder='Enter NIK' required> </div> <div class='col-xs-2' style='padding:1;'> <input type='text' id='in"+no+"' name='in"+no+"' class='form-control timepicker' > </div> <div class='col-xs-2' style='padding:1;'> <input type='text' id='out"+no+"' name='out"+no+"' class='form-control timepicker' > </div> <div class='col-xs-2' style='padding:1;'> <input type='text' id='sif"+no+"' name='sif"+no+"' class='form-control ' placeholder='Keterangan' > </div><div class='col-xs-2' style='padding:0;'>&nbsp;<button onclick='kurang(this,\""+lop+"\");' class='btn btn-danger'><i class='fa fa-close'></i> </button> <button type='button' onclick='tambah(\""+id+"\",\""+lop+"\"); ' class='btn btn-success'><i class='fa fa-plus' ></i></button></div></div>");
+
+      $("#"+id).append(divdata).find('.timepicker').timepicker({
+        showInputs: false,
+        showMeridian: false,
+        defaultTime: '0:00',
+      });;
+      document.getElementById(lop).value = no;
+      no+=1;
+
+    }
+
+    function kurang(elem,lop) {
+      var lop = lop;
+      var ids = $(elem).parent('div').parent('div').attr('id');
+      var oldid = ids;
+      $(elem).parent('div').parent('div').remove();
+      var newid = parseInt(ids) + 1;
+      jQuery("#"+newid).attr("id",oldid);
+      jQuery("#nik"+newid).attr("name","nik"+oldid);
+      jQuery("#in"+newid).attr("name","in"+oldid);
+
+      jQuery("#nik"+newid).attr("id","nik"+oldid);
+      jQuery("#in"+newid).attr("id","in"+oldid);
+
+      jQuery("#out"+newid).attr("name","out"+oldid);
+      jQuery("#out"+newid).attr("id","out"+oldid);
+
+      jQuery("#sif"+newid).attr("name","sif"+oldid);
+      jQuery("#sif"+newid).attr("id","sif"+oldid);
+
+      no-=1;
+      var a = no -1;
+
+      for (var i =  ids; i <= a; i++) { 
+        var newid = parseInt(i) + 1;
+        var oldid = newid - 1;
+        jQuery("#"+newid).attr("id",oldid);
+        jQuery("#nik"+newid).attr("name","nik"+oldid);
+        jQuery("#in"+newid).attr("name","in"+oldid);
+
+        jQuery("#nik"+newid).attr("id","nik"+oldid);
+        jQuery("#in"+newid).attr("id","in"+oldid);
+
+        jQuery("#out"+newid).attr("name","out"+oldid);
+        jQuery("#out"+newid).attr("id","out"+oldid);
+
+        jQuery("#sif"+newid).attr("name","sif"+oldid);
+        jQuery("#sif"+newid).attr("id","sif"+oldid);
+
+      // alert(i)
+    }
+
+    document.getElementById(lop).value = a;
+  }
+
+  function hide() {
+    $("#submit").prop('disabled','true');
+    $("#file").prop('disabled','true');
+    $("#loading").show();
+  }
+
+  function saveDriver() {
+    alert('Driver simpan');
+  }
+
+  $('#datepicker').datepicker({
+    autoclose: true,
+    format: 'dd/mm/yyyy',
+  })
+
+  $('.datepicker').datepicker({
+    autoclose: true,
+    format: "mm-yyyy",
+    viewMode: "months", 
+    minViewMode: "months"
+  })
+
+  $('.timepicker').timepicker({
+    showInputs: false,
+    showMeridian: false,
+    defaultTime: '0:00',
+  });
+</script>
 
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the
