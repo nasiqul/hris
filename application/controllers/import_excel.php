@@ -103,7 +103,7 @@ class import_excel extends CI_Controller {
                 }
             }
 
-            $this->updatedataover($date);
+            // $this->updatedataover($date);
 
             $this->session->set_flashdata('status', 'sukses');
             redirect("home/presensi");
