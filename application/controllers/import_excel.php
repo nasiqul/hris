@@ -8,6 +8,8 @@ class import_excel extends CI_Controller {
 		// $this->load->library(array('PHPExcel','PHPExcel/IOFactory'));
         $this->load->model('export_model');
         $this->load->model('home_model');
+        $this->load->model('over_model_new');
+        $this->load->model('over_model');
     }
 
     public function upload(){
@@ -78,6 +80,7 @@ class import_excel extends CI_Controller {
             // $row = explode("\t", $rows);
             $first = explode("\t", $rows[0]);
             $date =  date('Y-m-d' , strtotime($first[2]));
+
             $this->export_model->deletePresensi($date);
 
             foreach ($rows as $row)
@@ -100,157 +103,55 @@ class import_excel extends CI_Controller {
                 }
             }
 
+            $this->updatedataover($date);
+
             $this->session->set_flashdata('status', 'sukses');
             redirect("home/presensi");
 
         }
 
-        public function export_excel_presensi(){
+        public function updatedataover($tgl)
+        {
+            $list = $this->over_model_new->tabel_konfirmasi($tgl);
 
-            $bulan = $_POST['tgl'];
-            $tgl = date('Y-m-d',strtotime('01-'.$_POST['tgl']));
-            $lastDay = date('t',strtotime($tgl));
+            $data = array();
+            foreach ($list as $key) {
+                $cost = 0;  
+                $budget = 0;
+                if ($key->jml_nik == "1") {
 
-        // Load plugin PHPExcel nya
-            include APPPATH.'third_party/PHPExcel/PHPExcel.php';
+                    if ($key->jam_plan != "0") {
+                        $where = array(
+                            'nik' => $key->nik,
+                            'id_ot' =>$key->id
+                        );
 
-        // Panggil class PHPExcel nya
-            $excel = new PHPExcel();
+                        $jam = $key->jam_plan;
 
-        // Settingan awal fil excel
-            $excel->getProperties()->setCreator('MIRAI')
-            ->setLastModifiedBy('MIRAI')
-            ->setTitle("Data Absensi MIRAI")
-            ->setSubject("MIRAI")
-            ->setDescription("Laporan Absensi MIRAI")
-            ->setKeywords("Data Absensi");
+                        $this->over_model->update_data_over($where,'over_time_member');
+                        $this->over_model->update_data_final($where,'over_time_member',$key->final2);
 
-        // Buat sebuah variabel untuk menampung pengaturan style dari header tabel
-            $style_col = array(
-            'font' => array('bold' => true), // Set font nya jadi bold
-            'alignment' => array(
-                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER, // Set text jadi ditengah secara horizontal (center)
-                'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER // Set text jadi di tengah secara vertical (middle)
-            ),
-            'borders' => array(
-                'top' => array('style'  => PHPExcel_Style_Border::BORDER_THIN), // Set border top dengan garis tipis
-                'right' => array('style'  => PHPExcel_Style_Border::BORDER_THIN),  // Set border right dengan garis tipis
-                'bottom' => array('style'  => PHPExcel_Style_Border::BORDER_THIN), // Set border bottom dengan garis tipis
-                'left' => array('style'  => PHPExcel_Style_Border::BORDER_THIN) // Set border left dengan garis tipis
-            )
-        );
+                    }
+                    else {
+                        $jam = "0";
+                    }
 
-        // Buat sebuah variabel untuk menampung pengaturan style dari isi tabel
-            $style_row = array(
-                'alignment' => array(
-                'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER // Set text jadi di tengah secara vertical (middle)
-            ),
-                'borders' => array(
-                'top' => array('style'  => PHPExcel_Style_Border::BORDER_THIN), // Set border top dengan garis tipis
-                'right' => array('style'  => PHPExcel_Style_Border::BORDER_THIN),  // Set border right dengan garis tipis
-                'bottom' => array('style'  => PHPExcel_Style_Border::BORDER_THIN), // Set border bottom dengan garis tipis
-                'left' => array('style'  => PHPExcel_Style_Border::BORDER_THIN) // Set border left dengan garis tipis
-            )
-            );
+                    $nik = $key->nik;
+                    $tgl = $key->tanggal;
 
-        $excel->setActiveSheetIndex(0)->setCellValue('A1', "DATA ABSENSI BULAN ".$bulan); // Set kolom A1 dengan tulisan "DATA SISWA"
-        $excel->getActiveSheet()->mergeCells('A1:K1'); // Set Merge Cell pada kolom A1 sampai E1
-        $excel->getActiveSheet()->getStyle('A1')->getFont()->setBold(TRUE); // Set bold kolom A1
-        $excel->getActiveSheet()->getStyle('A1')->getFont()->setSize(15); // Set font size 15 untuk kolom A1
-        $excel->getActiveSheet()->getStyle('A1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER); // Set text center untuk kolom A1
+                    $this->over_model->change_over($nik, $tgl, $jam);
 
-        $siswa = $this->home_model->get_report_absensi($tgl);
+                }
 
+            // echo json_encode($s);
+            }
 
-        // Set kolom A3 dengan tulisan "NO"
-        $excel->setActiveSheetIndex(0)->setCellValue('A3', "PIN"); // Set kolom C3 dengan tulisan "NAMA"
-        $excel->setActiveSheetIndex(0)->setCellValue('B3', "NIK"); // Set kolom D3 dengan tulisan "JENIS KELAMIN"
-        $excel->setActiveSheetIndex(0)->setCellValue('C3', "Nama Karyawan"); // Set kolom E3 dengan tulisan "ALAMAT"
-        $excel->setActiveSheetIndex(0)->setCellValue('D3', "Tgl. Masuk"); 
-        $excel->setActiveSheetIndex(0)->setCellValue('E3', "JK"); 
-        $excel->setActiveSheetIndex(0)->setCellValue('F3', "CT"); 
-        $excel->setActiveSheetIndex(0)->setCellValue('G3', "K"); 
-        $excel->setActiveSheetIndex(0)->setCellValue('H3', "M"); 
-        $excel->setActiveSheetIndex(0)->setCellValue('I3', "Im"); 
-        $excel->setActiveSheetIndex(0)->setCellValue('J3', "N"); 
-        $excel->setActiveSheetIndex(0)->setCellValue('K3', "Sn"); 
-        $excel->setActiveSheetIndex(0)->setCellValue('L3', "KM"); 
-        $excel->setActiveSheetIndex(0)->setCellValue('M3', "CK"); 
-        $excel->setActiveSheetIndex(0)->setCellValue('N3', "SD"); 
-        $excel->setActiveSheetIndex(0)->setCellValue('O3', "S"); 
-        $excel->setActiveSheetIndex(0)->setCellValue('P3', "I"); 
-        $excel->setActiveSheetIndex(0)->setCellValue('Q3', "A"); 
-        $excel->setActiveSheetIndex(0)->setCellValue('R3', "PC"); 
-        $excel->setActiveSheetIndex(0)->setCellValue('S3', "T"); 
-        
-        // Apply style header yang telah kita buat tadi ke masing-masing kolom header
-        $excel->getActiveSheet()->getStyle('A3')->applyFromArray($style_col);
-        $excel->getActiveSheet()->getStyle('B3')->applyFromArray($style_col);
-        $excel->getActiveSheet()->getStyle('C3')->applyFromArray($style_col);
-        $excel->getActiveSheet()->getStyle('D3')->applyFromArray($style_col);
-        $excel->getActiveSheet()->getStyle('E3')->applyFromArray($style_col);
-        $excel->getActiveSheet()->getStyle('F3')->applyFromArray($style_col);
-        $excel->getActiveSheet()->getStyle('G3')->applyFromArray($style_col);
-        $excel->getActiveSheet()->getStyle('H3')->applyFromArray($style_col);
-        $excel->getActiveSheet()->getStyle('I3')->applyFromArray($style_col);
-        $excel->getActiveSheet()->getStyle('J3')->applyFromArray($style_col);
-        $excel->getActiveSheet()->getStyle('K3')->applyFromArray($style_col);
-        $excel->getActiveSheet()->getStyle('L3')->applyFromArray($style_col);
-        $excel->getActiveSheet()->getStyle('M3')->applyFromArray($style_col);
-        $excel->getActiveSheet()->getStyle('N3')->applyFromArray($style_col);
-        $excel->getActiveSheet()->getStyle('O3')->applyFromArray($style_col);
-        $excel->getActiveSheet()->getStyle('P3')->applyFromArray($style_col);
-        $excel->getActiveSheet()->getStyle('Q3')->applyFromArray($style_col);
-        $excel->getActiveSheet()->getStyle('R3')->applyFromArray($style_col);
-        $excel->getActiveSheet()->getStyle('S3')->applyFromArray($style_col);
-
-
-        // $current_col = 0;
-
-        $numrow = 4; // Set baris pertama untuk isi tabel adalah baris ke 4
-        foreach($siswa as $data){ // Lakukan looping pada variabel siswa
-            $excel->setActiveSheetIndex(0)->setCellValue('A'.$numrow, $data->pin);
-            $excel->setActiveSheetIndex(0)->setCellValue('B'.$numrow, $data->nik);
-            $excel->setActiveSheetIndex(0)->setCellValue('C'.$numrow, $data->namaKaryawan);
-            $excel->setActiveSheetIndex(0)->setCellValue('D'.$numrow, $data->tanggalMasuk);
-            $excel->setActiveSheetIndex(0)->setCellValue('E'.$numrow, $data->jk);
-            
-            
-            // Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
-            $excel->getActiveSheet()->getStyle('A'.$numrow)->applyFromArray($style_row);
-            $excel->getActiveSheet()->getStyle('B'.$numrow)->applyFromArray($style_row);
-            $excel->getActiveSheet()->getStyle('C'.$numrow)->applyFromArray($style_row);
-            $excel->getActiveSheet()->getStyle('D'.$numrow)->applyFromArray($style_row);
-            $excel->getActiveSheet()->getStyle('E'.$numrow)->applyFromArray($style_row);
-            
-            $numrow++; // Tambah 1 setiap kali looping
         }
-        
-        // Set height semua kolom menjadi auto (mengikuti height isi dari kolommnya, jadi otomatis)
-        $excel->getActiveSheet()->getDefaultRowDimension()->setRowHeight(-1);
 
-        // Set orientasi kertas jadi LANDSCAPE
-        $excel->getActiveSheet()->getPageSetup()->setOrientation(PHPExcel_Worksheet_PageSetup::ORIENTATION_LANDSCAPE);
-
-        // Set judul file excel nya
-        $excel->getActiveSheet(0)->setTitle("Data Absensi");
-        $excel->setActiveSheetIndex(0);
-
-        // Proses file excel
-        header('Content-Type: application/vnd.ms-excel');
-        header('Content-Disposition: attachment; filename="DataAbsensi.xlsx"'); // Set nama file excel nya
-        header('Cache-Control: max-age=0');
-
-        $write = PHPExcel_IOFactory::createWriter($excel, 'Excel2007');
-        ob_end_clean();
-        $write->save('php://output');
+        protected function alert($text) {
+            return "<script> alert('".$text."'); </script>";
+        }
 
     }
 
-    protected function alert($text) {
-        return "<script> alert('".$text."'); </script>";
-    }
-
-}
-
-?>
+    ?>

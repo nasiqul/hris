@@ -31,7 +31,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <div class="row">
           <div class="col-md-12">
             <div class="nav-tabs-custom">
-              <ul class="nav nav-tabs">
+              <ul class="nav nav-tabs" id="parent_men">
                 <li class="active"><a href="#tab_1" data-toggle="tab" onclick="head12('EDIT ROLE','devisi','role',''); tabel('role')">Role</a></li>
                 <li><a href="#tab_2" data-toggle="tab"  onclick="head12('EDIT MENU','departemen','menu','devisi','id_devisi'); tabel('menu')" >Menu</a></li>
                 <li><a href="#tab_3" data-toggle="tab"  onclick="head12('EDIT USER','section','user','departemen','id_departemen'); tabel('user')" >User</a></li>
@@ -74,6 +74,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <th>Username</th>
                     <th>Nama</th>
                     <th>Dept</th>
+                    <th>Aksi</th>
                   </tr>
                 </thead>
                 <tbody></tbody>
@@ -91,7 +92,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <!-- /.content -->
 </div>
 <div class="modal fade" id="devisi" style="display: none;">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -105,10 +106,32 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <input type="hidden" name="id" id="id" class="form-control"><br>
           
           <input type="text" name="nama" id="nama" class="form-control">
-          <label>Induk :</label>
-          <select class="form-control select2" style="width: 100%" id="select_induk">
-           <option disabled>pilih</option>
-         </select>
+          
+
+        <div class="row">
+          <div class="col-md-12">
+            <div class="nav-tabs-custom">
+              <ul class="nav nav-tabs" id="parent_menuap">
+                        
+              </ul>
+              <div class="tab-content">
+                <div class="tab-pane active" id="menutab_1">
+                  <label>
+                  <input type="checkbox" id="a"> asas<br>
+                  </label>
+                </div>
+              
+            <!-- /.tab-pane -->
+        <!-- /.tab-pane -->
+      </div>
+      <!-- /.tab-content -->
+    </div>
+
+  </div>
+</div>
+
+
+
        </div>
        <div class="modal-footer">
         <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
@@ -156,6 +179,29 @@ scratch. This page gets rid of all links and provides the needed markup only.
       var table = $('#'+id).DataTable(); 
       table.destroy();
 
+      if (id=="role") {
+         $(document).ready(function() {
+      $('#role').DataTable({
+        "lengthMenu"    : [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        "processing"    : true,
+        "serverSide"    : true,
+        'order'         : [],
+        "ajax": {
+          "url": "<?php echo base_url('master/ajax_role/role')?>",            
+          "type": "POST"
+        },
+        "columnDefs": [
+        {
+          "targets": [ 1 ], //first column / numbering column
+          "orderable": false, //set not orderable
+        }]
+      })
+      $('.select2').select2({
+      });
+
+    })
+       }else{
+
       $('#'+id).DataTable({
         "lengthMenu"    : [[10, 25, 50, -1], [10, 25, 50, "All"]],
         "processing"    : true,
@@ -171,28 +217,37 @@ scratch. This page gets rid of all links and provides the needed markup only.
           "orderable": false, //set not orderable
         }]
       })
+      }
     }
-
-    function selek(sel) {
-     var nama = $('#detail12').val();
-     var sel = $('#'+sel).text();
-     $("#select_induk").empty();
+    function parent_menu() {
+     
+     $("#parent_menuap").empty();
      $.ajax({
       type: 'GET',
-      url: '<?php echo base_url("master/get_select") ?>',
-      data: {
-        'nama': nama,
+      url: '<?php echo base_url("master/parent_menu") ?>',
+      
+      dataType: "json",
+      success: function (data) {
+        for(i = 0; i < data.length; i++){   
+            $("#parent_menuap").append("<li ><a href='#menutab_1' data-toggle='tab'>"+data[i][0]+"</a></li>");          
+        }
+      }
+    })
+   }
+
+     function menu(nama) {
+     
+     $("#menutab_1").empty();
+     $.ajax({
+      type: 'GET',
+      url: '<?php echo base_url("master/sub_menu") ?>',
+      data:{
+        nama:nama,
       },
       dataType: "json",
       success: function (data) {
-        for(i = 0; i < data.length; i++){
-          if (sel == data[i][1]) {
-            $("#select_induk").append("<option value="+data[i][0]+" selected>"+data[i][1]+"</option>");
-
-          }else {
-            $("#select_induk").append("<option value="+data[i][0]+">"+data[i][1]+"</option>");
-
-          }
+        for(i = 0; i < data.length; i++){   
+            $("#menutab_1").append("<li ><a href='#tab_1' data-toggle='tab'>"+data[i][0]+"</a></li>");          
         }
       }
     })

@@ -24,6 +24,15 @@ class Master extends CI_Controller {
 		$this->load->view("master/master_login",$data);
 	}
 
+	public function keperluan()
+	{
+		$data['menu2'] = 'Master';
+		$data['menu'] = 'Master Keperluan';
+		$data['parentMenu'] = $this->home_model->getParentMenu();
+		$data['kep'] = $this->master_model->getKeperluan();
+		$this->load->view("master/master_keperluan",$data);
+	}
+
 	public function ajax_client()
 	{
 		$id = $this->session->userdata("nik");
@@ -141,6 +150,13 @@ class Master extends CI_Controller {
 		
 	}
 
+	public function edit_keperluan()
+	{
+		$id = $_POST['id'];
+		$isi = $_POST['isi'];
+		$this->master_model->edit_keperluan($id, $isi);
+	}
+
 	public function get_select()
 	{
 		$nama = $_GET['nama'];
@@ -175,6 +191,10 @@ class Master extends CI_Controller {
 			if ($id =="role") {
 			$row[] = "<p id='$key->alias$key->id'>$key->id</p>";				
 			$row[] = "<p id='$key->id$key->alias'>$key->nama</p>";
+			$row[] = "<button class='btn btn-info btn-xs' id='detail' name='devisi' onclick='devisi(\"$key->alias$key->id\"); parent_menu()'>Detail</button> 
+			<button class='btn btn-primary btn-xs' >Edit</button>
+			<button class='btn btn-danger btn-xs' >Edit</button>
+			";
 		}
 
 		if ($id =="menu") {
@@ -182,6 +202,7 @@ class Master extends CI_Controller {
 			$row[] = "<p id='$key->id$key->alias'>$key->nama</p>";
 			$row[] = "<p id='$key->id$key->alias'>$key->url</p>";
 			$row[] = "<p id='$key->id$key->alias'>$key->icon</p>";
+			$row[] = "<button class='btn btn-info btn-xs' id='detail' name='devisi' onclick='devisi(\"$key->alias$key->id\"); selek(\"$key->id$key->alias\")'>Detail</button>";
 		}
 
 		if ($id =="user") {
@@ -189,8 +210,9 @@ class Master extends CI_Controller {
 			$row[] = "<p id='$key->id$key->alias'>$key->username</p>";
 			$row[] = "<p id='$key->id$key->alias'>$key->nama</p>";
 			$row[] = "<p id='$key->id$key->alias'>$key->department</p>";
-		}
 			$row[] = "<button class='btn btn-info btn-xs' id='detail' name='devisi' onclick='devisi(\"$key->alias$key->id\"); selek(\"$key->id$key->alias\")'>Detail</button>";
+		}
+			
 			$data[] = $row;
 		}
 
@@ -202,6 +224,44 @@ class Master extends CI_Controller {
 		);
         //output to json format
 		echo json_encode($output);
+	}
+
+	public function parent_menu()
+	{
+		
+		$list = $this->master_model->parent_menu();
+
+		$data = array();
+		foreach ($list as $key) {
+			$row = array();
+
+			$row[] = $key->parent_menu;		
+
+			$data[] = $row;
+		}
+
+        //output to json format
+		echo json_encode($data);
+
+	}
+
+	public function sub_menu()
+	{
+		$nama = $_GET['nama'];
+		$list = $this->master_model->sub_menu($nama);
+
+		$data = array();
+		foreach ($list as $key) {
+			$row = array();
+			$row[] = $key->id_menu;
+			$row[] = $key->nama_menu;		
+
+			$data[] = $row;
+		}
+
+        //output to json format
+		echo json_encode($data);
+
 	}
 
 	

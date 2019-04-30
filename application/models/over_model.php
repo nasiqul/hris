@@ -1390,6 +1390,8 @@ public function get_o_data($tgl)
     return $query->result();
 }
 
+
+  // ------------- LAMA ---------------
 public function get_cc5($tgl,$cc)
 {
     if ($cc != "0"){
@@ -1491,45 +1493,66 @@ public function get_budget_hari($tgl)
 }
 
 
-public function get_budget($tgl, $cc, $fiskal)
+// public function get_budget($tgl, $cc, $fiskal)
+// {
+//     if ($cc != "0"){
+//         $where = "where departemen ='".$cc."'";
+//     }
+//     else{
+//         $where = "";
+//     }
+
+//     $q = "
+//     select period, departemen, sum(budget) as budget from 
+//     (
+//     select cost_center_budget.period, master_cc.departemen, sum((cost_center_budget.budget*a.tot_karyawan)) as budget from cost_center_budget
+
+//     left join
+//     (
+//     select mon, costCenter, count(if(if(date_format(a.tanggalMasuk, '%Y-%m') < mon, 1, 0 ) - if(date_format(a.tanggalKeluar, '%Y-%m') < mon, 1, 0 ) = 0, null, 1)) as tot_karyawan from
+//     (
+//     select distinct fiskal, date_format(tanggal, '%Y-%m') as mon
+//     from kalender_fy
+//     ) as b
+//     join
+//     (
+//     select '".$fiskal."' as fy, karyawan.kode, tanggalKeluar, tanggalMasuk, nik, costCenter
+//     from karyawan
+//     ) as a
+//     on a.fy = b.fiskal
+//     group by mon, costCenter
+//     having mon = '".$tgl."'
+//     ) as a on a.costCenter = cost_center_budget.id_cc
+//     left join master_cc on master_cc.id_cc = a.costCenter
+//     where date_format(cost_center_budget.period, '%Y-%m') = '".$tgl."'
+//     group by departemen
+// ) as m ".$where."";
+//  // WHERE departemen = "LOG"
+
+// $query = $this->db->query($q);
+// return $query->result();
+
+// }
+
+public function get_budget($tgl, $tgl2, $cc)
 {
-    if ($cc != "0"){
-        $where = "where departemen ='".$cc."'";
-    }
-    else{
+    if ($cc == '0') {
         $where = "";
+    } else {
+        $where = 'where departemen = '.$cc;
     }
 
     $q = "
-    select period, departemen, sum(budget) as budget from 
+    select tanggal, departemen, act, sum(budget_tot) as budget_tot from 
     (
-    select cost_center_budget.period, master_cc.departemen, sum((cost_center_budget.budget*a.tot_karyawan)) as budget from cost_center_budget
-
-    left join
-    (
-    select mon, costCenter, count(if(if(date_format(a.tanggalMasuk, '%Y-%m') < mon, 1, 0 ) - if(date_format(a.tanggalKeluar, '%Y-%m') < mon, 1, 0 ) = 0, null, 1)) as tot_karyawan from
-    (
-    select distinct fiskal, date_format(tanggal, '%Y-%m') as mon
-    from kalender_fy
-    ) as b
-    join
-    (
-    select '".$fiskal."' as fy, karyawan.kode, tanggalKeluar, tanggalMasuk, nik, costCenter
-    from karyawan
-    ) as a
-    on a.fy = b.fiskal
-    group by mon, costCenter
-    having mon = '".$tgl."'
-    ) as a on a.costCenter = cost_center_budget.id_cc
-    left join master_cc on master_cc.id_cc = a.costCenter
-    where date_format(cost_center_budget.period, '%Y-%m') = '".$tgl."'
+    select DATE_FORMAT( d.period, '%d' ) as tanggal, round(sum(d.budget_total) / DATE_FORMAT( LAST_DAY( '".$tgl."' ), '%d' ),1) as budget_tot, master_cc.departemen, '0' as act from
+    (select id_cc, period, budget_total from cost_center_budget where DATE_FORMAT(period,'%Y-%m') = '".$tgl2."') d left join master_cc on master_cc.id_cc = d.id_cc
+    ".$where."
     group by departemen
-) as m ".$where."";
- // WHERE departemen = "LOG"
+    ) d";
 
 $query = $this->db->query($q);
 return $query->result();
-
 }
 
 public function get_data_ot_month($fiskal)
@@ -1615,67 +1638,78 @@ public function exportdatahr($id)
     return $query->result();
 }
 
-public function get_presentase($n1, $bagian,$fiskal)
+public function get_presentase($tgl, $tgl2, $bagian)
 {
     if ($bagian == "0") {
-        $kode = "kode";
-        $where1 = "";
-        $join = "";
+        $where = "";
     } else {
-        $kode = "mc.kode";
-        $where1 = "and master_cc.departemen = '".$bagian."'";
-        $join = "right join (
-        select kode from master_cc
-        group by kode
-    ) as mc on mc.kode = m.kode";
+        $where = "where master_cc.departemen = '".$bagian."'";
 }
 
 $q = "
-select mon, ".$kode.", IFNULL(sum(budget_tot),'0') as budget_tot2, IFNULL(sum(aktual),'0') as aktual from
+select  COALESCE ( m.act, 0 ) act, COALESCE ( m.tot, 0 ) tot, v.kode from
 (
-
-select mon, b.id_cc, b.kode, karyawan, IFNULL(budget,0) as budget, IFNULL(karyawan * budget,0) as budget_tot, IFNULL(aktual,0) as aktual from 
-(
-select mon, master_cc.id_cc, kode, master_cc.departemen ,sum(tot_karyawan) as karyawan from (
-select mon, costCenter, count(if(if(date_format(a.tanggalMasuk, '%Y-%m') < mon, 1, 0 ) - if(date_format(a.tanggalKeluar, '%Y-%m') < mon, 1, 0 ) = 0, null, 1)) as tot_karyawan from
-(
-select distinct fiskal, date_format(tanggal, '%Y-%m') as mon
-from kalender_fy
-) as b
-join
-(
-select '".$fiskal."' as fy, karyawan.kode, tanggalKeluar, tanggalMasuk, nik, costCenter
-from karyawan
-) as a
-on a.fy = b.fiskal
-group by mon, costCenter
-having mon = '".$n1."'
-) as b 
-left join master_cc on master_cc.id_cc = b.costCenter
-where master_cc.id_cc IS NOT NULL ".$where1."
-GROUP BY mon, id_cc
-
-) as b
-
-left join (
-select cost_center_budget.id_cc, cost_center_budget.period, cost_center_budget.budget, master_cc.kode from cost_center_budget
-left join master_cc on  master_cc.id_cc = cost_center_budget.id_cc
-where date_format(period, '%Y-%m') = '".$n1."' ".$where1."
-) as c on c.id_cc = b.id_cc
-
-left join (
-select over.nik, over.tanggal, over.jam, karyawan.costCenter, sum(jam) as aktual from over
-left join karyawan on karyawan.nik = over.nik
-where date_format(tanggal, '%Y-%m') = '".$n1."'
-and karyawan.costCenter IS NOT NULL
-group by costCenter
-) as r on r.costCenter = b.id_cc
-
-) as m ".$join."
-GROUP BY ".$kode."
-
-
-";
+SELECT
+    n.id_cc,
+    master_cc.name,
+    sum( n.act ) AS act,
+    sum( budget_tot ) AS tot,
+    master_cc.kode
+FROM
+    (
+SELECT
+    l.id_cc,
+    d.tanggal,
+    COALESCE ( act, 0 ) act,
+    l.budget_tot 
+FROM
+    (
+SELECT
+    id_cc,
+    ROUND( ( budget_total / DATE_FORMAT( LAST_DAY( '".$tgl."'  ), '%d' ) ), 1 ) budget_tot 
+FROM
+    cost_center_budget 
+WHERE
+    DATE_FORMAT( period, '%Y-%m' ) = '".$tgl2."'  
+    ) AS l
+    CROSS JOIN ( SELECT tanggal FROM over_time WHERE DATE_FORMAT( tanggal, '%Y-%m' ) = '".$tgl2."'  AND tanggal <= '".$tgl."'  GROUP BY tanggal ) AS d
+    LEFT JOIN (
+SELECT
+    d.tanggal,
+    sum( jam ) AS act,
+    karyawan.costCenter 
+FROM
+    (
+SELECT
+    over_time_member.nik,
+    over_time.tanggal,
+    sum( over_time_member.jam ) AS jam 
+FROM
+    over_time
+    LEFT JOIN over_time_member ON over_time.id = over_time_member.id_ot 
+WHERE
+    DATE_FORMAT( over_time.tanggal, '%Y-%m' ) = '".$tgl2."'  
+    AND over_time_member.nik IS NOT NULL 
+    AND over_time.deleted_at IS NULL 
+GROUP BY
+    over_time_member.nik,
+    over_time.tanggal 
+    ) d
+    LEFT JOIN karyawan ON karyawan.nik = d.nik 
+GROUP BY
+    tanggal,
+    costCenter 
+    ) x ON x.costCenter = l.id_cc 
+    AND x.tanggal = d.tanggal 
+WHERE
+    d.tanggal <= '".$tgl."' 
+    ) AS n
+    LEFT JOIN master_cc ON master_cc.id_cc = n.id_cc 
+    ".$where."
+GROUP BY
+    master_cc.kode
+) m
+    right join (select kode from master_cc GROUP BY kode) v on v.kode = m.kode ";
 $query = $this->db->query($q);
 
 return $query->result();
@@ -1715,6 +1749,80 @@ public function get_break($hari, $dari, $sampai, $shift)
 
     return $query->result();
 
+}
+
+public function get_over_time($tgl, $tgl2, $cc)
+{
+    if ($cc == "0") {
+        $where = "";
+    } else {
+        $where = "where departemen = '".$cc."' ";
+    }
+    
+    $q = "SELECT
+    tanggal,
+    departemen,
+    sum(act) as act,
+    sum(budget_tot) as budget_tot
+    FROM
+    (
+    SELECT
+    l.id_cc,
+    l.NAME,
+    l.departemen,
+    DATE_FORMAT( d.tanggal, '%d' ) tanggal,
+    COALESCE ( act, 0 ) act,
+    l.budget_tot AS budget_tot 
+    FROM
+    (
+    SELECT
+    cost_center_budget.id_cc,
+    ROUND( ( budget_total / DATE_FORMAT( LAST_DAY( '".$tgl."' ), '%d' ) ), 1 ) budget_tot,
+    master_cc.NAME,
+    master_cc.departemen 
+    FROM
+    cost_center_budget
+    LEFT JOIN master_cc ON master_cc.id_cc = cost_center_budget.id_cc 
+    WHERE
+    DATE_FORMAT( period, '%Y-%m' ) = '".$tgl2."' 
+    ) AS l
+    CROSS JOIN ( SELECT tanggal FROM over_time WHERE DATE_FORMAT( tanggal, '%Y-%m' ) = '".$tgl2."' AND tanggal <= '".$tgl."' GROUP BY tanggal ) AS d
+    LEFT JOIN (
+    SELECT
+    d.tanggal,
+    sum( jam ) AS act,
+    karyawan.costCenter 
+    FROM
+    (
+    SELECT
+    over_time_member.nik,
+    over_time.tanggal,
+    sum( over_time_member.jam ) AS jam 
+    FROM
+    over_time
+    LEFT JOIN over_time_member ON over_time.id = over_time_member.id_ot 
+    WHERE
+    DATE_FORMAT( over_time.tanggal, '%Y-%m' ) = '".$tgl2."' 
+    AND over_time_member.nik IS NOT NULL 
+    AND over_time.deleted_at IS NULL 
+    GROUP BY
+    over_time_member.nik,
+    over_time.tanggal 
+    ) d
+    LEFT JOIN karyawan ON karyawan.nik = d.nik 
+    GROUP BY
+    tanggal,
+    costCenter 
+    ) x ON x.costCenter = l.id_cc 
+    AND x.tanggal = d.tanggal 
+    WHERE
+    d.tanggal <= '".$tgl."' 
+    ) as p
+    ".$where." group by departemen,tanggal";
+
+    $query = $this->db->query($q);
+
+    return $query->result();
 }
 
     // public function ot_summary_m()

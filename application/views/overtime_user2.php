@@ -122,8 +122,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <br>           
             </div>
 
-            
-
             <table id="example1" class="table table-responsive table-striped"  width="100%">
               <thead>
                 <tr>
@@ -173,9 +171,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <div class="modal-footer">
             <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
             <form action="<?php echo base_url('ot/print_grup/'); ?>" method="POST" target="_blank">
-                <input type="hidden" name="id" id="id2">
-                <input type="hidden" name="tanggal" id="tgl2">
-                <button type="submit" class="btn btn-primary pull-right" id="p2"><i class="fa fa-print"></i> Print</button>
+              <input type="hidden" name="id" id="id2">
+              <input type="hidden" name="tanggal" id="tgl2">
+              <button type="submit" class="btn btn-primary pull-right" id="p2"><i class="fa fa-print"></i> Print</button>
             </form>
           </div>
         </div>
@@ -283,7 +281,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <script>
     var table;
     $(document).ready(function() {
-      $('.tags').tagsInput({ height: '40px', width : 'auto' });
+      $('.tags').tagsInput({ height: '40px', width : 'auto', defaultText : 'Add no spl' });
       tabel2 = $('#example1').DataTable();
       tabel2.destroy();
 
@@ -316,7 +314,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
       var tag = $('#NoSpl').val();
       if (tag.search(id) !=-1) {
-        alert("ada")
+        alert("SPL sudah ditambahkan")
       }else{
         $('#NoSpl').addTag(id);
       }

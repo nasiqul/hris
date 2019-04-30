@@ -27,9 +27,9 @@ class Over_model_new extends CI_Model {
     {
         $this->db->select("m.*,  p.masuk, p.keluar, (m.act - m.jam_plan) as diff, IF(m.act < m.jam_plan, m.act, m.jam_plan) as final, namaKaryawan");
         $this->db->from("(
-            select o.*, over_time_member.nik, over_time_member.jam as jam_plan, IFNULL(over.jam,0) as act from (select id, tanggal from over_time where tanggal = '".$tgl."' and deleted_at IS NULL) as o
+            select o.*, over_time_member.nik, over_time_member.jam as jam_plan, IFNULL(over.jam,0) as act, over.hari from (select id, tanggal from over_time where tanggal = '".$tgl."' and deleted_at IS NULL) as o
             join over_time_member on o.id = over_time_member.id_ot
-            left join (select tanggal, nik, jam from over where tanggal = '".$tgl."') over on over.nik = over_time_member.nik
+            left join (select tanggal, nik, jam, status as hari from over where tanggal = '".$tgl."') over on over.nik = over_time_member.nik
             where status = 0
             GROUP BY nik, id_ot
 
@@ -504,6 +504,30 @@ class Over_model_new extends CI_Model {
         return $query->result();
     }
 
+    public function ganti_aktual($nik, $tgl, $jam, $hari)
+    {
+        $this->db->where('nik', $nik);
+        $this->db->where('tanggal', $tgl);
+        $data = $this->db->get('over');
+
+        $hasil = $data->num_rows();
+
+        if ($hasil <= 0) {
+            $this->db->set('nik', $nik);
+            $this->db->set('tanggal', $tgl);
+            $this->db->set('jam', $jam);
+            $this->db->set('status', $hari);
+            $query = $this->db->insert('over');
+            return 'Success Insert Data';
+        } else {
+            $this->db->set('jam', $jam);
+            $this->db->where('nik', $nik);
+            $this->db->where('tanggal', $tgl);
+            $query = $this->db->update('over');
+
+            return 'Success Update Data';
+        }
+    }
 }
 
 ?>
