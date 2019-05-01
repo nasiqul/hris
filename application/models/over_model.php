@@ -1758,8 +1758,8 @@ public function get_break($hari, $dari, $sampai, $shift)
 
 public function get_over_time($tgl, $tgl2, $cc)
 {
-    if ($cc == "0") {
-        $where = "";
+    if ($cc == 0) {
+        $where = '';
     } else {
         $where = "where departemen = '".$cc."' ";
     }
@@ -1823,7 +1823,7 @@ public function get_over_time($tgl, $tgl2, $cc)
     WHERE
     d.tanggal <= '".$tgl."' 
     ) as p
-    ".$where." group by departemen,tanggal";
+     ".$where." group by departemen,tanggal";
 
     $query = $this->db->query($q);
 
@@ -1839,7 +1839,9 @@ public function get_over_time($tgl, $tgl2, $cc)
     public function get_cuti()
     {
         $ympimis = $this->load->database('ympimisdev', TRUE);
-        $query = $ympimis->select('absence_code')->where('deduction','1')->get('absence_categories');
+        $query = $ympimis->select('absence_code')
+        ->where('deduction','1')
+        ->get('absence_categories');
 
         return $query->result();
     }

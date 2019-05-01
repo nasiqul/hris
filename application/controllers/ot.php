@@ -144,6 +144,8 @@ class Ot extends CI_Controller {
 		foreach ($list as $key) {
 			$row = array();
 			$tg = date("d-m-Y",strtotime($key->tanggal));
+			$tgl_full = date('l, d M Y',strtotime($key->tanggal));
+
 			$row[] = $key->id;
 			$row[] = $tg;
 			$row[] = $key->nik;
@@ -161,7 +163,7 @@ class Ot extends CI_Controller {
 			$row[] = $key->diff;
 			$row[] = "<p id='f".$key->nik.$key->id."'>".$key->final."<p>";
 
-			$row[] = "<button class='btn btn-primary btn-xs' onclick='detail_spl(".$key->id.")'>Detail</button>
+			$row[] = "<button class='btn btn-primary btn-xs' onclick='editAct(".$key->id.",\"".$key->nik."\", \"".$key->tanggal."\", \"".$tgl_full."\", \"".$key->hari."\", \"".$key->namaKaryawan."\", \"".$key->masuk."\", \"".$key->keluar."\", \"".$key->jam_plan."\", \"".$key->act."\", \"".$key->diff."\")'><i class='fa fa-pencil'></i> Edit</button>
 			<button class='btn btn-success btn-xs' id='conf".$key->nik.$key->id."' onclick='modalOpen(\"".$key->nik."\",".$key->final.",\"".$tg."\",\"".$key->id."\")'><i class='fa fa-thumbs-up'></i> OK</button>";
 
 			$data[] = $row;
@@ -175,6 +177,23 @@ class Ot extends CI_Controller {
 		);
             //output to json format
 		echo json_encode($output);
+	}
+
+	public function edit_act()
+	{
+		$jam = $_POST['jam'];
+		$nik = $_POST['nik'];
+		$tgl = $_POST['tgl'];
+		$hari = $_POST['hari'];
+
+		$d = $this->over_model_new->ganti_aktual($nik, $tgl, $jam, $hari);
+
+		$response = array(
+			'status' => true,
+			'message' => $d,
+		);
+
+		echo json_encode($response);
 	}
 
 	public function updatedataover()
@@ -208,7 +227,7 @@ class Ot extends CI_Controller {
 				$nik = $key->nik;
 				$tgl = $key->tanggal;
 
-				$this->over_model->change_over($nik, $tgl, $jam);
+				$this->over_model->change_over_all($nik, $tgl, $jam);
 
 			}
 
@@ -1294,53 +1313,67 @@ class Ot extends CI_Controller {
 	{
 		if (isset($_POST['bulan'])) {
             //$n = date('m-Y', strtotime($_POST['date2']));
-			$tgl = $_POST['bulan'];
 			$tgl2 = date('Y-m',strtotime("01-".$_POST['bulan']));
 		}
 		else {
-			$tgl = date('m-Y');
+			
 			$tgl2 = date('Y-m');
 		}
+
+		$tgl = date('Y-m-d');
 
 		if (isset($_POST['bagian'])) {
             //$n = date('m-Y', strtotime($_POST['date2']));
 			$cc = $_POST['bagian'];
 		}
 		else {
-			$cc = "0";
+			$cc = 0;
 		}
 
 		$data4 = array();
 
-		$fiskal = $this->home_model->getFiskal($tgl2);
-
-		$list2 = $this->over_model->get_cc5($tgl,$cc);
-		$list3 = $this->over_model->get_budget($tgl2,$cc,$fiskal[0]->fiskal);
-
 		$data3 = array();
 
-		foreach ($list3 as $key3) {
+		$list2 = $this->over_model->get_over_time($tgl, $tgl2, $cc);
+
+		foreach ($list2 as $key3) {
 			$row2 = array();
-			$row2[] = $key3->period; 
-			$row2[] = $key3->departemen;
-			$row2[] = (float) $key3->budget;
+			$row2[] = $key3->tanggal; 
+			$row2[] = $key3->departemen; 
+			$row2[] = (float) $key3->act;
+			$row2[] = (float) $key3->budget_tot;
 
 			$data3[] = $row2;
 		}
 
+
+		// $data3 = array();
+
+		// foreach ($list3 as $key3) {
+		// 	$row2 = array();
+		// 	$row2[] = $key3->period; 
+		// 	$row2[] = $key3->departemen;
+		// 	$row2[] = (float) $key3->budget;
+
+		// 	$data3[] = $row2;
+		// }
+
+		$list3 = $this->over_model->get_budget($tgl, $tgl2, $cc);
+
 		$data2 = array();
 
-		foreach ($list2 as $key2) {
+		foreach ($list3 as $key2) {
 			$row = array();
-			$row[] = date('d',strtotime($key2->tanggal)); 
-			$row[] = $key2->departemen;
-			$row[] = (float) $key2->jam;
+			$row[] = $key2->tanggal; 
+			$row[] = $key2->departemen; 
+			$row[] = (float) $key2->act;
+			$row[] = (float) $key2->budget_tot;
 
 			$data2[] = $row;
 		}
 
-		array_push($data4, $data2);
 		array_push($data4, $data3);
+		array_push($data4, $data2);
 
             //output to json format
 		echo json_encode($data4);
@@ -1513,18 +1546,19 @@ class Ot extends CI_Controller {
 
 	public function presentase_g()
 	{
-		$tgl = $_POST['bulan'];
+		$tgl2 = $_POST['bulan'];
+		$tgl = date('Y-m-d');
 		$bagian = $_POST['bagian'];
-		$n1 = date('Y-m', strtotime("01-".$tgl));
+		$n1 = date('Y-m', strtotime("01-".$tgl2));
 
 		$fiskal = $this->home_model->getFiskal($n1);
 
-		$list = $this->over_model->get_presentase($n1,$bagian,$fiskal[0]->fiskal);
+		$list = $this->over_model->get_presentase($tgl, $n1, $bagian);
 		$data = array();
 		foreach ($list as $key) {
 			$row = array();
-			$row["budget"] = (float) $key->budget_tot2;
-			$row["aktual"] = (float) $key->aktual;
+			$row["budget"] = (float) $key->tot;
+			$row["aktual"] = (float) $key->act;
 			$row["kode"] = $key->kode;
 
 			$data[] = $row;
