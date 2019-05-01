@@ -270,7 +270,6 @@ function postTgl() {
     bagian : bagian
   },
   success: function(data) {
-   progressData();
    progress_bar();
    var data = $.parseJSON(data);
    var title = $("[name=date2]").val();
@@ -342,7 +341,7 @@ var res = d.split("-");
 
 cumulativeData2 = [0]; accData2 = [];
 for(i=0; i < xCategories.length; i++){ 
-  accData2.push(data[1][0][2] / xCategories.length); 
+  accData2.push(data[1][0][3]); 
 }
 
 
