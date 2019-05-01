@@ -99,11 +99,17 @@ class import_excel extends CI_Controller {
                     );
 
                     $this->export_model->export_presensi($daily_data);
-                    // print_r($daily_data);
+
+                    $list_cuti = $this->over_model->get_cuti();
+                    foreach ($list_cuti as $key2) {
+                        if ($key2->absence_code == $shift2) {
+                            $this->over_model->update_cuti($row[1]);
+                        }
+                    }
                 }
             }
 
-            // $this->updatedataover($date);
+            $this->updatedataover($date);
 
             $this->session->set_flashdata('status', 'sukses');
             redirect("home/presensi");
@@ -139,11 +145,8 @@ class import_excel extends CI_Controller {
                     $nik = $key->nik;
                     $tgl = $key->tanggal;
 
-                    $this->over_model->change_over($nik, $tgl, $jam);
-
+                    $this->over_model->change_over_all($nik, $tgl, $jam);
                 }
-
-            // echo json_encode($s);
             }
 
         }

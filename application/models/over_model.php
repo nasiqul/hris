@@ -1740,6 +1740,11 @@ public function change_over($nik, $tgl, $jam)
     $this->db->query('CALL masukDataOverSPLAktual ("'.$nik.'","'.$tgl.'","'.$hari.'","'.$jam.'")');
 }
 
+public function change_over_all($nik, $tgl, $jam)
+{
+    $this->db->query('update over set jam = '.$jam.' and status = 1 where tanggal = "'.$tgl.'" and nik = "'.$nik.'" and status = 0');
+}
+
 public function get_break($hari, $dari, $sampai, $shift)
 {
     $q = "SELECT IFNULL(sum(TIME_TO_SEC(duration)),'0') as istirahat from breaktime 
@@ -1824,6 +1829,20 @@ public function get_over_time($tgl, $tgl2, $cc)
 
     return $query->result();
 }
+
+    public function update_cuti($nik)
+    {
+        $ympimis = $this->load->database('ympimisdev', TRUE);
+        $query = 'UPDATE leaves SET leave_left = leave_left - 1 where employee_id = "'.$nik.'" ORDER BY valid_from DESC limit 1';
+        $ympimis->query($query);    
+    }
+    public function get_cuti()
+    {
+        $ympimis = $this->load->database('ympimisdev', TRUE);
+        $query = $ympimis->select('absence_code')->where('deduction','1')->get('absence_categories');
+
+        return $query->result();
+    }
 
     // public function ot_summary_m()
     // {
