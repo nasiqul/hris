@@ -194,7 +194,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     </th>
                   </tr>
                   <tr>
-                    <th width="17%">Nik</th>
+                    <th width="17%">NIK</th>
                     <th width="26%">Nama</th>
                     <th width="8%">Dari</th>
                     <th width="8%">Sampai</th>
@@ -573,6 +573,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               $('#print').css("display", "block");
             }
           });
+          console.log(nik1);
         }
       }
     });

@@ -1743,7 +1743,7 @@ public function get_over_time($tgl, $tgl2, $cc)
     WHERE
     DATE_FORMAT( period, '%Y-%m' ) = '".$tgl2."' 
     ) AS l
-    CROSS JOIN ( SELECT tanggal FROM over_time WHERE DATE_FORMAT( tanggal, '%Y-%m' ) = '".$tgl2."' AND tanggal <= '".$tgl."' GROUP BY tanggal ) AS d
+    CROSS JOIN ( SELECT tanggal FROM kalender_fy WHERE DATE_FORMAT( tanggal, '%Y-%m' ) = '".$tgl2."' ) AS d
     LEFT JOIN (
     SELECT
     d.tanggal,
@@ -1772,8 +1772,6 @@ public function get_over_time($tgl, $tgl2, $cc)
     costCenter 
     ) x ON x.costCenter = l.id_cc 
     AND x.tanggal = d.tanggal 
-    WHERE
-    d.tanggal <= '".$tgl."' 
     ) as p 
      ".$where." group by departemen,tanggal";
 

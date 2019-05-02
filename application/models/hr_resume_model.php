@@ -25,15 +25,20 @@ class HR_resume_model extends CI_Model {
     {
         $this->db->select('*');
         $this->db->from('(
-            select karyawan.nik, namaKaryawan, CONCAT(departemen.nama," - ",section.nama," - ",sub_section.nama," - ",group1.nama ) bagian, COALESCE(jam,0) act from karyawan
+            select karyawan.nik, namaKaryawan, CONCAT(departemen.nama," - ",section.nama," - ",sub_section.nama," - ",group1.nama ) bagian, COALESCE(jam,0) act, aktual.satuan from karyawan
             left join posisi on posisi.nik = karyawan.nik
             join departemen on departemen.id = posisi.id_dep
             join section on section.id = posisi.id_sec
             join sub_section on sub_section.id = posisi.id_sub_sec
             join group1 on group1.id = posisi.id_group
             left join
-            ( select nik, sum(jam) as jam from over where date_format(tanggal, "%Y-%m") = "'.$tgl.'" and status_final = 1
-            group by nik) as aktual on aktual.nik = karyawan.nik
+            ( select d.nik, sum(d.jam) as jam, sum(satuan) as satuan from
+                        (
+                        select m.*, satuan_lembur.satuan from (
+                            select tanggal ,nik, sum(jam) as jam, status from over where date_format(tanggal, "%Y-%m") = "'.$tgl.'" and status_final = 1
+            group by tanggal, nik ) as m 
+                        left join satuan_lembur on satuan_lembur.jam = m.jam and satuan_lembur.hari = m.status
+                        ) d group by nik) as aktual on aktual.nik = karyawan.nik
         ) as tabel');
 
         $i = 0;
