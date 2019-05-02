@@ -415,8 +415,7 @@ for (var i = 0; i <= cumulativeData2.length; i++) {
 },
 series: seriesData
 });
-
-       setTimeout(postTgl, 5000);
+       setTimeout(postTgl, 15000);
      },
      cache: false
    });

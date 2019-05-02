@@ -29,7 +29,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <div class="input-group-addon bg-green" style="border-color: green">
                 <i class="fa fa-calendar"></i>
               </div>
-              <input type="text" class="form-control datepicker" id="tgl" onchange="alert(this.value)" placeholder="Select date" style="border-color: green">
+              <input type="text" class="form-control datepicker" id="tgl" onchange="buattable()" placeholder="Select date" style="border-color: green">
             </div>
           </div>
 
@@ -70,13 +70,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
   </div>
   <!-- ./wrapper -->
   <script>
+    var tabel = $('#example1').DataTable();
     $(document).ready(function() {
       buattable();
     })
 
     function buattable() {
-      var tgl = $("tgl").val();
-      $('#example1').DataTable({
+      tabel.destroy();
+      var tgl = $("#tgl").val();
+      tabel = $('#example1').DataTable({
         "lengthMenu"    : [[10, 25, 50, -1], [10, 25, 50, "All"]],
         "processing"    : true,
         "serverSide"    : true,
