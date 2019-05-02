@@ -169,7 +169,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
       setInterval(function(){
         drawChart();
-      }, 10000);
+      }, 30000);
     })
 
     $('body').toggleClass('sidebar-collapse');
