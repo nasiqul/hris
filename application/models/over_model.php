@@ -1539,7 +1539,7 @@ public function get_budget($tgl, $tgl2, $cc)
     if ($cc == '0') {
         $where = "";
     } else {
-        $where = 'where departemen = '.$cc;
+        $where = 'where departemen = "'.$cc.'"';
     }
 
     $q = "
@@ -1638,7 +1638,7 @@ public function exportdatahr($id)
     return $query->result();
 }
 
-public function get_presentase($tgl, $tgl2, $bagian)
+public function get_presentase($tgl2, $bagian)
 {
     if ($bagian == "0") {
         $where = "";
@@ -1646,70 +1646,22 @@ public function get_presentase($tgl, $tgl2, $bagian)
         $where = "where master_cc.departemen = '".$bagian."'";
 }
 
-$q = "
-select  COALESCE ( m.act, 0 ) act, COALESCE ( m.tot, 0 ) tot, v.kode from
-(
-SELECT
-    n.id_cc,
-    master_cc.name,
-    sum( n.act ) AS act,
-    sum( budget_tot ) AS tot,
-    master_cc.kode
-FROM
-    (
-SELECT
-    l.id_cc,
-    d.tanggal,
-    COALESCE ( act, 0 ) act,
-    l.budget_tot 
-FROM
-    (
-SELECT
-    id_cc,
-    ROUND( ( budget_total / DATE_FORMAT( LAST_DAY( '".$tgl."'  ), '%d' ) ), 1 ) budget_tot 
-FROM
-    cost_center_budget 
-WHERE
-    DATE_FORMAT( period, '%Y-%m' ) = '".$tgl2."'  
-    ) AS l
-    CROSS JOIN ( SELECT tanggal FROM over_time WHERE DATE_FORMAT( tanggal, '%Y-%m' ) = '".$tgl2."'  AND tanggal <= '".$tgl."'  GROUP BY tanggal ) AS d
-    LEFT JOIN (
-SELECT
-    d.tanggal,
-    sum( jam ) AS act,
-    karyawan.costCenter 
-FROM
-    (
-SELECT
-    over_time_member.nik,
-    over_time.tanggal,
-    sum( over_time_member.jam ) AS jam 
-FROM
-    over_time
-    LEFT JOIN over_time_member ON over_time.id = over_time_member.id_ot 
-WHERE
-    DATE_FORMAT( over_time.tanggal, '%Y-%m' ) = '".$tgl2."'  
-    AND over_time_member.nik IS NOT NULL 
-    AND over_time.deleted_at IS NULL 
-GROUP BY
-    over_time_member.nik,
-    over_time.tanggal 
-    ) d
-    LEFT JOIN karyawan ON karyawan.nik = d.nik 
-GROUP BY
-    tanggal,
-    costCenter 
-    ) x ON x.costCenter = l.id_cc 
-    AND x.tanggal = d.tanggal 
-WHERE
-    d.tanggal <= '".$tgl."' 
-    ) AS n
-    LEFT JOIN master_cc ON master_cc.id_cc = n.id_cc 
-    ".$where."
-GROUP BY
-    master_cc.kode
-) m
-    right join (select kode from master_cc GROUP BY kode) v on v.kode = m.kode ";
+$q = "select COALESCE(sum(d.act) ,0) act, COALESCE(sum(d.budget) ,0) budget, d.kode from 
+( select COALESCE(sum(jam),0) as act, master_cc.kode, master_cc.id_cc, master_cc.departemen, round(sum(budget_total),2) as budget from 
+( select sum(ovr.jam) as jam, departemen, master_cc.kode, master_cc.id_cc from 
+( select GROUP_CONCAT(over_time.id) id, over_time.tanggal, over_time_member.nik, sum(jam) jam, over_time_member.status from over_time left join over_time_member on over_time.id = over_time_member.id_ot where DATE_FORMAT(tanggal,'%Y-%m') = '".$tgl2."' and deleted_at IS NULL and nik IS NOT NULL
+group by nik, tanggal) ovr 
+left join karyawan on karyawan.nik = ovr.nik
+left join master_cc on master_cc.id_cc = karyawan.costCenter
+group by id_cc ) as m
+RIGHT JOIN master_cc on master_cc.id_cc = m.id_cc
+left join 
+(select id_cc, budget_total from cost_center_budget where DATE_FORMAT(period,'%Y-%m') = '".$tgl2."') bgd 
+    on bgd.id_cc = master_cc.id_cc
+". $where ."
+group by master_cc.departemen
+) as d
+group by d.kode";
 $query = $this->db->query($q);
 
 return $query->result();
@@ -1742,7 +1694,7 @@ public function change_over($nik, $tgl, $jam)
 
 public function change_over_all($nik, $tgl, $jam)
 {
-    $this->db->query('update over set jam = '.$jam.' and status = 1 where tanggal = "'.$tgl.'" and nik = "'.$nik.'" and status = 0');
+    $this->db->query('update over set jam = '.$jam.' and status_final = 1 where tanggal = "'.$tgl.'" and nik = "'.$nik.'" and status_final = 0');
 }
 
 public function get_break($hari, $dari, $sampai, $shift)
@@ -1758,10 +1710,10 @@ public function get_break($hari, $dari, $sampai, $shift)
 
 public function get_over_time($tgl, $tgl2, $cc)
 {
-    if ($cc == 0) {
+    if ($cc == '0') {
         $where = '';
     } else {
-        $where = "where departemen = '".$cc."' ";
+        $where = "where departemen = '".$cc."'";
     }
     
     $q = "SELECT
@@ -1822,7 +1774,7 @@ public function get_over_time($tgl, $tgl2, $cc)
     AND x.tanggal = d.tanggal 
     WHERE
     d.tanggal <= '".$tgl."' 
-    ) as p
+    ) as p 
      ".$where." group by departemen,tanggal";
 
     $query = $this->db->query($q);

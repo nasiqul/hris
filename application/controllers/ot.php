@@ -1322,12 +1322,12 @@ class Ot extends CI_Controller {
 
 		$tgl = date('Y-m-d');
 
-		if (isset($_POST['bagian'])) {
+		if (isset($_POST['cc'])) {
             //$n = date('m-Y', strtotime($_POST['date2']));
-			$cc = $_POST['bagian'];
+			$cc = $_POST['cc'];
 		}
 		else {
-			$cc = 0;
+			$cc = "0";
 		}
 
 		$data4 = array();
@@ -1553,11 +1553,11 @@ class Ot extends CI_Controller {
 
 		$fiskal = $this->home_model->getFiskal($n1);
 
-		$list = $this->over_model->get_presentase($tgl, $n1, $bagian);
+		$list = $this->over_model->get_presentase($n1, $bagian);
 		$data = array();
 		foreach ($list as $key) {
 			$row = array();
-			$row["budget"] = (float) $key->tot;
+			$row["budget"] = (float) $key->budget;
 			$row["aktual"] = (float) $key->act;
 			$row["kode"] = $key->kode;
 

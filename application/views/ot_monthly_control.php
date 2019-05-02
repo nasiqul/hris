@@ -267,7 +267,7 @@ function postTgl() {
    url: url,
    data: {
     bulan : bulan,
-    bagian : bagian
+    cc : bagian
   },
   success: function(data) {
    progress_bar();
@@ -415,7 +415,7 @@ for (var i = 0; i <= cumulativeData2.length; i++) {
 },
 series: seriesData
 });
-       setTimeout(postTgl, 15000);
+       setTimeout(postTgl, 30000);
      },
      cache: false
    });
