@@ -22,18 +22,21 @@ class Over_cari_chart2 extends CI_Model {
 
     private function _get_over_cari($tgl, $cat)
     {
-        $this->db->select('date_format(over.tanggal, "%m-%Y") as month_name, karyawan.nik, karyawan.namaKaryawan, dp.nama as departemen, sc.nama as section, karyawan.kode, ROUND(avg(over.jam),1) as avg');
-        $this->db->from('over');
-        $this->db->join('karyawan','karyawan.nik = over.nik', 'left');
-        $this->db->join('posisi p','p.nik = karyawan.nik');
-        $this->db->join('departemen dp','dp.id = p.id_dep');
-        $this->db->join('section sc','sc.id = p.id_sec');
-        $this->db->where('over.jam > 3');
-        $this->db->where('over.status','N');
-        $this->db->where('MONTH(over.tanggal) = MONTH(STR_TO_DATE("'.$tgl.'","%d-%m-%Y"))');
-        $this->db->where('YEAR(over.tanggal) = YEAR(STR_TO_DATE("'.$tgl.'","%d-%m-%Y"))');
-        $this->db->where('karyawan.kode', $cat);
-        $this->db->group_by(array("date_format(over.tanggal, '%m-%Y')", "over.nik"));
+        $this->db->select('*');
+        $this->db->from('(
+            select a.nik, ROUND( sum(jam / org),2) as avg,karyawan.namaKaryawan, dp.nama as departemen, sc.nama as section, karyawan.kode from (
+            select nik, count(nik) as org, sum(jam) as jam from (
+            select nik,tanggal, jam from over where DATE_FORMAT(tanggal,"%Y-%m")="'.$tgl.'" and Status = "N" and jam > 3 ORDER BY nik asc
+            ) d group by nik
+            ) a  
+            LEFT JOIN karyawan on karyawan.nik = a.nik
+            JOIN posisi p on p.nik = karyawan.nik
+            JOIN departemen dp on dp.id = p.id_dep
+            join section sc on sc.id = p.id_sec
+            WHERE karyawan.kode="'.$cat.'"
+            group by a.nik
+        )a');
+
 
         $i = 0;
 
@@ -95,21 +98,25 @@ class Over_cari_chart2 extends CI_Model {
 
     private function _get_over_cari_14($tgl, $cat)
     {
-        $this->db->select('b.month_name, karyawan.nik, karyawan.namaKaryawan, dp.nama as departemen, sc.nama as section, karyawan.kode, ROUND(avg(b.jam),1) as avg');
-        $this->db->from('(
-            select date_format(over.tanggal, "%m-%Y") as month_name, week(over.tanggal) as week_name, karyawan.nik, karyawan.kode, sum(over.jam) as jam from over
-            left join karyawan on karyawan.nik = over.nik 
-            where over.status = "N" AND MONTH(over.tanggal) = MONTH(STR_TO_DATE("'.$tgl.'","%d-%m-%Y"))
-            AND YEAR(over.tanggal) = YEAR(STR_TO_DATE("'.$tgl.'","%d-%m-%Y"))
-            group by date_format(over.tanggal, "%m-%Y"), week(over.tanggal), karyawan.nik, karyawan.kode
-            having jam > 14
+        $this->db->select('*');
+        $this->db->from(' (
+            select a.nik,a.avg,karyawan.namaKaryawan, dp.nama as departemen, sc.nama as section, karyawan.kode  from (
+            select nik, ROUND( sum(jam/jml),2) as avg from (
+            select nik, sum(jam) as jam, sum(org) as jml from (
+            select *,COUNT(nik) as org from (
+            select nik,SUM(jam) as jam, WEEK(tanggal) as wek from over WHERE DATE_FORMAT(tanggal,"%Y-%m")="'.$tgl.'" and status = "n" GROUP BY WEEK(tanggal),nik ORDER BY nik 
+            )a WHERE a.jam > 14 GROUP BY nik, wek
+            ) a GROUP BY a.nik
+            ) a GROUP BY a.nik
+            ) a
+
+            LEFT JOIN karyawan on karyawan.nik = a.nik
+            JOIN posisi p on p.nik = karyawan.nik
+            JOIN departemen dp on dp.id = p.id_dep
+            join section sc on sc.id = p.id_sec
+            WHERE karyawan.kode="'.$cat.'"
         ) b');
-        $this->db->join('karyawan','karyawan.nik = b.nik', 'left');
-        $this->db->join('posisi p','p.nik = karyawan.nik');
-        $this->db->join('departemen dp','dp.id = p.id_dep');
-        $this->db->join('section sc','sc.id = p.id_sec');
-        $this->db->where('karyawan.kode', $cat);
-        $this->db->group_by("b.nik");
+        
 
         $i = 0;
 
@@ -172,31 +179,43 @@ class Over_cari_chart2 extends CI_Model {
 
     private function _get_over_cari_3_14($tgl, $cat)
     {
-        $this->db->select('u.month_name as month_name, karyawan.nik, karyawan.namaKaryawan, dp.nama as departemen, sc.nama as section, karyawan.kode, ROUND(l.jml,1) as avg');
+       
+        $this->db->select('c.*');
         $this->db->from('
             (
-                select date_format(over.tanggal, "%m-%Y") as month_name, over.nik, karyawan.namaKaryawan, karyawan.kode, sum(over.jam) as sum from over 
-    left join karyawan on karyawan.nik = over.nik 
-    where over.jam > 3 and over.status = "N" 
-    AND MONTH(over.tanggal) = MONTH(STR_TO_DATE("'.$tgl.'","%d-%m-%Y")) AND YEAR(STR_TO_DATE("'.$tgl.'","%d-%m-%Y"))
-    group by date_format(over.tanggal, "%m-%Y"), over.nik
-        ) as u
-        ');
-        $this->db->join('(
-            select date_format(over.tanggal, "%m-%Y") as month_name, karyawan.nik, karyawan.namaKaryawan, karyawan.kode, avg(over.jam) as avg, sum(over.jam) as jml from over
-        left join karyawan on karyawan.nik = over.nik 
-        where over.status = "N"
-        AND MONTH(over.tanggal) = MONTH(STR_TO_DATE("'.$tgl.'","%d-%m-%Y")) AND YEAR(STR_TO_DATE("'.$tgl.'","%d-%m-%Y"))
-        group by date_format(over.tanggal, "%m-%Y"), week(over.tanggal), karyawan.nik 
-        having jml > 14
-        ) as l
-        ','u.nik = l.nik');
-        $this->db->join('karyawan','karyawan.nik = u.nik');
-        $this->db->join('posisi p','p.nik = u.nik');
-        $this->db->join('departemen dp','dp.id = p.id_dep');
-        $this->db->join('section sc','sc.id = p.id_sec');
-        $this->db->where('u.kode', $cat);
-        $this->db->group_by("u.nik");
+            select a.nik, ROUND( sum(jam / org),2) as avg,karyawan.namaKaryawan, dp.nama as departemen, sc.nama as section, karyawan.kode from (
+            select nik, count(nik) as org, sum(jam) as jam from (
+            select nik,tanggal, jam from over where DATE_FORMAT(tanggal,"%Y-%m")="'.$tgl.'" and Status = "N" and jam > 3 ORDER BY nik asc
+            ) d group by nik
+            ) a  
+            LEFT JOIN karyawan on karyawan.nik = a.nik
+            JOIN posisi p on p.nik = karyawan.nik
+            JOIN departemen dp on dp.id = p.id_dep
+            join section sc on sc.id = p.id_sec
+            WHERE karyawan.kode="'.$cat.'"
+            group by a.nik
+            )a
+            INNER JOIN (
+            select * from (
+            select a.nik,a.avg,karyawan.namaKaryawan, dp.nama as departemen, sc.nama as section, karyawan.kode  from (
+            select nik, ROUND( sum(jam/jml),2) as avg from (
+            select nik, sum(jam) as jam, sum(org) as jml from (
+            select *,COUNT(nik) as org from (
+            select nik,SUM(jam) as jam, WEEK(tanggal) as wek from over WHERE DATE_FORMAT(tanggal,"%Y-%m")="'.$tgl.'" and status = "n" GROUP BY WEEK(tanggal),nik ORDER BY nik 
+            )a WHERE a.jam > 14 GROUP BY nik, wek
+            ) a GROUP BY a.nik
+            ) a GROUP BY a.nik
+            ) a
+
+            LEFT JOIN karyawan on karyawan.nik = a.nik
+            JOIN posisi p on p.nik = karyawan.nik
+            JOIN departemen dp on dp.id = p.id_dep
+            join section sc on sc.id = p.id_sec
+            WHERE karyawan.kode="'.$cat.'"
+            ) b ) c
+            on a.nik = c.nik
+            ');
+
 
         $i = 0;
 
@@ -259,22 +278,23 @@ class Over_cari_chart2 extends CI_Model {
 
     private function _get_over_cari_56($tgl, $cat)
     {
-        $this->db->select('month_name, ROUND(d.jam,1) as avg, karyawan.nik, karyawan.namaKaryawan, dp.nama as departemen, sc.nama as section, karyawan.kode');
-        $this->db->from('(
-        select date_format(over.tanggal, "%m-%Y") as month_name, sum(over.jam) as jam, k.nik, k.kode from over
-        join karyawan k on k.nik = over.nik
-        WHERE MONTH(over.tanggal) = MONTH(STR_TO_DATE("'.$tgl.'","%d-%m-%Y"))
-        AND YEAR(over.tanggal) = YEAR(STR_TO_DATE("'.$tgl.'","%d-%m-%Y")) 
-        AND over.status = "N"
-        GROUP BY k.kode, k.nik, date_format(over.tanggal, "%m-%Y")
-        ) as d');
-        $this->db->join('karyawan','karyawan.nik = d.nik');
-        $this->db->join('posisi p','p.nik = karyawan.nik');
-        $this->db->join('departemen dp','dp.id = p.id_dep');
-        $this->db->join('section sc','sc.id = p.id_sec');
-        $this->db->where('karyawan.kode',$cat);
-        $this->db->group_by(array("karyawan.kode", "karyawan.nik"));
-        $this->db->having("avg > 56");
+        $this->db->select('*');
+        $this->db->from('
+            (
+            select a.nik, ROUND( sum(jam),2) as avg,karyawan.namaKaryawan, dp.nama as departemen, sc.nama as section, karyawan.kode from (
+            select nik, count(nik) as org, sum(jam) as jam from (
+            select nik,tanggal, jam from over where DATE_FORMAT(tanggal,"%Y-%m")="'.$tgl.'" and Status = "N" ORDER BY nik asc
+            ) d group by nik 
+            ) a 
+            LEFT JOIN karyawan on karyawan.nik = a.nik
+            JOIN posisi p on p.nik = karyawan.nik
+            JOIN departemen dp on dp.id = p.id_dep
+            join section sc on sc.id = p.id_sec
+            WHERE karyawan.kode="'.$cat.'" 
+            group by a.nik
+        )a where a.avg > 56
+            ');
+        
 
         $i = 0;
 
@@ -337,17 +357,20 @@ class Over_cari_chart2 extends CI_Model {
 
     private function _get_over_cari_t($tgl)
     {
-        $this->db->select('date_format(over.tanggal, "%m-%Y") as month_name, karyawan.nik, karyawan.namaKaryawan, dp.nama as departemen, sc.nama as section, karyawan.kode, ROUND(avg(over.jam),1) as avg');
-        $this->db->from('over');
-        $this->db->join('karyawan','karyawan.nik = over.nik', 'left');
-        $this->db->join('posisi p','p.nik = karyawan.nik');
-        $this->db->join('departemen dp','dp.id = p.id_dep');
-        $this->db->join('section sc','sc.id = p.id_sec');
-        $this->db->where('over.jam > 3');
-        $this->db->where('over.status','N');
-        $this->db->where('MONTH(over.tanggal) = MONTH(STR_TO_DATE("'.$tgl.'","%d-%m-%Y"))');
-        $this->db->where('YEAR(over.tanggal) = YEAR(STR_TO_DATE("'.$tgl.'","%d-%m-%Y"))');
-        $this->db->group_by(array("date_format(over.tanggal, '%m-%Y')", "over.nik"));
+        $this->db->select('*');
+        $this->db->from('(
+            select a.nik, ROUND( sum(jam / org),2) as avg,karyawan.namaKaryawan, dp.nama as departemen, sc.nama as section, karyawan.kode from (
+            select nik, count(nik) as org, sum(jam) as jam from (
+            select nik,tanggal, jam from over where DATE_FORMAT(tanggal,"%Y-%m")="'.$tgl.'" and Status = "N" and jam > 3 ORDER BY nik asc
+            ) d group by nik
+            ) a  
+            LEFT JOIN karyawan on karyawan.nik = a.nik
+            JOIN posisi p on p.nik = karyawan.nik
+            JOIN departemen dp on dp.id = p.id_dep
+            join section sc on sc.id = p.id_sec
+           
+            group by a.nik
+        )a');
 
         $i = 0;
 
@@ -409,20 +432,24 @@ class Over_cari_chart2 extends CI_Model {
 
     private function _get_over_cari_14_t($tgl)
     {
-        $this->db->select('b.month_name, karyawan.nik, karyawan.namaKaryawan, dp.nama as departemen, sc.nama as section, karyawan.kode, ROUND(avg(b.jam),1) as avg');
-        $this->db->from('(
-                select date_format(over.tanggal, "%m-%Y") as month_name, week(over.tanggal) as week_name, karyawan.nik, karyawan.kode, sum(over.jam) as jam from over
-                left join karyawan on karyawan.nik = over.nik 
-                where over.status = "N" AND MONTH(over.tanggal) = MONTH(STR_TO_DATE("'.$tgl.'","%d-%m-%Y"))
-                 AND YEAR(over.tanggal) = YEAR(STR_TO_DATE("'.$tgl.'","%d-%m-%Y"))
-                group by date_format(over.tanggal, "%m-%Y"), week(over.tanggal), karyawan.nik, karyawan.kode
-                having jam > 14
-            ) as b');
-        $this->db->join('karyawan','karyawan.nik = b.nik', 'left');
-        $this->db->join('posisi p','p.nik = karyawan.nik');
-        $this->db->join('departemen dp','dp.id = p.id_dep');
-        $this->db->join('section sc','sc.id = p.id_sec');
-        $this->db->group_by("b.nik");
+        $this->db->select('*');
+        $this->db->from(' (
+            select a.nik,a.avg,karyawan.namaKaryawan, dp.nama as departemen, sc.nama as section, karyawan.kode  from (
+            select nik, ROUND( sum(jam/jml),2) as avg from (
+            select nik, sum(jam) as jam, sum(org) as jml from (
+            select *,COUNT(nik) as org from (
+            select nik,SUM(jam) as jam, WEEK(tanggal) as wek from over WHERE DATE_FORMAT(tanggal,"%Y-%m")="'.$tgl.'" and status = "n" GROUP BY WEEK(tanggal),nik ORDER BY nik 
+            )a WHERE a.jam > 14 GROUP BY nik, wek
+            ) a GROUP BY a.nik
+            ) a GROUP BY a.nik
+            ) a
+
+            LEFT JOIN karyawan on karyawan.nik = a.nik
+            JOIN posisi p on p.nik = karyawan.nik
+            JOIN departemen dp on dp.id = p.id_dep
+            join section sc on sc.id = p.id_sec
+            
+        ) b');
 
         $i = 0;
 
@@ -485,30 +512,41 @@ class Over_cari_chart2 extends CI_Model {
 
     private function _get_over_cari_3_14_t($tgl)
     {
-        $this->db->select('u.month_name as month_name, karyawan.nik, karyawan.namaKaryawan, dp.nama as departemen, sc.nama as section, karyawan.kode, ROUND(l.avg,1) as avg');
+         $this->db->select('c.*');
         $this->db->from('
             (
-                select date_format(over.tanggal, "%m-%Y") as month_name, over.nik, karyawan.namaKaryawan, karyawan.kode, sum(over.jam) as sum from over 
-    left join karyawan on karyawan.nik = over.nik 
-    where over.jam > 3 and over.status = "N" 
-    AND MONTH(over.tanggal) = MONTH(STR_TO_DATE("'.$tgl.'","%d-%m-%Y")) AND YEAR(STR_TO_DATE("'.$tgl.'","%d-%m-%Y"))
-    group by date_format(over.tanggal, "%m-%Y"), over.nik
-        ) as u
-        ');
-        $this->db->join('(
-            select date_format(over.tanggal, "%m-%Y") as month_name, karyawan.nik, karyawan.namaKaryawan, karyawan.kode, avg(over.jam) as avg, sum(over.jam) as jml from over
-        left join karyawan on karyawan.nik = over.nik 
-        where over.status = "N"
-        AND MONTH(over.tanggal) = MONTH(STR_TO_DATE("'.$tgl.'","%d-%m-%Y")) AND YEAR(STR_TO_DATE("'.$tgl.'","%d-%m-%Y"))
-        group by date_format(over.tanggal, "%m-%Y"), week(over.tanggal), karyawan.nik 
-        having jml > 14
-        ) as l
-        ','u.nik = l.nik');
-        $this->db->join('karyawan','karyawan.nik = u.nik');
-        $this->db->join('posisi p','p.nik = u.nik');
-        $this->db->join('departemen dp','dp.id = p.id_dep');
-        $this->db->join('section sc','sc.id = p.id_sec');
-        $this->db->group_by("u.nik");
+            select a.nik, ROUND( sum(jam / org),2) as avg,karyawan.namaKaryawan, dp.nama as departemen, sc.nama as section, karyawan.kode from (
+            select nik, count(nik) as org, sum(jam) as jam from (
+            select nik,tanggal, jam from over where DATE_FORMAT(tanggal,"%Y-%m")="'.$tgl.'" and Status = "N" and jam > 3 ORDER BY nik asc
+            ) d group by nik
+            ) a  
+            LEFT JOIN karyawan on karyawan.nik = a.nik
+            JOIN posisi p on p.nik = karyawan.nik
+            JOIN departemen dp on dp.id = p.id_dep
+            join section sc on sc.id = p.id_sec
+           
+            group by a.nik
+            )a
+            INNER JOIN (
+            select * from (
+            select a.nik,a.avg,karyawan.namaKaryawan, dp.nama as departemen, sc.nama as section, karyawan.kode  from (
+            select nik, ROUND( sum(jam/jml),2) as avg from (
+            select nik, sum(jam) as jam, sum(org) as jml from (
+            select *,COUNT(nik) as org from (
+            select nik,SUM(jam) as jam, WEEK(tanggal) as wek from over WHERE DATE_FORMAT(tanggal,"%Y-%m")="'.$tgl.'" and status = "n" GROUP BY WEEK(tanggal),nik ORDER BY nik 
+            )a WHERE a.jam > 14 GROUP BY nik, wek
+            ) a GROUP BY a.nik
+            ) a GROUP BY a.nik
+            ) a
+
+            LEFT JOIN karyawan on karyawan.nik = a.nik
+            JOIN posisi p on p.nik = karyawan.nik
+            JOIN departemen dp on dp.id = p.id_dep
+            join section sc on sc.id = p.id_sec
+           
+            ) b ) c
+            on a.nik = c.nik
+            ');
 
         $i = 0;
 
@@ -571,21 +609,22 @@ class Over_cari_chart2 extends CI_Model {
 
     private function _get_over_cari_56_t($tgl)
     {
-        $this->db->select('month_name, ROUND(d.jam,1) as avg, karyawan.nik, karyawan.namaKaryawan, dp.nama as departemen, sc.nama as section, karyawan.kode');
-        $this->db->from('(
-        select date_format(over.tanggal, "%m-%Y") as month_name, sum(over.jam) as jam, k.nik, k.kode from over
-        join karyawan k on k.nik = over.nik
-        WHERE MONTH(over.tanggal) = MONTH(STR_TO_DATE("'.$tgl.'","%d-%m-%Y"))
-        AND YEAR(over.tanggal) = YEAR(STR_TO_DATE("'.$tgl.'","%d-%m-%Y")) 
-        AND over.status = "N"
-        GROUP BY k.kode, k.nik, date_format(over.tanggal, "%m-%Y")
-        ) as d');
-        $this->db->join('karyawan','karyawan.nik = d.nik');
-        $this->db->join('posisi p','p.nik = karyawan.nik');
-        $this->db->join('departemen dp','dp.id = p.id_dep');
-        $this->db->join('section sc','sc.id = p.id_sec');
-        $this->db->group_by(array("karyawan.kode", "karyawan.nik"));
-        $this->db->having("avg > 56");
+        $this->db->select('*');
+        $this->db->from('
+            (
+            select a.nik, ROUND( sum(jam),2) as avg,karyawan.namaKaryawan, dp.nama as departemen, sc.nama as section, karyawan.kode from (
+            select nik, count(nik) as org, sum(jam) as jam from (
+            select nik,tanggal, jam from over where DATE_FORMAT(tanggal,"%Y-%m")="'.$tgl.'" and Status = "N" ORDER BY nik asc
+            ) d group by nik 
+            ) a 
+            LEFT JOIN karyawan on karyawan.nik = a.nik
+            JOIN posisi p on p.nik = karyawan.nik
+            JOIN departemen dp on dp.id = p.id_dep
+            join section sc on sc.id = p.id_sec
+           
+            group by a.nik
+        )a where a.avg > 56
+            ');
 
         $i = 0;
 

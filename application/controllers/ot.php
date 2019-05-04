@@ -1107,7 +1107,7 @@ class Ot extends CI_Controller {
 
 	public function ajax_ot_g_detail2()
 	{
-		$tgl = date('d-m-Y' ,strtotime('10-'.$_GET['tgl']));
+		$tgl = date('Y-m' ,strtotime($_GET['tgl']));
 		$kode = $_GET['kode'];
 		$cat = $_GET['cat'];
 
@@ -1695,12 +1695,10 @@ class Ot extends CI_Controller {
 		$kar = 0;
 
 		$data = array();
-		$data3 = array();
+		$datas = array();
 
 		$list = $this->over_model_new->ot_control($tgl, $tgl2);
 
-		$fiskal = $this->home_model->getFiskal($tgl2);
-		$list2 = $this->over_model_new->tot_karyawan($tgl2, $fiskal[0]->fiskal);
 
 		foreach ($list as $key) {
 			$row = array();
@@ -1714,15 +1712,31 @@ class Ot extends CI_Controller {
 		}
 
 
+		$fiskal = $this->home_model->getFiskal($tgl2);
+		$list2 = $this->over_model_new->tot_karyawan($tgl2, $fiskal[0]->fiskal);
+
 		foreach ($list2 as $key) {
 			$tot = (int) $key->tot_karyawan;
 			$kar += $tot;
 		}
 
-		array_push($data3, $data);
-		array_push($data3, $kar);
+		$list3 = $this->over_model_new->budget_harian($tgl, $tgl2);
+		$data3 = array();
 
-		echo json_encode($data3);
+		foreach ($list3 as $key3) {
+			$row = array();
+			$row[] = $key3->cost_center;
+			$row[] = $key3->name;
+			$row[] = (float) $key3->jam;
+
+			$data3[] = $row;
+		}
+
+		array_push($datas, $data);
+		array_push($datas, $kar);
+		array_push($datas, $data3);
+
+		echo json_encode($datas);
 	}
 
 	public function overtime_control_detail()

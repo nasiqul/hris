@@ -315,8 +315,8 @@ class Over_model_new extends CI_Model {
 
     public function ot_control($tgl, $tgl2)
     {
-        $q = "SELECT  n.id_cc,  master_cc.NAME,
-        sum( n.act ) AS act,        sum( budget_tot ) AS tot,        sum( budget_tot ) - sum( n.act ) AS diff         FROM
+        $q = "SELECT  n.id_cc, master_cc.NAME,
+        sum( n.act ) AS act, sum( budget_tot ) AS tot, sum( budget_tot ) - sum( n.act ) AS diff         FROM
         (
         SELECT
         l.id_cc,
@@ -368,7 +368,7 @@ class Over_model_new extends CI_Model {
         GROUP BY
         id_cc 
         ORDER BY
-        diff ASC        ";
+        diff ASC";
         $query = $this->db->query($q);
         return $query->result();
     }
@@ -527,6 +527,17 @@ class Over_model_new extends CI_Model {
 
             return 'Success Update Data';
         }
+    }
+
+    public function budget_harian($tgl, $tgl2)
+    {
+        $q = "select bdg.*, master_cc.name from
+        (select cost_center, sum(jam) as jam from budget_harian where DATE_FORMAT(tanggal,'%Y-%m') = '".$tgl2."' and tanggal <= '".$tgl."'
+        group by cost_center) as bdg
+        left join master_cc on master_cc.id_cc = bdg.cost_center";
+        
+        $query = $this->db->query($q);
+        return $query->result();
     }
 }
 
