@@ -210,7 +210,6 @@ class Export_model extends CI_Model {
 			$query = 'UPDATE leaves SET leave_left = leave_left + 1 where employee_id = "'.$nik.'" and valid_from < "'.$tgl.'" and valid_to > "'.$tgl.'"';
 			$ympimis->query($query); 
 		}
-		
 		$this->db->where('tanggal', $tgl);
 		$this->db->delete('presensi');
 	}

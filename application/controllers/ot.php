@@ -1815,7 +1815,7 @@ class Ot extends CI_Controller {
 			$row[] = $key->nik;
 			$row[] = $key->namaKaryawan;
 			$row[] = $key->bagian;
-			$row[] = (float) $key->act;
+			$row[] = (float) $key->jam;
 			$row[] = (float) $key->satuan;
 
 			$data[] = $row;

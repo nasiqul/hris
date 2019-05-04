@@ -32,6 +32,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <input type="text" class="form-control datepicker" id="tgl" onchange="buattable()" placeholder="Select date" style="border-color: green">
             </div>
           </div>
+          <div class="pull-right">
+            <button class="btn btn-warning btn-md pull-right" id="exportid" href="" onclick="exportData('tgl')">Export by Date</button>
+            <button class="btn btn-warning btn-md pull-right" id="exportid" style="margin-right: 5px" href="" onclick="exportData('nik')">Export by NIK</button>
+
+          </div>
 
         </h1>
       </section>
@@ -97,6 +102,25 @@ scratch. This page gets rid of all links and provides the needed markup only.
           "orderable": false, //set not orderable
         }]
       })
+    }
+
+    function exportData(func) {
+      if($("#tgl").val())
+      {
+        var tgl = $("#tgl").val();
+      }
+      else {
+        var tgl = 1;
+      }
+
+      if (func == 'tgl') {
+        var url = "<?php echo base_url('import_excel/exportOvertime/') ?>"+ tgl;
+      } else if (func == 'nik') {
+        var url = "<?php echo base_url('import_excel/exportOvertime2/') ?>"+ tgl;
+      }
+
+      window.location.replace(url);
+      // alert(url);
     }
 
     $('.datepicker').datepicker({

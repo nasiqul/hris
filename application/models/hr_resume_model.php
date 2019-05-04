@@ -24,21 +24,23 @@ class HR_resume_model extends CI_Model {
     private function _get_datatables_query($tgl)
     {
         $this->db->select('*');
-        $this->db->from('(
-            select karyawan.nik, namaKaryawan, CONCAT(departemen.nama," - ",section.nama," - ",sub_section.nama," - ",group1.nama ) bagian, COALESCE(jam,0) act, aktual.satuan from karyawan
-            left join posisi on posisi.nik = karyawan.nik
-            join departemen on departemen.id = posisi.id_dep
-            join section on section.id = posisi.id_sec
-            join sub_section on sub_section.id = posisi.id_sub_sec
-            join group1 on group1.id = posisi.id_group
-            left join
-            ( select d.nik, sum(d.jam) as jam, sum(satuan) as satuan from
-                        (
-                        select m.*, satuan_lembur.satuan from (
-                            select tanggal ,nik, sum(jam) as jam, status from over where date_format(tanggal, "%Y-%m") = "'.$tgl.'" and status_final = 1
-            group by tanggal, nik ) as m 
-                        left join satuan_lembur on satuan_lembur.jam = m.jam and satuan_lembur.hari = m.status
-                        ) d group by nik) as aktual on aktual.nik = karyawan.nik
+        $this->db->from('(select ovr.nik, karyawan.namaKaryawan, CONCAT(dept.nama," - ",dev.nama," - ",sec.nama," - ",sub.nama," - ",gr.nama) bagian, ovr.final as jam, SUM(satuan) as satuan from
+                (
+                select over_time.tanggal, over_time_member.nik, sum(final) final, over_time.hari from over_time left join over_time_member on over_time.id = over_time_member.id_ot where DATE_FORMAT(tanggal,"%Y-%m") = "'.$tgl.'" and deleted_at IS NULL and nik IS NOT NULL and over_time_member.status = 1
+                group by nik,tanggal
+                ) ovr
+                left join karyawan on karyawan.nik = ovr.nik
+                left join posisi p on p.nik = karyawan.nik
+                left join departemen as dept on p.id_dep = dept.id
+                left join devisi as dev on p.id_devisi = dev.id
+                LEFT JOIN section as sec on p.id_sec = sec.id
+                LEFT JOIN sub_section as sub on p.id_sub_sec = sub.id
+                LEFT JOIN group1    as gr on p.id_group = gr.id  
+                left join satuan_lembur on satuan_lembur.jam = ovr.final and satuan_lembur.hari = ovr.hari
+                where ovr.final <> 0
+                group by nik
+                ORDER BY tanggal asc
+
         ) as tabel');
 
         $i = 0;
