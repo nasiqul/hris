@@ -1159,7 +1159,7 @@ class Ot extends CI_Controller {
 
 	public function ajax_ot_jam()
 	{
-		$tgl = $_GET['tgl2'];
+		$tgl = date('Y-m' ,strtotime($_GET['tgl2']));
 		$cat = $_GET['cat'];
 		
 		if ($cat == "3jam") {
