@@ -1707,6 +1707,7 @@ class Ot extends CI_Controller {
 			$row[] = (float) $key->tot;
 			$row[] = (float) $key->act;
 			$row[] = date('d F Y',strtotime($tgl));
+			$row[] = (float) $key->jam_harian;
 
 			$data[] = $row;
 		}

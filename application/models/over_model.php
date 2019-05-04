@@ -1780,10 +1780,10 @@ public function get_over_time($tgl, $tgl2, $cc)
     return $query->result();
 }
 
-    public function update_cuti($nik)
+    public function update_cuti($nik, $tgl)
     {
         $ympimis = $this->load->database('ympimisdev', TRUE);
-        $query = 'UPDATE leaves SET leave_left = leave_left - 1 where employee_id = "'.$nik.'" ORDER BY valid_from DESC limit 1';
+        $query = 'UPDATE leaves SET leave_left = leave_left - 1 where employee_id = "'.$nik.'" and valid_from < "'.$tgl.'" and valid_to > "'.$tgl.'"';
         $ympimis->query($query);    
     }
     public function get_cuti()

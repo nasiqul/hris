@@ -191,6 +191,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         var xCategories = [];
         var seriesDataBudget = [];
         var seriesDataAktual = [];
+        var budgetHarian = [];
         var cat;
 
         for(var i = 0; i < data[0].length; i++){
@@ -199,6 +200,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           tot_act += data[0][i][3];
           seriesDataBudget.push(data[0][i][2]);
           seriesDataAktual.push(data[0][i][3]);
+          budgetHarian.push(data[0][i][5]);
           if(xCategories.indexOf(cat) === -1){
            xCategories[xCategories.length] = cat;
          }
@@ -232,6 +234,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
       var interval = Math.ceil(300/10);
 
+      Highcharts.SVGRenderer.prototype.symbols['c-rect'] = function (x, y, w, h) {
+        return ['M', x, y + h / 2, 'L', x + w, y + h / 2];
+      };
 
       Highcharts.chart('container', {
         chart: {
@@ -277,7 +282,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           }
         },
         plotOptions: {
-          series: {
+          column: {
             pointPadding: 0.93,
             cursor: 'pointer',
             point: {
@@ -304,6 +309,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
             pointPadding: 0,
             borderWidth: 0,
             groupPadding: 0.1,
+            animation: false,
+            opacity: 0.2
+          },
+          scatter : {
+              dataLabels: {
+                enabled: false
+            },
             animation: false
           }
         },
@@ -315,14 +327,25 @@ scratch. This page gets rid of all links and provides the needed markup only.
           name: 'Overtime Actual',
           data: seriesDataAktual,
           color: "#7300ab"
+        },
+        {
+          name: 'Day Budget',
+          marker: {
+            symbol: 'c-rect',
+            lineWidth:4,
+            lineColor: '#02ff17',
+            radius: 10,
+          },
+          type: 'scatter',
+          data: budgetHarian
         }]
       });
     }
   })
-    }
+}
 
-    function modalTampil(costCenter, date) {
-      $("#myModal").modal('show');
+function modalTampil(costCenter, date) {
+  $("#myModal").modal('show');
       var showChar = 100;  // How many characters are shown by default
       var ellipsestext = "...";
       var moretext = "Show more >";

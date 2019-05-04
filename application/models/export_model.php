@@ -201,6 +201,16 @@ class Export_model extends CI_Model {
 
 	public function deletePresensi($tgl)
 	{
+		$ympimis = $this->load->database('ympimisdev', TRUE);
+		$q = "select nik, shift from ftm.presensi where presensi.tanggal = '".$tgl."' and presensi.shift IN ( Select absence_code from ympimis.absence_categories where deduction = 1 )";
+		$query = $this->db->query($q);
+
+		foreach ($query->result() as $key) {
+			$nik = $key->nik;
+			$query = 'UPDATE leaves SET leave_left = leave_left + 1 where employee_id = "'.$nik.'" and valid_from < "'.$tgl.'" and valid_to > "'.$tgl.'"';
+			$ympimis->query($query); 
+		}
+		
 		$this->db->where('tanggal', $tgl);
 		$this->db->delete('presensi');
 	}
