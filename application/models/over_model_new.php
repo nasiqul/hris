@@ -565,10 +565,10 @@ class Over_model_new extends CI_Model {
             $s = "";
         }
 
-        $q = "select ovr.tanggal, ovr.nik, karyawan.namaKaryawan, karyawan.costCenter, master_cc.name, ovr.final as jam, sum(satuan) as satuan from
+        $q = "select ovr.tanggal, ovr.nik, karyawan.namaKaryawan, karyawan.costCenter, master_cc.name, sum(ovr.final) as jam, COALESCE(sum(satuan),0)  as satuan from
         (
         select over_time.tanggal, over_time_member.nik, sum(final) final, over_time.hari from over_time left join over_time_member on over_time.id = over_time_member.id_ot where DATE_FORMAT(tanggal,'%Y-%m') = '".$bulan."' and deleted_at IS NULL and nik IS NOT NULL and over_time_member.status = 1
-        group by nik ".$s."
+        group by nik, tanggal
         ) ovr
         left join karyawan on karyawan.nik = ovr.nik
         left join master_cc on karyawan.costCenter = master_cc.id_cc
