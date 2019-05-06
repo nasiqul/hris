@@ -1699,7 +1699,7 @@ public function change_over($nik, $tgl, $jam)
 
 public function change_over_all($nik, $tgl, $jam)
 {
-    $this->db->query('update over set jam = '.$jam.' and status_final = 1 where tanggal = "'.$tgl.'" and nik = "'.$nik.'" and status_final = 0');
+    $this->db->query('update over set jam = '.$jam.', status_final = 1 where tanggal = "'.$tgl.'" and nik = "'.$nik.'" and status_final = 0');
 }
 
 public function get_break($hari, $dari, $sampai, $shift)
