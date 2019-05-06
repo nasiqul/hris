@@ -200,7 +200,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           tot_act += data[0][i][3];
           seriesDataBudget.push(data[0][i][2]);
           seriesDataAktual.push(data[0][i][3]);
-          budgetHarian.push(data[0][i][5]);
+          budgetHarian.push(Math.round(data[0][i][5] * 100) / 100);
           if(xCategories.indexOf(cat) === -1){
            xCategories[xCategories.length] = cat;
          }

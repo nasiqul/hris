@@ -546,7 +546,8 @@ class Over_model_new extends CI_Model {
     public function budget_harian($tgl, $tgl2)
     {
         $q = "select bdg.*, master_cc.name from
-        (select cost_center, jam from budget_harian where DATE_FORMAT(tanggal,'%Y-%m') = '".$tgl2."' and tanggal = '".$tgl."') as bdg
+        (select cost_center, sum(jam) as jam from budget_harian where DATE_FORMAT(tanggal,'%Y-%m') = '".$tgl2."' and tanggal <= '".$tgl."'
+        group by cost_center) as bdg
         left join master_cc on master_cc.id_cc = bdg.cost_center";
 
         $query = $this->db->query($q);
