@@ -320,11 +320,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
           }
         },
         series: [{
-          name: 'Overtime Budget',
+          name: 'Budget Accumulative',
           data: seriesDataBudget,
           color: "#f76111"
         }, {
-          name: 'Overtime Actual',
+          name: 'Actual Accumulative',
           data: seriesDataAktual,
           color: "#7300ab"
         },

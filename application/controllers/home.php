@@ -252,7 +252,7 @@ class Home extends CI_Controller {
     public function ot_graph()
     {
         $data['menu2'] = 'Overtime';
-        $data['menu'] = 'Overtime Graph';
+        $data['menu'] = 'Report Graph';
         $data['parentMenu'] = $this->home_model->getParentMenu();
 
         $d = date('n');
