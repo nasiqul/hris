@@ -1122,70 +1122,74 @@ public function chart()
 
 public function chart2($tgl)
 {
-    $q = "SELECT kode.nama, '".$tgl."' month_name, IFNULL(SUM(3_jam),0) tiga_jam, IFNULL(14_jam,0) blas_jam, IFNULL(3_14_jam,0) tiga_blas_jam, IFNULL(56_jam,0) manam_jam from kode left join
-    (
-    select date_format(over.tanggal, '%m-%Y') as month_name, over.nik, karyawan.kode, if(count(over.nik) > 1, 1, count(over.nik)) as 3_jam from over 
-    left join karyawan on karyawan.nik = over.nik 
-    where over.jam > 3 and over.status = 'N' AND MONTH(over.tanggal) = MONTH('".$tgl."') AND YEAR(over.tanggal) = YEAR('".$tgl."')
-    group by date_format(over.tanggal, '%m-%Y'), karyawan.kode, over.nik
-    ) as a on a.kode = kode.nama
-    left join
-    (
-    select m.month_name, m.kode, sum(14_jam) as 14_jam from 
-    (
-    select b.month_name, b.kode, if(count(b.nik) > 1, 1, count(b.nik)) as 14_jam, b.nik from 
-    (
-    select date_format(over.tanggal, '%m-%Y') as month_name, week(over.tanggal) as week_name, karyawan.nik, karyawan.kode, sum(over.jam) as jam from over
-    left join karyawan on karyawan.nik = over.nik 
-    where over.status = 'N' AND MONTH(over.tanggal) = MONTH('".$tgl."') AND YEAR(over.tanggal) = YEAR('".$tgl."')
-    group by date_format(over.tanggal, '%m-%Y'), week(over.tanggal), karyawan.nik, karyawan.kode
-    having jam > 14
-    ) as b GROUP BY b.nik
-    ) as m GROUP BY m.kode
-    ) as c on c.kode = kode.nama
-    left join
-    (
-    SELECT u.month_name as bulan, u.kode, COUNT(u.nik) as 3_14_jam from 
-    (
-    select date_format(over.tanggal, '%m-%Y') as month_name, over.nik, karyawan.kode, if(count(over.nik) > 1, 1, count(over.nik)) as 3_jam from over 
-    left join karyawan on karyawan.nik = over.nik 
-    where over.jam > 3 and over.status = 'N' AND MONTH(over.tanggal) = MONTH('".$tgl."') AND YEAR(over.tanggal) = YEAR('".$tgl."')
-    group by date_format(over.tanggal, '%m-%Y'), karyawan.kode, over.nik
-    ) as u
-
-    JOIN
-
-    (
-    select b.month_name, b.kode, b.nik from 
-    (
-    select date_format(over.tanggal, '%m-%Y') as month_name, week(over.tanggal) as week_name, karyawan.nik, karyawan.kode, sum(over.jam) as jam from over
-    left join karyawan on karyawan.nik = over.nik 
-    where over.status = 'N' AND MONTH(over.tanggal) = MONTH('".$tgl."') AND YEAR(over.tanggal) = YEAR('".$tgl."')
-    group by date_format(over.tanggal, '%m-%Y'), week(over.tanggal), karyawan.nik, karyawan.kode
-    having jam > 14
-    ) as b GROUP BY b.nik
-    ) as l
-    on u.nik = l.nik
-    GROUP BY u.kode
-
-    ) as z on z.kode = kode.nama
-    left join
-    (
-    select month_name, kode, sum(nik) as 56_jam from (
-    select month_name, kode, COUNT(nik) as nik, jam from (
-    select date_format(over.tanggal, '%m-%Y') as month_name, sum(over.jam) as jam, k.nik, k.kode from over
-    join karyawan k on k.nik = over.nik
-    WHERE MONTH(over.tanggal) = MONTH('".$tgl."') AND YEAR(over.tanggal) = YEAR('".$tgl."') AND over.status = 'N'
-    GROUP BY k.kode, k.nik, date_format(over.tanggal, '%m-%Y')
-    ) as d
-    GROUP BY kode, nik
-    HAVING jam > 56
-    ) a
-
-    GROUP BY kode
-
-    ) t on t.kode = kode.nama
-    GROUP by kode.nama
+    $q = "select kd.kode,'".$tgl."' month_name, COALESCE(tiga.tiga_jam,0) as tiga_jam, COALESCE(patblas.emptblas_jam,0) as emptblas_jam, COALESCE(tiga_patblas.tiga_patblas_jam,0) as tiga_patblas_jam, COALESCE(lima_nam.limanam_jam,0) as limanam_jam from
+(select kode from karyawan where kode <> '' GROUP BY kode) kd
+left join
+( select kode, count(nik) tiga_jam from (
+        select d.nik, round(avg(jam),2) as avg, karyawan.kode from
+        (select over_time.id, tanggal, nik, sum(final) as jam, status, over_time.hari from over_time
+        left join over_time_member on over_time_member.id_ot = over_time.id
+        where deleted_at IS NULL and date_format(over_time.tanggal, '%Y-%m') = '".$tgl."' and nik IS NOT NULL and over_time_member.status = 1 and hari = 'N'
+        group by nik, tanggal) d 
+        left join karyawan on karyawan.nik  = d.nik
+        where jam > 3
+        group by d.nik
+        ) tiga_jam
+        group by kode
+) as tiga on kd.kode = tiga.kode
+left join (
+        select kode, count(nik) as emptblas_jam from
+        (select s.nik, avg(jam) as avg, kode from
+        (select nik, sum(jam) jam, week_name from
+        (select over_time.id, tanggal, nik, sum(final) as jam, status, over_time.hari, week(over_time.tanggal) as week_name from over_time
+        left join over_time_member on over_time_member.id_ot = over_time.id
+        where deleted_at IS NULL and date_format(over_time.tanggal, '%Y-%m') = '".$tgl."' and nik IS NOT NULL and over_time_member.status = 1 and hari = 'N'
+        group by nik, tanggal) m
+        group by nik, week_name) s
+        left join karyawan on karyawan.nik  = s.nik
+        where jam > 14
+        group by s.nik) l
+        group by kode
+) patblas on kd.kode = patblas.kode
+left join (
+     select karyawan.kode, count(c.nik) as tiga_patblas_jam from 
+ ( select z.nik, x.avg from 
+ ( select d.nik, round(avg(jam),2) as avg from
+        (select over_time.id, tanggal, nik, sum(final) as jam, status, over_time.hari from over_time
+        left join over_time_member on over_time_member.id_ot = over_time.id
+        where deleted_at IS NULL and date_format(over_time.tanggal, '%Y-%m') = '".$tgl."' and nik IS NOT NULL and over_time_member.status = 1 and hari = 'N'
+        group by nik, tanggal) d 
+        where jam > 3
+        group by d.nik ) z
+        
+        INNER JOIN
+        
+        ( select s.nik, avg(jam) as avg from
+        (select nik, sum(jam) jam, week_name from
+        (select over_time.id, tanggal, nik, sum(final) as jam, status, over_time.hari, week(over_time.tanggal) as week_name from over_time
+        left join over_time_member on over_time_member.id_ot = over_time.id
+        where deleted_at IS NULL and date_format(over_time.tanggal, '%Y-%m') = '".$tgl."' and nik IS NOT NULL and over_time_member.status = 1 and hari = 'N'
+        group by nik, tanggal) m
+        group by nik, week_name) s
+        where jam > 14
+        group by s.nik) x on z.nik = x.nik
+        ) c
+        left join karyawan on karyawan.nik = c.nik
+        group by karyawan.kode
+) tiga_patblas on kd.kode = tiga_patblas.kode
+left join 
+(
+    select kode, count(nik) as limanam_jam from
+( select d.nik, sum(jam) as jam, karyawan.kode from
+(select over_time.id, tanggal, nik, sum(final) as jam, status, over_time.hari from over_time
+        left join over_time_member on over_time_member.id_ot = over_time.id
+        where deleted_at IS NULL and date_format(over_time.tanggal, '%Y-%m') = '".$tgl."' and nik IS NOT NULL and over_time_member.status = 1 and hari = 'N'
+        group by nik, tanggal) d
+        left join karyawan on karyawan.nik = d.nik
+        group by d.nik ) c
+        where jam > 56
+        group by kode
+) lima_nam on lima_nam.kode = kd.kode
 
     ";
     $query = $this->db->query($q);

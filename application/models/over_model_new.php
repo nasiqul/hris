@@ -393,7 +393,9 @@ class Over_model_new extends CI_Model {
         ( select id_cc, period, budget from cost_center_budget where DATE_FORMAT(period,'%Y-%m') = '".$tgl2."' ) as budget
         left join
         ( select costCenter, COALESCE(sum(ot.jam),0) act from
-        ( select nik, sum(jam) jam from over WHERE DATE_FORMAT(tanggal,'%Y-%m') = '".$tgl2."' and tanggal <= '".$tgl."'
+        ( SELECT over_time_member.nik, sum(over_time_member.jam) jam from over_time
+        LEFT JOIN over_time_member on over_time.id = over_time_member.id_ot
+        WHERE DATE_FORMAT(tanggal,'%Y-%m') = '".$tgl2."' and tanggal <= '".$tgl."' and deleted_at is null
         group by nik ) as ot
         right join karyawan on karyawan.nik = ot.nik
         group by costCenter ) as aktual on budget.id_cc = aktual.costCenter
