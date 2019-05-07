@@ -790,10 +790,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
     var atasan2 = $('#atasan').text();
     $('#atasan').text('').append($('<input />',
     {
-      'value' : pin2, 
+      'value' : atasan2, 
       'type' : 'text', 
       'class' : 'form-control', 
-      'id' : 'txtpin'}
+      'id' : 'txtatasan'}
       ));
 
     var cc2 = $('#costC').text();
@@ -1064,6 +1064,7 @@ function showGroup() {
       var masuk = $('#tglMasuk2').val();
       var pin = $('#txtpin').val();
       var cost = $('#txtCC').val();
+      var atasan = $('#txtatasan').val();
 
       // --------- admin -------
       var hp = $('#txtHP').val();
@@ -1099,6 +1100,7 @@ function showGroup() {
           'masuk': masuk,
           'pin': pin,
           'cost': cost,
+          'atasan': atasan,
           // --------- admin -------
           'hp': hp,
           'rek': rek,

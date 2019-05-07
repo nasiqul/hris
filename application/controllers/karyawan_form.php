@@ -280,6 +280,7 @@ class Karyawan_form extends CI_Controller {
 		$masuk = $_POST['masuk'];
 		$pin = $_POST['pin'];
 		$cost = $_POST['cost'];
+		$atasan = $_POST['atasan'];
 
 		// --------- admin -------
 		$hp = $_POST['hp'];
@@ -303,6 +304,7 @@ class Karyawan_form extends CI_Controller {
 			'pin' => $pin,
 			'tanggalMasuk' => date('Y/m/d', strtotime($masuk)),			
 			'costCenter' => $cost,	
+			'atasan' => $atasan,
 			
 
 			// -----ADMIN ---
