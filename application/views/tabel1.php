@@ -29,80 +29,78 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <!-- Main content -->
       <section class="content container-fluid">
         <div class="col-md-12">
-
           <div class="box box-solid">
             <div class="box-body">
-              <table class="table table-bordered table-hover table-striped">
-               <tr>
-                    <th></th>
-                    <th>Hari Kerja</th>
-                    <th>Total Lembur</th>
-                    <th>total karyawan</th>
-                    <th>Karyawan Non-Aktif</th>
-                    <th>Karyawan Aktif</th>
-                    <th>Jam ketidakhadiran</th>
-                    <th>jam Kerja Total</th>
-                    <th>(%) Presentase Kehadiran</th>
-               </tr>
-               <?php $no = 0; $no2 = 0; foreach ($prs as $key) { ?>
+              <table class="table table-bordered">
+               <tr id="head" bgcolor="#ddd">
+                <th bgcolor="#ddd" ></th>
+              </tr>
+              <tr id="totalemp">
+                <th bgcolor="#ddd" >Total</th>
+              </tr>
+              <tr id="kehadiran">
+                <th bgcolor="#ddd" >% Kehadiran</th>
+              </tr>
+              <tr id="aktif">
+                <th bgcolor="#ddd">Aktif</th>
+              </tr>
+              <tr id="non">
+                <th bgcolor="#ddd">Non-aktif</th>
+              </tr>
+              <tr id="working">
+                <th bgcolor="#ddd">Total overtime (working day)</th>
+              </tr>
+              <tr id="holiday">
+                <th bgcolor="#ddd">Total overtime (Holiday)</th>
+              </tr>
+              <tr id="avg">
+                <th bgcolor="#ddd">Avg. Overtime</th>
+              </tr>
+              <tr id="56">
+                <th bgcolor="#ddd">Lembur Normal Lembur normal > 56 Jam per Bulan</th>
+              </tr>
+              <tr id="3">
+                <th bgcolor="#ddd">Lembur Normal > 3 Jam per Hari</th>
+              </tr>
+              <tr id="14">
+                <th bgcolor="#ddd">Lembur Normal > 14 Jam per Minggu</th>
+              </tr>
+              <tr id="3dan14">
+                <th bgcolor="#ddd">Lembur Normal > 3 Jam per Hari & <br> Lembur normal > 14 Jam per Minggu</th>
+              </tr>
+            </table>
 
-                    <tr>
-                         <th><?php echo date('F',strtotime($key->tanggal)) ?></th>
-                         <td><?php echo $key->hari_kerja ?></td>
-                         <td><?php echo $key->total_lembur ?></td>
-                         <td>
-                              <?php 
-                              $no += $key->total_keluar;
-                              $tot = $key->tot - $no;
-                              echo $tot;
-                              ?>
-                         </td>
-                         <td><?php echo $key->total_keluar ?></td>
-                         <td><?php echo $key->totalMasuk ?></td>
-                         <td><?php echo $key->jam_ketidakhadiran ?></td>
-                         <td>
-                              <?php 
-                              $jm_kerja = ($key->hari_kerja*$tot*8) + $key->total_lembur;
-                              echo $jm_kerja;
-                              ?>
-                         </td>
-                         <td>
-                              <?php 
-                              $prsn = ROUND(($jm_kerja - $key->jam_ketidakhadiran) / $jm_kerja * 100, 3);
-                              echo $prsn." %";
-                              ?>
-                         </td>
-                    </tr>
-
-               <?php } ?>
-
+            <br>
+            
+            <h4><b>Total Jam Kerja</b></h4>
+            <table class="table table-bordered">
+             <tr bgcolor="#ddd">
+              <th>Bulan</th>
+              <th>Hari Kerja</th>
+              <th>Total MP <br> YMPI</th>
+              <th>Jam Kerja</th>
+              <th>Total Jam Lembur</th>
+              <th>Jam Kerja Total</th>
+              <th>CT</th>
+              <th>SD</th>
+              <th>I</th>
+              <th>A</th>
+              <th>Total Absen</th>
+              <th>Jam <br> Ketidakhadiran</th>
+              <th>(%) Kehadiran</th>
+            </tr>
+            <tbody id="total_jam_isi">
+            </tbody>
           </table>
-
-          <table class="table">
-               <tr>
-                    <th>bulan</th>
-                    <th>aktif</th>
-                    <th>non-aktif</th>
-                    <th>Total Karyawan</th>
-               </tr>
-               <?php foreach ($prs2 as $key2) { ?>
-                    <tr>
-                         <td><?php echo $key2->periode ?></td>
-                         <td><?php echo $key2->aktif ?></td>
-                         <td><?php echo $key2->non_aktif ?></td>
-                         <td><?php echo $key2->total_karyawan ?></td>
-                    </tr>
-               <?php } ?>
-          </table>
-            </div>
-          </div>   
         </div>
-
-      </section>
-      <!-- /.content -->
+      </div>   
     </div>
-    <!-- /.content-wrapper -->
-    <!-- /.control-sidebar -->
+
+  </section>
+  <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+<!-- /.control-sidebar -->
   <!-- Add the sidebar's background. This div must be placed
     immediately after the control sidebar -->
     <div class="control-sidebar-bg"></div>
@@ -111,16 +109,44 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- ./wrapper -->
   <script>
     $(document).ready(function() {
-      $('#example1').DataTable({
-        "lengthMenu"    : [[10, 25, 50, -1], [10, 25, 50, "All"]],
-        "processing"    : true,
-        "serverSide"    : true,
-        'order'         : [],
-        "ajax": {
-          "url": "<?php echo base_url('home/ajax_qa')?>",            
-          "type": "POST"
+      $.ajax({
+        type : "GET",
+        url: "<?php echo base_url('home/get_total_emp/') ?>",
+        dataType: 'json',
+        success: function(data){
+          $.each(data, function(i, value){
+            $('#head').append($('<th>'+data[i][0]+'</th>'));
+            $('#kehadiran').append($('<td>'+data[i][1]+'</td>'));
+            $('#totalemp').append($('<td>'+data[i][2]+'</td>'));
+            $('#aktif').append($('<td>'+data[i][3]+'</td>'));
+            $('#non').append($('<td>'+data[i][4]+'</td>'));
+          });
         }
-      })
+      });
+
+      $.ajax({
+        type : "GET",
+        url: "<?php echo base_url('home/jam_kerja/') ?>",
+        dataType: 'json',
+        success: function(data){
+          $.each(data, function(i, value){
+            $('#total_jam_isi').append($('<tr><td>'+data[i][0]+'</td>'+
+              '<td>'+data[i][1]+'</td>'+
+              '<td>'+data[i][2]+'</td>'+
+              '<td>'+data[i][3]+'</td>'+
+              '<td>'+data[i][4]+'</td>'+
+              '<td>'+data[i][5]+'</td>'+
+              '<td>'+data[i][6]+'</td>'+
+              '<td>'+data[i][7]+'</td>'+
+              '<td>'+data[i][8]+'</td>'+
+              '<td>'+data[i][9]+'</td>'+
+              '<td>'+data[i][10]+'</td>'+
+              '<td>'+data[i][11]+'</td>'+
+              '<td>'+data[i][12]+' %</td>'+
+              '</tr>'));
+          });
+        }
+      });
     })
   </script>
 

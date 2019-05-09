@@ -260,17 +260,17 @@ class Home_model extends CI_Model {
 
     public function getMenu2($sess, $menu)
     {
-     $q = "select nama_menu, url, parent_menu, icon from master_menu 
-     left join role on master_menu.id_menu = role.id_menu
-     LEFT JOIN login as l on role.user_id = l.role
-     where l.username ='".$sess."' and master_menu.parent_menu ='".$menu."'";
+       $q = "select nama_menu, url, parent_menu, icon from master_menu 
+       left join role on master_menu.id_menu = role.id_menu
+       LEFT JOIN login as l on role.user_id = l.role
+       where l.username ='".$sess."' and master_menu.parent_menu ='".$menu."'";
 
-     $query = $this->db->query($q);
-     return $query->result();
- }
+       $query = $this->db->query($q);
+       return $query->result();
+   }
 
- public function getFiskal($tgl)
- {
+   public function getFiskal($tgl)
+   {
     $q = "select fiskal from kalender_fy where DATE_FORMAT(tanggal,'%Y-%m') = '".$tgl."' limit 1";
     $query = $this->db->query($q);
     return $query->result();   
@@ -313,6 +313,84 @@ public function getParentMenu()
 public function get_kep_all()
 {
     $query = $this->db->get('master_keperluan');
+    return $query->result();
+}
+
+public function all_emp($fy)
+{
+    $q = "
+    select z.mon, z.tot_karyawan, m.masuk, m.keluar from (
+    select mon, count(if(if(date_format(a.tanggalMasuk, '%Y-%m') <= mon, 1, 0 ) - if(date_format(a.tanggalKeluar, '%Y-%m') <= mon, 1, 0 ) = 0, null, 1)) as tot_karyawan from
+    (
+    select distinct fiskal, date_format(tanggal, '%Y-%m') as mon
+    from kalender_fy
+    ) as b
+    join
+    (
+    select '".$fy."' as fy, karyawan.kode, tanggalKeluar, tanggalMasuk, nik, costCenter
+    from karyawan
+    ) as a
+    on a.fy = b.fiskal
+    group by mon
+    ) z left join 
+    (
+    select mon, sum(masuk) as masuk, sum(keluar) as keluar from 
+    (
+    SELECT
+    date_format(a.tanggal, '%Y-%m') as mon, count(karyawan.nik) as masuk, 0 as keluar
+    FROM
+    ( SELECT * FROM kalender_fy WHERE kalender_fy.fiskal = '".$fy."' ) as a
+    LEFT JOIN karyawan ON karyawan.tanggalMasuk = a.tanggal group by date_format(a.tanggal, '%Y-%m')
+    union all
+    SELECT
+    date_format(a.tanggal, '%Y-%m') as mon, 0 as masuk, count(karyawan.nik) as keluar
+    FROM
+    ( SELECT * FROM kalender_fy WHERE kalender_fy.fiskal = '".$fy."' ) as a
+    LEFT JOIN karyawan ON karyawan.tanggalkeluar = a.tanggal group by date_format(a.tanggal, '%Y-%m')
+    ) as b group by mon
+    ) m on m.mon = z.mon
+    ";
+    $query = $this->db->query($q);
+    return $query->result();
+}
+
+public function tot_jam_kerja($fy)
+{
+    $q = "
+    select *, round((tot_kerja - jam_tdk) / tot_kerja,4) as persen from
+    (select jam_kerja.* , hari_kerja*tot_karyawan*8 as jam_kerja, (jam_kerja.lembur + hari_kerja*tot_karyawan*8) as tot_kerja, COALESCE(CT,0) CT, COALESCE(SD,0) SD, COALESCE(I,0) I, COALESCE(A,0) A, COALESCE(CT+SD+I+A,0) tot_absen, COALESCE((CT+SD+I+A)*8,0) jam_tdk from
+    ( select z.mon, m.hari_kerja, z.tot_karyawan, COALESCE(lembur.tot_lembur,0) as lembur from (
+    select mon, count(if(if(date_format(a.tanggalMasuk, '%Y-%m') <= mon, 1, 0 ) - if(date_format(a.tanggalKeluar, '%Y-%m') <= mon, 1, 0 ) = 0, null, 1)) as tot_karyawan from
+    (
+    select distinct fiskal, date_format(tanggal, '%Y-%m') as mon
+    from kalender_fy
+    ) as b
+    join
+    (
+    select '".$fy."' as fy, karyawan.kode, tanggalKeluar, tanggalMasuk, nik, costCenter
+    from karyawan
+    ) as a
+    on a.fy = b.fiskal
+    group by mon
+    ) z left join 
+    (
+    select count(tanggal) hari_kerja, DATE_FORMAT(tanggal,'%Y-%m') mon from kalender_fy where tanggal not in (select tanggal from kalender)
+    and fiskal = '".$fy."'
+    group by DATE_FORMAT(tanggal,'%Y-%m')
+    ) m on m.mon = z.mon
+    left join
+    (
+    select DATE_FORMAT(over_time.tanggal,'%Y-%m') as mon, sum(jam) as tot_lembur from over_time left join over_time_member on over_time.id = over_time_member.id_ot where deleted_at is null
+    group by DATE_FORMAT(over_time.tanggal,'%Y-%m')
+    ) as lembur on lembur.mon = z.mon
+    ) jam_kerja
+    left join (
+    select DATE_FORMAT(tanggal,'%Y-%m') as mon, count(IF(shift = 'CT',1,null)) CT, count(IF(shift = 'SD',1,null)) SD, count(IF(shift = 'I',1,null)) I, count(IF(shift = 'A',1,null)) A from presensi
+    GROUP BY DATE_FORMAT(tanggal,'%Y-%m')
+    ) absen on jam_kerja.mon = absen.mon
+    ) as semua
+    ";
+    $query = $this->db->query($q);
     return $query->result();
 }
 }

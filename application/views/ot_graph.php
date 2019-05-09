@@ -369,149 +369,6 @@ By Dep <br> <span class="text-purple">???</span></a>
 
      }
 
-//   CHARTT
-//      $(function () {
-//           var cat = new Array();
-//           var tiga_jam = new Array();
-//           var per_minggu = new Array();
-//           var per_bulan = new Array();
-//           var manam_bulan = new Array();
-
-//           $.getJSON('<?php // echo base_url("ot/overtime_chart/")?>', function(data) {
-
-//                for (i = 0; i < data.length; i++){
-//                     cat.push(data[i][0]);
-//                     tiga_jam.push(parseInt(data[i][1]));
-//                     per_minggu.push(parseInt(data[i][2]));
-//                     per_bulan.push(parseInt(data[i][3]));
-//                     manam_bulan.push(parseInt(data[i][4]));
-//                }
-
-//                $('#container3').highcharts({
-//                     chart: {
-//                          type: 'line',
-//                          backgroundColor : "#3d3f3f",   
-//                     },
-//                     legend: {
-//                          align: 'right',
-//                          verticalAlign: 'top',
-//                          layout: 'vertical',
-//                          x: 0,
-//                          y: 100,
-//                          itemStyle: {
-//                               color: '#FFF'
-//                          },
-//                          itemHoverStyle: {
-//                               color: '#DDD'
-//                          },
-//                          itemHiddenStyle: {
-//                               color: '#616363'
-//                          }
-//                     },
-//                     exporting : {
-//                          enabled : true
-//                     },
-//                     title: {
-//                          text: data[0][5],
-//                          style: {
-//                               color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
-//                          }
-//                     },
-//                     xAxis: {
-//                          gridLineWidth: 1,
-//                          gridLineColor: "#7a7c7c",
-//                          categories: cat,
-//                          labels: {
-//                               style: {
-//                                    color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
-//                               }
-//                          }
-//                     },
-//                     yAxis: {
-//                          min:0,
-//                          gridLineColor: "#7a7c7c",
-//                          title: {
-//                               text: 'Jumlah (orang)',
-//                               style: {
-//                                    color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
-//                               }
-//                          },
-//                          labels: {
-//                               style: {
-//                                    color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
-//                               }
-//                          }
-//                     },
-//                     plotOptions: {
-//                          line: {
-//                               dataLabels: {
-//                                    enabled: true,
-//                                    color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
-//                               },
-//                               enableMouseTracking: true
-//                          },
-//                          series: {
-//                               cursor: 'pointer',
-//                               point: {
-//                                    events: {
-//                                         click: function(e) {  
-//                                              show(data[0][5], this.category, this.series.name);
-//                                         }
-//                                    }
-//                               }
-//                          }
-//                     },
-//                     credits: {
-//                          enabled: false
-//                     },
-//                     series: [{
-//                          name: 'OT > 3 JAM / HARI',
-//                          color: '#2598db',
-//                          shadow: {
-//                               color: '#2598db',
-//                               width: 7,
-//                               offsetX: 0,
-//                               offsetY: 0
-//                          },
-//                          data: tiga_jam
-//                     }, {
-//                          name: 'OT > 14 JAM / MGG',
-//                          color: '#f2ad96',
-//                          shadow: {
-//                               color: '#f2ad96',
-//                               width: 7,
-//                               offsetX: 0,
-//                               offsetY: 0
-//                          },
-//                          data: per_minggu
-//                     },
-//                     {
-//                          name: 'OT > 3 dan > 14 Jam',
-//                          color: '#f90031',
-//                          shadow: {
-//                               color: '#f90031',
-//                               width: 7,
-//                               offsetX: 0,
-//                               offsetY: 0
-//                          },
-//                          data: per_bulan
-//                     },
-//                     {
-//                          name: 'OT > 56 JAM / BLN',
-//                          color: '#d756f7',
-//                          shadow: {
-//                               color: '#d756f7',
-//                               width: 7,
-//                               offsetX: 0,
-//                               offsetY: 0
-//                          },
-//                          data: manam_bulan
-//                     }]
-
-//                });
-// });
-// })
-
 function show(tgl, cat, kode) {
      tabel = $('#example3').DataTable();
      tabel.destroy();
@@ -718,6 +575,8 @@ for (i = 0; i < s.length; i++){
      manam_bulan.push(parseInt(s[i][4]));
 
 }
+tgl = s[0][5];
+ console.log(tgl);
 
 $('#container4').highcharts({
      chart: {
@@ -889,7 +748,7 @@ function tiga_jam() {
                "type": "GET",
                "data": {
                     tgl2 : ttanggal,
-                    cat: "3jam"
+                    cat: "3jam_t"
                }
           }
      })
@@ -913,7 +772,7 @@ function empatbelas_jam() {
                "type": "GET",
                "data": {
                     tgl2 : ttanggal,
-                    cat: "14jam"
+                    cat: "14jam_t"
                }
           }
      })
@@ -937,7 +796,7 @@ function tiga_dan_empatbelas_jam() {
                "type": "GET",
                "data": {
                     tgl2 : ttanggal,
-                    cat: "3_14jam"
+                    cat: "3_14jam_t"
                }
           }
      })
@@ -961,7 +820,7 @@ function limaenam_jam() {
                "type": "GET",
                "data": {
                     tgl2 : ttanggal,
-                    cat: "56jam"
+                    cat: "56jam_t"
                }
           }
      })

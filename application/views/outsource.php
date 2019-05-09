@@ -39,8 +39,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <thead>
                   <tr>
                     <th>Periode</th>
-                    <th>E Masuk</th>
-                    <th>E Keluar</th>
+                    <th>&sum; &nbsp; Masuk</th>
+                    <th>&sum; &nbsp; Keluar</th>
                     <th>Jumlah Total</th>
                   </tr>
                 </thead>

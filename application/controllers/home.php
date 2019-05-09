@@ -196,8 +196,7 @@ class Home extends CI_Controller {
     public function emp_tot()
     {
         $data['menu2'] = 'Employee';
-        $data['prs'] = $this->over_model->get_p_data();
-        $data['prs2'] = $this->over_model->tes1();
+        // $data['prs'] = $this->over_model->get_p_data();
         $data['menu'] = 'Total Employee';
         $data['parentMenu'] = $this->home_model->getParentMenu();
         $this->load->view('tabel1',$data);
@@ -721,9 +720,9 @@ public function ajax_presensi_shift()
       }
   }
   else
-     $result[] = json_decode ("{}");
+   $result[] = json_decode ("{}");
 
- echo json_encode($result);
+echo json_encode($result);
 }
 
 public function ajax_emp_keluarga()
@@ -1283,6 +1282,53 @@ public function ajax_budget_g()
     );
             //output to json format
     echo json_encode($output);
+}
+public function get_total_emp()
+{
+    $fy = $this->home_model->getFiskal(date('Y-m'));
+    $list = $this->home_model->all_emp($fy[0]->fiskal);
+
+    $data = array();
+    foreach ($list as $key) {
+        $row = array();
+        $row[] = date('M',strtotime($key->mon."-01"));
+        $row[] = 0;
+        $row[] = $key->tot_karyawan;
+        $row[] = $key->masuk;
+        $row[] = $key->keluar;
+
+        $data[] = $row;
+    }
+
+    echo json_encode($data);
+}
+
+public function jam_kerja()
+{
+    $fy = $this->home_model->getFiskal(date('Y-m'));
+    $list = $this->home_model->tot_jam_kerja($fy[0]->fiskal);
+
+    $data = array();
+    foreach ($list as $key) {
+        $row = array();
+        $row[] = date('M-y',strtotime($key->mon."-01"));
+        $row[] = $key->hari_kerja;
+        $row[] = $key->tot_karyawan;
+        $row[] = $key->jam_kerja;
+        $row[] = $key->lembur;
+        $row[] = $key->tot_kerja;
+        $row[] = $key->CT;
+        $row[] = $key->SD;
+        $row[] = $key->I;
+        $row[] = $key->A;
+        $row[] = $key->tot_absen;
+        $row[] = $key->jam_tdk;
+        $row[] = (float) $key->persen * 100;
+
+        $data[] = $row;
+    }
+
+    echo json_encode($data);
 }
 
 }

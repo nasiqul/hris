@@ -181,9 +181,7 @@ class Export_model extends CI_Model {
 			else {
 				$d = 0;
 				$jam_lembur = 0;
-
 			}
-
 		}
 		
 		$c = round($d/3600,1);
@@ -194,7 +192,7 @@ class Export_model extends CI_Model {
 
 		if($result){
 			return true;
-		}else{
+		} else {
 			return $this->db->_error_message(); 
 		}
 	}
