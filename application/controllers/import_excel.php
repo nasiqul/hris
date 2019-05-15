@@ -135,7 +135,6 @@ class import_excel extends CI_Controller {
 
                         $jam = $key->jam_plan;
 
-                        $this->over_model->update_data_over($where,'over_time_member');
                         $this->over_model->update_data_final($where,'over_time_member',$jam);
 
                     }

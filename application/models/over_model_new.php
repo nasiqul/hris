@@ -286,7 +286,7 @@ class Over_model_new extends CI_Model {
     {
         $q = "select *, COUNT(nik) as jml_nik from
         (
-        select IFNULL(d.id,'-') as id, over.tanggal, over.nik, over.jam as aktual, IFNULL(d.jam,0) as jam_plan, IFNULL((over.jam - d.jam),0) as diff, IF(final = 0 OR final IS NULL, IFNULL(d.jam,0) , 0) as final2, d.status from over
+        select IFNULL(d.id,'-') as id, over.tanggal, over.nik, over.jam as aktual, IFNULL(d.jam,0) as jam_plan, IFNULL((over.jam - d.jam),0) as diff, d.status from over
         left join (
         select over_time_member.id_ot, over_time.id, tanggal, nik, jam, final, over_time_member.status from over_time
         join over_time_member on over_time_member.id_ot = over_time.id
@@ -314,10 +314,10 @@ class Over_model_new extends CI_Model {
     }
 
     public function ot_control($tgl, $tgl2)
-    {
+    {        
         $q = "SELECT datas.*, d.jam_harian from
         ( SELECT  n.id_cc, master_cc.NAME,
-        sum( n.act ) AS act, sum( budget_tot ) AS tot, sum( budget_tot ) - sum( n.act ) AS diff         FROM
+        sum( n.act ) AS act, sum( budget_tot ) AS tot, sum( budget_tot ) - sum( n.act ) AS diff FROM
         (
         SELECT
         l.id_cc,
@@ -345,7 +345,7 @@ class Over_model_new extends CI_Model {
         SELECT
         over_time_member.nik,
         over_time.tanggal,
-        sum( over_time_member.jam ) AS jam 
+        sum( over_time_member.final ) AS jam 
         FROM
         over_time
         LEFT JOIN over_time_member ON over_time.id = over_time_member.id_ot 
