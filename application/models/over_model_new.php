@@ -345,7 +345,7 @@ class Over_model_new extends CI_Model {
         SELECT
         over_time_member.nik,
         over_time.tanggal,
-        sum( over_time_member.final ) AS jam 
+        sum( IF(status = 0,over_time_member.jam,over_time_member.final) ) AS jam 
         FROM
         over_time
         LEFT JOIN over_time_member ON over_time.id = over_time_member.id_ot 
