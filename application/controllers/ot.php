@@ -2040,7 +2040,7 @@ class Ot extends CI_Controller {
 			$excel->setActiveSheetIndex(0)->setCellValue('I'.$numrow, $data->jam_lembur);
 			$excel->setActiveSheetIndex(0)->setCellValue('J'.$numrow, $data->masuk_aktual);
 			$excel->setActiveSheetIndex(0)->setCellValue('K'.$numrow, $data->keluar_aktual);
-			$excel->setActiveSheetIndex(0)->setCellValue('L'.$numrow, $data->jam_aktual);
+			$excel->setActiveSheetIndex(0)->setCellValue('L'.$numrow, $data->jam_aktual);a
 			$excel->setActiveSheetIndex(0)->setCellValue('M'.$numrow, $data->diff);
 			$excel->setActiveSheetIndex(0)->setCellValue('N'.$numrow, $data->status_hari);
 			$excel->setActiveSheetIndex(0)->setCellValue('O'.$numrow, $data->status_spl);

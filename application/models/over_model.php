@@ -1628,17 +1628,16 @@ public function exportdata($id)
 public function exportdatahr($id)
 {
     $this->db->select("*");
-    $this->db->from("( select over_time_member.id_ot,  over_time_member.nik, over_time.tanggal, karyawan.namaKaryawan, section.nama, over_time_member.dari as dari_lembur, over_time_member.sampai as sampai_lembur, over_time_member.jam as jam_lembur, presensi.masuk as masuk_aktual, presensi.keluar as keluar_aktual,over.jam as jam_aktual, (over.jam - over_time_member.jam) as diff,over.status as status_hari, over_time_member.status as status_spl, over_time_member.final as final_jam, COALESCE(satuan_lembur.satuan,0) as satuan from over_time_member 
+    $this->db->from("( select over_time_member.id_ot,  over_time_member.nik, over_time.tanggal, karyawan.namaKaryawan, section.nama, over_time_member.dari as dari_lembur, over_time_member.sampai as sampai_lembur, over_time_member.jam as jam_lembur, presensi.masuk as masuk_aktual, presensi.keluar as keluar_aktual,over_time_member.status as status_spl, over_time_member.final as final_jam, COALESCE(satuan_lembur.satuan,0) as satuan, '-' as jam_aktual, '-' as diff, over_time.hari as status_hari  from over_time_member 
         left join over_time on over_time_member.id_ot = over_time.id
         left join karyawan on over_time_member.nik = karyawan.nik
         left join posisi on karyawan.nik = posisi.nik
         left join section on posisi.id_sec = section.id
         left join presensi on karyawan.nik = presensi.nik
-        left join over on karyawan.nik = over.nik
-        left join satuan_lembur on over_time_member.final = satuan_lembur.jam and over.status = satuan_lembur.hari
+        left join satuan_lembur on over_time_member.final = satuan_lembur.jam 
         where DATE_FORMAT(over_time.tanggal,'%Y-%m-%d')='".$id."' 
         and DATE_FORMAT(presensi.tanggal,'%Y-%m-%d')='".$id."' 
-        and DATE_FORMAT(over.tanggal,'%Y-%m-%d')='".$id."' and over_time.deleted_at IS NULL ) a");
+        and over_time.deleted_at IS NULL ) a");
 
     $query = $this->db->get();
     return $query->result();
