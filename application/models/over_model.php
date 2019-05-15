@@ -401,15 +401,16 @@ class Over_model extends CI_Model {
         }
     } 
 
-    public function update_data_over($where,$table){
-        $this->db->set('status', "1");
-        $this->db->where($where);
-        $this->db->update($table);
-    }   
+    // public function update_data_over($where,$table){
+    //     $this->db->set('status', "1");
+    //     $this->db->where($where);
+    //     $this->db->update($table);
+    // }   
 
 
     public function update_data_final($where,$table,$data){
         $this->db->set('final', $data);
+        $this->db->set('status', "1");
         $this->db->where($where);
         $this->db->update($table);
     }  

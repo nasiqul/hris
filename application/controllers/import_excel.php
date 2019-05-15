@@ -135,7 +135,6 @@ class import_excel extends CI_Controller {
 
                         $jam = $key->jam_plan;
 
-                        $this->over_model->update_data_over($where,'over_time_member');
                         $this->over_model->update_data_final($where,'over_time_member',$jam);
 
                     }
@@ -282,31 +281,31 @@ class import_excel extends CI_Controller {
 
 
     public function exportOvertime2($tgl){
-        if ($tgl == 1) {
-            $bulan = date('Y-m');
-        } 
-        else {
-            $bulan = date('Y-m',strtotime('01-'.$tgl));
-        }
+            if ($tgl == 1) {
+                $bulan = date('Y-m');
+            } 
+            else {
+                $bulan = date('Y-m',strtotime('01-'.$tgl));
+            }
 
         // $tgl = $_POST['tgl'];
 
         // Load plugin PHPExcel nya
-        include APPPATH.'third_party/PHPExcel/PHPExcel.php';
+            include APPPATH.'third_party/PHPExcel/PHPExcel.php';
 
         // Panggil class PHPExcel nya
-        $excel = new PHPExcel();
+            $excel = new PHPExcel();
 
         // Settingan awal fil excel
-        $excel->getProperties()->setCreator('MIRAI')
-        ->setLastModifiedBy('MIRAI')
-        ->setTitle("Data MIRAI")
-        ->setSubject("MIRAI")
-        ->setDescription("Laporan MIRAI")
-        ->setKeywords("Data Lembur");
+            $excel->getProperties()->setCreator('MIRAI')
+            ->setLastModifiedBy('MIRAI')
+            ->setTitle("Data MIRAI")
+            ->setSubject("MIRAI")
+            ->setDescription("Laporan MIRAI")
+            ->setKeywords("Data Lembur");
 
         // Buat sebuah variabel untuk menampung pengaturan style dari header tabel
-        $style_col = array(
+            $style_col = array(
             'font' => array('bold' => true), // Set font nya jadi bold
             'alignment' => array(
                 'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER, // Set text jadi ditengah secara horizontal (center)
@@ -321,17 +320,17 @@ class import_excel extends CI_Controller {
         );
 
         // Buat sebuah variabel untuk menampung pengaturan style dari isi tabel
-        $style_row = array(
-            'alignment' => array(
+            $style_row = array(
+                'alignment' => array(
                 'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER // Set text jadi di tengah secara vertical (middle)
             ),
-            'borders' => array(
+                'borders' => array(
                 'top' => array('style'  => PHPExcel_Style_Border::BORDER_THIN), // Set border top dengan garis tipis
                 'right' => array('style'  => PHPExcel_Style_Border::BORDER_THIN),  // Set border right dengan garis tipis
                 'bottom' => array('style'  => PHPExcel_Style_Border::BORDER_THIN), // Set border bottom dengan garis tipis
                 'left' => array('style'  => PHPExcel_Style_Border::BORDER_THIN) // Set border left dengan garis tipis
             )
-        );
+            );
 
         $excel->setActiveSheetIndex(0)->setCellValue('A1', "DATA LEMBUR ".$tgl); // Set kolom A1 dengan tulisan "DATA SISWA"
         $excel->getActiveSheet()->mergeCells('A1:F1'); // Set Merge Cell pada kolom A1 sampai E1
