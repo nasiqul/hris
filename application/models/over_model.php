@@ -890,15 +890,19 @@ public function getGA($tgl)
     $this->db->select("tanggal,  
         (SELECT IFNULL(SUM(makan), 0) from over_time_member 
         JOIN over_time ON over_time.id = over_time_member.id_ot
-        WHERE shift = 1 AND over_time.tanggal = STR_TO_DATE('".$tgl."', '%d-%m-%Y')) as makan1 ,
+        WHERE shift = 1 AND over_time.tanggal = STR_TO_DATE('".$tgl."', '%d-%m-%Y')
+        and deleted_at is null) as makan1 ,
 
         (SELECT IFNULL(SUM(makan), 0) from over_time_member 
         JOIN over_time ON over_time.id = over_time_member.id_ot
-        WHERE shift = 2 AND over_time.tanggal = STR_TO_DATE('".$tgl."', '%d-%m-%Y')) as makan2 , 
+        WHERE shift = 2 AND over_time.tanggal = STR_TO_DATE('".$tgl."', '%d-%m-%Y')
+        and deleted_at is null) as makan2 , 
 
         (SELECT IFNULL(SUM(makan), 0) from over_time_member 
         JOIN over_time ON over_time.id = over_time_member.id_ot
-        WHERE shift = 3 AND over_time.tanggal = STR_TO_DATE('".$tgl."', '%d-%m-%Y')) as makan3");
+        WHERE shift = 3 AND over_time.tanggal = STR_TO_DATE('".$tgl."', '%d-%m-%Y')
+        and deleted_at is null) as makan3");
+
     $this->db->from("over_time o");
     $this->db->join("over_time_member om","o.id = om.id_ot");
     $this->db->where("o.tanggal = STR_TO_DATE('".$tgl."', '%d-%m-%Y')");
@@ -913,15 +917,18 @@ public function getGA2($tgl)
     $this->db->select("tanggal,  
         (SELECT IFNULL(SUM(ext_food), 0) from over_time_member 
         JOIN over_time ON over_time.id = over_time_member.id_ot
-        WHERE shift = 1 AND over_time.tanggal = STR_TO_DATE('".$tgl."', '%d-%m-%Y')) as makan1 ,
+        WHERE shift = 1 AND over_time.tanggal = STR_TO_DATE('".$tgl."', '%d-%m-%Y')
+        and deleted_at is null) as makan1 ,
 
         (SELECT IFNULL(SUM(ext_food), 0) from over_time_member 
         JOIN over_time ON over_time.id = over_time_member.id_ot
-        WHERE shift = 2 AND over_time.tanggal = STR_TO_DATE('".$tgl."', '%d-%m-%Y')) as makan2 , 
+        WHERE shift = 2 AND over_time.tanggal = STR_TO_DATE('".$tgl."', '%d-%m-%Y')
+        and deleted_at is null) as makan2 , 
 
         (SELECT IFNULL(SUM(ext_food), 0) from over_time_member 
         JOIN over_time ON over_time.id = over_time_member.id_ot
-        WHERE shift = 3 AND over_time.tanggal = STR_TO_DATE('".$tgl."', '%d-%m-%Y')) as makan3");
+        WHERE shift = 3 AND over_time.tanggal = STR_TO_DATE('".$tgl."', '%d-%m-%Y')
+        and deleted_at is null) as makan3");
     $this->db->from("over_time o");
     $this->db->join("over_time_member om","o.id = om.id_ot");
     $this->db->where("o.tanggal = STR_TO_DATE('".$tgl."', '%d-%m-%Y')");
@@ -944,7 +951,7 @@ public function makan1db($tgl,$id)
         LEFT JOIN section as sec on p.id_sec = sec.id
         LEFT JOIN sub_section as sub on p.id_sub_sec = sub.id
         LEFT JOIN group1    as gr on p.id_group = gr.id         
-        WHERE over_time.shift = ".$id." AND over_time.tanggal = STR_TO_DATE('".$tgl."', '%d-%m-%Y') and a.makan ='1'
+        WHERE over_time.shift = ".$id." AND over_time.tanggal = STR_TO_DATE('".$tgl."', '%d-%m-%Y') and a.makan ='1' and deleted_at is null
     ) a");
 
     $query = $this->db->get();
@@ -964,7 +971,7 @@ public function extrafood2($tgl,$id)
         LEFT JOIN section as sec on p.id_sec = sec.id
         LEFT JOIN sub_section as sub on p.id_sub_sec = sub.id
         LEFT JOIN group1    as gr on p.id_group = gr.id         
-        WHERE over_time.shift = ".$id." AND over_time.tanggal = STR_TO_DATE('".$tgl."', '%d-%m-%Y') and a.ext_food ='1'
+        WHERE over_time.shift = ".$id." AND over_time.tanggal = STR_TO_DATE('".$tgl."', '%d-%m-%Y') and a.ext_food ='1' and deleted_at is null
     ) a");
 
     $query = $this->db->get();
@@ -1030,7 +1037,7 @@ public function transdb($id,$tgl,$dari,$sampai)
      LEFT JOIN sub_section as sub on p.id_sub_sec = sub.id
      LEFT JOIN group1    as gr on p.id_group = gr.id              
      where dari='".$dari."' and sampai='".$sampai."' and transport='".$id."' 
-     and over_time.tanggal = STR_TO_DATE('".$tgl."', '%d-%m-%Y'))a");
+     and over_time.tanggal = STR_TO_DATE('".$tgl."', '%d-%m-%Y') and deleted_at is null )a");
     $query = $this->db->get();
     return $query->result();
 }
@@ -1042,6 +1049,7 @@ public function getGA_trans($tgl)
         SELECT o.tanggal, om.dari, om.sampai, transport, COUNT(if(transport = 'B' , transport, null)) B, COUNT(if(transport = 'P' , transport, null)) P from over_time o 
         left JOIN over_time_member om ON o.id = om.id_ot
         WHERE o.tanggal = STR_TO_DATE('".$tgl."', '%d-%m-%Y')
+        and deleted_at is null
         group by dari, sampai
     ) as b");
     $this->db->where("b.B <> 0");
