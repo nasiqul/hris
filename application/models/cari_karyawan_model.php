@@ -31,6 +31,7 @@ class Cari_karyawan_model extends CI_Model {
         $this->db->join('section sec','p.id_sec = sec.id', 'left');
         $this->db->join('sub_section ssec','p.id_sub_sec = ssec.id', 'left');
         $this->db->join('group1 gr','p.id_group = gr.id', 'left');
+        $this->db->where('tanggalKeluar IS NULL');
 
         if ($status) {
             $this->db->where("statusKaryawan", $status);
