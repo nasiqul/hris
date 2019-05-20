@@ -227,8 +227,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                               <tr>
                                                 <th>NIK</th>
                                                 <th>Employee Name</th>
-                                                <th>Devision</th>
+                                                <th>Division</th>
                                                 <th>Department</th>
+                                                <th>Section</th>
+                                                <th>Sub Section</th>
                                                 <th>Entry Date</th>
                                                 <th>Employee Status</th>
                                                 <th>Status</th>

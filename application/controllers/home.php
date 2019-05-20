@@ -469,10 +469,11 @@ class Home extends CI_Controller {
         foreach ($list as $key) {
             $row = array();
             $row[] = $key->nik;
-                //$row[] = $key->foto;
             $row[] = $key->namaKaryawan;
             $row[] = $key->namadev;
             $row[] = $key->namadep;
+            $row[] = $key->section;
+            $row[] = $key->sub_section;
             $row[] = $key->tanggalMasuk;
             $row[] = $key->statusKaryawan;
             if ($key->status == "Aktif")

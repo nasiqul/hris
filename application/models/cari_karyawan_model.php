@@ -23,7 +23,7 @@ class Cari_karyawan_model extends CI_Model {
 
 	private function _get_datatables_query($status, $grade, $dep, $pos)
     {
-        $this->db->select("k.nik, k.namaKaryawan, dv.nama as namadev, dp.nama as namadep, DATE_FORMAT(k.tanggalMasuk, '%d %b %Y') as tanggalMasuk, k.statusKaryawan, k.status");
+        $this->db->select("k.nik, k.namaKaryawan, dv.nama as namadev, dp.nama as namadep,sec.nama as section, ssec.nama as sub_section, DATE_FORMAT(k.tanggalMasuk, '%d %b %Y') as tanggalMasuk, k.statusKaryawan, k.status");
         $this->db->from('karyawan k');
         $this->db->join('posisi p','k.nik = p.nik', 'left');
         $this->db->join('devisi dv','p.id_devisi = dv.id', 'left');
