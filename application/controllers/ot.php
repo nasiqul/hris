@@ -1999,11 +1999,10 @@ class Ot extends CI_Controller {
 		$excel->setActiveSheetIndex(0)->setCellValue('J3', "Masuk Aktual"); 
 		$excel->setActiveSheetIndex(0)->setCellValue('K3', "Keluar Aktual"); 
 		$excel->setActiveSheetIndex(0)->setCellValue('L3', "Jam Aktual");
-		$excel->setActiveSheetIndex(0)->setCellValue('M3', "Diff");
-		$excel->setActiveSheetIndex(0)->setCellValue('N3', "Status Hari");
-		$excel->setActiveSheetIndex(0)->setCellValue('O3', "Status Spl");
-		$excel->setActiveSheetIndex(0)->setCellValue('P3', "Final Jam");
-		$excel->setActiveSheetIndex(0)->setCellValue('Q3', "Satuan");
+		$excel->setActiveSheetIndex(0)->setCellValue('M3', "Status Hari");
+		$excel->setActiveSheetIndex(0)->setCellValue('N3', "Status Spl");
+		$excel->setActiveSheetIndex(0)->setCellValue('O3', "Final Jam");
+		$excel->setActiveSheetIndex(0)->setCellValue('P3', "Satuan");
 		// Apply style header yang telah kita buat tadi ke masing-masing kolom header
 		$excel->getActiveSheet()->getStyle('A3')->applyFromArray($style_col);
 		$excel->getActiveSheet()->getStyle('B3')->applyFromArray($style_col);
@@ -2021,7 +2020,6 @@ class Ot extends CI_Controller {
 		$excel->getActiveSheet()->getStyle('N3')->applyFromArray($style_col);
 		$excel->getActiveSheet()->getStyle('O3')->applyFromArray($style_col);
 		$excel->getActiveSheet()->getStyle('P3')->applyFromArray($style_col);
-		$excel->getActiveSheet()->getStyle('Q3')->applyFromArray($style_col);
 
 		// Panggil function view yang ada di SiswaModel untuk menampilkan semua data siswanya
 		$siswa = $this->over_model->exportdatahr($id);
@@ -2041,10 +2039,10 @@ class Ot extends CI_Controller {
 			$excel->setActiveSheetIndex(0)->setCellValue('J'.$numrow, $data->masuk);
 			$excel->setActiveSheetIndex(0)->setCellValue('K'.$numrow, $data->keluar);
 			$excel->setActiveSheetIndex(0)->setCellValue('L'.$numrow, $data->aktual);
-			$excel->setActiveSheetIndex(0)->setCellValue('N'.$numrow, $data->hari);
-			$excel->setActiveSheetIndex(0)->setCellValue('O'.$numrow, $data->status_final);
-			$excel->setActiveSheetIndex(0)->setCellValue('P'.$numrow, $data->final_jam);
-			$excel->setActiveSheetIndex(0)->setCellValue('Q'.$numrow, $data->satuan);
+			$excel->setActiveSheetIndex(0)->setCellValue('M'.$numrow, $data->hari);
+			$excel->setActiveSheetIndex(0)->setCellValue('N'.$numrow, $data->status_final);
+			$excel->setActiveSheetIndex(0)->setCellValue('O'.$numrow, $data->final_jam);
+			$excel->setActiveSheetIndex(0)->setCellValue('P'.$numrow, $data->satuan);
 			
 			
 			// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
@@ -2064,7 +2062,6 @@ class Ot extends CI_Controller {
 			$excel->getActiveSheet()->getStyle('N'.$numrow)->applyFromArray($style_row);
 			$excel->getActiveSheet()->getStyle('O'.$numrow)->applyFromArray($style_row);
 			$excel->getActiveSheet()->getStyle('P'.$numrow)->applyFromArray($style_row);
-			$excel->getActiveSheet()->getStyle('Q'.$numrow)->applyFromArray($style_row);
 			
 			$no++; // Tambah 1 setiap kali looping
 			$numrow++; // Tambah 1 setiap kali looping
