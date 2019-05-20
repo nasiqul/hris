@@ -2034,16 +2034,15 @@ class Ot extends CI_Controller {
 			$excel->setActiveSheetIndex(0)->setCellValue('C'.$numrow, $data->nik);
 			$excel->setActiveSheetIndex(0)->setCellValue('D'.$numrow, $data->tanggal);
 			$excel->setActiveSheetIndex(0)->setCellValue('E'.$numrow, $data->namaKaryawan);
-			$excel->setActiveSheetIndex(0)->setCellValue('F'.$numrow, $data->nama);
-			$excel->setActiveSheetIndex(0)->setCellValue('G'.$numrow, $data->dari_lembur);
-			$excel->setActiveSheetIndex(0)->setCellValue('H'.$numrow, $data->sampai_lembur);
-			$excel->setActiveSheetIndex(0)->setCellValue('I'.$numrow, $data->jam_lembur);
-			$excel->setActiveSheetIndex(0)->setCellValue('J'.$numrow, $data->masuk_aktual);
-			$excel->setActiveSheetIndex(0)->setCellValue('K'.$numrow, $data->keluar_aktual);
-			$excel->setActiveSheetIndex(0)->setCellValue('L'.$numrow, $data->jam_aktual);
-			$excel->setActiveSheetIndex(0)->setCellValue('M'.$numrow, $data->diff);
-			$excel->setActiveSheetIndex(0)->setCellValue('N'.$numrow, $data->status_hari);
-			$excel->setActiveSheetIndex(0)->setCellValue('O'.$numrow, $data->status_spl);
+			$excel->setActiveSheetIndex(0)->setCellValue('F'.$numrow, $data->section);
+			$excel->setActiveSheetIndex(0)->setCellValue('G'.$numrow, $data->dari);
+			$excel->setActiveSheetIndex(0)->setCellValue('H'.$numrow, $data->sampai);
+			$excel->setActiveSheetIndex(0)->setCellValue('I'.$numrow, $data->jam);
+			$excel->setActiveSheetIndex(0)->setCellValue('J'.$numrow, $data->masuk);
+			$excel->setActiveSheetIndex(0)->setCellValue('K'.$numrow, $data->keluar);
+			$excel->setActiveSheetIndex(0)->setCellValue('L'.$numrow, $data->aktual);
+			$excel->setActiveSheetIndex(0)->setCellValue('N'.$numrow, $data->hari);
+			$excel->setActiveSheetIndex(0)->setCellValue('O'.$numrow, $data->status_final);
 			$excel->setActiveSheetIndex(0)->setCellValue('P'.$numrow, $data->final_jam);
 			$excel->setActiveSheetIndex(0)->setCellValue('Q'.$numrow, $data->satuan);
 			
