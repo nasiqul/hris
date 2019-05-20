@@ -1636,7 +1636,7 @@ public function exportdata($id)
 public function exportdatahr($id)
 {
     $this->db->select("*");
-    $this->db->from("(select o.*, karyawan.namaKaryawan, p.masuk, p.keluar, section.nama as section, ov.jam as aktual from
+    $this->db->from("(select o.*, karyawan.namaKaryawan, p.masuk, p.keluar, section.nama as section, ov.jam as aktual, satuan from
         (select over_time.id as id_ot, over_time.tanggal, over_time_member.nik, dari, sampai, jam, hari, final as final_jam, over_time_member.status as status_final from over_time left join over_time_member on over_time.id = over_time_member.id_ot
         where tanggal = '".$id."' and deleted_at is null
         group by over_time.id, nik) o
@@ -1645,6 +1645,8 @@ public function exportdatahr($id)
         left join (select nik, masuk, keluar from presensi where tanggal = '".$id."') p on p.nik = o.nik
         left join posisi on posisi.nik = o.nik
         left join section on section.id = posisi.id_sec
+        left join satuan_lembur on satuan_lembur.jam = o.final_jam and satuan_lembur.hari = o.hari
+        order by o.nik asc
     ) a");
 
     $query = $this->db->get();
