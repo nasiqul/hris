@@ -369,174 +369,174 @@ By Dep <br> <span class="text-purple">???</span></a>
 
      }
 
-function show(tgl, cat, kode) {
-     tabel = $('#example3').DataTable();
-     tabel.destroy();
+     function show(tgl, cat, kode) {
+          tabel = $('#example3').DataTable();
+          tabel.destroy();
 
-     $('#myModal2').modal('show');
+          $('#myModal2').modal('show');
 
-     $('#example3').DataTable({
-          "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
-          "processing": true,
-          "serverSide": true,
-          "searching": true,
-          "bLengthChange": true,
-          "order": [],
-          "ajax": {
-               "url": "<?php echo base_url('ot/ajax_ot_g_detail/')?>",            
-               "type": "GET",
-               "data": {
-                    tgl : tgl,
-                    kode : kode,
-                    cat: cat
+          $('#example3').DataTable({
+               "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+               "processing": true,
+               "serverSide": true,
+               "searching": true,
+               "bLengthChange": true,
+               "order": [],
+               "ajax": {
+                    "url": "<?php echo base_url('ot/ajax_ot_g_detail/')?>",            
+                    "type": "GET",
+                    "data": {
+                         tgl : tgl,
+                         kode : kode,
+                         cat: cat
+                    }
                }
-          }
-     });
-}
+          });
+     }
 
-$(function () {
-     var cat = new Array();
-     var tiga_jam = new Array();
-     var per_minggu = new Array();
-     var per_bulan = new Array();
-     var manam_bulan = new Array();
+     $(function () {
+          var cat = new Array();
+          var tiga_jam = new Array();
+          var per_minggu = new Array();
+          var per_bulan = new Array();
+          var manam_bulan = new Array();
 
-     $.getJSON('<?php echo base_url("ot/overtime_chart2/")?>', function(data) {
+          $.getJSON('<?php echo base_url("ot/overtime_chart2/")?>', function(data) {
 
-          for (i = 0; i < data.length; i++){
-               cat.push(data[i][0]);
-               tiga_jam.push(parseInt(data[i][1]));
-               per_minggu.push(parseInt(data[i][2]));
-               per_bulan.push(parseInt(data[i][3]));
-               manam_bulan.push(parseInt(data[i][4]));
-          }
+               for (i = 0; i < data.length; i++){
+                    cat.push(data[i][0]);
+                    tiga_jam.push(parseInt(data[i][1]));
+                    per_minggu.push(parseInt(data[i][2]));
+                    per_bulan.push(parseInt(data[i][3]));
+                    manam_bulan.push(parseInt(data[i][4]));
+               }
 
-          tgl = data[0][5];
-          console.log(tgl);
+               tgl = data[0][5];
+               console.log(tgl);
 
-          $('#container4').highcharts({
-               chart: {
-                    type: 'line',
-                    backgroundColor : "#3d3f3f",   
-               },
-               legend: {
-                    itemStyle: {
-                         color: '#FFF'
+               $('#container4').highcharts({
+                    chart: {
+                         type: 'line',
+                         backgroundColor : "#3d3f3f",   
                     },
-                    itemHoverStyle: {
-                         color: '#DDD'
-                    },
-                    itemHiddenStyle: {
-                         color: '#616363'
-                    }
-               },
-               exporting : {
-                    enabled : true,
-                    buttons: {
-                         contextButton: {
-                              align: 'right',
-                              x: -25
-                         }
-                    }
-               },
-               title: {
-                    text: data[0][5],
-                    style: {
-                         color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
-                    }
-               },
-               xAxis: {
-                    gridLineWidth: 1,
-                    gridLineColor: "#7a7c7c",
-                    categories: cat,
-                    labels: {
-                         style: {
-                              color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
-                         }
-                    }
-               },
-               yAxis: {
-                    min:0,
-                    gridLineColor: "#7a7c7c",
-                    title: {
-                         text: 'Jumlah (orang)',
-                         style: {
-                              color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
-                         }
-                    },
-                    labels: {
-                         style: {
-                              color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
-                         }
-                    }
-               },
-               plotOptions: {
-                    line: {
-                         dataLabels: {
-                              enabled: true,
-                              color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+                    legend: {
+                         itemStyle: {
+                              color: '#FFF'
                          },
-                         enableMouseTracking: true
+                         itemHoverStyle: {
+                              color: '#DDD'
+                         },
+                         itemHiddenStyle: {
+                              color: '#616363'
+                         }
                     },
-                    series: {
-                         cursor: 'pointer',
-                         point: {
-                              events: {
-                                   click: function(e) {  
-                                        show2(data[0][5], this.category, this.series.name);
+                    exporting : {
+                         enabled : true,
+                         buttons: {
+                              contextButton: {
+                                   align: 'right',
+                                   x: -25
+                              }
+                         }
+                    },
+                    title: {
+                         text: data[0][5],
+                         style: {
+                              color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+                         }
+                    },
+                    xAxis: {
+                         gridLineWidth: 1,
+                         gridLineColor: "#7a7c7c",
+                         categories: cat,
+                         labels: {
+                              style: {
+                                   color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+                              }
+                         }
+                    },
+                    yAxis: {
+                         min:0,
+                         gridLineColor: "#7a7c7c",
+                         title: {
+                              text: 'Jumlah (orang)',
+                              style: {
+                                   color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+                              }
+                         },
+                         labels: {
+                              style: {
+                                   color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+                              }
+                         }
+                    },
+                    plotOptions: {
+                         line: {
+                              dataLabels: {
+                                   enabled: true,
+                                   color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+                              },
+                              enableMouseTracking: true
+                         },
+                         series: {
+                              cursor: 'pointer',
+                              point: {
+                                   events: {
+                                        click: function(e) {  
+                                             show2(data[0][5], this.category, this.series.name);
+                                        }
                                    }
                               }
                          }
-                    }
-               },
-               credits: {
-                    enabled: false
-               },
-               series: [{
-                    name: 'OT>3 JAM / HARI',
-                    color: '#2598db',
-                    shadow: {
+                    },
+                    credits: {
+                         enabled: false
+                    },
+                    series: [{
+                         name: 'OT>3 JAM / HARI',
                          color: '#2598db',
-                         width: 7,
-                         offsetX: 0,
-                         offsetY: 0
-                    },
-                    data: tiga_jam
-               }, {
-                    name: 'OT>14 JAM / MGG',
-                    color: '#f2ad96',
-                    shadow: {
+                         shadow: {
+                              color: '#2598db',
+                              width: 7,
+                              offsetX: 0,
+                              offsetY: 0
+                         },
+                         data: tiga_jam
+                    }, {
+                         name: 'OT>14 JAM / MGG',
                          color: '#f2ad96',
-                         width: 7,
-                         offsetX: 0,
-                         offsetY: 0
+                         shadow: {
+                              color: '#f2ad96',
+                              width: 7,
+                              offsetX: 0,
+                              offsetY: 0
+                         },
+                         data: per_minggu
                     },
-                    data: per_minggu
-               },
-               {
-                    name: 'OT>3 & >14 JAM',
-                    color: '#f90031',
-                    shadow: {
+                    {
+                         name: 'OT>3 & >14 JAM',
                          color: '#f90031',
-                         width: 7,
-                         offsetX: 0,
-                         offsetY: 0
+                         shadow: {
+                              color: '#f90031',
+                              width: 7,
+                              offsetX: 0,
+                              offsetY: 0
+                         },
+                         data: per_bulan
                     },
-                    data: per_bulan
-               },
-               {
-                    name: 'OT>56 JAM / BLN',
-                    color: '#d756f7',
-                    shadow: {
+                    {
+                         name: 'OT>56 JAM / BLN',
                          color: '#d756f7',
-                         width: 7,
-                         offsetX: 0,
-                         offsetY: 0
-                    },
-                    data: manam_bulan
-               }]
+                         shadow: {
+                              color: '#d756f7',
+                              width: 7,
+                              offsetX: 0,
+                              offsetY: 0
+                         },
+                         data: manam_bulan
+                    }]
 
-          });
+               });
 });
 })
 
@@ -576,7 +576,7 @@ for (i = 0; i < s.length; i++){
 
 }
 tgl = s[0][5];
- console.log(tgl);
+console.log(tgl);
 
 $('#container4').highcharts({
      chart: {
@@ -742,6 +742,7 @@ function tiga_jam() {
           "serverSide": true,
           "searching": true,
           "bLengthChange": true,
+          "paging": false,
           "order": [],
           "ajax": {
                "url": "<?php echo base_url('ot/ajax_ot_jam/')?>",            
@@ -763,6 +764,7 @@ function empatbelas_jam() {
      tabel9 = $('#14jam').DataTable({
           "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
           "processing": true,
+          "paging": false,
           "serverSide": true,
           "searching": true,
           "bLengthChange": true,
@@ -789,6 +791,7 @@ function tiga_dan_empatbelas_jam() {
           "processing": true,
           "serverSide": true,
           "searching": true,
+          "paging": false,
           "bLengthChange": true,
           "order": [],
           "ajax": {
@@ -812,6 +815,7 @@ function limaenam_jam() {
           "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
           "processing": true,
           "serverSide": true,
+          "paging": false,
           "searching": true,
           "bLengthChange": true,
           "order": [],
