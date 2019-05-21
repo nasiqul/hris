@@ -721,9 +721,9 @@ public function ajax_presensi_shift()
       }
   }
   else
-   $result[] = json_decode ("{}");
+     $result[] = json_decode ("{}");
 
-echo json_encode($result);
+ echo json_encode($result);
 }
 
 public function ajax_emp_keluarga()
@@ -1287,49 +1287,55 @@ public function ajax_budget_g()
 public function get_total_emp()
 {
     $fy = $this->home_model->getFiskal(date('Y-m'));
-    $list = $this->home_model->all_emp($fy[0]->fiskal);
+    $fiskal = $fy[0]->fiskal;
+    $all_emp = $this->home_model->all_emp($fiskal);
+    $all_work = $this->home_model->tot_jam_kerja($fiskal);
 
     $data = array();
-    foreach ($list as $key) {
+    foreach ($all_emp as $key) {
         $row = array();
         $row[] = date('M',strtotime($key->mon."-01"));
         $row[] = 0;
         $row[] = $key->tot_karyawan;
         $row[] = $key->masuk;
         $row[] = $key->keluar;
+        $row[] = $key->normal;
+        $row[] = $key->libur;
+        $row[] = $key->avg;
+        $row[] = $key->tiga_jam;
+        $row[] = $key->patblas_jam;
+        $row[] = $key->tiga_patblas;
+        $row[] = $key->limanam;
 
         $data[] = $row;
     }
 
-    echo json_encode($data);
-}
-
-public function jam_kerja()
-{
-    $fy = $this->home_model->getFiskal(date('Y-m'));
-    $list = $this->home_model->tot_jam_kerja($fy[0]->fiskal);
-
-    $data = array();
-    foreach ($list as $key) {
+    $data2 = array();
+    foreach ($all_work as $key2) {
         $row = array();
-        $row[] = date('M-y',strtotime($key->mon."-01"));
-        $row[] = $key->hari_kerja;
-        $row[] = $key->tot_karyawan;
-        $row[] = $key->jam_kerja;
-        $row[] = $key->lembur;
-        $row[] = $key->tot_kerja;
-        $row[] = $key->CT;
-        $row[] = $key->SD;
-        $row[] = $key->I;
-        $row[] = $key->A;
-        $row[] = $key->tot_absen;
-        $row[] = $key->jam_tdk;
-        $row[] = (float) $key->persen * 100;
+        $row[] = date('M-y',strtotime($key2->mon."-01"));
+        $row[] = $key2->hari_kerja;
+        $row[] = $key2->tot_karyawan;
+        $row[] = $key2->jam_kerja;
+        $row[] = $key2->lembur;
+        $row[] = $key2->tot_kerja;
+        $row[] = $key2->CT;
+        $row[] = $key2->SD;
+        $row[] = $key2->I;
+        $row[] = $key2->A;
+        $row[] = $key2->tot_absen;
+        $row[] = $key2->jam_tdk;
+        $row[] = round((float) $key2->persen * 100,2);
 
-        $data[] = $row;
+        $data2[] = $row;
     }
 
-    echo json_encode($data);
+    $response = array(
+        'all_emp' => $data,
+        'jam_kerja' => $data2
+    );
+
+    echo json_encode($response);
 }
 
 }

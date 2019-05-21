@@ -114,35 +114,35 @@ scratch. This page gets rid of all links and provides the needed markup only.
         url: "<?php echo base_url('home/get_total_emp/') ?>",
         dataType: 'json',
         success: function(data){
-          $.each(data, function(i, value){
-            $('#head').append($('<th>'+data[i][0]+'</th>'));
-            $('#kehadiran').append($('<td>'+data[i][1]+'</td>'));
-            $('#totalemp').append($('<td>'+data[i][2]+'</td>'));
-            $('#aktif').append($('<td>'+data[i][3]+'</td>'));
-            $('#non').append($('<td>'+data[i][4]+'</td>'));
+          $.each(data.all_emp, function(i, value){
+            $('#head').append($('<th>'+data.all_emp[i][0]+'</th>'));
+            $('#kehadiran').append($('<td>'+data.all_emp[i][1]+'</td>'));
+            $('#totalemp').append($('<td>'+data.all_emp[i][2]+'</td>'));
+            $('#aktif').append($('<td>'+data.all_emp[i][3]+'</td>'));
+            $('#non').append($('<td>'+data.all_emp[i][4]+'</td>'));
+            $('#working').append($('<td>'+data.all_emp[i][5]+'</td>'));
+            $('#holiday').append($('<td>'+data.all_emp[i][6]+'</td>'));
+            $('#avg').append($('<td>'+data.all_emp[i][7]+'</td>'));
+            $('#3').append($('<td>'+data.all_emp[i][8]+'</td>'));
+            $('#14').append($('<td>'+data.all_emp[i][9]+'</td>'));
+            $('#3dan14').append($('<td>'+data.all_emp[i][10]+'</td>'));
+            $('#56').append($('<td>'+data.all_emp[i][11]+'</td>'));
           });
-        }
-      });
 
-      $.ajax({
-        type : "GET",
-        url: "<?php echo base_url('home/jam_kerja/') ?>",
-        dataType: 'json',
-        success: function(data){
-          $.each(data, function(i, value){
-            $('#total_jam_isi').append($('<tr><td>'+data[i][0]+'</td>'+
-              '<td>'+data[i][1]+'</td>'+
-              '<td>'+data[i][2]+'</td>'+
-              '<td>'+data[i][3]+'</td>'+
-              '<td>'+data[i][4]+'</td>'+
-              '<td>'+data[i][5]+'</td>'+
-              '<td>'+data[i][6]+'</td>'+
-              '<td>'+data[i][7]+'</td>'+
-              '<td>'+data[i][8]+'</td>'+
-              '<td>'+data[i][9]+'</td>'+
-              '<td>'+data[i][10]+'</td>'+
-              '<td>'+data[i][11]+'</td>'+
-              '<td>'+data[i][12]+' %</td>'+
+          $.each(data.jam_kerja, function(i, value){
+            $('#total_jam_isi').append($('<tr><td>'+data.jam_kerja[i][0]+'</td>'+
+              '<td>'+data.jam_kerja[i][1]+'</td>'+
+              '<td>'+data.jam_kerja[i][2]+'</td>'+
+              '<td>'+data.jam_kerja[i][3]+'</td>'+
+              '<td>'+data.jam_kerja[i][4]+'</td>'+
+              '<td>'+data.jam_kerja[i][5]+'</td>'+
+              '<td>'+data.jam_kerja[i][6]+'</td>'+
+              '<td>'+data.jam_kerja[i][7]+'</td>'+
+              '<td>'+data.jam_kerja[i][8]+'</td>'+
+              '<td>'+data.jam_kerja[i][9]+'</td>'+
+              '<td>'+data.jam_kerja[i][10]+'</td>'+
+              '<td>'+data.jam_kerja[i][11]+'</td>'+
+              '<td>'+data.jam_kerja[i][12]+' %</td>'+
               '</tr>'));
           });
         }

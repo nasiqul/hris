@@ -318,8 +318,10 @@ public function get_kep_all()
 
 public function all_emp($fy)
 {
+    $tgl = date('Y-m');
     $q = "
-    select z.mon, z.tot_karyawan, m.masuk, m.keluar from (
+    select alls.* , round((normal+libur) / tot_karyawan,2) as avg, COALESCE(tiga_jam,0) as tiga_jam, COALESCE(patblas_jam,0) as patblas_jam, COALESCE(tiga_patblas,0) as tiga_patblas, COALESCE(limanam_jam,0) as limanam from (
+select z.mon, z.tot_karyawan, m.masuk, m.keluar, COALESCE(ovr.normal,0) as normal , COALESCE(ovr.libur,0) as libur from (
     select mon, count(if(if(date_format(a.tanggalMasuk, '%Y-%m') <= mon, 1, 0 ) - if(date_format(a.tanggalKeluar, '%Y-%m') <= mon, 1, 0 ) = 0, null, 1)) as tot_karyawan from
     (
     select distinct fiskal, date_format(tanggal, '%Y-%m') as mon
@@ -349,6 +351,84 @@ public function all_emp($fy)
     LEFT JOIN karyawan ON karyawan.tanggalkeluar = a.tanggal group by date_format(a.tanggal, '%Y-%m')
     ) as b group by mon
     ) m on m.mon = z.mon
+        left join (
+        select DATE_FORMAT(over_time.tanggal,'%Y-%m') as tanggal, sum(IF(hari = 'L',final,0)) libur, sum(IF(hari = 'N',final,0)) normal from over_time 
+        left join over_time_member on over_time.id = over_time_member.id_ot
+        join (select * from kalender_fy where fiskal='".$fy."') cal on cal.tanggal = over_time.tanggal
+        where deleted_at is null and DATE_FORMAT(over_time.tanggal,'%Y-%m') <= '".$tgl."' and nik is not null
+        and over_time_member.status = 1
+        group by DATE_FORMAT(over_time.tanggal,'%Y-%m')
+        ) ovr on ovr.tanggal = z.mon
+        ) alls
+        left join (
+            select DATE_FORMAT(tanggal,'%Y-%m') mon ,count(nik) as tiga_jam from (
+                select tanggal, nik, jam_final from
+                (select over_time.id, over_time.tanggal, nik, sum(final) as jam_final, status, over_time.hari from over_time
+                left join over_time_member on over_time_member.id_ot = over_time.id
+                join (select * from kalender_fy where fiskal='".$fy."') cal on cal.tanggal = over_time.tanggal
+                where deleted_at IS NULL and nik IS NOT NULL and over_time_member.status = 1 and hari = 'N'
+                group by nik, over_time.tanggal) d 
+                where jam_final > 3
+                group by nik,  DATE_FORMAT(d.tanggal,'%Y-%m')
+                ) tiga_jam
+                group by DATE_FORMAT(tanggal,'%Y-%m')
+        ) tiga_jam on tiga_jam.mon = alls.mon
+        left join (
+            select DATE_FORMAT(tanggal,'%Y-%m') mon, count(nik) as patblas_jam from (
+            select tanggal, nik from
+            (select tanggal, nik, sum(jam) jam, week_name from
+            (select over_time.id, over_time.tanggal, nik, sum(final) as jam, status, over_time.hari, week(over_time.tanggal) as week_name from over_time
+            left join over_time_member on over_time_member.id_ot = over_time.id
+            join (select * from kalender_fy where fiskal='".$fy."') cal on cal.tanggal = over_time.tanggal
+            where deleted_at IS NULL and nik IS NOT NULL and over_time_member.status = 1 and hari = 'N'
+            group by nik, over_time.tanggal) m
+            group by nik, week_name) s
+            where jam > 14
+            group by nik, DATE_FORMAT(tanggal,'%Y-%m')
+            ) as m
+            group by DATE_FORMAT(tanggal,'%Y-%m')
+        ) as patblas_jam on alls.mon = patblas_jam.mon
+        left join (
+                select mon, count(nik) as tiga_patblas from
+                (select z.mon, z.nik from 
+                        ( select DATE_FORMAT(d.tanggal,'%Y-%m') as mon, nik from
+                        (select over_time.id, over_time.tanggal, nik, sum(final) as jam_final from over_time
+                                left join over_time_member on over_time_member.id_ot = over_time.id
+                                join (select * from kalender_fy where fiskal='".$fy."') cal on cal.tanggal = over_time.tanggal
+                                where deleted_at IS NULL and nik IS NOT NULL and over_time_member.status = 1 and hari = 'N'
+                                group by nik, over_time.tanggal) d 
+                        where jam_final > 3
+                        group by nik, DATE_FORMAT(d.tanggal,'%Y-%m')) z
+
+                        INNER JOIN
+
+                        (select DATE_FORMAT(tanggal,'%Y-%m') as mon, nik from
+                            (select tanggal, nik, sum(jam) jam, week_name from
+                            (select over_time.id, over_time.tanggal, nik, sum(final) as jam, status, over_time.hari, week(over_time.tanggal) as week_name from over_time
+                            left join over_time_member on over_time_member.id_ot = over_time.id
+                            join (select * from kalender_fy where fiskal='196') cal on cal.tanggal = over_time.tanggal
+                            where deleted_at IS NULL and nik IS NOT NULL and over_time_member.status = 1 and hari = 'N'
+                            group by nik, over_time.tanggal) m
+                            group by nik, week_name) s
+                            where jam > 14
+                            group by nik, DATE_FORMAT(tanggal,'%Y-%m')
+                            ) x on z.nik = x.nik
+                            group by z.mon, z.nik) semua
+                            group by mon
+        ) tiga_patblas on tiga_patblas.mon = alls.mon
+        left join (
+            select mon, count(nik) as limanam_jam from
+            ( select DATE_FORMAT(d.tanggal,'%Y-%m') as mon ,d.nik, sum(jam) as jam from
+            (select over_time.tanggal, nik, sum(final) as jam from over_time
+            left join over_time_member on over_time_member.id_ot = over_time.id
+            join (select * from kalender_fy where fiskal='".$fy."') cal on cal.tanggal = over_time.tanggal
+            where deleted_at IS NULL and nik IS NOT NULL and over_time_member.status = 1 and hari = 'N'
+            group by nik, over_time.tanggal) d
+            group by nik, DATE_FORMAT(d.tanggal,'%Y-%m')) m
+            where jam > 56
+            group by mon
+        ) limanam on limanam.mon = alls.mon
+        
     ";
     $query = $this->db->query($q);
     return $query->result();
@@ -356,6 +436,7 @@ public function all_emp($fy)
 
 public function tot_jam_kerja($fy)
 {
+    $tgl = date('Y-m');
     $q = "
     select *, round((tot_kerja - jam_tdk) / tot_kerja,4) as persen from
     (select jam_kerja.* , hari_kerja*tot_karyawan*8 as jam_kerja, (jam_kerja.lembur + hari_kerja*tot_karyawan*8) as tot_kerja, COALESCE(CT,0) CT, COALESCE(SD,0) SD, COALESCE(I,0) I, COALESCE(A,0) A, COALESCE(CT+SD+I+A,0) tot_absen, COALESCE((CT+SD+I+A)*8,0) jam_tdk from
@@ -388,6 +469,7 @@ public function tot_jam_kerja($fy)
     select DATE_FORMAT(tanggal,'%Y-%m') as mon, count(IF(shift = 'CT',1,null)) CT, count(IF(shift = 'SD',1,null)) SD, count(IF(shift = 'I',1,null)) I, count(IF(shift = 'A',1,null)) A from presensi
     GROUP BY DATE_FORMAT(tanggal,'%Y-%m')
     ) absen on jam_kerja.mon = absen.mon
+    where jam_kerja.mon <= '".$tgl."'
     ) as semua
     ";
     $query = $this->db->query($q);
