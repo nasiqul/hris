@@ -461,8 +461,12 @@ public function tot_jam_kerja($fy)
     ) m on m.mon = z.mon
     left join
     (
-    select DATE_FORMAT(over_time.tanggal,'%Y-%m') as mon, sum(jam) as tot_lembur from over_time left join over_time_member on over_time.id = over_time_member.id_ot where deleted_at is null
-    group by DATE_FORMAT(over_time.tanggal,'%Y-%m')
+        select DATE_FORMAT(over_time.tanggal,'%Y-%m') as mon, sum(final) tot_lembur from over_time 
+        left join over_time_member on over_time.id = over_time_member.id_ot
+        join (select * from kalender_fy where fiskal='".$fy."') cal on cal.tanggal = over_time.tanggal
+        where deleted_at is null and DATE_FORMAT(over_time.tanggal,'%Y-%m') <= '".$tgl."' and nik is not null
+        and over_time_member.status = 1
+        group by DATE_FORMAT(over_time.tanggal,'%Y-%m')
     ) as lembur on lembur.mon = z.mon
     ) jam_kerja
     left join (
