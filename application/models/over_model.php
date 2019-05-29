@@ -846,6 +846,12 @@ public function get_data_chart($tgl,$cc,$tgl2)
     return $this->db->query($q)->result();
 }
 
+public function get_budget_g($tanggal, $tanggal2, $cc)
+{
+    $q = "select id_cc, (budget_total / DATE_FORMAT(LAST_DAY('".$tanggal."'),'%d')) budget_tot from cost_center_budget where DATE_FORMAT(period,'%Y-%m') = '".$tanggal2."' and id_cc = ".$cc."";
+    return $this->db->query($q)->result();
+}
+
 public function get_id($tgl)
 {
     $this->db->select("id");

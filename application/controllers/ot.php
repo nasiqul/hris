@@ -397,8 +397,10 @@ class Ot extends CI_Controller {
 				$data[] = $row;
 			}
 
+		} else {
+			$list2 = $this->over_model->get_budget_g($tgl, $tgl2, $cc);
+            $data[] = array(0,date("d/m",strtotime($tgl)), $list2[0]->budget_tot);
 		}
-            //output to json format
 		echo json_encode($data);
 	}
 
