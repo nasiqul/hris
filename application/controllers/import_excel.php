@@ -208,7 +208,7 @@ class import_excel extends CI_Controller {
             );
 
         $excel->setActiveSheetIndex(0)->setCellValue('A1', "DATA LEMBUR"); // Set kolom A1 dengan tulisan "DATA SISWA"
-        $excel->getActiveSheet()->mergeCells('A1:G1'); // Set Merge Cell pada kolom A1 sampai E1
+        $excel->getActiveSheet()->mergeCells('A1:I1'); // Set Merge Cell pada kolom A1 sampai E1
         $excel->getActiveSheet()->getStyle('A1')->getFont()->setBold(TRUE); // Set bold kolom A1
         $excel->getActiveSheet()->getStyle('A1')->getFont()->setSize(15); // Set font size 15 untuk kolom A1
         $excel->getActiveSheet()->getStyle('A1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER); // Set text center untuk kolom A1
@@ -220,8 +220,10 @@ class import_excel extends CI_Controller {
         $excel->setActiveSheetIndex(0)->setCellValue('C3', "Nama Karyawan"); // Set kolom B3 dengan tulisan "NIS"
         $excel->setActiveSheetIndex(0)->setCellValue('D3', "ID CC"); // Set kolom C3 dengan tulisan "NAMA"
         $excel->setActiveSheetIndex(0)->setCellValue('E3', "CC"); // Set kolom D3 dengan tulisan "JENIS KELAMIN"
-        $excel->setActiveSheetIndex(0)->setCellValue('F3', "Jam"); // Set kolom D3 dengan tulisan "JENIS KELAMIN"
-        $excel->setActiveSheetIndex(0)->setCellValue('G3', "Satuan"); // Set kolom D3 dengan tulisan "JENIS KELAMIN"
+        $excel->setActiveSheetIndex(0)->setCellValue('F3', "IN"); // Set kolom D3 dengan tulisan 
+        $excel->setActiveSheetIndex(0)->setCellValue('G3', "OUT"); // Set kolom D3 dengan tulisan 
+        $excel->setActiveSheetIndex(0)->setCellValue('H3', "Jam"); // Set kolom D3 dengan tulisan "JENIS KELAMIN"
+        $excel->setActiveSheetIndex(0)->setCellValue('I3', "Satuan"); // Set kolom D3 dengan tulisan "JENIS KELAMIN"
         // Apply style header yang telah kita buat tadi ke masing-masing kolom header
         $excel->getActiveSheet()->getStyle('A3')->applyFromArray($style_col);
         $excel->getActiveSheet()->getStyle('B3')->applyFromArray($style_col);
@@ -230,6 +232,8 @@ class import_excel extends CI_Controller {
         $excel->getActiveSheet()->getStyle('E3')->applyFromArray($style_col);
         $excel->getActiveSheet()->getStyle('F3')->applyFromArray($style_col);
         $excel->getActiveSheet()->getStyle('G3')->applyFromArray($style_col);
+        $excel->getActiveSheet()->getStyle('H3')->applyFromArray($style_col);
+        $excel->getActiveSheet()->getStyle('I3')->applyFromArray($style_col);
 
         // Panggil function view yang ada di SiswaModel untuk menampilkan semua data siswanya
         $isi = $this->over_model_new->export_over_time($bulan,'tgl');
@@ -241,8 +245,10 @@ class import_excel extends CI_Controller {
             $excel->setActiveSheetIndex(0)->setCellValue('C'.$numrow, $data->namaKaryawan);
             $excel->setActiveSheetIndex(0)->setCellValue('D'.$numrow, $data->costCenter);
             $excel->setActiveSheetIndex(0)->setCellValue('E'.$numrow, $data->name);
-            $excel->setActiveSheetIndex(0)->setCellValue('F'.$numrow, $data->jam);
-            $excel->setActiveSheetIndex(0)->setCellValue('G'.$numrow, $data->satuan);
+            $excel->setActiveSheetIndex(0)->setCellValue('F'.$numrow, $data->in);
+            $excel->setActiveSheetIndex(0)->setCellValue('G'.$numrow, $data->out);
+            $excel->setActiveSheetIndex(0)->setCellValue('H'.$numrow, $data->jam);
+            $excel->setActiveSheetIndex(0)->setCellValue('I'.$numrow, $data->satuan);
             
             // Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
             $excel->getActiveSheet()->getStyle('A'.$numrow)->applyFromArray($style_row);
