@@ -258,6 +258,8 @@ class import_excel extends CI_Controller {
             $excel->getActiveSheet()->getStyle('E'.$numrow)->applyFromArray($style_row);
             $excel->getActiveSheet()->getStyle('F'.$numrow)->applyFromArray($style_row);
             $excel->getActiveSheet()->getStyle('G'.$numrow)->applyFromArray($style_row);
+            $excel->getActiveSheet()->getStyle('H'.$numrow)->applyFromArray($style_row);
+            $excel->getActiveSheet()->getStyle('I'.$numrow)->applyFromArray($style_row);
 
             
             $numrow++; // Tambah 1 setiap kali looping
