@@ -440,7 +440,7 @@ function modalTampil(costCenter, date) {
       <?php $tgl_max = date('d-m-Y') ?>
       autoclose: true,
       format: "dd-mm-yyyy",
-      endDate: '<?php echo $tgl_max ?>',
+      endDate: '<?php echo $tgl_max ?>'
 
     });
 
