@@ -93,7 +93,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             <span class="description-percentage" id="tot_diff"></span>
                           </h5>      
                           <span class="description-text" style="font-size: 35px;">Difference</span>
-                          <br><span class="description-text" style="font-size: 18px">(FQ/ACT)</span>
+                          <br><span class="description-text" style="font-size: 18px">(FQ-ACT)</span>
                           <br><span class="description-text" style="font-size: 35px;">差異</span>   
                         </div>
                       </div>
