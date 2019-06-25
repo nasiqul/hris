@@ -63,20 +63,20 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <div class="col-md-12">
                   <div class="row">
                     <div class="col-md-12">
-                      <div class="col-md-2">
-                        <div class="description-block border-right" style="color: #f76111">
-                          <h5 class="description-header" style="font-size: 60px;">
-                            <span class="description-percentage" id="tot_budget"></span>
-                          </h5>      
-                          <span class="description-text" style="font-size: 35px;">Total Budget<br><span >総予算</span></span>   
-                        </div>
-                      </div>
                       <div class="col-md-3">
                         <div class="description-block border-right" style="color: #02ff17">
                           <h5 class="description-header" style="font-size: 60px;">
                             <span class="description-percentage" id="tot_day_budget"></span>
                           </h5>      
                           <span class="description-text" style="font-size: 35px;">Total Forecast<br><span ></span></span>   
+                        </div>
+                      </div>
+                      <div class="col-md-2">
+                        <div class="description-block border-right" style="color: #f76111">
+                          <h5 class="description-header" style="font-size: 60px;">
+                            <span class="description-percentage" id="tot_budget"></span>
+                          </h5>      
+                          <span class="description-text" style="font-size: 35px;">Total Budget<br><span >総予算</span></span>   
                         </div>
                       </div>
                       <div class="col-md-3">
@@ -326,8 +326,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
             opacity: 0.2
           },
           scatter : {
-              dataLabels: {
-                enabled: false
+            dataLabels: {
+              enabled: false
             },
             animation: false
           }
