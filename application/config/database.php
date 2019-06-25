@@ -97,7 +97,7 @@ $db['default'] = array(
 
 $db['ympimisdev'] = array(
 	'dsn'	=> '',
-	'hostname' => 'localhost',
+	'hostname' => '172.17.128.18',
 	'username' => 'root',
 	'password' => '',
 	'database' => 'ympimis',
