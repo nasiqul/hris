@@ -337,6 +337,7 @@ class Over_model_new extends CI_Model {
                         LEFT JOIN over_time_member ON over_time.id = over_time_member.id_ot 
                     WHERE
                         DATE_FORMAT( over_time.tanggal, '%Y-%m' ) = '".$tgl2."' 
+                        AND over_time.tanggal <= '".$tgl."'
                         AND over_time_member.nik IS NOT NULL 
                         AND over_time.deleted_at IS NULL 
                         AND jam_aktual = 0 
