@@ -500,6 +500,21 @@ class Over_model extends CI_Model {
         $this->db->insert('over_time_member', $data);	
     }
 
+    public function update_member($id_user, $nik1, $dari1, $sampai1, $jam1, $trans1, $makan1, $exfood1, $idJam1, $stat1)
+    {
+        $this->db->set('dari', $dari1);
+        $this->db->set('sampai', $sampai1);
+        $this->db->set('jam', $jam1);
+        $this->db->set('transport', $trans1);
+        $this->db->set('makan', $makan1);
+        $this->db->set('ext_food', $exfood1);
+        $this->db->set('id_jam', $idJam1);
+        $this->db->set('jam_aktual', $stat1);
+
+        $this->db->where('id', $id_user);
+        $this->db->update('over_time_member'); 
+    }
+
     public function deleteSPL($id_ot)
     {
         $this->db->where('id_ot', $id_ot);
@@ -570,7 +585,7 @@ class Over_model extends CI_Model {
         $q = "select om.nik, karyawan.namaKaryawan, costCenter, dari, sampai, transport, makan, ext_food, jam from over_time o 
         join over_time_member om on o.id = om.id_ot
         left join karyawan on karyawan.nik = om.nik
-        where o.id = '".$id."'";
+        where o.id = '".$id."' and jam_aktual = 0";
         $query = $this->db->query($q);
         return $query->result();
     }
@@ -621,6 +636,7 @@ class Over_model extends CI_Model {
         $this->db->join("over_time_member om","o.id = om.id_ot");
         $this->db->join("karyawan k","om.nik = k.nik");
         $this->db->where("o.id",$id);
+        $this->db->where("om.jam_aktual",0);
 
 
         $i = 0;

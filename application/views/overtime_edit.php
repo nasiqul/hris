@@ -289,7 +289,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         }
         ?>
 
-        var newdiv1 = $( "<div class='col-md-12' style='margin-bottom: 5px' id='"+no+"'>"+
+        var newdiv1 = $( "<div class='col-md-12' style='margin-bottom: 5px' id='<?php echo $key->id_user ?>'>"+
           "<div class='col-md-2'><input type='text' id='nik"+no+"' value='<?php echo $key->nik ?>' class='form-control' readonly></div>"+
           "<div class='col-md-3'><p id='nama"+no+"'><?php echo $key->namaKaryawan ?></p></div><div class='col-md-1'><input class='form-control timepicker' value='<?php echo $key->dari ?>'  id='dari"+no+"' name='dari"+no+"'></input></div>"+
           "<div class='col-md-1'><input class='form-control timepicker' id='sampai"+no+"'  name='sampai"+no+"' value='<?php echo $key->sampai ?>'></input></div><div class='col-md-1'><p id='jam"+no+"' hidden></p><p id='jamfix"+no+"'><?php echo $key->jam ?></p></div>"+
@@ -298,7 +298,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           "<div class='col-md-1'><input type='checkbox' id='makan"+no+"' <?php echo $cekM ?>></div>"+
           "<div class='col-md-1'><input type='checkbox' id='exfood"+no+"' <?php echo $cekExF ?>></div>"+
           "<div class='col-md-1'><button class='btn btn-danger btn-xs' id='delete"+no+"' onclick='deleteRow(this); ali()'><i class='fa fa-minus'></i></button></div>"+
-          "<input type='hidden' id='idJam"+no+"'></div>");
+          "<input type='hidden' id='idJam"+no+"'><input type='hidden' id='stat<?php echo $key->id_user ?>' value='0'></div>");
 
         $("#peserta").append(newdiv1).find('.timepicker').timepicker({
           showInputs: false,
@@ -324,8 +324,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
         nomorali+=1;
         $('#totalsemua').text("Total : "+nomorali);
       <?php } ?>
-        $("#dari")[0].setAttribute("onchange","dari();");
-        $("#sampai")[0].setAttribute("onchange","sampai();");
+      $("#dari")[0].setAttribute("onchange","dari();");
+      $("#sampai")[0].setAttribute("onchange","sampai();");
 
     }
 
@@ -334,56 +334,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
       var ids = $(elem).parent('div').parent('div').attr('id');
 
-      var oldid = ids;
-      nomorali-=1;
-      if (nomorali ==0){
-        arrNik = [];
-      }
+      $("#stat"+ids).val(1);
 
-      var removed = arrNik.splice(parseInt(ids) - 1,1);
-      console.log(arrNik);
-      $(elem).parent('div').parent('div').remove();
-
-      var newid = parseInt(ids) + 1;
-      jQuery("#"+newid).attr("id",oldid);
-      jQuery("#nik"+newid).attr("id","nik"+oldid);
-      jQuery("#nama"+newid).attr("id","nama"+oldid);
-      jQuery("#dari"+newid).attr("id","dari"+oldid);
-      jQuery("#sampai"+newid).attr("id","sampai"+oldid);
-      jQuery("#jam"+newid).attr("id","jam"+oldid);
-      jQuery("#jamfix"+newid).attr("id","jamfix"+oldid);
-      jQuery("#trans"+newid).attr("id","trans"+oldid);
-      jQuery("#makan"+newid).attr("id","makan"+oldid);
-      jQuery("#exfood"+newid).attr("id","exfood"+oldid);
-      jQuery("#delete"+newid).attr("id","delete"+oldid);
-      jQuery("#nomorauto"+newid).attr("id","nomorauto"+oldid);
-
-      // console.log(no);
-
-      $('#totalsemua').text("Total : "+nomorali);
-      
-      no-=1;
-      var z = no - 1;
-
-      for (var i =  ids; i <= z; i++) { 
-        var newid = parseInt(i)  + 1;
-        var oldid = newid - 1;
-        jQuery("#"+newid).attr("id",oldid);
-        jQuery("#nik"+newid).attr("id","nik"+oldid);
-        jQuery("#nama"+newid).attr("id","nama"+oldid);
-        jQuery("#dari"+newid).attr("id","dari"+oldid);
-        jQuery("#sampai"+newid).attr("id","sampai"+oldid);
-        jQuery("#jam"+newid).attr("id","jam"+oldid);
-        jQuery("#jamfix"+newid).attr("id","jamfix"+oldid);
-        jQuery("#trans"+newid).attr("id","trans"+oldid);
-        jQuery("#makan"+newid).attr("id","makan"+oldid);
-        jQuery("#exfood"+newid).attr("id","exfood"+oldid);
-        jQuery("#delete"+newid).attr("id","delete"+oldid);
-        jQuery("#nomorauto"+newid).attr("id","nomorauto"+oldid);
-        // var a = $('#nomorauto'+newid).text();
-        // $("#nomorauto"+newid).text(a);
-      }
-
+      $("#"+ids).hide();
     }
 
     function ali() {
@@ -420,7 +373,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         },
         dataType: 'json',
         success: function (data) {
-            // the next thing you want to do 
+            // the next thing you want to do
             var $section = $('#sec');
             var $subsec = $('#subsec');
 
@@ -515,68 +468,65 @@ scratch. This page gets rid of all links and provides the needed markup only.
   }
 
   function edit1() {
-    if ($('#nik1').length == 0) {
-      openDangerGritter();
-      return false;
-    }
+    // if ($('#nik1').length == 0) {
+    //   openDangerGritter();
+    //   return false;
+    // }
 
     var no_doc2 = document.getElementById('nodoc2').value;
 
-    $.ajax({
-      type: 'POST',
-      url: '<?php echo base_url("ot/deleteSPL") ?>',
-      data: {
-        'nodoc2': no_doc2
-      },
-      success: function(data){
-        for (var i = 1; i <= no; i++) {
+    for (var i = 1; i <= no; i++) {
+      var id = "#nik"+i;
 
-          var nik1 = document.getElementById('nik'+i).value;
+      var nik1 = $(id).val();
 
-          var sampai = $('#sampai'+i).val();
-          var dari = $('#dari'+i).val();
+      var id_user = $(id).parent('div').parent('div').attr('id');
+      
+      var stat = $('#stat'+id_user).val();
 
-          var jamS = $("#jamfix"+i).text();
+      var sampai = $('#sampai'+i).val();
+      var dari = $('#dari'+i).val();
 
-          var e = document.getElementById("trans"+i);
-          var transS = e.options[e.selectedIndex].value;
+      var jamS = $("#jamfix"+i).text();
 
-          if ($('#makan'+i).is(':checked'))
-            makanS="1";
-          else
-            makanS="0";
+      var e = document.getElementById("trans"+i);
+      var transS = e.options[e.selectedIndex].value;
 
-          if ($('#exfood'+i).is(':checked'))
-            exfoodS="1";
-          else
-            exfoodS="0";
+      if ($('#makan'+i).is(':checked'))
+        makanS="1";
+      else
+        makanS="0";
 
-          var id_jam = $("#idJam"+i).val();
+      if ($('#exfood'+i).is(':checked'))
+        exfoodS="1";
+      else
+        exfoodS="0";
 
-          $.ajax({
-            type: 'POST',
-            url: '<?php echo base_url("ot/ot_member_submit") ?>',
-            data: {
-              'nodoc2': no_doc2,
-              'nik': nik1,
-              'dari': dari,
-              'sampai': sampai,
-              'jam': jamS,
-              'trans': transS,
-              'makan': makanS,
-              'exfood': exfoodS,
-              'id_jam': id_jam,
-            },
-            success: function(data){
-              openSuccessGritter();
-              $('#submit').css("display", "none");
-              $('#print').css("display", "block");
-            }
-          });
-          console.log(nik1);
+      var id_jam = $("#idJam"+i).val();
+
+      $.ajax({
+        type: 'POST',
+        url: '<?php echo base_url("ot/ot_member_update") ?>',
+        data: {
+          'id_user': id_user,
+          'nik': nik1,
+          'dari': dari,
+          'sampai': sampai,
+          'jam': jamS,
+          'trans': transS,
+          'makan': makanS,
+          'exfood': exfoodS,
+          'id_jam': id_jam,
+          'stat': stat
+        },
+        success: function(data){
+          openSuccessGritter();
+          $('#submit').css("display", "none");
+          $('#print').css("display", "block");
         }
-      }
-    });
+      });
+      console.log(nik1);
+    }
   }
 
   function openSuccessGritter(){

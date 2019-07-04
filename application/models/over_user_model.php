@@ -33,6 +33,7 @@ class Over_user_model extends CI_Model {
         $this->db->join("departemen",'departemen.id = sc.id_departemen','left');
         $this->db->where("tanggal = '".$tgl."'");
         $this->db->where("deleted_at IS NULL");
+        $this->db->where("jam_aktual = 0");
         
         if ($role != "1") {
         $this->db->where("departemen.nama = (select department from login where username = '".$user."')");

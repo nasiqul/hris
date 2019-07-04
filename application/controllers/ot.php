@@ -63,6 +63,22 @@ class Ot extends CI_Controller {
 		$this->over_model->save_member($no_doc, $nik, $dari, $sampai, $jam, $trans, $makan, $exfood, $idJam);
 	}
 
+	public function ot_member_update()
+	{
+		$id_user = $_POST['id_user'];
+		$nik = $_POST['nik'];
+		$dari = $_POST['dari'];
+		$sampai = $_POST['sampai'];
+		$jam = $_POST['jam'];
+		$trans = $_POST['trans'];
+		$makan = $_POST['makan'];
+		$exfood = $_POST['exfood'];
+		$idJam = $_POST['id_jam'];
+		$stat = $_POST['stat'];
+
+		$this->over_model->update_member($id_user, $nik, $dari, $sampai, $jam, $trans, $makan, $exfood, $idJam, $stat);
+	}
+
 	public function deleteSPL()
 	{
 		$no_doc = $_POST['nodoc2'];
@@ -399,7 +415,7 @@ class Ot extends CI_Controller {
 
 		} else {
 			$list2 = $this->over_model->get_budget_g($tgl, $tgl2, $cc);
-            $data[] = array(0,date("d/m",strtotime($tgl)), $list2[0]->budget_tot);
+			$data[] = array(0,date("d/m",strtotime($tgl)), $list2[0]->budget_tot);
 		}
 		echo json_encode($data);
 	}

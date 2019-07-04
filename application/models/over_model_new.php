@@ -305,10 +305,10 @@ class Over_model_new extends CI_Model {
 
     public function ot_hr($id)
     {
-        $q = "select over_time.id, DATE_FORMAT(over_time.tanggal,'%d-%m-%Y') as tanggal, over_time.departemen, over_time.section, over_time.sub_sec, over_time.keperluan, over_time.catatan, over_time.hari, over_time.shift, over_time.status_shift, over_time_member.nik, namaKaryawan, jam, dari, sampai, makan, ext_food, transport from over_time
+        $q = "select over_time.id, over_time_member.id as id_user, DATE_FORMAT(over_time.tanggal,'%d-%m-%Y') as tanggal, over_time.departemen, over_time.section, over_time.sub_sec, over_time.keperluan, over_time.catatan, over_time.hari, over_time.shift, over_time.status_shift, over_time_member.nik, namaKaryawan, jam, dari, sampai, makan, ext_food, transport from over_time
         left join over_time_member on over_time.id = over_time_member.id_ot
         left join karyawan on karyawan.nik = over_time_member.nik
-        where over_time.id = '".$id."'";
+        where over_time.id = '".$id."' and jam_aktual = 0";
         $query = $this->db->query($q);
         return $query->result();
     }
