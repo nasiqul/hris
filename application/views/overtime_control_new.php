@@ -63,6 +63,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <div class="col-md-12">
                   <div class="row">
                     <div class="col-md-12">
+                      <div class="col-md-3">
+                        <div class="description-block border-right" style="color: #02ff17">
+                          <h5 class="description-header" style="font-size: 58px;">
+                            <span class="description-percentage" id="tot_day_budget"></span>
+                          </h5>      
+                          <span class="description-text" style="font-size: 35px;">Total Forecast<br><span >累計見込み</span></span>   
+                        </div>
+                      </div>
+
                       <div class="col-md-2">
                         <div class="description-block border-right" style="color: #f76111">
                           <h5 class="description-header" style="font-size: 58px;">
@@ -71,14 +80,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                           <span class="description-text" style="font-size: 35px;">Total Budget<br><span >総予算</span></span>   
                         </div>
                       </div>
-                      <div class="col-md-3">
-                        <div class="description-block border-right" style="color: #02ff17">
-                          <h5 class="description-header" style="font-size: 58px;">
-                            <span class="description-percentage" id="tot_day_budget"></span>
-                          </h5>      
-                          <span class="description-text" style="font-size: 35px;">Total Forecast<br><span ></span></span>   
-                        </div>
-                      </div>
+                      
                       <div class="col-md-3">
                         <div class="description-block border-right" style="color: #7300ab" >
                           <h5 class="description-header" style="font-size: 58px; ">
@@ -93,7 +95,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             <span class="description-percentage" id="tot_diff"></span>
                           </h5>      
                           <span class="description-text" style="font-size: 35px;">Difference</span>
-                          <br><span class="description-text" style="font-size: 18px">(FQ-ACT)</span>
+                          <br><span class="description-text" style="font-size: 18px">(BDG-ACT)</span>
                           <br><span class="description-text" style="font-size: 35px;">差異</span>   
                         </div>
                       </div>
@@ -218,7 +220,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
          }
        }
 
-       tot_diff = tot_day_budget - tot_act;
+       tot_diff = tot_budget - tot_act;
 
        tot_budget = Math.round(tot_budget * 100) / 100;
        tot_day_budget = Math.round(tot_day_budget * 100) / 100;

@@ -15,9 +15,9 @@ class Management extends CI_Controller {
 	public function index()
 	{
 		$data['i'] = 'ok';
-		$data['menu'] = 'ovrMoC';
-		$data['section'] = $this->budget_model->get_name_cc2();
-		$this->load->view('ot_monthly_control', $data);
+		$data['menu'] = 'OT-new';
+		$data['tgl2'] = $this->over_model_new->getlastData();
+		$this->load->view("overtime_control_new",$data);
 	}
 
 	public function monthlyMon()
@@ -32,7 +32,7 @@ class Management extends CI_Controller {
 		$data['i'] = 'ok';
 		$data['menu'] = 'OT-m';
 		$data['section'] = $this->budget_model->get_name_cc();
-        $data['fiskal'] = $this->home_model->getFiskalAll();
+		$data['fiskal'] = $this->home_model->getFiskalAll();
 		$this->load->view('ot_management', $data);
 	}
 
@@ -51,25 +51,25 @@ class Management extends CI_Controller {
 	}
 
 	public function detailSPL2($nik,$tgl)
-    {
-    	$data['menu2'] = 'Overtime';
-        $data['menu'] = 'OT Management By NIK';
-        $data['nik'] = $nik;
-        $data['tgl'] = $tgl;
-        $data['i'] = 'ok';
-        $this->load->view("graph_report",$data);
-    }
+	{
+		$data['menu2'] = 'Overtime';
+		$data['menu'] = 'OT Management By NIK';
+		$data['nik'] = $nik;
+		$data['tgl'] = $tgl;
+		$data['i'] = 'ok';
+		$this->load->view("graph_report",$data);
+	}
 
-    public function overtime_control()
-    {
-        $data['i'] = 'ok';
-        $data['menu'] = 'OT-new';
-        $data['tgl2'] = $this->over_model_new->getlastData();
-        $this->load->view("overtime_control_new",$data);
-    }
+	public function overtime_control()
+	{
+		$data['i'] = 'ok';
+		$data['menu'] = 'ovrMoC';
+		$data['section'] = $this->budget_model->get_name_cc2();
+		$this->load->view('ot_monthly_control', $data);
+	}
 
 
-    public function ajax_ot_report_d()
+	public function ajax_ot_report_d()
 	{
 		$list = $this->over_report_model->get_ot_report2();
 
@@ -111,9 +111,9 @@ class Management extends CI_Controller {
 	{
 		$data['i'] = 'ok';
 		$data['menu2'] = 'Overtime';
-        $data['menu'] = 'Monthly Overtime Control';
-        $data['section'] = $this->budget_model->get_name_cc2();
-        $this->load->view("display/ot_control", $data);
+		$data['menu'] = 'Monthly Overtime Control';
+		$data['section'] = $this->budget_model->get_name_cc2();
+		$this->load->view("display/ot_control", $data);
 	}
 
 }
