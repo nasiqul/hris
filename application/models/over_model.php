@@ -1659,9 +1659,9 @@ public function exportdatahr($id)
 {
     $this->db->select("*");
     $this->db->from("(select o.*, karyawan.namaKaryawan, p.masuk, p.keluar, section.nama as section, ov.jam as aktual, satuan from
-        (select over_time.id as id_ot, over_time.tanggal, over_time_member.nik, dari, sampai, jam, hari, final as final_jam, over_time_member.status as status_final from over_time left join over_time_member on over_time.id = over_time_member.id_ot
+        (select over_time.id as id_ot, over_time.tanggal, over_time_member.nik, dari, sampai, sum(jam) as jam, hari, sum(final) as final_jam, over_time_member.status as status_final from over_time left join over_time_member on over_time.id = over_time_member.id_ot
         where tanggal = '".$id."' and deleted_at is null and over_time_member.jam_aktual = 0
-        group by over_time.id, nik) o
+        group by nik) o
         left join (select nik, jam from over where tanggal = '".$id."') ov on ov.nik = o.nik
         left join karyawan on karyawan.nik = o.nik
         left join (select nik, masuk, keluar from presensi where tanggal = '".$id."') p on p.nik = o.nik
