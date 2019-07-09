@@ -63,16 +63,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <div class="col-md-12">
                   <div class="row">
                     <div class="col-md-12">
-                      <div class="col-md-3">
+                     <!--  <div class="col-md-3">
                         <div class="description-block border-right" style="color: #02ff17">
                           <h5 class="description-header" style="font-size: 58px;">
                             <span class="description-percentage" id="tot_day_budget"></span>
                           </h5>      
                           <span class="description-text" style="font-size: 35px;">Total Forecast<br><span >累計見込み</span></span>   
                         </div>
-                      </div>
+                      </div> -->
 
-                      <div class="col-md-2">
+                      <div class="col-md-3">
                         <div class="description-block border-right" style="color: #f76111">
                           <h5 class="description-header" style="font-size: 58px;">
                             <span class="description-percentage" id="tot_budget"></span>
@@ -89,7 +89,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                           <span class="description-text" style="font-size: 35px;">Total Actual<br><span >総実績</span></span>   
                         </div>
                       </div>
-                      <div class="col-md-2">
+                      <div class="col-md-3">
                         <div class="description-block border-right text-green" id="diff_text">
                           <h5 class="description-header" style="font-size: 58px;">
                             <span class="description-percentage" id="tot_diff"></span>
@@ -99,7 +99,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                           <br><span class="description-text" style="font-size: 35px;">差異</span>   
                         </div>
                       </div>
-                      <div class="col-md-2">
+                      <div class="col-md-3">
                         <div class="description-block border-right text-yellow">
                           <h5 class="description-header" style="font-size: 58px;">
                             <span class="description-percentage" id="avg"></span>
@@ -220,7 +220,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
          }
        }
 
-       tot_diff = tot_budget - tot_act;
+       tot_diff = tot_day_budget - tot_act;
 
        tot_budget = Math.round(tot_budget * 100) / 100;
        tot_day_budget = Math.round(tot_day_budget * 100) / 100;
@@ -233,8 +233,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
        var tot_diff2 = tot_diff.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
 
-       $("#tot_budget").text(tot_budget2);
-       $("#tot_day_budget").text(tot_day_budget2);
+       $("#tot_budget").text(tot_day_budget2);
+       // $("#tot_day_budget").text(tot_day_budget2);
        $("#tot_act").text(tot_act2);
 
        if (tot_diff > 0) {
