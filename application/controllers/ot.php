@@ -2106,6 +2106,152 @@ class Ot extends CI_Controller {
 		$write->save('php://output');
 
 	}
+
+	public function exportexcelsplrange($tgl_awal, $tgl_akhir)
+	{
+		include APPPATH.'third_party/PHPExcel/PHPExcel.php';
+		
+		// Panggil class PHPExcel nya
+		$excel = new PHPExcel();
+
+		// Settingan awal fil excel
+		$excel->getProperties()->setCreator('MIRAI')
+		->setLastModifiedBy('MIRAI')
+		->setTitle("Data MIRAI")
+		->setSubject("MIRAI")
+		->setDescription("Laporan MIRAI")
+		->setKeywords("Data Lembur");
+
+		// Buat sebuah variabel untuk menampung pengaturan style dari header tabel
+		$style_col = array(
+			'font' => array('bold' => true), // Set font nya jadi bold
+			'alignment' => array(
+				'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER, // Set text jadi ditengah secara horizontal (center)
+				'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER // Set text jadi di tengah secara vertical (middle)
+			),
+			'borders' => array(
+				'top' => array('style'  => PHPExcel_Style_Border::BORDER_THIN), // Set border top dengan garis tipis
+				'right' => array('style'  => PHPExcel_Style_Border::BORDER_THIN),  // Set border right dengan garis tipis
+				'bottom' => array('style'  => PHPExcel_Style_Border::BORDER_THIN), // Set border bottom dengan garis tipis
+				'left' => array('style'  => PHPExcel_Style_Border::BORDER_THIN) // Set border left dengan garis tipis
+			)
+		);
+
+		// Buat sebuah variabel untuk menampung pengaturan style dari isi tabel
+		$style_row = array(
+			'alignment' => array(
+				'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER // Set text jadi di tengah secara vertical (middle)
+			),
+			'borders' => array(
+				'top' => array('style'  => PHPExcel_Style_Border::BORDER_THIN), // Set border top dengan garis tipis
+				'right' => array('style'  => PHPExcel_Style_Border::BORDER_THIN),  // Set border right dengan garis tipis
+				'bottom' => array('style'  => PHPExcel_Style_Border::BORDER_THIN), // Set border bottom dengan garis tipis
+				'left' => array('style'  => PHPExcel_Style_Border::BORDER_THIN) // Set border left dengan garis tipis
+			)
+		);
+
+		$excel->setActiveSheetIndex(0)->setCellValue('A1', "DATA LEMBUR ".$tgl_awal." - ".$tgl_akhir); // Set kolom A1 dengan tulisan "DATA SISWA"
+		$excel->getActiveSheet()->mergeCells('A1:D1'); // Set Merge Cell pada kolom A1 sampai E1
+		$excel->getActiveSheet()->getStyle('A1')->getFont()->setBold(TRUE); // Set bold kolom A1
+		$excel->getActiveSheet()->getStyle('A1')->getFont()->setSize(11); // Set font size 15 untuk kolom A1
+		$excel->getActiveSheet()->getStyle('A1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER); // Set text center untuk kolom A1
+
+		// Buat header tabel nya pada baris ke 3
+		$excel->setActiveSheetIndex(0)->setCellValue('A2', "No SPL"); // Set kolom A3 dengan tulisan "NO"
+		$excel->setActiveSheetIndex(0)->setCellValue('B2', "NIK"); // Set kolom B3 dengan tulisan "NIS"
+		$excel->setActiveSheetIndex(0)->setCellValue('C2', "Tanggal"); // Set kolom C3 dengan tulisan 
+		$excel->setActiveSheetIndex(0)->setCellValue('D2', "Nama"); 
+		$excel->setActiveSheetIndex(0)->setCellValue('E2', "Bagian"); 
+		$excel->setActiveSheetIndex(0)->setCellValue('F2', "Dari"); 
+		$excel->setActiveSheetIndex(0)->setCellValue('G2', "Sampai"); 
+		$excel->setActiveSheetIndex(0)->setCellValue('H2', "Jam"); 
+		$excel->setActiveSheetIndex(0)->setCellValue('I2', "In"); 
+		$excel->setActiveSheetIndex(0)->setCellValue('J2', "Out"); 
+		$excel->setActiveSheetIndex(0)->setCellValue('K2', "Jam"); 
+		$excel->setActiveSheetIndex(0)->setCellValue('L2', "Status Hari");
+		$excel->setActiveSheetIndex(0)->setCellValue('M2', "Status Konfirm");
+		$excel->setActiveSheetIndex(0)->setCellValue('N2', "Final Jam");
+		$excel->setActiveSheetIndex(0)->setCellValue('O2', "Satuan");
+		// Apply style header yang telah kita buat tadi ke masing-masing kolom header
+		$excel->getActiveSheet()->getStyle('A2')->applyFromArray($style_col);
+		$excel->getActiveSheet()->getStyle('B2')->applyFromArray($style_col);
+		$excel->getActiveSheet()->getStyle('C2')->applyFromArray($style_col);
+		$excel->getActiveSheet()->getStyle('D2')->applyFromArray($style_col);
+		$excel->getActiveSheet()->getStyle('E2')->applyFromArray($style_col);
+		$excel->getActiveSheet()->getStyle('F2')->applyFromArray($style_col);
+		$excel->getActiveSheet()->getStyle('G2')->applyFromArray($style_col);
+		$excel->getActiveSheet()->getStyle('H2')->applyFromArray($style_col);
+		$excel->getActiveSheet()->getStyle('I2')->applyFromArray($style_col);
+		$excel->getActiveSheet()->getStyle('J2')->applyFromArray($style_col);
+		$excel->getActiveSheet()->getStyle('K2')->applyFromArray($style_col);
+		$excel->getActiveSheet()->getStyle('L2')->applyFromArray($style_col);
+		$excel->getActiveSheet()->getStyle('M2')->applyFromArray($style_col);
+		$excel->getActiveSheet()->getStyle('N2')->applyFromArray($style_col);
+		$excel->getActiveSheet()->getStyle('O2')->applyFromArray($style_col);
+
+		// Panggil function view yang ada di SiswaModel untuk menampilkan semua data siswanya
+		$spl = $this->over_model_new->exportspl($tgl_awal, $tgl_akhir);
+
+		$no = 1; // Untuk penomoran tabel, di awal set dengan 1
+		$numrow = 4; // Set baris pertama untuk isi tabel adalah baris ke 4
+		foreach($spl as $data){ // Lakukan looping pada variabel siswa
+			$excel->setActiveSheetIndex(0)->setCellValue('A'.$numrow, $data->id_ot);
+			$excel->setActiveSheetIndex(0)->setCellValue('B'.$numrow, $data->nik);
+			$excel->setActiveSheetIndex(0)->setCellValue('C'.$numrow, $data->tanggal);
+			$excel->setActiveSheetIndex(0)->setCellValue('D'.$numrow, $data->namaKaryawan);
+			$excel->setActiveSheetIndex(0)->setCellValue('E'.$numrow, $data->bagian);
+			$excel->setActiveSheetIndex(0)->setCellValue('F'.$numrow, $data->dari);
+			$excel->setActiveSheetIndex(0)->setCellValue('G'.$numrow, $data->sampai);
+			$excel->setActiveSheetIndex(0)->setCellValue('H'.$numrow, $data->jam);
+			$excel->setActiveSheetIndex(0)->setCellValue('I'.$numrow, $data->masuk);
+			$excel->setActiveSheetIndex(0)->setCellValue('J'.$numrow, $data->keluar);
+			$excel->setActiveSheetIndex(0)->setCellValue('K'.$numrow, '');
+			$excel->setActiveSheetIndex(0)->setCellValue('L'.$numrow, $data->status_hari);
+			$excel->setActiveSheetIndex(0)->setCellValue('M'.$numrow, $data->status_konfirmasi);
+			$excel->setActiveSheetIndex(0)->setCellValue('N'.$numrow, $data->final_jam);
+			$excel->setActiveSheetIndex(0)->setCellValue('O'.$numrow, $data->satuan);
+			
+			
+			// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
+			$excel->getActiveSheet()->getStyle('A'.$numrow)->applyFromArray($style_row);
+			$excel->getActiveSheet()->getStyle('B'.$numrow)->applyFromArray($style_row);
+			$excel->getActiveSheet()->getStyle('C'.$numrow)->applyFromArray($style_row);
+			$excel->getActiveSheet()->getStyle('D'.$numrow)->applyFromArray($style_row);
+			$excel->getActiveSheet()->getStyle('E'.$numrow)->applyFromArray($style_row);
+			$excel->getActiveSheet()->getStyle('F'.$numrow)->applyFromArray($style_row);
+			$excel->getActiveSheet()->getStyle('G'.$numrow)->applyFromArray($style_row);
+			$excel->getActiveSheet()->getStyle('H'.$numrow)->applyFromArray($style_row);
+			$excel->getActiveSheet()->getStyle('I'.$numrow)->applyFromArray($style_row);
+			$excel->getActiveSheet()->getStyle('J'.$numrow)->applyFromArray($style_row);
+			$excel->getActiveSheet()->getStyle('K'.$numrow)->applyFromArray($style_row);
+			$excel->getActiveSheet()->getStyle('L'.$numrow)->applyFromArray($style_row);
+			$excel->getActiveSheet()->getStyle('M'.$numrow)->applyFromArray($style_row);
+			$excel->getActiveSheet()->getStyle('N'.$numrow)->applyFromArray($style_row);
+			$excel->getActiveSheet()->getStyle('O'.$numrow)->applyFromArray($style_row);
+					
+			$numrow++; // Tambah 1 setiap kali looping
+		}
+
+		
+		// Set height semua kolom menjadi auto (mengikuti height isi dari kolommnya, jadi otomatis)
+		$excel->getActiveSheet()->getDefaultRowDimension()->setRowHeight(-1);
+
+		// Set orientasi kertas jadi LANDSCAPE
+		$excel->getActiveSheet()->getPageSetup()->setOrientation(PHPExcel_Worksheet_PageSetup::ORIENTATION_LANDSCAPE);
+
+		// Set judul file excel nya
+		$excel->getActiveSheet(0)->setTitle("Data Lembur 1");
+		$excel->setActiveSheetIndex(0);
+
+		// Proses file excel
+		header('Content-Type: application/vnd.ms-excel');
+		header('Content-Disposition: attachment; filename="DataLemburPerBulan.xlsx"'); // Set nama file excel nya
+		header('Cache-Control: max-age=0');
+
+		$write = PHPExcel_IOFactory::createWriter($excel, 'Excel2007');
+		ob_end_clean();
+		$write->save('php://output');
+	}
 }
 ?>
 

@@ -320,59 +320,59 @@ class Over_model_new extends CI_Model {
         sum( n.act ) AS act, sum( budget_tot ) AS tot, sum( budget_tot ) - sum( n.act ) AS diff FROM
         (
         
-                    select id_cc, tanggal, sum(budget_tot) as budget_tot, sum(act) as act from (
-                    SELECT
-                        karyawan.costCenter as id_cc,
-                        d.tanggal,
-                        0 as budget_tot,
-                        sum( jam ) AS act
-                    FROM
-                        (
-                    SELECT
-                        over_time_member.nik,
-                        over_time.tanggal,
-                        sum( IF ( STATUS = 0, over_time_member.jam, over_time_member.final ) ) AS jam 
-                    FROM
-                        over_time
-                        LEFT JOIN over_time_member ON over_time.id = over_time_member.id_ot 
-                    WHERE
-                        DATE_FORMAT( over_time.tanggal, '%Y-%m' ) = '".$tgl2."' 
-                        AND over_time.tanggal <= '".$tgl."'
-                        AND over_time_member.nik IS NOT NULL 
-                        AND over_time.deleted_at IS NULL 
-                        AND jam_aktual = 0 
-                    GROUP BY
-                        over_time_member.nik,
-                        over_time.tanggal 
-                        ) d
-                        LEFT JOIN karyawan ON karyawan.nik = d.nik 
-                    GROUP BY
-                        tanggal,
-                        costCenter 
-                        
-                        UNION ALL
+        select id_cc, tanggal, sum(budget_tot) as budget_tot, sum(act) as act from (
+        SELECT
+        karyawan.costCenter as id_cc,
+        d.tanggal,
+        0 as budget_tot,
+        sum( jam ) AS act
+        FROM
+        (
+        SELECT
+        over_time_member.nik,
+        over_time.tanggal,
+        sum( IF ( STATUS = 0, over_time_member.jam, over_time_member.final ) ) AS jam 
+        FROM
+        over_time
+        LEFT JOIN over_time_member ON over_time.id = over_time_member.id_ot 
+        WHERE
+        DATE_FORMAT( over_time.tanggal, '%Y-%m' ) = '".$tgl2."' 
+        AND over_time.tanggal <= '".$tgl."'
+        AND over_time_member.nik IS NOT NULL 
+        AND over_time.deleted_at IS NULL 
+        AND jam_aktual = 0 
+        GROUP BY
+        over_time_member.nik,
+        over_time.tanggal 
+        ) d
+        LEFT JOIN karyawan ON karyawan.nik = d.nik 
+        GROUP BY
+        tanggal,
+        costCenter 
 
-                    SELECT
-                        l.id_cc,
-                        d.tanggal,
-                        l.budget_tot,
-                        0 as act
-                    FROM
-                        (
-                    SELECT
-                        id_cc,
-                        ROUND( ( budget_total / DATE_FORMAT( LAST_DAY( '".$tgl."' ), '%d' ) ), 1 ) budget_tot 
-                    FROM
-                        cost_center_budget 
-                    WHERE
-                        DATE_FORMAT( period, '%Y-%m' ) = '".$tgl2."' 
-                        ) AS l
-                        CROSS JOIN ( SELECT tanggal FROM over_time WHERE DATE_FORMAT( tanggal, '%Y-%m' ) = '".$tgl2."' AND tanggal <= '".$tgl."' 
-                        GROUP BY tanggal ) AS d
-                        ) as p
-                        group by id_cc, tanggal
-                
-                ) AS n
+        UNION ALL
+
+        SELECT
+        l.id_cc,
+        d.tanggal,
+        l.budget_tot,
+        0 as act
+        FROM
+        (
+        SELECT
+        id_cc,
+        ROUND( ( budget_total / DATE_FORMAT( LAST_DAY( '".$tgl."' ), '%d' ) ), 1 ) budget_tot 
+        FROM
+        cost_center_budget 
+        WHERE
+        DATE_FORMAT( period, '%Y-%m' ) = '".$tgl2."' 
+        ) AS l
+        CROSS JOIN ( SELECT tanggal FROM over_time WHERE DATE_FORMAT( tanggal, '%Y-%m' ) = '".$tgl2."' AND tanggal <= '".$tgl."' 
+        GROUP BY tanggal ) AS d
+        ) as p
+        group by id_cc, tanggal
+
+        ) AS n
         LEFT JOIN master_cc ON master_cc.id_cc = n.id_cc 
         GROUP BY
         id_cc 
@@ -586,6 +586,25 @@ class Over_model_new extends CI_Model {
         group by nik ".$s."
         ORDER BY tanggal asc
         ";
+
+        $query = $this->db->query($q);
+        return $query->result();
+    }
+
+    public function exportspl($awal, $akhir)
+    {
+        $q = "select id_ot, d.nik, d.tanggal, karyawan.namaKaryawan, CONCAT(section.nama,' - ',IFNULL(sub_section.nama,' ')) as bagian, dari, sampai, d.jam, masuk, keluar, d.hari as status_hari, d.status as status_konfirmasi, final as final_jam, satuan from 
+        (select id_ot, nik, dari, sampai, sum(jam) as jam, sum(final) as final, status, over_time.tanggal, over_time.section, over_time.sub_sec, hari from over_time 
+        left join over_time_member on over_time.id = over_time_member.id_ot
+        WHERE deleted_at is null and jam_aktual = 0 and tanggal >= '".$awal."' and tanggal <= '".$akhir."'
+        group by nik, tanggal) d
+        left join karyawan on karyawan.nik = d.nik
+        left join presensi on presensi.nik = d.nik and presensi.tanggal = d.tanggal
+        left join posisi on posisi.nik = d.nik
+        left join section on section.id = posisi.id_sec
+        left join sub_section on sub_section.id = posisi.id_sub_sec
+        left join satuan_lembur on satuan_lembur.jam = d.final and satuan_lembur.hari = d.hari
+        order by d.tanggal asc, nik asc";
 
         $query = $this->db->query($q);
         return $query->result();

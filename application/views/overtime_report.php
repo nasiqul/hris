@@ -6,15 +6,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <html>
 <!-- HEADER -->
 <?php require_once(APPPATH.'views/header/head.php'); ?>
+<link rel="stylesheet" href="<?php echo base_url()?>app/bower_components/bootstrap-daterangepicker/daterangepicker.css">
 <?php if (! $this->session->userdata('nikLogin')) { redirect('home/overtime_user'); }?>
 
 <style type="text/css">
-#info {
-  text-decoration: underline;
-}
-#info:hover {
-  text-decoration:none;
-}
+  #info {
+    text-decoration: underline;
+  }
+  #info:hover {
+    text-decoration:none;
+  }
 </style>
 
 <body class="hold-transition skin-purple sidebar-mini">
@@ -41,24 +42,39 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <div class="col-md-12">
           <div class="box box-solid">
             <div class="box-body">
-              <a class="btn btn-warning btn-md pull-right" id="exportid" href="">Export</a>
-              <input onchange="exporta();" type="text" name="tgl" id="tgl" class="form-control datepicker pull-right" style="width: 20%"><br>&nbsp;
-              
-              <table id="example1" class="table table-responsive table-striped">
-                <thead>
-                  <tr>
-                    <th>Period</th>
-                    <th>NIK</th>
-                    <th>Nama</th>
-                    <th>Bagian</th>
-                    <th>Total</th>
-                    <th>Satuan</th>
-                    <th>Aksi</th>
-                  </tr>
-                </thead>
-                <tbody>
-                </tbody>
-              </table>
+              <div class="row">
+                <div class="col-md-6">
+                  <label>Export per Hari:</label>
+                  <div class="input-group">
+                    <div class="input-group-addon">
+                      <i class="fa fa-calendar"></i>
+                    </div>
+                    <input onchange="exporta();" type="text" name="tgl" id="tgl" class="form-control datepicker" placeholder="select date">
+                    <span class="input-group-btn">
+                      <a class="btn btn-warning btn-md" id="exportid" href=""><i class="fa fa-save"></i> &nbsp;Export</a>
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Export Date range:</label>
+
+                    <div class="input-group">
+                      <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                      </div>
+                      <input type="text" class="form-control pull-right" id="daterange" onchange="getexportDate()">
+                      <span class="input-group-btn">
+                        <a class="btn btn-warning btn-md" id="exportrange" href=""><i class="fa fa-save"></i> &nbsp;Export</a>
+                      </span>
+                    </div>
+                    <!-- /.input group -->
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -128,6 +144,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
         }
         ],
       });
+
+      $('#daterange').daterangepicker({
+        locale: {
+          format: 'YYYY-MM-DD'
+        }
+      });
     })
 
     function detail(nik,tgl,nama) {
@@ -160,18 +182,28 @@ scratch. This page gets rid of all links and provides the needed markup only.
     }
 
     function exporta() {
-       var tgl = $("#tgl").val();
+     var tgl = $("#tgl").val();
      var url = "<?php echo base_url('ot/exportexcelhr/'); ?>"+tgl;
-      $("#exportid").prop("href", url)
-    }
+     $("#exportid").prop("href", url);
+   }
 
-     $('.datepicker').datepicker({
-      autoclose: true,
-      format: "yyyy-mm-dd"
-    });
+   function getexportDate() {
+     var dt = $("#daterange").val();
+     var date = dt.split(" - ");
+
+     var url = "<?php echo base_url('ot/exportexcelsplrange/'); ?>"+date[0]+"/"+date[1];
+     $("#exportrange").prop("href", url);
+     console.log(url);
+
+   }
+
+   $('.datepicker').datepicker({
+    autoclose: true,
+    format: "yyyy-mm-dd"
+  });
 
 
-  </script>
+</script>
 
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the
