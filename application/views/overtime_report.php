@@ -193,7 +193,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
      var url = "<?php echo base_url('ot/exportexcelsplrange/'); ?>"+date[0]+"/"+date[1];
      $("#exportrange").prop("href", url);
-     console.log(url);
+     // console.log(url);
 
    }
 

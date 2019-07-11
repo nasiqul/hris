@@ -477,6 +477,7 @@ class Over_model_new extends CI_Model {
         DATE_FORMAT( over_time.tanggal, '%Y-%m' ) = '".$tgl2."' 
         AND over_time.tanggal <= '".$tgl."' 
         AND over_time_member.nik IS NOT NULL 
+        and jam_aktual = 0
         GROUP BY
         over_time_member.nik,
         karyawan.namaKaryawan 

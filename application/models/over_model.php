@@ -1686,7 +1686,7 @@ public function get_presentase($tgl2, $bagian)
     $q = "select COALESCE(sum(d.act) ,0) act, COALESCE(sum(d.budget) ,0) budget, d.kode from 
     ( select COALESCE(sum(jam),0) as act, master_cc.kode, master_cc.id_cc, master_cc.departemen, round(sum(budget_total),2) as budget from 
     ( select sum(ovr.jam) as jam, departemen, master_cc.kode, master_cc.id_cc from 
-    ( select GROUP_CONCAT(over_time.id) id, over_time.tanggal, over_time_member.nik, sum(if(status = 0,over_time_member.jam,over_time_member.final)) jam, over_time_member.status from over_time left join over_time_member on over_time.id = over_time_member.id_ot where DATE_FORMAT(tanggal,'%Y-%m') = '".$tgl2."' and deleted_at IS NULL and nik IS NOT NULL
+    ( select GROUP_CONCAT(over_time.id) id, over_time.tanggal, over_time_member.nik, sum(if(status = 0,over_time_member.jam,over_time_member.final)) jam, over_time_member.status from over_time left join over_time_member on over_time.id = over_time_member.id_ot where DATE_FORMAT(tanggal,'%Y-%m') = '".$tgl2."' and deleted_at IS NULL and nik IS NOT NULL and jam_aktual = 0
     group by nik, tanggal) ovr 
     left join karyawan on karyawan.nik = ovr.nik
     left join master_cc on master_cc.id_cc = karyawan.costCenter
