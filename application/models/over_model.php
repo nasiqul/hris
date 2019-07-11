@@ -1799,6 +1799,7 @@ public function get_over_time($tgl, $tgl2, $cc)
     DATE_FORMAT( over_time.tanggal, '%Y-%m' ) = '".$tgl2."' 
     AND over_time_member.nik IS NOT NULL 
     AND over_time.deleted_at IS NULL 
+    and jam_aktual = 0
     GROUP BY
     over_time_member.nik,
     over_time.tanggal 
