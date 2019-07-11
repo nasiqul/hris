@@ -210,9 +210,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
         for(var i = 0; i < data[0].length; i++){
           cat = data[0][i][1];
-          tot_budget += data[0][i][5];
+          tot_budget += data[0][i][2];
           tot_act += data[0][i][3];
-          tot_day_budget += data[0][i][2];
+          tot_day_budget += data[0][i][5];
           // seriesDataBudget.push(data[0][i][2]);
           seriesDataBudget.push(Math.round(data[0][i][2] * 100) / 100);
           seriesDataAktual.push(data[0][i][3]);
