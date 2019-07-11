@@ -63,18 +63,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <div class="col-md-12">
                   <div class="row">
                     <div class="col-md-12">
-                     <!--  <div class="col-md-3">
-                        <div class="description-block border-right" style="color: #02ff17">
-                          <h5 class="description-header" style="font-size: 58px;">
-                            <span class="description-percentage" id="tot_day_budget"></span>
-                          </h5>      
-                          <span class="description-text" style="font-size: 35px;">Total Forecast<br><span >累計見込み</span></span>   
-                        </div>
-                      </div> -->
 
-                      <div class="col-md-3">
+                      <div class="col-md-2">
                         <div class="description-block border-right" style="color: #f76111">
-                          <h5 class="description-header" style="font-size: 58px;">
+                          <h5 class="description-header" style="font-size: 50px;">
                             <span class="description-percentage" id="tot_budget"></span>
                           </h5>      
                           <span class="description-text" style="font-size: 35px;">Total Budget<br><span >総予算</span></span>   
@@ -82,26 +74,35 @@ scratch. This page gets rid of all links and provides the needed markup only.
                       </div>
                       
                       <div class="col-md-3">
+                        <div class="description-block border-right" style="color: #02ff17">
+                          <h5 class="description-header" style="font-size: 50px;">
+                            <span class="description-percentage" id="tot_day_budget"></span>
+                          </h5>      
+                          <span class="description-text" style="font-size: 35px;">Total Forecast<br><span >累計見込み</span></span>   
+                        </div>
+                      </div>
+
+                      <div class="col-md-3">
                         <div class="description-block border-right" style="color: #7300ab" >
-                          <h5 class="description-header" style="font-size: 58px; ">
+                          <h5 class="description-header" style="font-size: 50px; ">
                             <span class="description-percentage" id="tot_act"></span>
                           </h5>      
                           <span class="description-text" style="font-size: 35px;">Total Actual<br><span >総実績</span></span>   
                         </div>
                       </div>
-                      <div class="col-md-3">
+                      <div class="col-md-2">
                         <div class="description-block border-right text-green" id="diff_text">
-                          <h5 class="description-header" style="font-size: 58px;">
+                          <h5 class="description-header" style="font-size: 50px;">
                             <span class="description-percentage" id="tot_diff"></span>
                           </h5>      
                           <span class="description-text" style="font-size: 35px;">Difference</span>
-                          <br><span class="description-text" style="font-size: 18px">(BDG-ACT)</span>
+                          <br><span class="description-text" style="font-size: 18px">(FQ-ACT)</span>
                           <br><span class="description-text" style="font-size: 35px;">差異</span>   
                         </div>
                       </div>
-                      <div class="col-md-3">
+                      <div class="col-md-2">
                         <div class="description-block border-right text-yellow">
-                          <h5 class="description-header" style="font-size: 58px;">
+                          <h5 class="description-header" style="font-size: 50px;">
                             <span class="description-percentage" id="avg"></span>
                           </h5>      
                           <span class="description-text" style="font-size: 35px;">Average<br><span >平均</span></span>   
@@ -209,11 +210,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
         for(var i = 0; i < data[0].length; i++){
           cat = data[0][i][1];
-          tot_budget += data[0][i][2];
+          tot_budget += data[0][i][5];
           tot_act += data[0][i][3];
-          tot_day_budget += data[0][i][5];
+          tot_day_budget += data[0][i][2];
           // seriesDataBudget.push(data[0][i][2]);
-          seriesDataBudget.push(Math.round(data[0][i][5] * 100) / 100);
+          seriesDataBudget.push(Math.round(data[0][i][2] * 100) / 100);
           seriesDataAktual.push(data[0][i][3]);
           budgetHarian.push(Math.round(data[0][i][2] * 100) / 100);
           if(xCategories.indexOf(cat) === -1){
@@ -234,8 +235,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
        var tot_diff2 = tot_diff.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
 
-       $("#tot_budget").text(tot_day_budget2);
-       // $("#tot_day_budget").text(tot_day_budget2);
+       $("#tot_budget").text(tot_budget2);
+       $("#tot_day_budget").text(tot_day_budget2);
        $("#tot_act").text(tot_act2);
 
        if (tot_diff > 0) {
