@@ -459,6 +459,7 @@ class Over_model_new extends CI_Model {
         AND over_time_member.nik IS NOT NULL 
         AND over_time.deleted_at IS NULL 
         and over_time.tanggal <='".$tgl."'
+        and jam_aktual = 0
         GROUP BY
         over_time_member.nik,
         over_time.tanggal 
