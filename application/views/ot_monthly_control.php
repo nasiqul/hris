@@ -374,8 +374,8 @@ for (var i = 0; i <= cumulativeData2.length; i++) {
         },
         title: {
           text: monthNames[date.getMonth()]+" "+ date.getFullYear()
-       },
-       xAxis: {
+        },
+        xAxis: {
          categories: xCategories
        },
        yAxis: {
@@ -415,9 +415,8 @@ for (var i = 0; i <= cumulativeData2.length; i++) {
 },
 series: seriesData
 });
-       setTimeout(postTgl, 30000);
-     },
-     cache: false
+       
+     }
    });
 }
 

@@ -37,12 +37,12 @@
 
     <?php } else if(isset($i)) { ?>
       <li class="header">Manpower Overtime</li>
-      <li class="<?php if($menu == 'ovrMoC') echo 'active'?>"><a href="<?php echo base_url('management'); ?>"><i class="fa fa-bar-chart"></i><span>Monthly Overtime Control</span></a></li>
+      <li class="<?php if($menu == 'OT-new') echo 'active'?>"><a href="<?php echo base_url('management'); ?>"><i class="fa fa-bar-chart"></i><span>Monthly Overtime Control</span></a></li>
       <li class="<?php if($menu == 'ovrMon') echo 'active'?>"><a href="<?php echo base_url('management/monthlyMon'); ?>"><i class="fa fa-bar-chart"></i><span>Overtime Monthly Monitor</span></a></li>
       <li class="<?php if($menu == 'OT-m') echo 'active'?>"><a href="<?php echo base_url('management/ot_m'); ?>"><i class="fa fa-bar-chart"></i><span>OT Management By Section</span></a></li>
       <li class="<?php if($menu == 'ovrR2') echo 'active'?>"><a href="<?php echo base_url('management/ot_report2'); ?>"><i class="fa fa-book"></i><span>OT Management By NIK</span></a></li>
       <li class="<?php if($menu == 'ovrMo') echo 'active'?>"><a href="<?php echo base_url('management/monthly'); ?>"><i class="fa fa-book"></i><span>Monthly Overtime Summary</span></a></li>
-      <li class="<?php if($menu == 'OT-new') echo 'active'?>"><a href="<?php echo base_url('management/overtime_control'); ?>"><i class="fa fa-bar-chart"></i><span>Overtime Control</span></a></li>
+      <li class="<?php if($menu == 'ovrMoC') echo 'active'?>"><a href="<?php echo base_url('management/overtime_control'); ?>"><i class="fa fa-bar-chart"></i><span>Overtime Control</span></a></li>
 
     <?php } else if(isset($z)) { ?>
       <li class="header">ManPower Information</li>
