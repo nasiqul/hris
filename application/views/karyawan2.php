@@ -30,7 +30,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <section class="content container-fluid">
         <br>
         <div class="col-md-12">
-          
+
           <div class="box box-solid">
             <div class="box-body">
               <div class="row">
@@ -147,6 +147,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 <p class="text-muted">Sub Section</p>
                                 <p id="sub-sec">scc</p>
 
+                                <p class="text-muted">Cost Center</p>
+                                <p id="costC"></p>
+
                               </div>
                               <div class="col-md-6">
                                 <p class="text-muted">Group</p>
@@ -185,9 +188,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
                               <div class="col-md-6">
                                 <p class="text-muted">Pin</p>
                                 <p id="pin"></p>
-
-                                <p class="text-muted">Cost Center</p>
-                                <p id="costC"></p>
 
                               </div>
                             </div>
@@ -799,7 +799,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     var cc2 = $('#costC').text();
     $('#costC').text('').append($('<input />',
     {
-      'value' : cc2, 
+      'value' : cc2,
       'type' : 'text', 
       'class' : 'form-control', 
       'id' : 'txtCC'}
