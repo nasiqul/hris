@@ -97,18 +97,16 @@ class Over_report_model extends CI_Model {
 
     private function _get_datatables_query2()
     {
-        $this->db->select('DATE_FORMAT(d.tanggal, "%M %Y") as period, d.nik, k.namaKaryawan, concat(dp.nama,"-",IF(sc.nama,sc.nama,""),"/", k.kode) as bagian, total_jam');
-        $this->db->from("(
-            select tanggal, nik, sum(jam) as total_jam from over
-            group by DATE_FORMAT(tanggal, '%M %Y'),nik
-        ) as d");
-        $this->db->join("karyawan k","d.nik = k.nik","left");
-        $this->db->join("posisi p","p.nik = d.nik","left");
-        $this->db->join("departemen dp","dp.id = p.id_dep", "left");
-        $this->db->join("section sc","sc.id = p.id_sec", "left");
-        $this->db->where("total_jam <> 0");
-        $this->db->order_by("period","DESC");
-
+        $this->db->select('ovr.period, ovr.nik, emp.`name`, department, section, ovr.final_jam');
+        $this->db->from("(select DATE_FORMAT(tanggal, '%Y-%m') period, nik, SUM(IF(status = 1, final, jam)) as final_jam from over_time_member 
+            join over_time on over_time.id = over_time_member.id_ot
+            where deleted_at is null
+            and jam_aktual = 0
+            group by nik, DATE_FORMAT(tanggal, '%Y-%m')
+        ) ovr");
+        $this->db->join("ympimis.employees emp","emp.employee_id = ovr.nik","left");
+        $this->db->join("(select employee_id, department, section from ympimis.mutation_logs where valid_to is null) mutation","mutation.employee_id = ovr.nik","left");
+        $this->db->order_by('period desc, final_jam desc'); 
 
         $i = 0;
 

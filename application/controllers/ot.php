@@ -555,11 +555,10 @@ class Ot extends CI_Controller {
 				$row = array();
 				$row[] = $key->period;
 				$row[] = $key->nik;
-				$row[] = $key->namaKaryawan;
-				$row[] = $key->bagian;
-				$row[] = $key->total_jam;
-				// $row[] = "<button class='btn btn-primary btn-xs' onclick='
-				// detail2(\"".$key->nik."\",\"".$key->period."\",\"".$key->namaKaryawan."\")'>Detail</button>";
+				$row[] = $key->name;
+				$row[] = $key->department;
+				$row[] = $key->section;
+				$row[] = $key->final_jam;
 
 				$row[] = "<a class='btn btn-primary btn-sm' href='".base_url('home/detailSPL/'.$key->nik."/".$key->period)."'> Detail </a>";
 

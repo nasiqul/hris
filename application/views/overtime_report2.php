@@ -46,8 +46,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <tr>
                     <th>Period</th>
                     <th>NIK</th>
-                    <th>Nama</th>
-                    <th>Bagian</th>
+                    <th>Employee Name</th>
+                    <th>Department</th>
+                    <th>Section</th>
                     <th>Total</th>
                     <th>Aksi</th>
                   </tr>
