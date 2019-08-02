@@ -30,11 +30,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
         <div class="col-md-12">
           <div class="alert alert-success alert-dismissible" id="notif2" onclick="check(this)" style="cursor: pointer;" <?php if (!isset($_SESSION['status'])) echo "hidden"; else if ($_SESSION['status'] != 'sukses') echo "hidden"; ?>>
-            <h4><i class="icon fa fa-thumbs-o-up"></i> Upload Berhasil</h4>
+            <h4><i class="icon fa fa-thumbs-o-up"></i> Import Berhasil</h4>
           </div>
 
           <div class="alert alert-danger alert-dismissible" id="notif3" onclick="check(this)" style="cursor: pointer;" <?php if (!isset($_SESSION['status'])) echo "hidden"; else if ($_SESSION['status'] != 'gagal') echo "hidden"; ?>>
-            <h4><i class="icon fa fa-thumbs-o-down"></i> Upload Gagal</h4>
+            <h4><i class="icon fa fa-thumbs-o-down"></i> Import Gagal</h4>
           </div>
         </div>
 
@@ -85,6 +85,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i> <span>Search</span></button>
                 <a class="btn btn-warning" id="reset" href="<?php echo base_url('home/session_destroy') ?>" ><i class="fa fa-refresh"></i> Reset</a>
                 <button class="btn btn-success btn-sm pull-right" type="button" id="import2" onclick="openModal2()"  style="margin-right: 3px"><i class="fa fa-arrow-down"></i> input presensi driver</button>
+                <a href="<?php echo base_url() ?>app/excel/os_drv_presensi.xls" class="pull-right" style="margin-right: 10px; text-decoration: underline;">Format</a>
               </div>
             </form>
           </div>
@@ -142,7 +143,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-success">Save</button>
+                    <button type="submit" class="btn btn-success">Import</button>
                   </div>
                 </form> 
               </div>
@@ -194,24 +195,24 @@ scratch. This page gets rid of all links and provides the needed markup only.
     }
 
 
-  $('#datepicker').datepicker({
-    autoclose: true,
-    format: 'dd/mm/yyyy',
-  })
+    $('#datepicker').datepicker({
+      autoclose: true,
+      format: 'dd/mm/yyyy',
+    })
 
-  $('.datepicker').datepicker({
-    autoclose: true,
-    format: "mm-yyyy",
-    viewMode: "months", 
-    minViewMode: "months"
-  })
+    $('.datepicker').datepicker({
+      autoclose: true,
+      format: "mm-yyyy",
+      viewMode: "months", 
+      minViewMode: "months"
+    })
 
-  $('.timepicker').timepicker({
-    showInputs: false,
-    showMeridian: false,
-    defaultTime: '0:00',
-  });
-</script>
+    $('.timepicker').timepicker({
+      showInputs: false,
+      showMeridian: false,
+      defaultTime: '0:00',
+    });
+  </script>
 
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the
