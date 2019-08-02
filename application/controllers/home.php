@@ -17,6 +17,7 @@ class Home extends CI_Controller {
         $this->load->model('over_model');
         $this->load->model('over_model_new');
         $this->load->model('budget_model');
+        $this->load->model('os_model');
     }
 
     public function index()
@@ -375,10 +376,19 @@ class Home extends CI_Controller {
 
             $this->session->set_userdata($newdata);
         }
+
         $data['parentMenu'] = $this->home_model->getParentMenu();
         $data['menu2'] = 'Presence';
         $data['menu'] = 'Presence Data';
         $this->load->view('index',$data);
+    }
+
+    public function presensi_os()
+    {
+        $data['parentMenu'] = $this->home_model->getParentMenu();
+        $data['menu2'] = 'Presence';
+        $data['menu'] = 'Outsource Presence';
+        $this->load->view('presence_outsource',$data);
     }
 
     public function presensi_graph()
@@ -721,9 +731,9 @@ public function ajax_presensi_shift()
       }
   }
   else
-     $result[] = json_decode ("{}");
+   $result[] = json_decode ("{}");
 
- echo json_encode($result);
+echo json_encode($result);
 }
 
 public function ajax_emp_keluarga()
@@ -1336,6 +1346,42 @@ public function get_total_emp()
     );
 
     echo json_encode($response);
+}
+
+public function ajax_outsource()
+{
+    $list = $this->os_model->get_data_persensi();
+    $tot = $this->os_model->count_all();
+    $filter = $this->os_model->count_filtered();
+
+
+    $data = array();
+    foreach ($list as $key) {
+        $row = array();
+        $row[] = date('j M Y', strtotime($key->tanggal));
+        $row[] = $key->nik;
+        $row[] = $key->namaKaryawan;
+        $row[] = $key->sec." - ".$key->subsec." - ".$key->grup;
+        if ($key->masuk == '') 
+            $row[] = '';
+        else
+            $row[] = $key->masuk;
+        if ($key->keluar == '') 
+            $row[] = '';
+        else
+            $row[] = $key->keluar;
+
+        $data[] = $row;
+    }
+
+    $output = array(
+        "draw" => $_POST['draw'],
+        "recordsTotal" => $tot,
+        "recordsFiltered" => $filter,
+        "data" => $data,
+    );
+            //output to json format
+    echo json_encode($output);
 }
 
 }

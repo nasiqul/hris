@@ -211,5 +211,27 @@ class Export_model extends CI_Model {
 		$this->db->where('tanggal', $tgl);
 		$this->db->delete('presensi');
 	}
+
+
+	public function export_presensi_drv($big_data)
+	{
+		$sql = array(); 
+		foreach ($big_data as $datas) {
+			// foreach($datas as $row) {
+			
+			$sql[] = '("","'.$datas['nik'].'", "'.$datas['tgl'].'", "'.$datas['masuk'].'", "'.$datas['keluar'].'")';
+			// }
+		}
+		// print_r($sql);
+
+		$this->db->query('INSERT INTO presensi_os (id, nik, tanggal, masuk, keluar) VALUES '.implode(',', $sql));
+
+	}
+
+	public function deletePresensiOS($tgl)
+	{
+		$this->db->where('tanggal', $tgl);
+		$this->db->delete('presensi_os');
+	}
 }
 ?>

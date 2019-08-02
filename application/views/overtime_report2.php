@@ -111,7 +111,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <script>
     var table;
     $(document).ready(function() {
-
       table = $('#example1').DataTable({
         "lengthMenu"    : [[10, 25, 50, -1], [10, 25, 50, "All"]],
         "processing"    : true,
