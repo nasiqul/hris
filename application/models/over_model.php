@@ -844,27 +844,20 @@ public function set_jam($id, $nik, $jam)
 public function get_data_chart($tgl,$cc,$tgl2)
 {
     $q = "
-    select m.id_cc, d.tanggal,  COALESCE(x.act,0) act, ROUND(m.budget_tot,2) as budget_tot from ( select id_cc, (budget_total / DATE_FORMAT(LAST_DAY('".$tgl."'),'%d')) budget_tot from cost_center_budget where DATE_FORMAT(period,'%Y-%m') = '".$tgl2."' and id_cc = ".$cc." ) m
-    cross join 
-    (
-    select tanggal from over
-    where DATE_FORMAT(tanggal,'%Y-%m') = '".$tgl2."'
-    group by tanggal
-    ) as d left join 
-    (
-    select d.tanggal, sum(jam) as act, karyawan.costCenter from
-    (select nik, tanggal, jam from over where DATE_FORMAT(tanggal,'%Y-%m') = '".$tgl2."' and jam <> 0) d
-    left join karyawan on karyawan.nik = d.nik
-    where costCenter = ".$cc."
-    group by tanggal
-    ) x on x.costCenter = m.id_cc and x.tanggal = d.tanggal
-    where d.tanggal <= '".$tgl."'";
+    select week_date, COALESCE(jam,0) act, ".$cc." cost_center, round((select (budget / DATE_FORMAT(LAST_DAY('".$tgl."'),'%d')) budget_tot from ympimis.budgets where DATE_FORMAT(period,'%Y-%m') = '".$tgl2."' and cost_center = ".$cc." ),2) as budget_total from
+(select ovr.tanggal, sum(ovr.jam) as jam, cost_center from 
+(select nik, tanggal, sum(IF(status = 0, jam, final)) as jam from over_time_member left join over_time on over_time.id = over_time_member.id_ot where DATE_FORMAT(tanggal,'%Y-%m') = '".$tgl2."' and tanggal <= '".$tgl."' and deleted_at is null and jam_aktual = 0
+group by nik, tanggal) ovr
+left join (select employee_id, cost_center from ympimis.mutation_logs where valid_to is null) cc on cc.employee_id = ovr.nik
+where jam > 0 and cost_center = ".$cc."
+group by tanggal) as overtime right join 
+(select week_date from ympimis.weekly_calendars where DATE_FORMAT(week_date,'%Y-%m') = '".$tgl2."' and week_date <= '".$tgl."') cal on cal.week_date = overtime.tanggal";
     return $this->db->query($q)->result();
 }
 
 public function get_budget_g($tanggal, $tanggal2, $cc)
 {
-    $q = "select id_cc, (budget_total / DATE_FORMAT(LAST_DAY('".$tanggal."'),'%d')) budget_tot from cost_center_budget where DATE_FORMAT(period,'%Y-%m') = '".$tanggal2."' and id_cc = ".$cc."";
+    $q = "select (budget / DATE_FORMAT(LAST_DAY('".$tanggal."'),'%d')) budget_total from ympimis.budgets where DATE_FORMAT(period,'%Y-%m') = '".$tanggal2."' and cost_center = ".$cc;
     return $this->db->query($q)->result();
 }
 

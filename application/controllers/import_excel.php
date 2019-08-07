@@ -146,10 +146,12 @@ class import_excel extends CI_Controller {
                 if (strlen($row) > 0) {
                     $row = explode("\t", $row);
                     $daily_data = Array(
-                        'nik' => $row[0],
-                        'tgl'    => date('Y-m-d' , strtotime($row[1])),
-                        'masuk'       => $row[2],
-                        'keluar'       => $row[3]
+                        'pin' => $row[0],
+                        'nik' => $row[1],
+                        'tgl'    => date('Y-m-d' , strtotime($row[2])),
+                        'masuk'       => $row[3],
+                        'keluar'       => $row[4],
+                        'shift'       => $row[5]
                     );
 
                     array_push($big_data,$daily_data);
@@ -159,7 +161,7 @@ class import_excel extends CI_Controller {
             $this->export_model->export_presensi_drv($big_data);
 
             $this->session->set_flashdata('status', 'sukses');
-            redirect("home/presensi");
+            redirect("home/presensi_os");
         }
 
         public function updatedataover($tgl)

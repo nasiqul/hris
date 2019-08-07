@@ -407,15 +407,15 @@ class Ot extends CI_Controller {
 			foreach ($list as $key) {
 				$row = array();
 				$row[] = (float) $key->act;
-				$row[] = date("d/m",strtotime($key->tanggal));
-				$row[] = (float) $key->budget_tot;
+				$row[] = date("d/m",strtotime($key->week_date));
+				$row[] = (float) $key->budget_total;	
 
 				$data[] = $row;
 			}
 
 		} else {
 			$list2 = $this->over_model->get_budget_g($tgl, $tgl2, $cc);
-			$data[] = array(0,date("d/m",strtotime($tgl)), $list2[0]->budget_tot);
+			$data[] = array(0,date("d/m",strtotime($tgl)), $list2[0]->budget_total);
 		}
 		echo json_encode($data);
 	}

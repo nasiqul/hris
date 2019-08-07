@@ -302,7 +302,6 @@
 						console.log(target);
 
 
-
 						var charts = $('#container').highcharts({
 
 							chart:

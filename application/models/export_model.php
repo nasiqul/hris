@@ -217,12 +217,9 @@ class Export_model extends CI_Model {
 	{
 		$sql = array(); 
 		foreach ($big_data as $datas) {
-			// foreach($datas as $row) {
 			
-			$sql[] = '("","'.$datas['nik'].'", "'.$datas['tgl'].'", "'.$datas['masuk'].'", "'.$datas['keluar'].'")';
-			// }
+			$sql[] = '("","'.$datas['pin'].'", "'.$datas['nik'].'", "'.$datas['tgl'].'", "'.$datas['masuk'].'", "'.$datas['keluar'].'", "'.$datas['shift'].'")';
 		}
-		// print_r($sql);
 
 		$this->db->query('INSERT INTO presensi_os (id, nik, tanggal, masuk, keluar) VALUES '.implode(',', $sql));
 
