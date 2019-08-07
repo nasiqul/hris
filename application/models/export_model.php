@@ -221,7 +221,7 @@ class Export_model extends CI_Model {
 			$sql[] = '("","'.$datas['pin'].'", "'.$datas['nik'].'", "'.$datas['tgl'].'", "'.$datas['masuk'].'", "'.$datas['keluar'].'", "'.$datas['shift'].'")';
 		}
 
-		$this->db->query('INSERT INTO presensi_os (id, nik, tanggal, masuk, keluar) VALUES '.implode(',', $sql));
+		$this->db->query('INSERT INTO presensi_os (id, pin, nik, tanggal, masuk, keluar,shift) VALUES '.implode(',', $sql));
 
 	}
 
