@@ -83,7 +83,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <div class="box-footer">
                 <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i> <span>Search</span></button>
                 <a class="btn btn-warning" id="reset" href="<?php echo base_url('home/session_destroy') ?>" ><i class="fa fa-refresh"></i> Reset</a>
-                <button class="btn btn-success btn-sm pull-right" type="button" id="import2" onclick="openModal2()"  style="margin-right: 3px"><i class="fa fa-arrow-down"></i> input presensi driver</button>
+                <button class="btn btn-success btn-sm pull-right" type="button" id="import2" onclick="openModal2()"  style="margin-right: 3px"><i class="fa fa-arrow-down"></i> input presensi driver OS</button>
                 <!-- <a href="<?php echo base_url() ?>app/excel/os_drv_presensi.xls" class="pull-right" style="margin-right: 10px; text-decoration: underline;">Format</a> -->
               </div>
             </form>
