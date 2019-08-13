@@ -145,19 +145,21 @@
 				<div style="width: 50%" class="pull-right">
 					<table width="100%" border="1px" id="tb-collapse" style="background-color: #dddddd">
 						<tr>
-							<td width="33%">Diketahui,</td>
-							<td width="33%">Desetujui,</td>
-							<td width="34%">Diketahui,</td>
+							<td width="25%">Diketahui,</td>
+							<td width="25%">Desetujui,</td>
+							<td width="25%">Desetujui,</td>
+							<td width="25%">Diketahui,</td>
 						</tr>
 						<tr>
 							<td>Dept. Manager</td>
+							<td>DGM Division</td>
 							<td>GM Division</td>
 							<td>HR Director</td>
 						</tr>
 						<tr>
 							<td height="92px"></td><td></td><td></td>
 						</tr>
-						<tr><td style="text-align: left;">tgl. </td><td style="text-align: left;">tgl. </td><td style="text-align: left;">tgl. </td></tr>
+						<tr><td style="text-align: left;">tgl. </td><td style="text-align: left;">tgl. </td><td style="text-align: left;">tgl. </td><td style="text-align: left;">tgl. </td></tr>
 					</table>
 				</div>
 			</div>
