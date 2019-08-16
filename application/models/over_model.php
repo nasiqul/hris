@@ -1024,7 +1024,7 @@ public function multiot_cc($id,$tgl,$tgl2)
     left join 
     (
     select d.tanggal, sum(jam) as act, karyawan.costCenter from
-    (select nik, tanggal, jam from over where DATE_FORMAT(tanggal,'%Y-%m') = '".$tgl2."' and jam <> 0) d
+    (select nik, tanggal, if(status = 1, final, jam) jam from over_time left join over_time_member on over_time.id = over_time_member.id_ot where deleted_at is null and jam_aktual = 0 and DATE_FORMAT(tanggal,'%Y-%m') = '".$tgl2."') d
     left join karyawan on karyawan.nik = d.nik
     where karyawan.costCenter IN (".$id.")
     group by tanggal, costCenter
