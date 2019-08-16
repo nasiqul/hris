@@ -146,8 +146,8 @@
 					<table width="100%" border="1px" id="tb-collapse" style="background-color: #dddddd">
 						<tr>
 							<td width="25%">Diketahui,</td>
-							<td width="25%">Desetujui,</td>
-							<td width="25%">Desetujui,</td>
+							<td width="25%">Disetujui,</td>
+							<td width="25%">Disetujui,</td>
 							<td width="25%">Diketahui,</td>
 						</tr>
 						<tr>
