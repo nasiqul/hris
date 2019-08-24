@@ -1001,7 +1001,7 @@ public function multiot2($id)
     left join group1 on over_time.sub_sec = group1.id
     join over_time_member on over_time_member.id_ot = over_time.id
     left join karyawan on karyawan.nik = over_time_member.nik
-    where over_time.id IN (".$id.")
+    where over_time.id IN (".$id.") and jam_aktual = 0
     group by id";
 
     $query = $this->db->query($q);
