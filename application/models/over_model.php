@@ -595,7 +595,7 @@ class Over_model extends CI_Model {
         $q = "select n.*, z.act from 
         (
         select d.id_cc, d.period, (d.budget * m.karyawan) as tot_budget from (
-        select id_cc, period, budget from cost_center_budget where date_format(period, '%Y-%m') = '".$tgl."'
+        select cost_center as id_cc, period, budget from ympimis.budgets where date_format(period, '%Y-%m') = '".$tgl."'
         ) d
         left join
         (
