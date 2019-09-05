@@ -605,7 +605,7 @@ class Over_model_new extends CI_Model {
         left join posisi on posisi.nik = d.nik
         left join section on section.id = posisi.id_sec
         left join sub_section on sub_section.id = posisi.id_sub_sec
-        left join satuan_lembur on satuan_lembur.jam = d.final and satuan_lembur.hari = d.hari
+        left join satuan_lembur on satuan_lembur.jam = IF(d.final <> 0, d.final, d.jam) and satuan_lembur.hari = d.hari
         order by d.tanggal asc, nik asc";
 
         $query = $this->db->query($q);
