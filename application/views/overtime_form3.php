@@ -241,6 +241,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     var nomorali = 0;
     var idDoc;
     var sec = 0;
+    var hari2 = 'N';
 
     var no = 1;
     var hari = 'N';
@@ -634,7 +635,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             'kep': kep,
             'cat': cat,
             'subsec' : subsec,
-            'hari' : hari,
+            'hari' : hari2,
             'grup' : group4,
             'shift' : shift
           },
@@ -770,12 +771,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
       if(isChecked)
       {
         if (hari == "N")
-          var hari2 = "L";
+          hari2 = "L";
         else
-          var hari2 = "L";
+          hari2 = "L";
       }
       else
-        var hari2 = "N";
+        hari2 = "N";
     } 
     else if (idShift == 3 || isChecked2 || sec == 7) {
       var isChecked = $('#libur').is(':checked');
@@ -783,17 +784,17 @@ scratch. This page gets rid of all links and provides the needed markup only.
       if(isChecked)
       {
         if (hari == "N")
-          var hari2 = "L";
+          hari2 = "L";
         else
-          var hari2 = "L";
+          hari2 = "L";
       }
       else
-        var hari2 = "N";
+        hari2 = "N";
     }
 
     else {
       $('#libur2').css('display','none');
-      var hari2 = hari;
+      hari2 = hari;
 
     }
     $("#textHari").text(hari2);
