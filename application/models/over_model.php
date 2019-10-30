@@ -112,75 +112,75 @@ class Over_model extends CI_Model {
     {
         $this->db->select("b.*, count(b.nik) as jml");
         $this->db->from("
-         (
+           (
 
-         select tanggal, nik,nama,masuk,keluar,id,shift,status,jam,final,id_jam,jam_lembur, IFNULL(aktual, 0) as aktual, IFNULL(diff, 0) as diff, IFNULL(final2, 0) as final2, hari from 
+           select tanggal, nik,nama,masuk,keluar,id,shift,status,jam,final,id_jam,jam_lembur, IFNULL(aktual, 0) as aktual, IFNULL(diff, 0) as diff, IFNULL(final2, 0) as final2, hari from 
 
 
-         (select tanggal,c.nik1 as nik, d.namaKaryawan as nama, masuk, keluar, id, shift, c.status, jam, final, c.id_jam, c.jam_lembur, hari, 
-         (IF(hari = 'L',
-         floor((TIME_TO_SEC(TIMEDIFF(concat('2010-08-20 ',keluar), concat('2010-08-20 ',masuk)))) / 60 / 60 * 2) / 2, 
-         IF(shift = 1,
-         floor((
+           (select tanggal,c.nik1 as nik, d.namaKaryawan as nama, masuk, keluar, id, shift, c.status, jam, final, c.id_jam, c.jam_lembur, hari, 
+           (IF(hari = 'L',
+           floor((TIME_TO_SEC(TIMEDIFF(concat('2010-08-20 ',keluar), concat('2010-08-20 ',masuk)))) / 60 / 60 * 2) / 2, 
+           IF(shift = 1,
+           floor((
 
-         IF(c.jam_lembur = 'Awal',0,
-         IF(DATE_FORMAT(tanggal,'%a') = 'Fri',
-         (TIME_TO_SEC(TIMEDIFF(concat('2010-08-20 ',keluar), '2010-08-20 16:30:00'))),
-         (TIME_TO_SEC(TIMEDIFF(concat('2010-08-20 ',keluar), '2010-08-20 16:00:00'))))
-         )
-         + 
+           IF(c.jam_lembur = 'Awal',0,
+           IF(DATE_FORMAT(tanggal,'%a') = 'Fri',
+           (TIME_TO_SEC(TIMEDIFF(concat('2010-08-20 ',keluar), '2010-08-20 16:30:00'))),
+           (TIME_TO_SEC(TIMEDIFF(concat('2010-08-20 ',keluar), '2010-08-20 16:00:00'))))
+           )
+           + 
 
-         IF(c.jam_lembur = 'Awal',(TIME_TO_SEC(TIMEDIFF('2010-08-20 07:00:00' , concat('2010-08-20 ',masuk)))),0)
-         )/ 60 / 60 * 2) / 2
-         , IF(shift = 2,
-         floor((IF(c.jam_lembur = 'Awal',0,
-         IF(DATE_FORMAT(tanggal,'%a') = 'Fri'
-         ,(TIME_TO_SEC(TIMEDIFF(concat('2010-08-20 ',keluar), '2010-08-20 00:45:00')))
-         ,(TIME_TO_SEC(TIMEDIFF(concat('2010-08-20 ',keluar), '2010-08-20 00:15:00'))))
-         )
+           IF(c.jam_lembur = 'Awal',(TIME_TO_SEC(TIMEDIFF('2010-08-20 07:00:00' , concat('2010-08-20 ',masuk)))),0)
+           )/ 60 / 60 * 2) / 2
+           , IF(shift = 2,
+           floor((IF(c.jam_lembur = 'Awal',0,
+           IF(DATE_FORMAT(tanggal,'%a') = 'Fri'
+           ,(TIME_TO_SEC(TIMEDIFF(concat('2010-08-20 ',keluar), '2010-08-20 00:45:00')))
+           ,(TIME_TO_SEC(TIMEDIFF(concat('2010-08-20 ',keluar), '2010-08-20 00:15:00'))))
+           )
 
-         + 
+           + 
 
-         IF(c.jam_lembur = 'Awal',
-         IF(DATE_FORMAT(tanggal,'%a') = 'Fri'
-         ,(TIME_TO_SEC(TIMEDIFF('2010-08-20 16:30:00' , concat('2010-08-20 ',masuk))))
-         ,(TIME_TO_SEC(TIMEDIFF('2010-08-20 16:00:00' , concat('2010-08-20 ',masuk)))))                          
-         ,0)
+           IF(c.jam_lembur = 'Awal',
+           IF(DATE_FORMAT(tanggal,'%a') = 'Fri'
+           ,(TIME_TO_SEC(TIMEDIFF('2010-08-20 16:30:00' , concat('2010-08-20 ',masuk))))
+           ,(TIME_TO_SEC(TIMEDIFF('2010-08-20 16:00:00' , concat('2010-08-20 ',masuk)))))                          
+           ,0)
 
-         )/ 60 / 60 * 2) / 2
-         , IF(shift = 3,
-         floor((IF(c.jam_lembur = 'Awal',0,
-         IF(DATE_FORMAT(tanggal,'%a') = 'Fri'
-         ,(TIME_TO_SEC(TIMEDIFF(concat('2010-08-20 ',keluar), '2010-08-20 07:40:00')))
-         ,(TIME_TO_SEC(TIMEDIFF(concat('2010-08-20 ',keluar), '2010-08-20 07:10:00'))))
-         )
+           )/ 60 / 60 * 2) / 2
+           , IF(shift = 3,
+           floor((IF(c.jam_lembur = 'Awal',0,
+           IF(DATE_FORMAT(tanggal,'%a') = 'Fri'
+           ,(TIME_TO_SEC(TIMEDIFF(concat('2010-08-20 ',keluar), '2010-08-20 07:40:00')))
+           ,(TIME_TO_SEC(TIMEDIFF(concat('2010-08-20 ',keluar), '2010-08-20 07:10:00'))))
+           )
 
-         + 
+           + 
 
-         IF(c.jam_lembur = 'Awal',(TIME_TO_SEC(TIMEDIFF('2010-08-20 00:00:00' , concat('2010-08-20 ',masuk)))),0)
-         )/ 60 / 60 * 2) / 2
-         , 0)))
-         ) - (SELECT istirahat from master_lembur where id = c.id_jam))
+           IF(c.jam_lembur = 'Awal',(TIME_TO_SEC(TIMEDIFF('2010-08-20 00:00:00' , concat('2010-08-20 ',masuk)))),0)
+           )/ 60 / 60 * 2) / 2
+           , 0)))
+           ) - (SELECT istirahat from master_lembur where id = c.id_jam))
 
-         as aktual, 
-         ((SELECT aktual) - jam) as diff,
-         IF((SELECT aktual) > jam , 
-         IF(final <> 0, ROUND((SELECT final), 1) , ROUND(jam, 1))
-         , ROUND((SELECT aktual), 1))
-         as final2
+           as aktual, 
+           ((SELECT aktual) - jam) as diff,
+           IF((SELECT aktual) > jam , 
+           IF(final <> 0, ROUND((SELECT final), 1) , ROUND(jam, 1))
+           , ROUND((SELECT aktual), 1))
+           as final2
 
-         from (SELECT * from (
-         SELECT o.tanggal, o.id, b.jam, b.nik as nik1,b.id_jam as id_jam,b.jam_lembur as jam_lembur, b.status as status, final, hari from over_time as o
-         LEFT JOIN over_time_member as b
-         on o.id = b.id_ot
-         ) a
+           from (SELECT * from (
+           SELECT o.tanggal, o.id, b.jam, b.nik as nik1,b.id_jam as id_jam,b.jam_lembur as jam_lembur, b.status as status, final, hari from over_time as o
+           LEFT JOIN over_time_member as b
+           on o.id = b.id_ot
+           ) a
 
-         left join (
-         SELECT presensi.nik,presensi.masuk,presensi.keluar,presensi.tanggal as tanggalpresensi, shift from presensi where presensi.nik in (SELECT over_time_member.nik from over_time_member) and presensi.tanggal in (SELECT over_time.tanggal from over_time)
-         ) b on a.tanggal = b.tanggalpresensi and a.nik1 = b.nik) c
-         left join karyawan d on c.nik = d.nik ) tmp
-         ) as b
-         ");
+           left join (
+           SELECT presensi.nik,presensi.masuk,presensi.keluar,presensi.tanggal as tanggalpresensi, shift from presensi where presensi.nik in (SELECT over_time_member.nik from over_time_member) and presensi.tanggal in (SELECT over_time.tanggal from over_time)
+           ) b on a.tanggal = b.tanggalpresensi and a.nik1 = b.nik) c
+           left join karyawan d on c.nik = d.nik ) tmp
+           ) as b
+           ");
 
         $this->db->where("tanggal = '".$tgl."'");
         $this->db->where("masuk IS NOT NULL");
@@ -580,66 +580,82 @@ class Over_model extends CI_Model {
         return $query->result();
     }
 
-    public function get_member_id($id)
+    public function get_member_id($id,$tgl)
     {
-        $q = "select om.nik, karyawan.namaKaryawan, costCenter, dari, sampai, transport, makan, ext_food, jam from over_time o 
+        // $q = "select om.nik, karyawan.namaKaryawan, costCenter, dari, sampai, transport, makan, ext_food, jam from over_time o 
+        // join over_time_member om on o.id = om.id_ot
+        // left join karyawan on karyawan.nik = om.nik
+        // where o.id = '".$id."' and jam_aktual = 0";
+
+        $tgl2 = date('Y-m-d',strtotime($tgl));
+        $first = date('Y-m-01',strtotime($tgl));
+
+        $q = "select ovr.*, if(mut.position = '-', mut.grade_name, mut.position) grade, IFNULL(ovr_all.jam,0) as jam_all from 
+        (select om.nik, karyawan.namaKaryawan, costCenter, dari, sampai, transport, makan, ext_food, jam from over_time o 
         join over_time_member om on o.id = om.id_ot
         left join karyawan on karyawan.nik = om.nik
-        where o.id = '".$id."' and jam_aktual = 0";
-        $query = $this->db->query($q);
-        return $query->result();
-    }
-
-    public function costCenter($id, $tgl, $fy)
-    {
-        $q = "select n.*, z.act from 
-        (
-        select d.id_cc, d.period, (d.budget * m.karyawan) as tot_budget from (
-        select cost_center as id_cc, period, budget from ympimis.budgets where date_format(period, '%Y-%m') = '".$tgl."'
-        ) d
+        where o.id = '".$id."' and jam_aktual = 0) as ovr left join
+        (select employee_id, grade_name, position from ympimis.promotion_logs where valid_to is null) as mut on ovr.nik = mut.employee_id
         left join
         (
-        select mon, master_cc.id_cc, sum(tot_karyawan) as karyawan from (
-        select mon, costCenter, count(if(if(date_format(a.tanggalMasuk, '%Y-%m') < mon, 1, 0 ) - if(date_format(a.tanggalKeluar, '%Y-%m') < mon, 1, 0 ) = 0, null, 1)) as tot_karyawan from
-        (
-        select distinct fiskal, date_format(tanggal, '%Y-%m') as mon
-        from kalender_fy
-        ) as b
-        join
-        (
-        select '".$fy."' as fy, karyawan.kode, tanggalKeluar, tanggalMasuk, nik, costCenter
-        from karyawan
-        ) as a
-        on a.fy = b.fiskal
-        group by mon, costCenter
-        having mon = '".$tgl."'
-        ) as b 
-        left join master_cc on master_cc.id_cc = b.costCenter
-        GROUP BY mon, master_cc.id_cc
-        ) m on m.id_cc = d.id_cc
-        where d.id_cc = '".$id."'
-        ) n left join (
-        select tanggal, sum(jam) act, costCenter from over
-        left join karyawan on karyawan.nik = over.nik
-        where date_format(tanggal, '%Y-%m') = '".$tgl."' and costCenter='".$id."'
-        group by costCenter
-        ) z on n.id_cc = z.costCenter
-        ";
-        $query = $this->db->query($q);
-        return $query->result();
-    }
+        select nik, SUM(IF(`status` = 1,final,jam)) as jam from over_time left join over_time_member on over_time.id = over_time_member.id_ot
+        where over_time.tanggal >= '".$first."' and over_time.tanggal < '".$tgl2."' and jam_aktual = 0 and deleted_at is null
+        group by nik
+    ) as ovr_all on ovr_all.nik = ovr.nik";
+    $query = $this->db->query($q);
+    return $query->result();
+}
 
-    private function _get_datatables_query2($id)
-    {
-        $this->db->select("o.id as id_over, tanggal, departemen, section, keperluan, catatan, om.*, k.namaKaryawan");
-        $this->db->from('over_time o');
-        $this->db->join("over_time_member om","o.id = om.id_ot");
-        $this->db->join("karyawan k","om.nik = k.nik");
-        $this->db->where("o.id",$id);
-        $this->db->where("om.jam_aktual",0);
+public function costCenter($id, $tgl, $fy)
+{
+    $q = "select n.*, z.act from 
+    (
+    select d.id_cc, d.period, (d.budget * m.karyawan) as tot_budget from (
+    select cost_center as id_cc, period, budget from ympimis.budgets where date_format(period, '%Y-%m') = '".$tgl."'
+    ) d
+    left join
+    (
+    select mon, master_cc.id_cc, sum(tot_karyawan) as karyawan from (
+    select mon, costCenter, count(if(if(date_format(a.tanggalMasuk, '%Y-%m') < mon, 1, 0 ) - if(date_format(a.tanggalKeluar, '%Y-%m') < mon, 1, 0 ) = 0, null, 1)) as tot_karyawan from
+    (
+    select distinct fiskal, date_format(tanggal, '%Y-%m') as mon
+    from kalender_fy
+    ) as b
+    join
+    (
+    select '".$fy."' as fy, karyawan.kode, tanggalKeluar, tanggalMasuk, nik, costCenter
+    from karyawan
+    ) as a
+    on a.fy = b.fiskal
+    group by mon, costCenter
+    having mon = '".$tgl."'
+    ) as b 
+    left join master_cc on master_cc.id_cc = b.costCenter
+    GROUP BY mon, master_cc.id_cc
+    ) m on m.id_cc = d.id_cc
+    where d.id_cc = '".$id."'
+    ) n left join (
+    select tanggal, sum(jam) act, costCenter from over
+    left join karyawan on karyawan.nik = over.nik
+    where date_format(tanggal, '%Y-%m') = '".$tgl."' and costCenter='".$id."'
+    group by costCenter
+    ) z on n.id_cc = z.costCenter
+    ";
+    $query = $this->db->query($q);
+    return $query->result();
+}
+
+private function _get_datatables_query2($id)
+{
+    $this->db->select("o.id as id_over, tanggal, departemen, section, keperluan, catatan, om.*, k.namaKaryawan");
+    $this->db->from('over_time o');
+    $this->db->join("over_time_member om","o.id = om.id_ot");
+    $this->db->join("karyawan k","om.nik = k.nik");
+    $this->db->where("o.id",$id);
+    $this->db->where("om.jam_aktual",0);
 
 
-        $i = 0;
+    $i = 0;
 
         foreach ($this->column_search as $item) // loop column 
         {
@@ -845,13 +861,13 @@ public function get_data_chart($tgl,$cc,$tgl2)
 {
     $q = "
     select week_date, COALESCE(jam,0) act, ".$cc." cost_center, round((select (budget / DATE_FORMAT(LAST_DAY('".$tgl."'),'%d')) budget_tot from ympimis.budgets where DATE_FORMAT(period,'%Y-%m') = '".$tgl2."' and cost_center = ".$cc." ),2) as budget_total from
-(select ovr.tanggal, sum(ovr.jam) as jam, cost_center from 
-(select nik, tanggal, sum(IF(status = 0, jam, final)) as jam from over_time_member left join over_time on over_time.id = over_time_member.id_ot where DATE_FORMAT(tanggal,'%Y-%m') = '".$tgl2."' and tanggal <= '".$tgl."' and deleted_at is null and jam_aktual = 0
-group by nik, tanggal) ovr
-left join (select employee_id, cost_center from ympimis.mutation_logs where valid_to is null) cc on cc.employee_id = ovr.nik
-where jam > 0 and cost_center = ".$cc."
-group by tanggal) as overtime right join 
-(select week_date from ympimis.weekly_calendars where DATE_FORMAT(week_date,'%Y-%m') = '".$tgl2."' and week_date <= '".$tgl."') cal on cal.week_date = overtime.tanggal";
+    (select ovr.tanggal, sum(ovr.jam) as jam, cost_center from 
+    (select nik, tanggal, sum(IF(status = 0, jam, final)) as jam from over_time_member left join over_time on over_time.id = over_time_member.id_ot where DATE_FORMAT(tanggal,'%Y-%m') = '".$tgl2."' and tanggal <= '".$tgl."' and deleted_at is null and jam_aktual = 0
+    group by nik, tanggal) ovr
+    left join (select employee_id, cost_center from ympimis.mutation_logs where valid_to is null) cc on cc.employee_id = ovr.nik
+    where jam > 0 and cost_center = ".$cc."
+    group by tanggal) as overtime right join 
+    (select week_date from ympimis.weekly_calendars where DATE_FORMAT(week_date,'%Y-%m') = '".$tgl2."' and week_date <= '".$tgl."') cal on cal.week_date = overtime.tanggal";
     return $this->db->query($q)->result();
 }
 
@@ -1042,17 +1058,17 @@ public function transdb($id,$tgl,$dari,$sampai)
 {
     $this->db->select("*");
     $this->db->from("(
-       SELECT a.nik,k.namaKaryawan,dept.nama as dept,dev.nama as dev,sec.nama as sec,sub.nama as sub,gr.nama as gruop1 from over_time_member as a
-       JOIN over_time ON over_time.id = a.id_ot
-       left join karyawan as k on a.nik = k.nik
-       LEFT JOIN posisi as p on a.nik = p.nik
-       left join departemen as dept on p.id_dep = dept.id
-       left join devisi as dev on p.id_devisi = dev.id
-       LEFT JOIN section as sec on p.id_sec = sec.id
-       LEFT JOIN sub_section as sub on p.id_sub_sec = sub.id
-       LEFT JOIN group1    as gr on p.id_group = gr.id              
-       where dari='".$dari."' and sampai='".$sampai."' and transport='".$id."' 
-       and over_time.tanggal = STR_TO_DATE('".$tgl."', '%d-%m-%Y') and deleted_at is null )a");
+     SELECT a.nik,k.namaKaryawan,dept.nama as dept,dev.nama as dev,sec.nama as sec,sub.nama as sub,gr.nama as gruop1 from over_time_member as a
+     JOIN over_time ON over_time.id = a.id_ot
+     left join karyawan as k on a.nik = k.nik
+     LEFT JOIN posisi as p on a.nik = p.nik
+     left join departemen as dept on p.id_dep = dept.id
+     left join devisi as dev on p.id_devisi = dev.id
+     LEFT JOIN section as sec on p.id_sec = sec.id
+     LEFT JOIN sub_section as sub on p.id_sub_sec = sub.id
+     LEFT JOIN group1    as gr on p.id_group = gr.id              
+     where dari='".$dari."' and sampai='".$sampai."' and transport='".$id."' 
+     and over_time.tanggal = STR_TO_DATE('".$tgl."', '%d-%m-%Y') and deleted_at is null )a");
     $query = $this->db->get();
     return $query->result();
 }

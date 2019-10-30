@@ -428,7 +428,7 @@ class Ot extends CI_Controller {
 
 		$data['usul'] = $this->home_model->get_jabatan($nik);
 		$data['list'] = $this->over_model->get_over_by_id($id);
-		$data['list_anggota'] = $this->over_model->get_member_id($id);
+		$data['list_anggota'] = $this->over_model->get_member_id($id, $tgl);
 		$cc = $this->over_model->get_member_id($id,$tgl);
 		$fiskal = $this->home_model->getFiskal($tgl2);
 		$data['cc_member'] = $this->over_model->costCenter($cc[sizeof($cc)-1]->costCenter, $tgl2, $fiskal[0]->fiskal);

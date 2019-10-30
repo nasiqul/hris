@@ -162,7 +162,9 @@
 			<tr class="head">
 				<th width="3%">No</th>
 				<th width="9%">NIK</th>
-				<th >Nama</th>
+				<th>Nama</th>
+				<th width="9%">Grade</th>
+				<th width="5%">&Sigma; Jam</th>
 				<th width="5%">Dari</th>
 				<th width="5%">Sampai</th>
 				<th width="5%">Trans</th>
@@ -177,6 +179,8 @@
 					<td style="padding: 10px 0 10px 0; text-align: center"><?php echo $no ?></td>
 					<td style="text-align: center"><?php echo $key->nik ?></td>
 					<td><?php echo $key->namaKaryawan ?></td>
+					<td style="text-align: center;"><?php echo $key->grade ?></td>
+					<td style="text-align: center;"><?php echo $key->jam_all ?></td>
 					<td style="text-align: center;"><?php echo date("H:i",strtotime($key->dari)); ?></td>
 					<td style="text-align: center;"><?php echo date("H:i",strtotime($key->sampai)) ?></td>
 					<td style="text-align: center;"><?php echo $key->transport; ?></td>
@@ -195,7 +199,7 @@
 				$no++;
 			} ?>
 			<tr class="foot">
-				<td colspan="5" style="text-align: left;">B = Bangil <br> P = Pasuruan</td>
+				<td colspan="7" style="text-align: left;">B = Bangil <br> P = Pasuruan</td>
 				<td style="text-align: center;">B = <?php echo $b ?><br>P = <?php echo $p ?></td>
 				<td style="text-align: center;"><?php echo $mkn ?></td>
 				<td style="text-align: center;"><?php echo $efood ?></td>
