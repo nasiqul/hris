@@ -48,15 +48,22 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <!-- form start -->
             <form action="<?php echo base_url('home/presensi'); ?>" method="POST">
               <div class="box-body">
-                <div class="col-md-3">
+                <div class="col-md-2">
                   <div class="form-group">
-                    <label for="inputTanggal"><i class="fa fa-calendar"></i> <span>Date</span></label>
-                    <input type="text" class="form-control" name="tanggal" id="datepicker" placeholder="Select date"
-                    <?php if(isset($_SESSION['tanggal'])) echo 'value="'.$_SESSION['tanggal'].'"';?>>
+                    <label><i class="fa fa-calendar"></i> <span>Date From</span></label>
+                    <input type="text" class="form-control" name="tanggal_from" id="datepicker" placeholder="Select date from" required
+                    <?php if(isset($_SESSION['tanggal_from'])) echo 'value="'.$_SESSION['tanggal_from'].'"';?>>
+                  </div>
+                </div>
+                <div class="col-md-2">
+                  <div class="form-group">
+                    <label><i class="fa fa-calendar"></i> <span>Date To</span></label>
+                    <input type="text" class="form-control" name="tanggal_to" id="datepicker2" placeholder="Select date to" required
+                    <?php if(isset($_SESSION['tanggal_to'])) echo 'value="'.$_SESSION['tanggal_to'].'"';?>>
                   </div>
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-md-2">
                   <div class="form-group">
                     <label for="inputNik"><i class="fa fa-id-badge"></i> <span>NIK</span></label>
                     <input type="text" class="form-control" name="nik" id="inputNik" placeholder="NIK"
@@ -278,6 +285,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
   }
 
   $('#datepicker').datepicker({
+    autoclose: true,
+    format: 'dd/mm/yyyy',
+  })
+
+  $('#datepicker2').datepicker({
     autoclose: true,
     format: 'dd/mm/yyyy',
   })

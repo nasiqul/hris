@@ -365,10 +365,11 @@ class Home extends CI_Controller {
 
     public function presensi()
     {
-        if (isset($_POST['tanggal']) || isset($_POST['nik']) || isset($_POST['nama']) || isset($_POST['shift'])) 
+        if (isset($_POST['tanggal_from']) || isset($_POST['tanggal_to']) || isset($_POST['nik']) || isset($_POST['nama']) || isset($_POST['shift'])) 
         {
             $newdata = array(
-                'tanggal'  => $_POST['tanggal'],
+                'tanggal_from'  => $_POST['tanggal_from'],
+                'tanggal_to'  => $_POST['tanggal_to'],
                 'nik3'     => $_POST['nik'],
                 'nama' => $_POST['nama'],
                 'shift' => $_POST['shift']
@@ -416,18 +417,24 @@ class Home extends CI_Controller {
 
     public function ajax()
     {
-        if ((isset($_SESSION['tanggal']) && $_SESSION['tanggal'] != "") || (isset($_SESSION['nik3']) && $_SESSION['nik3'] != "") || (isset($_SESSION['nama']) && $_SESSION['nama'] != "") || (isset($_SESSION['shift']) && $_SESSION['shift'] != "")) 
+        if ((isset($_SESSION['tanggal_from']) && $_SESSION['tanggal_from'] != "") || (isset($_SESSION['tanggal_to']) && $_SESSION['tanggal_to'] != "") || (isset($_SESSION['nik3']) && $_SESSION['nik3'] != "") || (isset($_SESSION['nama']) && $_SESSION['nama'] != "") || (isset($_SESSION['shift']) && $_SESSION['shift'] != "")) 
         {
-            $tgl = $this->session->userdata('tanggal');
+            $tgl_from = $this->session->userdata('tanggal_from');
+            $tgl_to = $this->session->userdata('tanggal_to');
             $nik = $this->session->userdata('nik3');
             $nama = $this->session->userdata('nama');
             $shift = $this->session->userdata('shift');
 
-            $list = $this->cari_model->get_data_presensi_cari($tgl, $nik, $nama, $shift);
-            $tot = $this->cari_model->count_all($tgl, $nik, $nama, $shift);
-            $filter = $this->cari_model->count_filtered($tgl, $nik, $nama, $shift);
+            $list = $this->cari_model->get_data_presensi_cari($tgl_from, $tgl_to, $nik, $nama, $shift);
+            $tot = $this->cari_model->count_all($tgl_from, $tgl_to, $nik, $nama, $shift);
+            $filter = $this->cari_model->count_filtered($tgl_from, $tgl_to, $nik, $nama, $shift);
         }
         else {
+            $tgl_from = "";
+            $tgl_to = "";
+            $nik = "";
+            $nama = "";
+            $shift = "";
             $list = $this->home_model->get_data_persensi();
             $tot = $this->home_model->count_all();
             $filter = $this->home_model->count_filtered();
@@ -458,6 +465,7 @@ class Home extends CI_Controller {
             "recordsTotal" => $tot,
             "recordsFiltered" => $filter,
             "data" => $data,
+            "params" => [$tgl_from, $tgl_to, $nik, $nama, $shift]
         );
             //output to json format
         echo json_encode($output);
@@ -1014,7 +1022,7 @@ public function get_presensi(){
 
 public function session_destroy()
 {
-    $array_items = array('tanggal' , 'nik3', 'nama', 'shift');
+    $array_items = array('tanggal_from','tanggal_to' , 'nik3', 'nama', 'shift');
     $this->session->unset_userdata($array_items);
     redirect('home/presensi');
 }

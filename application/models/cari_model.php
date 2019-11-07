@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Cari_model extends CI_Model {
 	var $column_order = array('tanggal','karyawan.nik','namaKaryawan','masuk','keluar','shift'); //set column field database for datatable orderable
     var $column_search = array('tanggal','karyawan.nik','namaKaryawan','masuk','keluar','shift'); //set column field database for datatable searchable 
-    var $order = array('masuk' => 'desc'); // default order 
+    var $order = array('tanggal' => 'asc'); // default order 
 
     public function __construct()
     {
@@ -12,9 +12,9 @@ class Cari_model extends CI_Model {
         $this->load->database();
     }
 
-    public function get_data_presensi_cari($tgl, $nik, $nama, $shift)
+    public function get_data_presensi_cari($tgl_from, $tgl_to, $nik, $nama, $shift)
     {
-        $this->_get_presensi_cari($tgl, $nik, $nama, $shift);
+        $this->_get_presensi_cari($tgl_from, $tgl_to, $nik, $nama, $shift);
         if($_POST['length'] != -1)
             $this->db->limit($_POST['length'], $_POST['start']);
         $query = $this->db->get();
@@ -22,13 +22,13 @@ class Cari_model extends CI_Model {
     }
 
 
-    private function _get_presensi_cari($tgl, $nik, $nama, $shift)
+    private function _get_presensi_cari($tgl_from, $tgl_to, $nik, $nama, $shift)
     {
 
         $this->db->select('karyawan.nik, karyawan.namaKaryawan, presensi.tanggal, presensi.masuk, presensi.keluar, presensi.shift, sec.nama as sec, ssc.nama as subsec, group1.nama as grup');
         $this->db->from('presensi');
-        $this->db->join('karyawan','karyawan.nik = presensi.nik', 'left');
-        $this->db->join('posisi','posisi.nik = karyawan.nik', 'left');
+        $this->db->join('karyawan','karyawan.nik = presensi.nik');
+        $this->db->join('posisi','posisi.nik = karyawan.nik');
         $this->db->join('section sec','sec.id = posisi.id_sec', 'left');
         $this->db->join('sub_section ssc','ssc.id = posisi.id_sub_sec', 'left');
         $this->db->join('group1','group1.id = posisi.id_group', 'left');
@@ -36,12 +36,13 @@ class Cari_model extends CI_Model {
         $this->db->where('presensi.shift !=','OFF');
         $this->db->where('presensi.shift !=','X');
 
-        if ($tgl) {
-            $this->db->where('DATE_FORMAT(tanggal, "%d/%m/%Y") = ',$tgl);
-        }
-
         if ($nik) {
             $this->db->where('karyawan.nik',$nik);
+        }
+
+        if ($tgl_from && $tgl_to) {
+            $this->db->where('tanggal >=', date('Y-m-d', strtotime( str_replace('/', '-', $tgl_from))));
+            $this->db->where('tanggal <=', date('Y-m-d', strtotime( str_replace('/', '-', $tgl_to))));
         }
 
         if ($nama) {
@@ -88,16 +89,16 @@ class Cari_model extends CI_Model {
         }
     }
 
-    function count_filtered($tgl, $nik, $nama, $shift)
+    function count_filtered($tgl_from, $tgl_to, $nik, $nama, $shift)
     {
-        $this->_get_presensi_cari($tgl, $nik, $nama, $shift);
+        $this->_get_presensi_cari($tgl_from, $tgl_to, $nik, $nama, $shift);
         $query = $this->db->get();
         return $query->num_rows();
     }
 
-    public function count_all($tgl, $nik, $nama, $shift)
+    public function count_all($tgl_from, $tgl_to, $nik, $nama, $shift)
     {
-        $this->_get_presensi_cari($tgl, $nik, $nama, $shift);
+        $this->_get_presensi_cari($tgl_from, $tgl_to, $nik, $nama, $shift);
         return $this->db->count_all_results();
     }
 }
