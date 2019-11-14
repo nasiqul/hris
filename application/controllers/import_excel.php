@@ -105,13 +105,13 @@ class import_excel extends CI_Controller {
 
                     $this->export_model->export_presensi($daily_data);
 
-                    $list_cuti = $this->over_model->get_cuti();
+                    // $list_cuti = $this->over_model->get_cuti();
 
-                    foreach ($list_cuti as $key2) {
-                        if ($key2->absence_code == $shift2) {
-                            $this->over_model->update_cuti($row[1], date('Y-m-d' , strtotime($row[2])));
-                        }
-                    }
+                    // foreach ($list_cuti as $key2) {
+                    //     if ($key2->absence_code == $shift2) {
+                    //         $this->over_model->update_cuti($row[1], date('Y-m-d' , strtotime($row[2])));
+                    //     }
+                    // }
                 }
             }
 
