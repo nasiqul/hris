@@ -1631,6 +1631,14 @@ class Ot extends CI_Controller {
 		$sampai = $_GET['sampai'];
 		$shift = $_GET['shift'];
 
+		if (explode(":",$dari)[0] > explode(":",$sampai)[0]) {
+			if ($shift == '2') {
+				$sampai = '24:00';
+			} else if ($shift == '3') {
+				$dari = '00:00';
+			}
+		}
+
 		$list = $this->over_model->get_break($hari, $dari, $sampai, $shift);
 
 		foreach ($list as $key) {
