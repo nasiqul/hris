@@ -164,6 +164,41 @@ class import_excel extends CI_Controller {
             redirect("home/presensi_os");
         }
 
+        public function upload_abs()
+        {
+            $big_data = [];
+            $file = $_FILES['file_abs']['tmp_name'];
+            if (!$file) {
+                $this->session->set_flashdata('status', 'gagal');
+                redirect('home/presensi');
+                exit;
+            }
+
+            $data = file_get_contents($file);
+
+            $rows = explode("\r\n", $data);
+
+            foreach ($rows as $row)
+            {
+                if (strlen($row) > 0) {
+                    $row = explode("\t", $row);
+                    $daily_data = Array(
+                        'nik' => $row[0],
+                        'tgl'    => date('Y-m-d' , strtotime($row[1])),
+                        'shift'       => $row[2]
+                    );
+
+                    array_push($big_data,$daily_data);
+                }
+            }
+
+            $this->export_model->export_absensi($big_data);
+            // print_r($date);
+
+            $this->session->set_flashdata('status', 'sukses');
+            redirect("home/presensi");
+        }
+
         public function updatedataover($tgl)
         {
             $list = $this->over_model_new->tabel_konfirmasi($tgl);

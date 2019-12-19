@@ -92,6 +92,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i> <span>Search</span></button>
                 <a class="btn btn-warning" id="reset" href="<?php echo base_url('home/session_destroy') ?>" ><i class="fa fa-refresh"></i> Reset</a>
                 <button class="btn btn-success btn-sm pull-right" type="button" id="import" onclick="openModal()"><i class="fa fa-arrow-down" ></i> import presensi</button>
+                <button class="btn btn-warning btn-sm pull-right" type="button" id="import_absence" onclick="openModalAbsensi()" style="margin-right: 1vw"><i class="fa fa-arrow-down" ></i> import absensi</button>
               </div>
             </form>
           </div>
@@ -135,7 +136,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
         <div class="modal fade" id="myModal">
           <div class="modal-dialog modal-sm">
-            <form method="post" action="<?php echo base_url('import_excel/upload3'); ?>" enctype="multipart/form-data" class="pull-right">
+            <form method="post" action="<?php echo base_url('import_excel/upload3'); ?>" enctype="multipart/form-data" class="pull-right" id="import_presensi">
               <div class="modal-content">
                 <div class="modal-header">
                   <h4 style="float: right;" id="modal-title"></h4>
@@ -152,6 +153,33 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </div>
                 <div class="modal-footer">
                   <input type="submit" id="submit" name="submit" value="Import" class="btn btn-success btn-sm pull-right">
+                  <button type="button" class="btn btn-danger btn-sm pull-left" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                </div>
+              </div>
+            </form>
+          </div>
+          <!-- /.modal-dialog -->
+        </div>
+
+        <div class="modal fade" id="modalAbs">
+          <div class="modal-dialog modal-sm">
+            <form method="post" action="<?php echo base_url('import_excel/upload_abs'); ?>" enctype="multipart/form-data" class="pull-right" id="import_absensi">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 style="float: right;" id="modal-title"></h4>
+                  <h4 class="modal-title"><b>Import Absensi</b></h4>
+
+                </div>
+                <div class="modal-body">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <input type="file" name="file_abs" id="file_abs">
+                      <span style="font-size: 2em" id="loading2"><i class="fa fa-refresh fa-spin"></i> Importing ...</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <input type="submit" id="submit_abs" name="submit" value="Import" class="btn btn-success btn-sm pull-right">
                   <button type="button" class="btn btn-danger btn-sm pull-left" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
                 </div>
               </div>
@@ -180,6 +208,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     var table;
     $(document).ready(function() {
       $("#loading").hide();
+      $("#loading2").hide();
 
       table = $('#example1').DataTable({
         "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
@@ -197,6 +226,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
     function openModal() {
       $('#myModal').modal({backdrop: 'static', keyboard: false});
+    }
+
+    function openModalAbsensi() {
+      $('#modalAbs').modal({backdrop: 'static', keyboard: false});
     }
 
     function openModal2() {
@@ -274,11 +307,19 @@ scratch. This page gets rid of all links and provides the needed markup only.
     document.getElementById(lop).value = a;
   }
 
-  function hide() {
+  $(document).on('submit','#import_presensi',function(){
+    // $("#file").prop('disabled','true');
     $("#submit").prop('disabled','true');
-    $("#file").prop('disabled','true');
     $("#loading").show();
-  }
+   // code
+ });
+
+  $(document).on('submit','#import_absensi',function(){
+    // $("#file").prop('disabled','true');
+    $("#submit_abs").prop('disabled','true');
+    $("#loading2").show();
+   // code
+ });
 
   function saveDriver() {
     alert('Driver simpan');

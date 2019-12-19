@@ -230,5 +230,18 @@ class Export_model extends CI_Model {
 		$this->db->where('tanggal', $tgl);
 		$this->db->delete('presensi_os');
 	}
+
+	public function export_absensi($big_data)
+	{
+		// $sql = array(); 
+		$sql = "";
+		foreach ($big_data as $datas) {
+			$sql = "UPDATE presensi set shift = '".$datas['shift']."' where nik = '".$datas['nik']."' and tanggal ='".$datas['tgl']."'; ";
+
+			$this->db->query($sql);
+		}
+
+
+	}
 }
 ?>
