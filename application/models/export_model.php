@@ -241,6 +241,7 @@ class Export_model extends CI_Model {
 			$this->db->query($sql);
 		}
 
+		// return $sql;
 
 	}
 }

@@ -182,10 +182,11 @@ class import_excel extends CI_Controller {
             {
                 if (strlen($row) > 0) {
                     $row = explode("\t", $row);
+                    $shift2 = trim(preg_replace('/\s\s+/', ' ', $row[2]));
                     $daily_data = Array(
                         'nik' => $row[0],
                         'tgl'    => date('Y-m-d' , strtotime($row[1])),
-                        'shift'       => $row[2]
+                        'shift'       => $shift2
                     );
 
                     array_push($big_data,$daily_data);
@@ -193,7 +194,7 @@ class import_excel extends CI_Controller {
             }
 
             $this->export_model->export_absensi($big_data);
-            // print_r($date);
+            // print_r($this->export_model->export_absensi($big_data));
 
             $this->session->set_flashdata('status', 'sukses');
             redirect("home/presensi");
