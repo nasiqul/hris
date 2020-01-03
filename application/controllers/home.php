@@ -56,8 +56,9 @@ class Home extends CI_Controller {
                 $data['menu'] = 'Overtime User';
                 $username = $this->session->userdata('nikLogin');
                 $data['dep'] = $this->over_model->get_dep($username);
+                $this->load->view('report', $data);
                 // $this->load->view('overtime_user2', $data);
-                redirect('http://172.17.128.4/mirai/public/information_board');
+                // redirect('http://172.17.128.4/mirai/public/information_board');
             }
             
         } else {
