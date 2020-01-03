@@ -230,8 +230,9 @@ class Home extends CI_Controller {
         $data['parentMenu'] = $this->home_model->getParentMenu();
         $data['menu2'] = 'Overtime';
         $data['menu'] = 'Overtime Data';
-        $this->load->view("overtime_form3",$data);
+        // $this->load->view("overtime_form3",$data);
         // $this->load->view('sunfish');
+        redirect('http://172.17.128.4/mirai/public/information_board');
     }
 
     public function overtime_edit($id_ot)
@@ -337,7 +338,9 @@ class Home extends CI_Controller {
         $data['menu2'] = 'Overtime';
         $data['menu'] = 'Overtime User';
         // $this->load->view('overtime_user2',$data);
-        $this->load->view('sunfish');
+        // $this->load->view('sunfish');
+        
+        redirect('http://172.17.128.4/mirai/public/information_board');
     }
 
     public function report_GA()
