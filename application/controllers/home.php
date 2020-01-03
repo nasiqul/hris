@@ -52,8 +52,8 @@ class Home extends CI_Controller {
             }
             else
             {
-                $data['menu2'] = 'Overtime';
-                $data['menu'] = 'Overtime User';
+                $data['menu2'] = 'home';
+                $data['menu'] = '';
                 $username = $this->session->userdata('nikLogin');
                 $data['dep'] = $this->over_model->get_dep($username);
                 $this->load->view('report', $data);
